@@ -1,28 +1,23 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.text.FlxText;
-import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
 
 /**
- * A FlxState which can be used for the actual gameplay.
+ * メインゲーム
  */
 class PlayState extends FlxState
 {
 	/**
-	 * Function that is called up when to state is created to set it up. 
+	 * 生成
 	 */
 	override public function create():Void
 	{
 		super.create();
 	}
-	
+
 	/**
-	 * Function that is called when this state is destroyed - you might want to 
-	 * consider setting all objects this state uses to null to help garbage collection.
+	 * 破棄
 	 */
 	override public function destroy():Void
 	{
@@ -30,10 +25,15 @@ class PlayState extends FlxState
 	}
 
 	/**
-	 * Function that is called once every frame.
+	 * 更新
 	 */
 	override public function update():Void
 	{
 		super.update();
-	}	
+
+		if(FlxG.keys.justPressed.ESCAPE) {
+			// ESCキーで終了する
+			throw "Terminate.";
+		}
+	}
 }
