@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -14,6 +15,9 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+
+		var player = new FlxSprite(0, 0, "assets/images/player.png");
+		this.add(player);
 	}
 
 	/**
