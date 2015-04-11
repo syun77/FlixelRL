@@ -1,6 +1,5 @@
 package;
 
-import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -16,7 +15,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		var player = new Player(0, 0);
+		var player = new Player(FlxG.width/2, FlxG.height/2);
 		this.add(player);
 	}
 
