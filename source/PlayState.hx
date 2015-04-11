@@ -16,7 +16,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		var player = new FlxSprite(0, 0, "assets/images/player.png");
+		var player = new Player(0, 0);
 		this.add(player);
 	}
 
