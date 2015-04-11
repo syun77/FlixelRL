@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-	<component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="Haxe 3.0.0" project-jdk-type="Haxe SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="Haxe 3.1.3" project-jdk-type="Haxe toolkit">
     <output url="file://$PROJECT_DIR$/export" />
   </component>
   <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="sslv3">
@@ -21,4 +21,3 @@
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
 </project>
-
