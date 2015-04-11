@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import DirUtil;
 
@@ -8,7 +9,11 @@ import DirUtil;
  */
 class Player extends FlxSprite {
 
-	private var _dir:Dir;
+
+	// 向き
+	private var _dir:Dir = Dir.Down;
+	// アニメーション状態
+	private var _bStop = true;
 
 	/**
 	 * 生成
@@ -36,7 +41,7 @@ class Player extends FlxSprite {
 		animation.add(getAnimName(false, Dir.Down), [14, 15], speed);
 
 		// アニメーションを再生
-		animation.play("walk-down");
+		changeAnim();
 	}
 
 	// アニメーション名を取得する
@@ -45,5 +50,42 @@ class Player extends FlxSprite {
 		var suf = DirUtil.toString(dir);
 
 		return pre + "-" + suf;
+	}
+
+	// アニメーションを再生
+	private function changeAnim():Void {
+		var name = getAnimName(_bStop, _dir);
+		animation.play(name);
+	}
+
+	// 更新
+	override public function update():Void {
+		super.update();
+
+		_bStop = true;
+		velocity.set(0, 0);
+		var speed = 50;
+		if(FlxG.keys.pressed.LEFT) {
+			_dir = Dir.Left;
+			_bStop = false;
+			velocity.x = -speed;
+		}
+		else if(FlxG.keys.pressed.UP) {
+			_dir = Dir.Up;
+			_bStop = false;
+			velocity.y = -speed;
+		}
+		else if(FlxG.keys.pressed.RIGHT) {
+			_dir = Dir.Right;
+			_bStop = false;
+			velocity.x = speed;
+		}
+		else if(FlxG.keys.pressed.DOWN) {
+			_dir = Dir.Down;
+			_bStop = false;
+			velocity.y = speed;
+		}
+
+		changeAnim();
 	}
 }
