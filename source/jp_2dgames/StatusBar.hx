@@ -1,4 +1,4 @@
-package jp.seconddgames.natsukiboost3.jp_2dgames;
+package jp_2dgames;
 
 import flixel.ui.FlxBar;
 

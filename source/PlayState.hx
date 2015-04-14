@@ -1,5 +1,6 @@
 package;
 
+import jp_2dgames.TmxLoader;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -16,6 +17,9 @@ class PlayState extends FlxState
 		super.create();
 
 		// マップ読み込み
+		var tmx = new TmxLoader();
+		tmx.load("assets/levels/001.tmx");
+		tmx.getLayer(0).dump();
 
 
 		// プレイヤー生成
