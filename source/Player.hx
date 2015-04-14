@@ -66,6 +66,9 @@ class Player extends FlxSprite {
 
 		// アニメーションを再生
 		changeAnim();
+
+		// 中心を基準に描画
+		offset.set(width/2, height/2);
 	}
 
 	// アニメーション名を取得する

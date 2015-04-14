@@ -15,8 +15,18 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		var player = new Player(FlxG.width/2, FlxG.height/2);
+		var player = new Player(16, 16);
 		this.add(player);
+		FlxG.watch.add(player, "x");
+		FlxG.watch.add(player, "y");
+		FlxG.watch.add(player, "_xprev");
+		FlxG.watch.add(player, "_yprev");
+		FlxG.watch.add(player, "frameWidth");
+		FlxG.watch.add(player, "width");
+
+//		FlxG.debugger.visible = true;
+		FlxG.debugger.toggleKeys = ["ALT"];
+//		FlxG.debugger.drawDebug = true;
 	}
 
 	/**
