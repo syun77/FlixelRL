@@ -4,6 +4,9 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import DirUtil;
 
+/**
+ * 状態
+ **/
 enum State {
 	Standby;
 	Walk;

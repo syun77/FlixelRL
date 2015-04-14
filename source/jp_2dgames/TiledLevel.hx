@@ -1,6 +1,5 @@
 package jp_2dgames;
 
-import jp.seconddgames.natsukiboost3.PlayState;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.addons.editors.tiled.TiledObjectGroup;
