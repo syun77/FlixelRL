@@ -15,6 +15,10 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+		// マップ読み込み
+
+
+		// プレイヤー生成
 		var player = new Player(16, 16);
 		this.add(player);
 		FlxG.watch.add(player, "x");
