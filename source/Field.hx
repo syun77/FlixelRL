@@ -13,6 +13,9 @@ class Field {
 	// グリッドサイズ
 	public static inline var GRID_SIZE:Int = 32;
 
+	// チップの種類
+	public static inline var WALL:Int = 3; // 壁
+
 	public static function toWorldX(i:Float):Float {
 		return i * GRID_SIZE + GRID_SIZE/2;
 	}
@@ -45,7 +48,7 @@ class Field {
 		var func = function(i:Int, j:Int, v:Int) {
 			pt.x = i * GRID_SIZE;
 			pt.y = j * GRID_SIZE;
-			if(v == 3) {
+			if(v == WALL) {
 				spr.pixels.copyPixels(chip.bitmap, rect, pt);
 			}
 		}
