@@ -166,6 +166,19 @@ class Layer2D {
         return ret;
     }
 
+    /**
+	 * レイヤー内の値を順番に走査する
+	 **/
+	public function forEach(Function:Int->Int->Int->Void):Void {
+		for(j in 0...height) {
+			for(i in 0...width) {
+				var v:Int = get(i, j);
+				Function(i, j, v);
+			}
+		}
+	}
+
+
     public function dump():Void {
         trace("<<Layer2D>> (width, height)=("+_width+", "+_height+")");
         for (j in 0..._height) {

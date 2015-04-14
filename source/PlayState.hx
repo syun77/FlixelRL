@@ -19,7 +19,14 @@ class PlayState extends FlxState
 		// マップ読み込み
 		var tmx = new TmxLoader();
 		tmx.load("assets/levels/001.tmx");
-		tmx.getLayer(0).dump();
+		var layer = tmx.getLayer(0);
+		var func = function(i:Int, j:Int, v:Int) {
+			if(v == 3) {
+				trace('${i}, ${j}');
+			}
+		}
+
+		layer.forEach(func);
 
 
 		// プレイヤー生成
