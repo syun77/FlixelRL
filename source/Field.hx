@@ -14,8 +14,12 @@ class Field {
 	public static inline var GRID_SIZE:Int = 32;
 
 	// チップの種類
+	public static inline var NONE:Int = 0; // 何もない
+	public static inline var PLAYER:Int = 1; // プレイヤー
+	public static inline var GOAL:Int = 2; // ゴール
 	public static inline var WALL:Int = 3; // 壁
 
+	// 座標変換
 	public static function toWorldX(i:Float):Float {
 		return i * GRID_SIZE + GRID_SIZE/2;
 	}
@@ -29,9 +33,27 @@ class Field {
 		return Math.floor((y - GRID_SIZE/2) / GRID_SIZE);
 	}
 
-	public function new() {
+	// コリジョンレイヤーの設定
+	private static var _cLayer:Layer2D;
+	public static function setCollisionLayer(layer:Layer2D):Void {
+		_cLayer = layer;
+	}
+	// 指定した座標がコリジョンかどうか
+	public static function isCollision(i:Int, j:Int):Bool {
+		var v = _cLayer.get(i, j);
+		if(v == WALL) {
+			// コリジョン
+			return true;
+		}
+
+		// コリジョンでない
+		return false;
 	}
 
+
+	/**
+	 * 背景画像を作成する
+	 **/
 	public static function createBackground(layer:Layer2D):FlxSprite {
 		var spr = new FlxSprite();
 		var w = layer.width * GRID_SIZE;
@@ -39,7 +61,8 @@ class Field {
 		// チップ画像読み込み
 		var chip = FlxG.bitmap.add("assets/images/wall1.png");
 		// 透明なスプライトを作成
-		spr.makeGraphic(w, h, FlxColor.TRANSPARENT);
+		//spr.makeGraphic(w, h, FlxColor.TRANSPARENT);
+		spr.makeGraphic(w, h, FlxColor.SILVER);
 		// 転送先の座標
 		var pt = new Point();
 		// 転送領域の作成
