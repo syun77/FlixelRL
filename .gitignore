@@ -2,3 +2,5 @@
 export
 assets/.DS_Store
 assets/levels/.DS_Store
+.DS_Store
+save.txt

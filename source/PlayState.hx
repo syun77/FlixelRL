@@ -17,6 +17,9 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+//		Save.save();
+		Save.load();
+
 		// マップ読み込み
 		var tmx = new TmxLoader();
 		tmx.load("assets/levels/001.tmx");
