@@ -59,7 +59,7 @@ class Field {
 		var w = layer.width * GRID_SIZE;
 		var h = layer.height * GRID_SIZE;
 		// チップ画像読み込み
-		var chip = FlxG.bitmap.add("assets/images/wall1.png");
+		var chip = FlxG.bitmap.add("assets/levels/tileset.png");
 		// 透明なスプライトを作成
 		//spr.makeGraphic(w, h, FlxColor.TRANSPARENT);
 		spr.makeGraphic(w, h, FlxColor.SILVER);
@@ -71,8 +71,11 @@ class Field {
 		var func = function(i:Int, j:Int, v:Int) {
 			pt.x = i * GRID_SIZE;
 			pt.y = j * GRID_SIZE;
-			if(v == WALL) {
-				spr.pixels.copyPixels(chip.bitmap, rect, pt);
+			switch(v) {
+				case GOAL, WALL:
+					rect.left = (v - 1) * GRID_SIZE;
+					rect.right = rect.left + GRID_SIZE;
+					spr.pixels.copyPixels(chip.bitmap, rect, pt);
 			}
 		}
 
