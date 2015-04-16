@@ -11,8 +11,7 @@ class CsvLoader {
 
 	private var _filepath:String = "";
 	private var _header:Array<String>;
-	private var _types:Array<String>;
-	private var _datas:Map<Int, Map<String, String>>;
+	private var _datas:Array<Map<String, String>>;
 
 	public function new(filepath:String = null) {
 		if(filepath != null) {
@@ -26,7 +25,7 @@ class CsvLoader {
      **/
 
 	public function load(filepath:String):Void {
-		_datas = new Map<Int, Map<String, String>>();
+		_datas = new Array<Map<String, String>>();
 		var text:String = Assets.getText(filepath);
 		if(text == null) {
 			FlxG.log.warn("CsvLoader.load() text is null. file:'" + filepath + "''");
@@ -41,8 +40,6 @@ class CsvLoader {
 			switch(row) {
 				case 0:
 					_header = line.split(",");
-				case 1:
-					_types = line.split(",");
 				default:
 					var nId = 0;
 					var col = 0;
@@ -59,7 +56,7 @@ class CsvLoader {
 						data.set(k, v);
 						col++;
 					}
-					_datas.set(nId, data);
+					_datas.push(data);
 			}
 			row++;
 		}
@@ -71,11 +68,7 @@ class CsvLoader {
      **/
 
 	public function size():Int {
-		var cnt:Int = 0;
-		for(k in _datas.keys()) {
-			cnt++;
-		}
-		return cnt;
+		return _datas.length;
 	}
 
 	/**
@@ -85,15 +78,10 @@ class CsvLoader {
      **/
 
 	public function hasId(id:Int):Bool {
-		return _datas.exists(id);
-	}
-
-	/**
-     * id配列を取得する
-     **/
-
-	public function keys():Iterator<Int> {
-		return _datas.keys();
+		if(id < 0 || _datas.length <= id) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -104,10 +92,10 @@ class CsvLoader {
      **/
 
 	public function getString(id:Int, key:String):String {
-		if(_datas.exists(id) == false) {
+		if(hasId(id) == false) {
 			throw "Error: Not found id = " + id;
 		}
-		var data:Map<String, String> = _datas.get(id);
+		var data:Map<String, String> = _datas[id];
 		if(data.exists(key) == false) {
 			throw "Error: Not found key = " + key;
 		}
@@ -120,11 +108,12 @@ class CsvLoader {
      **/
 
 	public function searchID(key:String, value:String):Int {
-		for(k in _datas.keys()) {
-			var data = _datas[k];
+		var i:Int = 0;
+		for(data in _datas) {
 			if(data[key] == value) {
-				return k;
+				return i;
 			}
+			i++;
 		}
 
 		return -1;
@@ -136,8 +125,7 @@ class CsvLoader {
      **/
 
 	public function searchItem(key:String, name:String, item:String):String {
-		for(k in _datas.keys()) {
-			var data = _datas[k];
+		for(data in _datas) {
 			if(data[key] == name) {
 				return data[item];
 			}
@@ -162,7 +150,7 @@ class CsvLoader {
 
 	public function foreachSearchID(func:Map<String, String> -> Bool):Int {
 		for(i in 0...size() + 1) {
-			if(_datas.exists(i) == false) {
+			if(hasId(i) == false) {
 				continue;
 			}
 			var data = _datas[i];
@@ -203,12 +191,7 @@ class CsvLoader {
 		trace(str);
 
 		str = "";
-		for(s in _types) {
-			str += s + ",";
-		}
-		trace(str);
-		for(k in _datas.keys()) {
-			var data = _datas.get(k);
+		for(data in _datas) {
 			str = "";
 			for(d in data) {
 				str += d + ",";

@@ -23,6 +23,12 @@ class PlayState extends FlxState
 	private function get_lField() {
 		return _lField;
 	}
+	// メッセージ
+	private var _message:Message;
+	public var message(get_message, null):Message;
+	private function get_message() {
+		return _message;
+	}
 
 	// 背景
 	private var _back:FlxSprite;
@@ -50,6 +56,12 @@ class PlayState extends FlxState
 		// プレイヤー生成
 		_player = new Player(Std.int(pt.x), Std.int(pt.y));
 		this.add(_player);
+
+		// メッセージ生成
+		_message = new Message();
+		this.add(_message);
+
+		// デバッグ情報設定
 		FlxG.watch.add(player, "x");
 		FlxG.watch.add(player, "y");
 		FlxG.watch.add(player, "_xprev");
@@ -90,10 +102,17 @@ class PlayState extends FlxState
 	{
 		super.update();
 
+		// デバッグ処理
+		updateDebug();
+	}
+
+	private function updateDebug():Void {
+	#if neko
 		if(FlxG.keys.justPressed.ESCAPE) {
 			// ESCキーで終了する
 			throw "Terminate.";
 		}
+	#end
 
 		if(FlxG.keys.justPressed.S) {
 			// セーブ

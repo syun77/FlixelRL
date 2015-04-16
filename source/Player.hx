@@ -122,21 +122,25 @@ class Player extends FlxSprite {
 			// 左へ進む
 			_dir = Dir.Left;
 			xnext -= 1;
+			Message.push("turn みぎ");
 		}
 		else if(FlxG.keys.pressed.UP) {
 			// 上へ進む
 			_dir = Dir.Up;
 			ynext -= 1;
+			Message.push("turn 上");
 		}
 		else if(FlxG.keys.pressed.RIGHT) {
 			// 右へ進む
 			_dir = Dir.Right;
 			xnext += 1;
+			Message.push("turn right");
 		}
 		else if(FlxG.keys.pressed.DOWN) {
 			// 下へ進む
 			_dir = Dir.Down;
 			ynext += 1;
+			Message.push("turn down");
 		}
 		else {
 			// 移動しない
