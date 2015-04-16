@@ -1,5 +1,6 @@
 package;
 
+import flixel.group.FlxTypedGroup;
 import jp_2dgames.Layer2D;
 import flixel.FlxSprite;
 import jp_2dgames.TmxLoader;
@@ -23,6 +24,9 @@ class PlayState extends FlxState
 	private function get_lField() {
 		return _lField;
 	}
+	// 敵管理
+	private var _enemies:FlxTypedGroup<Enemy>;
+
 	// メッセージ
 	private var _message:Message;
 	public var message(get_message, null):Message;
@@ -56,6 +60,16 @@ class PlayState extends FlxState
 		// プレイヤー生成
 		_player = new Player(Std.int(pt.x), Std.int(pt.y));
 		this.add(_player);
+
+		// 敵管理生成
+		_enemies = new FlxTypedGroup<Enemy>(32);
+		for(i in  0..._enemies.maxSize) {
+			_enemies.add(new Enemy());
+		}
+		this.add(_enemies);
+
+		var e:Enemy = _enemies.recycle();
+		e.init(3, 2, 1);
 
 		// メッセージ生成
 		_message = new Message();

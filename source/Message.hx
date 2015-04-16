@@ -68,7 +68,6 @@ class Message extends FlxGroup {
 		var idx = 0;
 		for(t in _msgList) {
 			t.y = y + MSG_POS_Y + idx * DY;
-			trace(t.y);
 			idx++;
 		}
 		this.add(text);

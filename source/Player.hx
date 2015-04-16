@@ -34,14 +34,17 @@ class Player extends FlxSprite {
 	private var _ynext:Float = 0;
 
 	// プロパティ
+	// チップ座標(X)
 	public var xchip(get_xchip, null):Int;
 	private function get_xchip() {
 		return Std.int(_xnext);
 	}
+	// チップ座標(Y)
 	public var ychip(get_ychip, null):Int;
 	private function get_ychip() {
 		return Std.int(_ynext);
 	}
+	// 方向
 	public var dir(get_dir, null):Dir;
 	private function get_dir() {
 		return _dir;
@@ -55,8 +58,6 @@ class Player extends FlxSprite {
 
 		init(X, Y, Dir.Down);
 
-		// アニメーションとして読み込む
-		loadGraphic("assets/images/player.png", true);
 		// アニメーションを登録
 		_registAnim();
 
@@ -183,6 +184,9 @@ class Player extends FlxSprite {
 	 * アニメーションの登録
 	 **/
 	private function _registAnim():Void {
+		// アニメーションとして読み込む
+		loadGraphic("assets/images/player.png", true);
+
 		// アニメーションを登録
 		// 待機アニメ
 		// アニメーション速度
