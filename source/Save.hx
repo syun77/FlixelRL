@@ -1,9 +1,9 @@
 package ;
 
-//#if neko
 import haxe.Json;
+#if neko
 import sys.io.File;
-//#end
+#end
 
 class SaveDataPlayer {
 	public var x:Int = 0;
@@ -33,10 +33,10 @@ class SaveData {
  **/
 class Save {
 
-//#if neko
+#if neko
 	// セーブデータ保存先
 	private static inline var PATH_SAVE = "/Users/syun/Desktop/HaxeFlixel_RogueLike/save.txt";
-//#end
+#end
 
   /**
    * セーブする
@@ -46,15 +46,16 @@ class Save {
 		var data = new SaveData();
 
 		var str = Json.stringify(data);
-//#if neko
+#if neko
 		sys.io.File.saveContent(PATH_SAVE, str);
-//#end
+#end
 	}
 
 	public static function load():Void {
-//#if neko
-		var str = sys.io.File.getContent(PATH_SAVE);
-//#end
+		var str = "";
+#if neko
+		str = sys.io.File.getContent(PATH_SAVE);
+#end
 		var data = Json.parse(str);
 		var s = new SaveData();
 		s.set(data);
