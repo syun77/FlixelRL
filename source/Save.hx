@@ -5,18 +5,25 @@ import haxe.Json;
 import sys.io.File;
 //#end
 
+class SaveDataPlayer {
+	public var x:Int = 0;
+	public var y:Int = 0;
+	public function new() {
+	}
+}
+
 class SaveData {
-	public var player_x:Int;
-	public var player_y:Int;
+	public var player:SaveDataPlayer;
 
 	public function new() {
-		player_x = 100;
-		player_y = 400;
+		player = new SaveDataPlayer();
+		player.x = 5;
+		player.y = 10;
 	}
 
 	public function set(data:Dynamic):Void {
-		player_x = data.player_x;
-		player_y = data.player_y;
+		player.x = data.player.x;
+		player.y = data.player.y;
 		trace(this);
 	}
 }
