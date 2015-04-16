@@ -33,20 +33,27 @@ class Player extends FlxSprite {
 	private var _xnext:Float = 0;
 	private var _ynext:Float = 0;
 
+	// プロパティ
+	public var xchip(get_xchip, null):Int;
+	private function get_xchip() {
+		return Std.int(_xnext);
+	}
+	public var ychip(get_ychip, null):Int;
+	private function get_ychip() {
+		return Std.int(_ynext);
+	}
+	public var dir(get_dir, null):Dir;
+	private function get_dir() {
+		return _dir;
+	}
+
 	/**
 	 * 生成
 	 */
-	public function new(X:Float, Y:Float) {
-		super(X, Y);
+	public function new(X:Int, Y:Int) {
+		super();
 
-		var chipX = Field.toChipX(X);
-		var chipY = Field.toChipY(Y);
-		_xprev = chipX;
-		_yprev = chipY;
-		_xnext = chipX;
-		_ynext = chipY;
-		x = Field.toWorldX(chipX);
-		y = Field.toWorldY(chipY);
+		init(X, Y, Dir.Down);
 
 		// アニメーションとして読み込む
 		loadGraphic("assets/images/player.png", true);
@@ -63,6 +70,23 @@ class Player extends FlxSprite {
 		var suf = DirUtil.toString(dir);
 
 		return pre + "-" + suf;
+	}
+
+	/**
+	 * 初期化
+	 **/
+	public function init(X:Int, Y:Int, dir:Dir):Void {
+		_xprev = X;
+		_yprev = Y;
+		_xnext = X;
+		_ynext = Y;
+		x = Field.toWorldX(X);
+		y = Field.toWorldY(Y);
+
+		_state = State.Standby;
+		_tWalk = 0;
+		// 向き
+		_dir = dir;
 	}
 
 	// アニメーションを再生

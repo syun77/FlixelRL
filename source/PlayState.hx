@@ -10,15 +10,18 @@ import flixel.FlxState;
  */
 class PlayState extends FlxState
 {
+	private var _player:Player;
+	public var player(get_player, null):Player;
+	private function get_player() {
+		return _player;
+	}
+
 	/**
 	 * 生成
 	 */
 	override public function create():Void
 	{
 		super.create();
-
-//		Save.save();
-		Save.load();
 
 		// マップ読み込み
 		var tmx = new TmxLoader();
@@ -32,8 +35,8 @@ class PlayState extends FlxState
 		var pt = layer.search(Field.PLAYER);
 
 		// プレイヤー生成
-		var player = new Player(Field.toWorldX(pt.x), Field.toWorldY(pt.y));
-		this.add(player);
+		_player = new Player(Std.int(pt.x), Std.int(pt.y));
+		this.add(_player);
 		FlxG.watch.add(player, "x");
 		FlxG.watch.add(player, "y");
 		FlxG.watch.add(player, "_xprev");
@@ -64,6 +67,15 @@ class PlayState extends FlxState
 		if(FlxG.keys.justPressed.ESCAPE) {
 			// ESCキーで終了する
 			throw "Terminate.";
+		}
+
+		if(FlxG.keys.justPressed.S) {
+			// セーブ
+			Save.save();
+		}
+		if(FlxG.keys.justPressed.L) {
+			// ロード
+			Save.load();
 		}
 	}
 }
