@@ -54,8 +54,7 @@ class Field {
 	/**
 	 * 背景画像を作成する
 	 **/
-	public static function createBackground(layer:Layer2D):FlxSprite {
-		var spr = new FlxSprite();
+	public static function createBackground(layer:Layer2D, spr:FlxSprite):FlxSprite {
 		var w = layer.width * GRID_SIZE;
 		var h = layer.height * GRID_SIZE;
 		// チップ画像読み込み

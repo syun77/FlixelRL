@@ -1,10 +1,11 @@
 package jp_2dgames;
 
+import flixel.util.FlxPoint;
+
 /**
  * ２次元マップクラス
  * @author syun
  */
-import flixel.util.FlxPoint;
 class Layer2D {
 	public var m_Default:Int = 0; // デフォルト値
 	public var m_OutOfRange:Int = -1; // 範囲外を指定した際のエラー値
@@ -45,16 +46,26 @@ class Layer2D {
 		_height = h;
 	}
 
+	/**
+	 * 指定のレイヤーから情報をコピーする
+   **/
 	public function copy(layer:Layer2D):Void {
-		layer.initialize(_width, _height);
-		for(j in 0..._height) {
-			for(i in 0..._width) {
-				var v:Int = get(i, j);
-				if(v != m_Default) {
-					layer.set(i, j, v);
-				}
-			}
+		initialize(layer.width, layer.height);
+		var func = function(i, j, v) {
+			set(i, j, v);
 		}
+		layer.forEach(func);
+	}
+
+	/**
+	 * 指定のレイヤーへ情報をコピーする
+   **/
+	public function copyTo(layer:Layer2D):Void {
+		layer.initialize(_width, _height);
+		var func = function(i, j, v) {
+			layer.set(i, j, v);
+		}
+		forEach(func);
 	}
 
 	public function copyRectDestination(layer:Layer2D, destX:Int, destY:Int, srcX:Int = 0, srcY:Int = 0, srcW:Int = 0, srcH:Int = 0):Void {
@@ -173,7 +184,6 @@ class Layer2D {
 	/**
 	 * レイヤー内の値を順番に走査する
 	 **/
-
 	public function forEach(Function:Int -> Int -> Int -> Void):Void {
 		for(j in 0...height) {
 			for(i in 0...width) {
@@ -183,6 +193,9 @@ class Layer2D {
 		}
 	}
 
+	/**
+	 * デバッグ出力
+   **/
 	public function dump():Void {
 		trace("<<Layer2D>> (width, height)=(" + _width + ", " + _height + ")");
 		for(j in 0..._height) {
@@ -191,6 +204,36 @@ class Layer2D {
 				s += TextUtil.fillSpace(get(i, j), 3);
 			}
 			trace(s);
+		}
+	}
+
+	/**
+	 * マップ情報をCSV文字列として取得する
+   **/
+	public function getCsv():String {
+		var buf = new StringBuf();
+		var func = function(i:Int, j:Int, v:Int) {
+			if(i > 0 || j > 0) {
+				buf.add(",");
+			}
+			buf.add(v);
+		}
+		forEach(func);
+
+		return buf.toString();
+	}
+
+	/**
+	 * CSV文字列からマップ情報を設定する
+	 **/
+	public function setCsv(w:Int, h:Int, csv:String) {
+		initialize(w, h);
+		var idx:Int = 0;
+		for(v in csv.split(",")) {
+			var x = idxToX(idx);
+			var y = idxToY(idx);
+			set(x, y, Std.parseInt(v));
+			idx++;
 		}
 	}
 }

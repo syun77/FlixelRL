@@ -3,6 +3,7 @@ package ;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.Layer2D;
 import DirUtil.Dir;
 import flixel.FlxG;
 import haxe.Json;
@@ -32,23 +33,55 @@ class SaveDataPlayer {
 }
 
 /**
+ * マップデータ
+ **/
+class SaveDataMap {
+	public var width:Int = 0;
+	public var height:Int = 0;
+	public var data:String = "";
+	public function new() {
+	}
+	// セーブ
+	public function save() {
+		var state = cast(FlxG.state, PlayState);
+		var layer = state.lField;
+		width = layer.width;
+		height = layer.height;
+		data = layer.getCsv();
+	}
+	// ロード
+	public function load(data:Dynamic) {
+		var state = cast(FlxG.state, PlayState);
+		var w = data.width;
+		var h = data.height;
+		var layer = new Layer2D();
+		layer.setCsv(w, h, data.data);
+		state.setFieldLayer(layer);
+	}
+}
+
+/**
  * セーブデータ
  **/
 class SaveData {
 	public var player:SaveDataPlayer;
+	public var map:SaveDataMap;
 
 	public function new() {
 		player = new SaveDataPlayer();
+		map = new SaveDataMap();
 	}
 
 	// セーブ
 	public function save():Void {
 		player.save();
+		map.save();
 	}
 
 	// ロード
 	public function load(data:Dynamic):Void {
 		player.load(data.player);
+		map.load(data.map);
 	}
 }
 

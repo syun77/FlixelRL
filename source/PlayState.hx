@@ -1,5 +1,6 @@
 package;
 
+import jp_2dgames.Layer2D;
 import flixel.FlxSprite;
 import jp_2dgames.TmxLoader;
 import flixel.FlxG;
@@ -10,11 +11,21 @@ import flixel.FlxState;
  */
 class PlayState extends FlxState
 {
+	// プレイヤー情報
 	private var _player:Player;
 	public var player(get_player, null):Player;
 	private function get_player() {
 		return _player;
 	}
+	// マップ情報
+	private var _lField:Layer2D;
+	public var lField(get_lField, null):Layer2D;
+	private function get_lField() {
+		return _lField;
+	}
+
+	// 背景
+	private var _back:FlxSprite;
 
 	/**
 	 * 生成
@@ -27,11 +38,13 @@ class PlayState extends FlxState
 		var tmx = new TmxLoader();
 		tmx.load("assets/levels/001.tmx");
 		var layer = tmx.getLayer(0);
+		// 背景レイヤーを生成
+		_lField = new Layer2D();
 		// 背景画像を登録
-		var back = Field.createBackground(layer);
-		this.add(back);
-		// コリジョンレイヤーを登録
-		Field.setCollisionLayer(layer);
+		_back = new FlxSprite();
+		this.add(_back);
+		// フィールドを登録
+		setFieldLayer(layer);
 		var pt = layer.search(Field.PLAYER);
 
 		// プレイヤー生成
@@ -47,6 +60,19 @@ class PlayState extends FlxState
 //		FlxG.debugger.visible = true;
 		FlxG.debugger.toggleKeys = ["ALT"];
 //		FlxG.debugger.drawDebug = true;
+	}
+
+	/**
+	 * フィールド情報を設定する
+   **/
+	public function setFieldLayer(layer:Layer2D) {
+		// フィールド情報をコピー
+		_lField.copy(layer);
+
+		// 背景画像を作成
+		Field.createBackground(_lField, _back);
+		// コリジョンレイヤーを登録
+		Field.setCollisionLayer(_lField);
 	}
 
 	/**
