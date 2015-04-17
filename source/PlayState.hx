@@ -26,6 +26,10 @@ class PlayState extends FlxState
 	}
 	// 敵管理
 	private var _enemies:FlxTypedGroup<Enemy>;
+	public var enemies(get_enemies, null):FlxTypedGroup<Enemy>;
+	private function get_enemies() {
+		return _enemies;
+	}
 
 	// メッセージ
 	private var _message:Message;

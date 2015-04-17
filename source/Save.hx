@@ -11,7 +11,7 @@ import haxe.Json;
 /**
  * プレイヤーデータ
  **/
-class SaveDataPlayer {
+private class _Player {
 	public var x:Int = 0;
 	public var y:Int = 0;
 	public var dir:String = "down";
@@ -33,9 +33,57 @@ class SaveDataPlayer {
 }
 
 /**
+ * 敵データ
+ **/
+private class _Enemy {
+	public var x:Int = 0;
+	public var y:Int = 0;
+	public var id:Int = 0;
+	public var dir:String = "down";
+	public function new () {
+	}
+}
+private class _Enemies {
+	public var array:Array<_Enemy>;
+	public function new () {
+		array = new Array<_Enemy>();
+	}
+	// セーブ
+	public function save() {
+		// いったん初期化
+		array = new Array<_Enemy>();
+
+		var enemies = cast(FlxG.state, PlayState).enemies;
+		var func = function(e:Enemy) {
+			var e2 = new _Enemy();
+			e2.x = e.xchip;
+			e2.y = e.ychip;
+			e2.id = e.id;
+			e2.dir = "down"; // TODO:
+			array.push(e2);
+		}
+
+		enemies.forEachAlive(func);
+	}
+	// ロード
+	public function load(data:Dynamic) {
+		var enemies = cast(FlxG.state, PlayState).enemies;
+		// 敵を全部消す
+		enemies.kill();
+		enemies.revive();
+		var arr:Array<_Enemy> = data.array;
+		// 作り直し
+		for(e2 in arr) {
+			var e:Enemy = enemies.recycle();
+			e.init(e2.x, e2.y, e2.id);
+		}
+	}
+}
+
+/**
  * マップデータ
  **/
-class SaveDataMap {
+private class _Map {
 	public var width:Int = 0;
 	public var height:Int = 0;
 	public var data:String = "";
@@ -63,24 +111,28 @@ class SaveDataMap {
 /**
  * セーブデータ
  **/
-class SaveData {
-	public var player:SaveDataPlayer;
-	public var map:SaveDataMap;
+private class SaveData {
+	public var player:_Player;
+	public var enemies:_Enemies;
+	public var map:_Map;
 
 	public function new() {
-		player = new SaveDataPlayer();
-		map = new SaveDataMap();
+		player = new _Player();
+		enemies = new _Enemies();
+		map = new _Map();
 	}
 
 	// セーブ
 	public function save():Void {
 		player.save();
+		enemies.save();
 		map.save();
 	}
 
 	// ロード
 	public function load(data:Dynamic):Void {
 		player.load(data.player);
+		enemies.load(data.enemies);
 		map.load(data.map);
 	}
 }
