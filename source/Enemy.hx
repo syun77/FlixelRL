@@ -1,13 +1,34 @@
 package ;
+import flixel.util.FlxPoint;
+import flixel.FlxG;
+import DirUtil.Dir;
 import flixel.FlxSprite;
+
+/**
+ * 状態
+ **/
+private enum State {
+	Standby;
+	Walk;
+}
 
 /**
  * 敵クラス
  **/
 class Enemy extends FlxSprite {
 
+	// 1マス進むのにかかるフレーム数
+	private static inline var TIMER_WALK:Int = 16;
+
+	// 状態
+	private var _state:State = State.Standby;
+	private var _tWalk:Int = 0;
+
 	// 敵ID
 	private var _id:Int = 1;
+
+	// 方向
+	private var _dir:Dir = Dir.Down;
 
 	// 移動元座標
 	private var _xprev:Float = 0;
@@ -60,6 +81,121 @@ class Enemy extends FlxSprite {
 		_ynext = Y;
 		x = Field.toWorldX(X);
 		y = Field.toWorldY(Y);
+	}
+
+	/**
+	 * 更新
+	 **/
+	override public function update():Void {
+		super.update();
+
+		switch(_state) {
+		case State.Standby:
+			_updateStandby();
+
+		case State.Walk:
+			_updateWalk();
+		}
+	}
+
+	/**
+	 * 移動方向を決める
+	 **/
+	private function _aiMoveDir():Dir {
+		// 移動方向判定
+		var player = cast(FlxG.state, PlayState).player;
+		var dx = player.xchip - xchip;
+		var dy = player.ychip - ychip;
+		var func = function() {
+			if(Math.abs(dx) > Math.abs(dy)) {
+				if(dx < 0) {
+					return Dir.Left;
+				}
+				else {
+					return Dir.Right;
+				}
+			}
+			else {
+				if(dy < 0) {
+					return Dir.Up;
+				}
+				else {
+					return Dir.Down;
+				}
+			}
+		}
+
+		// 移動方向の判定実行
+		var dir = func();
+
+		// 移動先が壁かどうかチェックする
+		var pt = FlxPoint.get(_xnext, _ynext);
+		pt = DirUtil.move(dir, pt);
+		trace(dx, dy);
+		trace(pt);
+		if(Field.isCollision(Std.int(pt.x), Std.int(pt.y))) {
+			// 移動できない
+			if(DirUtil.isHorizontal(dir)) {
+				if(dy < 0) {
+					dir = Dir.Up;
+				}
+				else {
+					dir = Dir.Down;
+				}
+			}
+			else {
+				if(dx < 0) {
+					dir = Dir.Left;
+				}
+				else {
+					dir = Dir.Right;
+				}
+			}
+		}
+
+		pt.put();
+		return dir;
+	}
+
+	/**
+	 * 更新・待機中
+	 **/
+	private function _updateStandby():Void {
+		var pt = FlxPoint.get(_xnext, _ynext);
+		_dir = _aiMoveDir();
+		pt = DirUtil.move(_dir, pt);
+
+		// 移動先チェック
+		if(Field.isCollision(Std.int(pt.x), Std.int(pt.y)) == false) {
+			// 移動可能
+			_xnext = Std.int(pt.x);
+			_ynext = Std.int(pt.y);
+			_state = State.Walk;
+			_tWalk = 0;
+		}
+
+		pt.put();
+	}
+
+	/**
+	 * 更新・歩く
+	 **/
+	private function _updateWalk():Void {
+		// 経過フレームの割合を求める
+		var t = _tWalk / TIMER_WALK;
+		// 移動方向を求める
+		var dx = _xnext - _xprev;
+		var dy = _ynext - _yprev;
+		// 座標を線形補間する
+		x = Field.toWorldX(_xprev) + (dx * Field.GRID_SIZE) * t;
+		y = Field.toWorldY(_yprev) + (dy * Field.GRID_SIZE) * t;
+		_tWalk++;
+		if(_tWalk >= TIMER_WALK) {
+			// 移動完了
+			_state = State.Standby;
+			_xprev = _xnext;
+			_yprev = _ynext;
+		}
 	}
 
 	/**

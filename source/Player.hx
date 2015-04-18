@@ -7,7 +7,7 @@ import DirUtil;
 /**
  * 状態
  **/
-enum State {
+private enum State {
 	Standby;
 	Walk;
 }
@@ -17,6 +17,7 @@ enum State {
  */
 class Player extends FlxSprite {
 
+	// 1マス進むのにかかるフレーム数
 	private static inline var TIMER_WALK:Int = 16;
 
 	// 状態
