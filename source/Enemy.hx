@@ -8,8 +8,9 @@ import flixel.FlxSprite;
  * 状態
  **/
 private enum State {
-	Standby;
-	Walk;
+	Standby; // 待機中
+	Walk;    // 歩き中
+	TurnEnd; // ターン終了
 }
 
 /**
@@ -91,11 +92,26 @@ class Enemy extends FlxSprite {
 
 		switch(_state) {
 		case State.Standby:
-			_updateStandby();
 
 		case State.Walk:
 			_updateWalk();
+
+		case State.TurnEnd:
 		}
+	}
+
+	/**
+	 * ターン終了したかどうか
+	 **/
+	public function isTurnEnd():Bool {
+		return _state == State.TurnEnd;
+	}
+
+	/**
+	 * ターン終了
+	 **/
+	public function turnEnd():Void {
+		_state = State.Standby;
 	}
 
 	/**
@@ -158,9 +174,9 @@ class Enemy extends FlxSprite {
 	}
 
 	/**
-	 * 更新・待機中
+	 * 移動要求をする
 	 **/
-	private function _updateStandby():Void {
+	public function requestMove():Void {
 		var pt = FlxPoint.get(_xnext, _ynext);
 		_dir = _aiMoveDir();
 		pt = DirUtil.move(_dir, pt);
@@ -172,6 +188,10 @@ class Enemy extends FlxSprite {
 			_ynext = Std.int(pt.y);
 			_state = State.Walk;
 			_tWalk = 0;
+		}
+		else {
+			// 移動できないのでターン終了
+			_state = State.TurnEnd;
 		}
 
 		pt.put();
@@ -192,7 +212,7 @@ class Enemy extends FlxSprite {
 		_tWalk++;
 		if(_tWalk >= TIMER_WALK) {
 			// 移動完了
-			_state = State.Standby;
+			_state = State.TurnEnd;
 			_xprev = _xnext;
 			_yprev = _ynext;
 		}

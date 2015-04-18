@@ -8,8 +8,9 @@ import DirUtil;
  * 状態
  **/
 private enum State {
-	Standby;
-	Walk;
+	KeyInput; // キー入力待ち
+	Walk;     // 歩き中
+	TurnEnd;  // ターン終了
 }
 
 /**
@@ -21,7 +22,7 @@ class Player extends FlxSprite {
 	private static inline var TIMER_WALK:Int = 16;
 
 	// 状態
-	private var _state:State = State.Standby;
+	private var _state:State = State.KeyInput;
 	private var _tWalk:Int = 0;
 	// 向き
 	private var _dir:Dir = Dir.Down;
@@ -35,6 +36,11 @@ class Player extends FlxSprite {
 	private var _ynext:Float = 0;
 
 	// プロパティ
+	// 状態
+	public var state(get_state, null):State;
+	private function get_state() {
+		return _state;
+	}
 	// チップ座標(X)
 	public var xchip(get_xchip, null):Int;
 	private function get_xchip() {
@@ -85,7 +91,7 @@ class Player extends FlxSprite {
 		x = Field.toWorldX(X);
 		y = Field.toWorldY(Y);
 
-		_state = State.Standby;
+		_state = State.KeyInput;
 		_tWalk = 0;
 		// 向き
 		_dir = dir;
@@ -97,16 +103,32 @@ class Player extends FlxSprite {
 		animation.play(name);
 	}
 
+	// キー入力待ち状態かどうか
+	public function isKeyInput():Bool {
+		return _state == State.KeyInput;
+	}
+	// ターン終了しているかどうか
+	public function isTurnEnd():Bool {
+		return _state == State.TurnEnd;
+	}
+	// ターン終了
+	public function turnEnd():Void {
+		_state = State.KeyInput;
+	}
+
 	// 更新
 	override public function update():Void {
 		super.update();
 
 		switch(_state) {
-		case State.Standby:
+		case State.KeyInput:
 			_updateStandby();
 
 		case State.Walk:
 			_updateWalk();
+
+		case State.TurnEnd:
+
 
 		}
 
@@ -175,7 +197,7 @@ class Player extends FlxSprite {
 		_tWalk++;
 		if(_tWalk >= TIMER_WALK) {
 			// 移動完了
-			_state = State.Standby;
+			_state = State.TurnEnd;
 			_xprev = _xnext;
 			_yprev = _ynext;
 		}

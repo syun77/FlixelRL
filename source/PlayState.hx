@@ -38,6 +38,9 @@ class PlayState extends FlxState
 		return _message;
 	}
 
+	// シーケンス管理
+	private var _seq:SeqMgr;
+
 	// 背景
 	private var _back:FlxSprite;
 
@@ -79,13 +82,12 @@ class PlayState extends FlxState
 		_message = new Message();
 		this.add(_message);
 
+		// シーケンス管理
+		_seq = new SeqMgr(this);
+
 		// デバッグ情報設定
-		FlxG.watch.add(player, "x");
-		FlxG.watch.add(player, "y");
-		FlxG.watch.add(player, "_xprev");
-		FlxG.watch.add(player, "_yprev");
-		FlxG.watch.add(player, "frameWidth");
-		FlxG.watch.add(player, "width");
+		FlxG.watch.add(player, "_state");
+		FlxG.watch.add(_seq, "_state");
 
 //		FlxG.debugger.visible = true;
 		FlxG.debugger.toggleKeys = ["ALT"];
@@ -119,6 +121,9 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+
+		// シーケンス更新
+		_seq.update();
 
 		// デバッグ処理
 		updateDebug();
