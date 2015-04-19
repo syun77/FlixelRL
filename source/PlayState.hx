@@ -76,7 +76,8 @@ class PlayState extends FlxState
 		this.add(_enemies);
 
 		var e:Enemy = _enemies.recycle();
-		e.init(3, 2, 1);
+		var params = new Status();
+		e.init(3, 2, 1, params);
 
 		// メッセージ生成
 		_message = new Message();

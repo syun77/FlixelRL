@@ -15,6 +15,7 @@ private class _Player {
 	public var x:Int = 0;
 	public var y:Int = 0;
 	public var dir:String = "down";
+	public var params:Status;
 	public function new() {
 	}
 	// セーブ
@@ -23,12 +24,13 @@ private class _Player {
 		x = p.xchip;
 		y = p.ychip;
 		dir = DirUtil.toString(p.dir);
+		params = p.params;
 	}
 	// ロード
 	public function load(data:Dynamic) {
 		var p = cast(FlxG.state, PlayState).player;
 		var dir = DirUtil.fromString(data.dir);
-		p.init(data.x, data.y, dir);
+		p.init(data.x, data.y, dir, data.params);
 	}
 }
 
@@ -40,6 +42,7 @@ private class _Enemy {
 	public var y:Int = 0;
 	public var id:Int = 0;
 	public var dir:String = "down";
+	public var params:Status;
 	public function new () {
 	}
 }
@@ -60,6 +63,7 @@ private class _Enemies {
 			e2.y = e.ychip;
 			e2.id = e.id;
 			e2.dir = "down"; // TODO:
+			e2.params = e.params;
 			array.push(e2);
 		}
 
@@ -75,7 +79,7 @@ private class _Enemies {
 		// 作り直し
 		for(e2 in arr) {
 			var e:Enemy = enemies.recycle();
-			e.init(e2.x, e2.y, e2.id);
+			e.init(e2.x, e2.y, e2.id, e2.params);
 		}
 	}
 }

@@ -34,13 +34,10 @@ class Player extends FlxSprite {
 	// 移動先座標
 	private var _xnext:Float = 0;
 	private var _ynext:Float = 0;
+	// ステータスパラメータ
+	private var _params:Status;
 
 	// プロパティ
-	// 状態
-	public var state(get_state, null):State;
-	private function get_state() {
-		return _state;
-	}
 	// チップ座標(X)
 	public var xchip(get_xchip, null):Int;
 	private function get_xchip() {
@@ -56,6 +53,11 @@ class Player extends FlxSprite {
 	private function get_dir() {
 		return _dir;
 	}
+	// パラメータ
+	public var params(get_params, null):Status;
+	private function get_params() {
+		return _params;
+	}
 
 	/**
 	 * 生成
@@ -63,7 +65,9 @@ class Player extends FlxSprite {
 	public function new(X:Int, Y:Int) {
 		super();
 
-		init(X, Y, Dir.Down);
+		var stt = new Status();
+
+		init(X, Y, Dir.Down, stt);
 
 		// アニメーションを登録
 		_registAnim();
@@ -83,7 +87,7 @@ class Player extends FlxSprite {
 	/**
 	 * 初期化
 	 **/
-	public function init(X:Int, Y:Int, dir:Dir):Void {
+	public function init(X:Int, Y:Int, dir:Dir, stt:Status):Void {
 		_xprev = X;
 		_yprev = Y;
 		_xnext = X;
@@ -95,6 +99,8 @@ class Player extends FlxSprite {
 		_tWalk = 0;
 		// 向き
 		_dir = dir;
+		// ステータス
+		_params = stt;
 	}
 
 	// アニメーションを再生

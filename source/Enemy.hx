@@ -37,6 +37,8 @@ class Enemy extends FlxSprite {
 	// 移動先座標
 	private var _xnext:Float = 0;
 	private var _ynext:Float = 0;
+	// ステータスパラメータ
+	private var _params:Status;
 
 	// プロパティ
 	// 敵ID
@@ -54,6 +56,11 @@ class Enemy extends FlxSprite {
 	private function get_ychip() {
 		return Std.int(_ynext);
 	}
+	// ステータスパラメータ
+	public var params(get_params, null):Status;
+	private function get_params() {
+		return _params;
+	}
 
 	public function new() {
 		super();
@@ -70,7 +77,7 @@ class Enemy extends FlxSprite {
 	/**
 	 * 初期化
 	 **/
-	public function init(X:Int, Y:Int, id:Int):Void {
+	public function init(X:Int, Y:Int, id:Int, params:Status):Void {
 		// アニメーション再生開始
 		animation.play(Std.string(id));
 		_id = id;
@@ -82,6 +89,7 @@ class Enemy extends FlxSprite {
 		_ynext = Y;
 		x = Field.toWorldX(X);
 		y = Field.toWorldY(Y);
+		_params = params;
 	}
 
 	/**
