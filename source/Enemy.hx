@@ -4,41 +4,41 @@ import flixel.FlxG;
 import DirUtil.Dir;
 import flixel.FlxSprite;
 
-/**
- * 状態
- **/
-private enum State {
-	Standby; // 待機中
-	Walk;    // 歩き中
-	TurnEnd; // ターン終了
-}
+///**
+// * 状態
+// **/
+//private enum State {
+//	Standby; // 待機中
+//	Walk;    // 歩き中
+//	TurnEnd; // ターン終了
+//}
 
 /**
  * 敵クラス
  **/
-class Enemy extends FlxSprite {
+class Enemy extends Actor {
 
-	// 1マス進むのにかかるフレーム数
-	private static inline var TIMER_WALK:Int = 16;
-
-	// 状態
-	private var _state:State = State.Standby;
-	private var _tWalk:Int = 0;
+//	// 1マス進むのにかかるフレーム数
+//	private static inline var TIMER_WALK:Int = 16;
+//
+//	// 状態
+//	private var _state:State = State.Standby;
+//	private var _tWalk:Int = 0;
 
 	// 敵ID
 	private var _id:Int = 1;
 
-	// 方向
-	private var _dir:Dir = Dir.Down;
-
-	// 移動元座標
-	private var _xprev:Float = 0;
-	private var _yprev:Float = 0;
-	// 移動先座標
-	private var _xnext:Float = 0;
-	private var _ynext:Float = 0;
-	// ステータスパラメータ
-	private var _params:Status;
+//	// 方向
+//	private var _dir:Dir = Dir.Down;
+//
+//	// 移動元座標
+//	private var _xprev:Float = 0;
+//	private var _yprev:Float = 0;
+//	// 移動先座標
+//	private var _xnext:Float = 0;
+//	private var _ynext:Float = 0;
+//	// ステータスパラメータ
+//	private var _params:Params;
 
 	// プロパティ
 	// 敵ID
@@ -46,24 +46,25 @@ class Enemy extends FlxSprite {
 	private function get_id() {
 		return _id;
 	}
-	// チップ座標(X)
-	public var xchip(get_xchip, null):Int;
-	private function get_xchip() {
-		return Std.int(_xnext);
-	}
-	// チップ座標(Y)
-	public var ychip(get_ychip, null):Int;
-	private function get_ychip() {
-		return Std.int(_ynext);
-	}
-	// ステータスパラメータ
-	public var params(get_params, null):Status;
-	private function get_params() {
-		return _params;
-	}
+//	// チップ座標(X)
+//	public var xchip(get_xchip, null):Int;
+//	private function get_xchip() {
+//		return Std.int(_xnext);
+//	}
+//	// チップ座標(Y)
+//	public var ychip(get_ychip, null):Int;
+//	private function get_ychip() {
+//		return Std.int(_ynext);
+//	}
+//	// ステータスパラメータ
+//	public var params(get_params, null):Params;
+//	private function get_params() {
+//		return _params;
+//	}
 
 	public function new() {
 		super();
+
 		// アニメーションを登録
 		_registAnim();
 
@@ -77,19 +78,25 @@ class Enemy extends FlxSprite {
 	/**
 	 * 初期化
 	 **/
-	public function init(X:Int, Y:Int, id:Int, params:Status):Void {
+	override public function init(X:Int, Y:Int, dir:Dir, params:Params):Void {
+
+		// ID取得
+		var id = params.id;
+
 		// アニメーション再生開始
 		animation.play(Std.string(id));
 		_id = id;
 
-		// 座標反映
-		_xprev = X;
-		_yprev = Y;
-		_xnext = X;
-		_ynext = Y;
-		x = Field.toWorldX(X);
-		y = Field.toWorldY(Y);
-		_params = params;
+		super.init(X, Y, Dir.Down, params);
+
+//		// 座標反映
+//		_xprev = X;
+//		_yprev = Y;
+//		_xnext = X;
+//		_ynext = Y;
+//		x = Field.toWorldX(X);
+//		y = Field.toWorldY(Y);
+//		_params = params;
 	}
 
 	/**
@@ -99,28 +106,32 @@ class Enemy extends FlxSprite {
 		super.update();
 
 		switch(_state) {
-		case State.Standby:
+		case Actor.State.KeyInput:
 
-		case State.Walk:
-			_updateWalk();
+		case Actor.State.Standby:
 
-		case State.TurnEnd:
+		case Actor.State.Walk:
+			if(_updateWalk()) {
+				_state = Actor.State.TurnEnd;
+			}
+
+		case Actor.State.TurnEnd:
 		}
 	}
 
-	/**
-	 * ターン終了したかどうか
-	 **/
-	public function isTurnEnd():Bool {
-		return _state == State.TurnEnd;
-	}
-
-	/**
-	 * ターン終了
-	 **/
-	public function turnEnd():Void {
-		_state = State.Standby;
-	}
+//	/**
+//	 * ターン終了したかどうか
+//	 **/
+//	public function isTurnEnd():Bool {
+//		return _state == State.TurnEnd;
+//	}
+//
+//	/**
+//	 * ターン終了
+//	 **/
+//	public function turnEnd():Void {
+//		_state = State.Standby;
+//	}
 
 	/**
 	 * 移動方向を決める
@@ -194,37 +205,37 @@ class Enemy extends FlxSprite {
 			// 移動可能
 			_xnext = Std.int(pt.x);
 			_ynext = Std.int(pt.y);
-			_state = State.Walk;
+			_state = Actor.State.Walk;
 			_tWalk = 0;
 		}
 		else {
 			// 移動できないのでターン終了
-			_state = State.TurnEnd;
+			_state = Actor.State.TurnEnd;
 		}
 
 		pt.put();
 	}
 
-	/**
-	 * 更新・歩く
-	 **/
-	private function _updateWalk():Void {
-		// 経過フレームの割合を求める
-		var t = _tWalk / TIMER_WALK;
-		// 移動方向を求める
-		var dx = _xnext - _xprev;
-		var dy = _ynext - _yprev;
-		// 座標を線形補間する
-		x = Field.toWorldX(_xprev) + (dx * Field.GRID_SIZE) * t;
-		y = Field.toWorldY(_yprev) + (dy * Field.GRID_SIZE) * t;
-		_tWalk++;
-		if(_tWalk >= TIMER_WALK) {
-			// 移動完了
-			_state = State.TurnEnd;
-			_xprev = _xnext;
-			_yprev = _ynext;
-		}
-	}
+//	/**
+//	 * 更新・歩く
+//	 **/
+//	private function _updateWalk():Void {
+//		// 経過フレームの割合を求める
+//		var t = _tWalk / TIMER_WALK;
+//		// 移動方向を求める
+//		var dx = _xnext - _xprev;
+//		var dy = _ynext - _yprev;
+//		// 座標を線形補間する
+//		x = Field.toWorldX(_xprev) + (dx * Field.GRID_SIZE) * t;
+//		y = Field.toWorldY(_yprev) + (dy * Field.GRID_SIZE) * t;
+//		_tWalk++;
+//		if(_tWalk >= TIMER_WALK) {
+//			// 移動完了
+//			_state = State.TurnEnd;
+//			_xprev = _xnext;
+//			_yprev = _ynext;
+//		}
+//	}
 
 	/**
 	 * アニメーションの登録

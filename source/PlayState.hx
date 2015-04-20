@@ -1,5 +1,6 @@
 package;
 
+import DirUtil.Dir;
 import flixel.group.FlxTypedGroup;
 import jp_2dgames.Layer2D;
 import flixel.FlxSprite;
@@ -76,8 +77,8 @@ class PlayState extends FlxState
 		this.add(_enemies);
 
 		var e:Enemy = _enemies.recycle();
-		var params = new Status();
-		e.init(3, 2, 1, params);
+		var params = new Params();
+		e.init(3, 2, Dir.Down, params);
 
 		// メッセージ生成
 		_message = new Message();

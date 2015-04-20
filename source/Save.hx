@@ -15,7 +15,7 @@ private class _Player {
 	public var x:Int = 0;
 	public var y:Int = 0;
 	public var dir:String = "down";
-	public var params:Status;
+	public var params:Params;
 	public function new() {
 	}
 	// セーブ
@@ -40,9 +40,8 @@ private class _Player {
 private class _Enemy {
 	public var x:Int = 0;
 	public var y:Int = 0;
-	public var id:Int = 0;
 	public var dir:String = "down";
-	public var params:Status;
+	public var params:Params;
 	public function new () {
 	}
 }
@@ -61,7 +60,6 @@ private class _Enemies {
 			var e2 = new _Enemy();
 			e2.x = e.xchip;
 			e2.y = e.ychip;
-			e2.id = e.id;
 			e2.dir = "down"; // TODO:
 			e2.params = e.params;
 			array.push(e2);
@@ -79,7 +77,8 @@ private class _Enemies {
 		// 作り直し
 		for(e2 in arr) {
 			var e:Enemy = enemies.recycle();
-			e.init(e2.x, e2.y, e2.id, e2.params);
+			var dir = DirUtil.fromString(e2.dir);
+			e.init(e2.x, e2.y, dir, e2.params);
 		}
 	}
 }
