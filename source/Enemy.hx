@@ -58,7 +58,7 @@ class Enemy extends Actor {
 
 		case Actor.State.Standby:
 
-		case Actor.State.Walk:
+		case Actor.State.Move:
 			if(_updateWalk()) {
 				_state = Actor.State.TurnEnd;
 			}
@@ -139,8 +139,8 @@ class Enemy extends Actor {
 			// 移動可能
 			_xnext = Std.int(pt.x);
 			_ynext = Std.int(pt.y);
-			_state = Actor.State.Walk;
-			_tWalk = 0;
+			_state = Actor.State.Move;
+			_tMove = 0;
 		}
 		else {
 			// 移動できないのでターン終了

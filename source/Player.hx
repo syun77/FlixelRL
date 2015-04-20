@@ -54,7 +54,7 @@ class Player extends Actor {
 
 		case Actor.State.Standby:
 
-		case Actor.State.Walk:
+		case Actor.State.Move:
 			if(_updateWalk()) {
 				_state = Actor.State.TurnEnd;
 			}
@@ -109,8 +109,8 @@ class Player extends Actor {
 			_xnext = xnext;
 			_ynext = ynext;
 			_bStop = false;
-			_state = Actor.State.Walk;
-			_tWalk = 0;
+			_state = Actor.State.Move;
+			_tMove = 0;
 		}
 	}
 

@@ -9,7 +9,7 @@ import flixel.FlxSprite;
 enum State {
 	KeyInput; // キー入力待ち
 	Standby;  // 待機中
-	Walk;     // 歩き中
+	Move;     // 移動中
 	TurnEnd;  // ターン終了
 }
 
@@ -23,7 +23,7 @@ class Actor extends FlxSprite {
 
 	// 状態
 	private var _state:State;
-	private var _tWalk:Int = 0;
+	private var _tMove:Int = 0;
 	// 向き
 	private var _dir:Dir = Dir.Down;
 	// アニメーション状態
@@ -75,7 +75,7 @@ class Actor extends FlxSprite {
 		y = Field.toWorldY(Y);
 
 		_state = State.KeyInput;
-		_tWalk = 0;
+		_tMove = 0;
 		// 向き
 		_dir = dir;
 		// ステータス
@@ -100,15 +100,15 @@ class Actor extends FlxSprite {
 	 **/
 	private function _updateWalk():Bool {
 		// 経過フレームの割合を求める
-		var t = _tWalk / TIMER_WALK;
+		var t = _tMove / TIMER_WALK;
 		// 移動方向を求める
 		var dx = _xnext - _xprev;
 		var dy = _ynext - _yprev;
 		// 座標を線形補間する
 		x = Field.toWorldX(_xprev) + (dx * Field.GRID_SIZE) * t;
 		y = Field.toWorldY(_yprev) + (dy * Field.GRID_SIZE) * t;
-		_tWalk++;
-		if(_tWalk >= TIMER_WALK) {
+		_tMove++;
+		if(_tMove >= TIMER_WALK) {
 			// 移動完了
 //			_state = State.TurnEnd;
 			_xprev = _xnext;
