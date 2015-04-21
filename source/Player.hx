@@ -9,6 +9,8 @@ import DirUtil;
  */
 class Player extends Actor {
 
+	private var _target:Enemy = null;
+
 	/**
 	 * 生成
 	 */
@@ -54,10 +56,23 @@ class Player extends Actor {
 
 		case Actor.State.Standby:
 
+		case Actor.State.ActBegin:
+
+		case Actor.State.Act:
+			_target.damage(30);
+			_state = Actor.State.TurnEnd;
+
+		case Actor.State.ActEnd:
+
+		case Actor.State.MoveBegin:
+
 		case Actor.State.Move:
 			if(_updateWalk()) {
 				_state = Actor.State.TurnEnd;
 			}
+
+		case Actor.State.MoveEnd:
+
 
 		case Actor.State.TurnEnd:
 
@@ -78,28 +93,43 @@ class Player extends Actor {
 			// 左へ進む
 			_dir = Dir.Left;
 			xnext -= 1;
-			Message.push("turn みぎ");
 		}
 		else if(FlxG.keys.pressed.UP) {
 			// 上へ進む
 			_dir = Dir.Up;
 			ynext -= 1;
-			Message.push("turn 上");
 		}
 		else if(FlxG.keys.pressed.RIGHT) {
 			// 右へ進む
 			_dir = Dir.Right;
 			xnext += 1;
-			Message.push("turn right");
 		}
 		else if(FlxG.keys.pressed.DOWN) {
 			// 下へ進む
 			_dir = Dir.Down;
 			ynext += 1;
-			Message.push("turn down");
 		}
 		else {
 			// 移動しない
+			return;
+		}
+
+		// 移動先に敵がいるかどうかチェック
+		_target = null;
+		var func = function(e:Enemy) {
+			if(e.checkPosition(xnext, ynext)) {
+				// 敵がいた
+				_target = e;
+			}
+		}
+		var enemies = cast(FlxG.state, PlayState).enemies;
+		enemies.forEachAlive(func);
+
+		if(_target != null) {
+			// 敵がいるので攻撃する
+			_xtarget = Std.int(xnext);
+			_ytarget = Std.int(ynext);
+			_state = Actor.State.ActBegin;
 			return;
 		}
 
@@ -109,7 +139,7 @@ class Player extends Actor {
 			_xnext = xnext;
 			_ynext = ynext;
 			_bStop = false;
-			_state = Actor.State.Move;
+			_state = Actor.State.MoveBegin;
 			_tMove = 0;
 		}
 	}

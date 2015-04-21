@@ -58,10 +58,20 @@ class Enemy extends Actor {
 
 		case Actor.State.Standby:
 
+		case Actor.State.ActBegin:
+
+		case Actor.State.Act:
+
+		case Actor.State.ActEnd:
+
+		case Actor.State.MoveBegin:
+
 		case Actor.State.Move:
 			if(_updateWalk()) {
 				_state = Actor.State.TurnEnd;
 			}
+
+		case Actor.State.MoveEnd:
 
 		case Actor.State.TurnEnd:
 		}
@@ -100,8 +110,6 @@ class Enemy extends Actor {
 		// 移動先が壁かどうかチェックする
 		var pt = FlxPoint.get(_xnext, _ynext);
 		pt = DirUtil.move(dir, pt);
-		trace(dx, dy);
-		trace(pt);
 		if(Field.isCollision(Std.int(pt.x), Std.int(pt.y))) {
 			// 移動できない
 			if(DirUtil.isHorizontal(dir)) {
