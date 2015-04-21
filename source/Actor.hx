@@ -58,6 +58,10 @@ class Actor extends FlxSprite {
 	private var _ytarget:Int = 0;
 	// ステータスパラメータ
 	private var _params:Params;
+	// ID
+	private var _id:Int = 1;
+	// 名前
+	private var _name:String = "";
 
 	// プロパティ
 	// チップ座標(X)
@@ -75,10 +79,20 @@ class Actor extends FlxSprite {
 	private function get_dir() {
 		return _dir;
 	}
+	// ID
+	public var id(get_id, null):Int;
+	private function get_id() {
+		return _id;
+	}
 	// パラメータ
 	public var params(get_params, null):Params;
 	private function get_params() {
 		return _params;
+	}
+	// 名前
+	public var name(get_name, null):String;
+	private function get_name() {
+		return _name;
 	}
 	// 行動タイプ
 	public var action(get_action, null):Action;
@@ -125,6 +139,8 @@ class Actor extends FlxSprite {
 		_dir = dir;
 		// ステータス
 		_params = params;
+		// ID
+		_id = params.id;
 	}
 
 	// 行動開始する
@@ -197,7 +213,12 @@ class Actor extends FlxSprite {
 	 * ダメージを与える
 	 **/
 	public function damage(val:Int):Bool {
-		Message.push('敵に${val}ダメージを与えた');
+		if(id == 0) {
+			Message.push('${name}は${val}ダメージを受けた');
+		}
+		else {
+			Message.push('${name}に${val}ダメージを与えた');
+		}
 
 		_params.hp -= val;
 		if(_params.hp <= 0) {

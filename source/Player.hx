@@ -21,6 +21,10 @@ class Player extends Actor {
 
 		// 初期化
 		init(X, Y, Dir.Down, params);
+		// プレイヤーはID「0」にしておく
+		_id = 0;
+		// 名前を設定
+		_name = "プレイヤー";
 
 		// アニメーションを登録
 		_registAnim();

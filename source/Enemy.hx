@@ -12,16 +12,6 @@ class Enemy extends Actor {
 	// プレイヤー
 	public static var target:Player = null;
 
-	// 敵ID
-	private var _id:Int = 1;
-
-	// プロパティ
-	// 敵ID
-	public var id(get_id, null):Int;
-	private function get_id() {
-		return _id;
-	}
-
 	public function new() {
 		super();
 
@@ -46,6 +36,8 @@ class Enemy extends Actor {
 		animation.play(Std.string(_id));
 
 		super.init(X, Y, Dir.Down, params);
+		// 名前を設定
+		_name = "スライム";
 	}
 
 	/**
