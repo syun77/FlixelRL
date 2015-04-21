@@ -10,6 +10,7 @@ private enum State {
 	PlayerAct; // プレイヤーの行動
 	EnemyRequestAI; // 敵のAI
 	Move; // 移動
+	EnemyActBegin; // 敵の行動開始
 	EnemyAct; // 敵の行動
 	TurnEnd; // ターン終了
 }
@@ -60,21 +61,40 @@ class SeqMgr {
 			case State.EnemyRequestAI:
 				// 敵に行動を要求する
 				_enemies.forEachAlive(function(e:Enemy) e.requestMove());
-				// プレイヤーの移動を開始する
-				_player.beginMove();
+				if(_player.isTurnEnd()) {
+					_state = State.EnemyActBegin;
+				}
+				else {
+					// プレイヤーの移動を開始する
+					_player.beginMove();
+					// 敵も移動する
+					_enemies.forEachAlive(function(e:Enemy) {
+						if(e.action == Actor.Action.Move) {
+							e.beginMove();
+						}
+					});
+				}
 				_state = State.Move;
 
 			case State.Move:
 				if(_player.isTurnEnd()) {
-					_state = State.EnemyAct;
+					_state = State.EnemyActBegin;
 				}
+
+			case State.EnemyActBegin:
+				_enemies.forEachAlive(function(e:Enemy) {
+					if(e.action == Actor.Action.Act) {
+						e.beginAction();
+					}
+				});
+				_state = State.EnemyAct;
 
 			case State.EnemyAct:
 				// ■敵の行動
 				var isEnd:Bool = true;
 				_enemies.forEachAlive(function(e:Enemy) {
 					if(e.isTurnEnd() == false) {
-						// 移動完了
+						// まだ終わっていない敵がいる
 						isEnd = false;
 					}
 				});

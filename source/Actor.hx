@@ -29,6 +29,7 @@ enum Action {
 	Standby; // 待機中
 	Act;     // 攻撃
 	Move;    // 移動
+	TurnEnd; // ターン終了
 }
 
 /**
@@ -91,6 +92,8 @@ class Actor extends FlxSprite {
 				return Action.Act; // 攻撃開始
 			case State.MoveBegin:
 				return Action.Move; // 移動開始
+			case State.TurnEnd:
+				return Action.TurnEnd; // ターン終了
 			default:
 				// 通常はここにこない
 				trace("error");
@@ -141,7 +144,7 @@ class Actor extends FlxSprite {
 			case State.MoveBegin:
 				_state = State.Move;
 			case State.TurnEnd:
-			// 何もしない
+				// 何もしない
 			default:
 				trace('error:${_state}');
 		}

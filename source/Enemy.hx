@@ -9,6 +9,9 @@ import flixel.FlxSprite;
  **/
 class Enemy extends Actor {
 
+	// プレイヤー
+	public static var target:Player = null;
+
 	// 敵ID
 	private var _id:Int = 1;
 
@@ -38,11 +41,9 @@ class Enemy extends Actor {
 	override public function init(X:Int, Y:Int, dir:Dir, params:Params):Void {
 
 		// ID取得
-		var id = params.id;
-
+		_id = params.id;
 		// アニメーション再生開始
-		animation.play(Std.string(id));
-		_id = id;
+		animation.play(Std.string(_id));
 
 		super.init(X, Y, Dir.Down, params);
 	}
@@ -61,6 +62,8 @@ class Enemy extends Actor {
 		case Actor.State.ActBegin:
 
 		case Actor.State.Act:
+			target.damage(30);
+			_state = Actor.State.TurnEnd;
 
 		case Actor.State.ActEnd:
 
@@ -110,7 +113,11 @@ class Enemy extends Actor {
 		// 移動先が壁かどうかチェックする
 		var pt = FlxPoint.get(_xnext, _ynext);
 		pt = DirUtil.move(dir, pt);
-		if(Field.isCollision(Std.int(pt.x), Std.int(pt.y))) {
+		var xnext = Std.int(pt.x);
+		var ynext = Std.int(pt.y);
+		pt.put();
+
+		if(Field.isCollision(xnext, ynext)) {
 			// 移動できない
 			if(DirUtil.isHorizontal(dir)) {
 				if(dy < 0) {
@@ -130,7 +137,6 @@ class Enemy extends Actor {
 			}
 		}
 
-		pt.put();
 		return dir;
 	}
 
@@ -141,21 +147,29 @@ class Enemy extends Actor {
 		var pt = FlxPoint.get(_xnext, _ynext);
 		_dir = _aiMoveDir();
 		pt = DirUtil.move(_dir, pt);
+		var xnext = Std.int(pt.x);
+		var ynext = Std.int(pt.y);
+		pt.put();
+
+		// 移動先にプレイヤーがいるかどうかをチェック
+		if(target.checkPosition(xnext, ynext)) {
+			// プレイヤーがいるので攻撃
+			_state = Actor.State.ActBegin;
+			return;
+		}
 
 		// 移動先チェック
-		if(Field.isCollision(Std.int(pt.x), Std.int(pt.y)) == false) {
+		if(Field.isCollision(xnext, ynext) == false) {
 			// 移動可能
-			_xnext = Std.int(pt.x);
-			_ynext = Std.int(pt.y);
-			_state = Actor.State.Move;
+			_xnext = xnext;
+			_ynext = ynext;
+			_state = Actor.State.MoveBegin;
 			_tMove = 0;
 		}
 		else {
 			// 移動できないのでターン終了
 			_state = Actor.State.TurnEnd;
 		}
-
-		pt.put();
 	}
 
 	/**

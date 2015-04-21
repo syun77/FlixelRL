@@ -55,16 +55,20 @@ class Player extends Actor {
 			_updateStandby();
 
 		case Actor.State.Standby:
+			// 何もしない
 
 		case Actor.State.ActBegin:
+			// 何もしない
 
 		case Actor.State.Act:
 			_target.damage(30);
 			_state = Actor.State.TurnEnd;
 
 		case Actor.State.ActEnd:
+			// 何もしない
 
 		case Actor.State.MoveBegin:
+			// 何もしない
 
 		case Actor.State.Move:
 			if(_updateWalk()) {
@@ -72,11 +76,10 @@ class Player extends Actor {
 			}
 
 		case Actor.State.MoveEnd:
-
+			// 何もしない
 
 		case Actor.State.TurnEnd:
-
-
+			// 何もしない
 		}
 
 		changeAnim();
@@ -87,8 +90,8 @@ class Player extends Actor {
 	 **/
 	private function _updateStandby():Void {
 		_bStop = true;
-		var xnext = cast(_xnext, Int);
-		var ynext = cast(_ynext, Int);
+		var xnext = Std.int(_xnext);
+		var ynext = Std.int(_ynext);
 		if(FlxG.keys.pressed.LEFT) {
 			// 左へ進む
 			_dir = Dir.Left;
@@ -127,8 +130,8 @@ class Player extends Actor {
 
 		if(_target != null) {
 			// 敵がいるので攻撃する
-			_xtarget = Std.int(xnext);
-			_ytarget = Std.int(ynext);
+			_xtarget = xnext;
+			_ytarget = ynext;
 			_state = Actor.State.ActBegin;
 			return;
 		}

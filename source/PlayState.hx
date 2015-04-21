@@ -68,6 +68,8 @@ class PlayState extends FlxState
 		// プレイヤー生成
 		_player = new Player(Std.int(pt.x), Std.int(pt.y));
 		this.add(_player);
+		// 敵からアクセスしやすいようにする
+		Enemy.target = _player;
 
 		// 敵管理生成
 		_enemies = new FlxTypedGroup<Enemy>(32);
