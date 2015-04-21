@@ -65,7 +65,10 @@ class Player extends Actor {
 			// 何もしない
 
 		case Actor.State.Act:
-			_target.damage(30);
+			if(_target.damage(30)) {
+				// 敵を倒した
+				_target.kill();
+			}
 			_state = Actor.State.TurnEnd;
 
 		case Actor.State.ActEnd:
