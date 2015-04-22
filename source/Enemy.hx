@@ -1,4 +1,5 @@
 package ;
+import jp_2dgames.CsvLoader;
 import flixel.util.FlxPoint;
 import flixel.FlxG;
 import DirUtil.Dir;
@@ -11,6 +12,8 @@ class Enemy extends Actor {
 
 	// プレイヤー
 	public static var target:Player = null;
+	// 敵パラメータ
+	public static var csv:CsvLoader = null;
 
 	public function new() {
 		super();
@@ -28,16 +31,20 @@ class Enemy extends Actor {
 	/**
 	 * 初期化
 	 **/
-	override public function init(X:Int, Y:Int, dir:Dir, params:Params):Void {
+	override public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool=false):Void {
 
 		// ID取得
 		_id = params.id;
 		// アニメーション再生開始
 		animation.play(Std.string(_id));
 
+		if(bCreate) {
+			// 生成なのでCSVからパラメータを取得する
+			params.hp = csv.searchItemInt("id", '${_id}', "hp");
+		}
 		super.init(X, Y, Dir.Down, params);
 		// 名前を設定
-		_name = "スライム";
+		_name = csv.searchItem("id", '${_id}', "name");
 	}
 
 	/**

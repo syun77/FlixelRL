@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxRandom;
 import DirUtil.Dir;
 import flixel.group.FlxTypedGroup;
 import jp_2dgames.Layer2D;
@@ -45,12 +46,19 @@ class PlayState extends FlxState
 	// 背景
 	private var _back:FlxSprite;
 
+	// CSVデータ
+	private var _csv:Csv;
+
 	/**
 	 * 生成
 	 */
 	override public function create():Void
 	{
 		super.create();
+
+		// CSV読み込み
+		_csv = new Csv();
+		Enemy.csv = _csv.enemy;
 
 		// マップ読み込み
 		var tmx = new TmxLoader();
@@ -78,9 +86,13 @@ class PlayState extends FlxState
 		}
 		this.add(_enemies);
 
-		var e:Enemy = _enemies.recycle();
-		var params = new Params();
-		e.init(3, 2, Dir.Down, params);
+		if(true) {
+			// TODO: デバッグ用に敵を生成
+			var e:Enemy = _enemies.recycle();
+			var params = new Params();
+			params.id = FlxRandom.intRanged(1, 5);
+			e.init(3, 2, Dir.Down, params, true);
+		}
 
 		// メッセージ生成
 		_message = new Message();
@@ -88,6 +100,7 @@ class PlayState extends FlxState
 
 		// シーケンス管理
 		_seq = new SeqMgr(this);
+
 
 		// デバッグ情報設定
 		FlxG.watch.add(player, "_state");
