@@ -1,5 +1,6 @@
 package ;
 
+import flixel.util.FlxColor;
 import DirUtil.Dir;
 import flixel.FlxSprite;
 
@@ -219,6 +220,8 @@ class Actor extends FlxSprite {
 		else {
 			Message.push('${name}に${val}ダメージを与えた');
 		}
+
+		Particle.start(Particle.PType.Circle, x, y, FlxColor.RED);
 
 		_params.hp -= val;
 		if(_params.hp <= 0) {

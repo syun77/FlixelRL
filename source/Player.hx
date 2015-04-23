@@ -1,5 +1,6 @@
 package ;
 
+import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import DirUtil;
@@ -70,6 +71,7 @@ class Player extends Actor {
 				// 敵を倒した
 				Message.push('${_target.name}を倒した');
 				_target.kill();
+				Particle.start(Particle.PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
 			}
 			_state = Actor.State.TurnEnd;
 

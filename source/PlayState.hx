@@ -32,6 +32,8 @@ class PlayState extends FlxState
 	private function get_enemies() {
 		return _enemies;
 	}
+	// パーティクル
+	private var _particles:FlxTypedGroup<Particle>;
 
 	// メッセージ
 	private var _message:Message;
@@ -86,6 +88,14 @@ class PlayState extends FlxState
 		}
 		this.add(_enemies);
 
+		// パーティクル
+		_particles = new FlxTypedGroup<Particle>(256);
+		for(i in 0..._particles.maxSize) {
+			_particles.add(new Particle());
+		}
+		this.add(_particles);
+		Particle.parent = _particles;
+
 		if(true) {
 			// TODO: デバッグ用に敵を生成
 			var e:Enemy = _enemies.recycle();
@@ -129,6 +139,7 @@ class PlayState extends FlxState
 	 */
 	override public function destroy():Void
 	{
+		Particle.parent = null;
 		super.destroy();
 	}
 
