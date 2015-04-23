@@ -186,6 +186,13 @@ class Actor extends FlxSprite {
 	}
 
 	/**
+	 * 更新
+	 **/
+	public function proc():Void {
+		// サブクラスで実装する
+	}
+
+	/**
 	 * 更新・歩く
 	 **/
 	private function _updateWalk():Bool {

@@ -50,9 +50,7 @@ class Enemy extends Actor {
 	/**
 	 * 更新
 	 **/
-	override public function update():Void {
-		super.update();
-
+	override public function proc():Void {
 		switch(_state) {
 		case Actor.State.KeyInput:
 

@@ -38,6 +38,24 @@ class SeqMgr {
 	 * 更新
 	 **/
 	public function update():Void {
+		var cnt:Int = 0;
+		var bLoop:Bool = true;
+		while(bLoop) {
+			bLoop = proc();
+			cnt++;
+			if(cnt > 100) {
+				break;
+			}
+		}
+	}
+
+	private function proc():Bool {
+		_player.proc();
+		_enemies.forEachAlive(function(e:Enemy) e.proc());
+
+		// ループフラグ
+		var ret:Bool = false;
+
 		switch(_state) {
 			case State.KeyInput:
 				// ■キー入力待ち
@@ -46,9 +64,11 @@ class SeqMgr {
 						// プレイヤー行動
 						_player.beginAction();
 						_state = State.PlayerAct;
+						ret = true;
 					case Actor.Action.Move:
 						// 移動した
 						_state = State.EnemyRequestAI;
+						ret = true;
 					default:
 						// 何もしていない
 				}
@@ -57,12 +77,14 @@ class SeqMgr {
 				if(_player.isTurnEnd()) {
 					// 移動完了
 					_state = State.EnemyRequestAI;
+					ret = true;
 				}
 			case State.EnemyRequestAI:
 				// 敵に行動を要求する
 				_enemies.forEachAlive(function(e:Enemy) e.requestMove());
 				if(_player.isTurnEnd()) {
 					_state = State.EnemyActBegin;
+					ret = true;
 				}
 				else {
 					// プレイヤーの移動を開始する
@@ -73,12 +95,14 @@ class SeqMgr {
 							e.beginMove();
 						}
 					});
+					_state = State.Move;
+					ret = true;
 				}
-				_state = State.Move;
 
 			case State.Move:
 				if(_player.isTurnEnd()) {
 					_state = State.EnemyActBegin;
+					ret = true;
 				}
 
 			case State.EnemyActBegin:
@@ -87,6 +111,7 @@ class SeqMgr {
 						e.beginAction();
 					}
 				});
+				ret = true;
 				_state = State.EnemyAct;
 
 			case State.EnemyAct:
@@ -101,13 +126,17 @@ class SeqMgr {
 				if(isEnd) {
 					// 敵がすべて移動完了した
 					_state = State.TurnEnd;
+					ret = true;
 				}
 			case State.TurnEnd:
 				// ■ターン終了
 				_player.turnEnd();
 				_enemies.forEachAlive(function(e:Enemy) e.turnEnd());
 				_state = State.KeyInput;
+				ret = true;
 		}
+
+		return ret;
 	}
 
 }
