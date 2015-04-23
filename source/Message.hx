@@ -11,10 +11,10 @@ import flixel.group.FlxGroup;
 class Message extends FlxGroup {
 
 	// フォントのパス
-	private static inline var PATH_FONT = "assets/font/misaki_gothic.ttf";
+	private static inline var PATH_FONT = "assets/font/PixelMplus10-Regular.ttf";
 
 	// フォントサイズ
-	private static inline var FONT_SIZE = 16;
+	private static inline var FONT_SIZE = 20;
 
 	// メッセージの最大
 	private static inline var MESSAGE_MAX = 5;
@@ -27,7 +27,7 @@ class Message extends FlxGroup {
 	private static inline var MSG_POS_X = 8;
 	private static inline var MSG_POS_Y = 8;
 	// メッセージ表示間隔
-	private static inline var DY = 24;
+	private static inline var DY = 26;
 
 	// 基準座標(X)
 	private var x:Float = POS_X;
@@ -55,7 +55,7 @@ class Message extends FlxGroup {
 	 * メッセージを末尾に追加
 	 **/
 	public function pushMsg(msg:String) {
-		var text = new FlxText(x + MSG_POS_X, 0, 320);
+		var text = new FlxText(x + MSG_POS_X, 0, 480);
 		text.setFormat(PATH_FONT, FONT_SIZE);
 		text.text = msg;
 	  if(_msgList.length >= MESSAGE_MAX) {
