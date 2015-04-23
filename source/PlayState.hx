@@ -32,6 +32,12 @@ class PlayState extends FlxState
 	private function get_enemies() {
 		return _enemies;
 	}
+	// アイテム管理
+	private var _items:FlxTypedGroup<Item>;
+	public var items(get_items, null):FlxTypedGroup<Item>;
+	private function get_items() {
+		return _items;
+	}
 	// パーティクル
 	private var _particles:FlxTypedGroup<Particle>;
 
@@ -88,6 +94,13 @@ class PlayState extends FlxState
 		}
 		this.add(_enemies);
 
+		// アイテム管理生成
+		_items = new FlxTypedGroup<Item>(32);
+		for(i in 0..._items.maxSize) {
+			_items.add(new Item());
+		}
+		this.add(_items);
+
 		// パーティクル
 		_particles = new FlxTypedGroup<Particle>(256);
 		for(i in 0..._particles.maxSize) {
@@ -102,6 +115,10 @@ class PlayState extends FlxState
 			var params = new Params();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(3, 2, Dir.Down, params, true);
+
+			// TODO: デバッグ用のアイテムを配置
+			var item:Item = _items.recycle();
+			item.init(10, 3, 1);
 		}
 
 		// メッセージ生成
