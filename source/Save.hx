@@ -55,7 +55,6 @@ private class _Enemies {
 		// いったん初期化
 		array = new Array<_Enemy>();
 
-		var enemies = cast(FlxG.state, PlayState).enemies;
 		var func = function(e:Enemy) {
 			var e2 = new _Enemy();
 			e2.x = e.xchip;
@@ -65,11 +64,11 @@ private class _Enemies {
 			array.push(e2);
 		}
 
-		enemies.forEachAlive(func);
+		Enemy.parent.forEachAlive(func);
 	}
 	// ロード
 	public function load(data:Dynamic) {
-		var enemies = cast(FlxG.state, PlayState).enemies;
+		var enemies = Enemy.parent;
 		// 敵を全部消す
 		enemies.kill();
 		enemies.revive();
@@ -82,6 +81,55 @@ private class _Enemies {
 		}
 	}
 }
+
+/**
+ * アイテムデータ
+ **/
+private class _Item {
+	public var x:Int = 0;
+	public var y:Int = 0;
+	public var id:Int = 0;
+	public var type:String = "";
+	public function new () {
+	}
+}
+private class _Items {
+	public var array:Array<_Item>;
+	public function new () {
+		array = new Array<_Item>();
+	}
+	// セーブ
+	public function save() {
+		// いったん初期化
+		array = new Array<_Item>();
+
+		var func = function(item:Item) {
+			var i = new _Item();
+			i.x = item.xchip;
+			i.y = item.ychip;
+			i.id = item.id;
+			i.type = ItemUtil.toString(item.type);
+			array.push(i);
+		}
+
+		Item.parent.forEachAlive(func);
+	}
+	// ロード
+	public function load(data:Dynamic) {
+		var items = Item.parent;
+		// アイテムを全部消す
+		items.kill();
+		items.revive();
+		var arr:Array<_Item> = data.array;
+		// 作り直し
+		for(i in arr) {
+			var item:Item = items.recycle();
+			var type = ItemUtil.fromString(i.type);
+			item.init(i.x, i.y, i.id);
+		}
+	}
+}
+
 
 /**
  * マップデータ
@@ -117,11 +165,13 @@ private class _Map {
 private class SaveData {
 	public var player:_Player;
 	public var enemies:_Enemies;
+	public var items:_Items;
 	public var map:_Map;
 
 	public function new() {
 		player = new _Player();
 		enemies = new _Enemies();
+		items = new _Items();
 		map = new _Map();
 	}
 
@@ -129,6 +179,7 @@ private class SaveData {
 	public function save():Void {
 		player.save();
 		enemies.save();
+		items.save();
 		map.save();
 	}
 
@@ -136,6 +187,7 @@ private class SaveData {
 	public function load(data:Dynamic):Void {
 		player.load(data.player);
 		enemies.load(data.enemies);
+		items.load(data.items);
 		map.load(data.map);
 	}
 }

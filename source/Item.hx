@@ -1,4 +1,5 @@
 package ;
+import flixel.group.FlxTypedGroup;
 import flixel.FlxG;
 import ItemUtil.IType;
 import flixel.FlxSprite;
@@ -8,6 +9,8 @@ import flixel.FlxSprite;
  **/
 class Item extends FlxSprite {
 
+	// 管理クラス
+	public static var parent:FlxTypedGroup<Item> = null;
 	// チップ座標
 	public var xchip(default, null):Int;
 	public var ychip(default, null):Int;

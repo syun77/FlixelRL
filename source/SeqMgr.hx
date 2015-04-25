@@ -30,7 +30,7 @@ class SeqMgr {
 	 **/
 	public function new(state:PlayState) {
 		_player = state.player;
-		_enemies = state.enemies;
+		_enemies = Enemy.parent;
 		_state = State.KeyInput;
 	}
 

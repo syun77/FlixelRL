@@ -1,7 +1,6 @@
 package ;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
-import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.group.FlxGroup;
 
@@ -29,6 +28,9 @@ class Message extends FlxGroup {
 	// メッセージ表示間隔
 	private static inline var DY = 26;
 
+	// インスタンス
+	public static var instance:Message = null;
+
 	// 基準座標(X)
 	private var x:Float = POS_X;
 	// 基準座標(Y)
@@ -36,8 +38,7 @@ class Message extends FlxGroup {
 
 	// メッセージの追加
 	public static function push(msg:String) {
-		var message = cast(FlxG.state, PlayState).message;
-		message.pushMsg(msg);
+		Message.instance.pushMsg(msg);
 	}
 
 	private var _msgList:List<FlxText>;

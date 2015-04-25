@@ -134,8 +134,7 @@ class Player extends Actor {
 				_target = e;
 			}
 		}
-		var enemies = cast(FlxG.state, PlayState).enemies;
-		enemies.forEachAlive(func);
+		Enemy.parent.forEachAlive(func);
 
 		if(_target != null) {
 			// 敵がいるので攻撃する

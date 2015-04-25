@@ -28,25 +28,13 @@ class PlayState extends FlxState
 	}
 	// 敵管理
 	private var _enemies:FlxTypedGroup<Enemy>;
-	public var enemies(get_enemies, null):FlxTypedGroup<Enemy>;
-	private function get_enemies() {
-		return _enemies;
-	}
 	// アイテム管理
 	private var _items:FlxTypedGroup<Item>;
-	public var items(get_items, null):FlxTypedGroup<Item>;
-	private function get_items() {
-		return _items;
-	}
 	// パーティクル
 	private var _particles:FlxTypedGroup<Particle>;
 
 	// メッセージ
 	private var _message:Message;
-	public var message(get_message, null):Message;
-	private function get_message() {
-		return _message;
-	}
 
 	// シーケンス管理
 	private var _seq:SeqMgr;
@@ -93,6 +81,7 @@ class PlayState extends FlxState
 			_enemies.add(new Enemy());
 		}
 		this.add(_enemies);
+		Enemy.parent = _enemies;
 
 		// アイテム管理生成
 		_items = new FlxTypedGroup<Item>(32);
@@ -100,6 +89,7 @@ class PlayState extends FlxState
 			_items.add(new Item());
 		}
 		this.add(_items);
+		Item.parent = _items;
 
 		// パーティクル
 		_particles = new FlxTypedGroup<Particle>(256);
@@ -124,6 +114,7 @@ class PlayState extends FlxState
 		// メッセージ生成
 		_message = new Message();
 		this.add(_message);
+		Message.instance = _message;
 
 		// シーケンス管理
 		_seq = new SeqMgr(this);
@@ -157,6 +148,9 @@ class PlayState extends FlxState
 	override public function destroy():Void
 	{
 		Particle.parent = null;
+		Item.parent = null;
+		Enemy.parent = null;
+		Message.instance = null;
 		super.destroy();
 	}
 

@@ -1,4 +1,5 @@
 package ;
+import flixel.group.FlxTypedGroup;
 import jp_2dgames.CsvLoader;
 import flixel.util.FlxPoint;
 import flixel.FlxG;
@@ -10,6 +11,8 @@ import flixel.FlxSprite;
  **/
 class Enemy extends Actor {
 
+	// 管理クラス
+	public static var parent:FlxTypedGroup<Enemy> = null;
 	// プレイヤー
 	public static var target:Player = null;
 	// 敵パラメータ
