@@ -67,13 +67,14 @@ class PlayState extends FlxState
 		this.add(_back);
 		// フィールドを登録
 		setFieldLayer(layer);
-		var pt = layer.search(Field.PLAYER);
 
-		// プレイヤー生成
-		_player = new Player(Std.int(pt.x), Std.int(pt.y));
-		this.add(_player);
-		// 敵からアクセスしやすいようにする
-		Enemy.target = _player;
+		// アイテム管理生成
+		_items = new FlxTypedGroup<Item>(32);
+		for(i in 0..._items.maxSize) {
+			_items.add(new Item());
+		}
+		this.add(_items);
+		Item.parent = _items;
 
 		// 敵管理生成
 		_enemies = new FlxTypedGroup<Enemy>(32);
@@ -83,13 +84,13 @@ class PlayState extends FlxState
 		this.add(_enemies);
 		Enemy.parent = _enemies;
 
-		// アイテム管理生成
-		_items = new FlxTypedGroup<Item>(32);
-		for(i in 0..._items.maxSize) {
-			_items.add(new Item());
-		}
-		this.add(_items);
-		Item.parent = _items;
+		var pt = layer.search(Field.PLAYER);
+
+		// プレイヤー生成
+		_player = new Player(Std.int(pt.x), Std.int(pt.y));
+		this.add(_player);
+		// 敵からアクセスしやすいようにする
+		Enemy.target = _player;
 
 		// パーティクル
 		_particles = new FlxTypedGroup<Particle>(256);

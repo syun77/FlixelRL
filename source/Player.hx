@@ -99,6 +99,25 @@ class Player extends Actor {
 	 **/
 	private function _updateStandby():Void {
 		_bStop = true;
+
+		if(FlxG.keys.justPressed.SPACE) {
+			// アイテムを拾えるかどうかをチェック
+			var bFind = false;
+			var func = function(item:Item) {
+				if(checkPosition(item.xchip, item.ychip)) {
+					// 拾える
+					Message.push('${item.name}を拾った');
+					bFind = true;
+					item.kill();
+				}
+			}
+			Item.parent.forEachAlive(func);
+			if(bFind) {
+				// アイテムを拾った
+				return;
+			}
+		}
+
 		var xnext = Std.int(_xnext);
 		var ynext = Std.int(_ynext);
 		if(FlxG.keys.pressed.LEFT) {

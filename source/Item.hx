@@ -21,7 +21,6 @@ class Item extends FlxSprite {
 	// 名前
 	public var name(default, null):String;
 
-
 	/**
 	 * コンストラクタ
 	 **/
