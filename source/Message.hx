@@ -9,12 +9,6 @@ import flixel.group.FlxGroup;
  **/
 class Message extends FlxGroup {
 
-	// フォントのパス
-	private static inline var PATH_FONT = "assets/font/PixelMplus10-Regular.ttf";
-
-	// フォントサイズ
-	private static inline var FONT_SIZE = 20;
-
 	// メッセージの最大
 	private static inline var MESSAGE_MAX = 5;
 	// ウィンドウ座標
@@ -31,10 +25,9 @@ class Message extends FlxGroup {
 	// インスタンス
 	public static var instance:Message = null;
 
-	// 基準座標(X)
-	private var x:Float = POS_X;
-	// 基準座標(Y)
-	private var y:Float = POS_Y;
+	// 基準座標
+	private var x:Float = POS_X; // X座標
+	private var y:Float = POS_Y; // Y座標
 
 	// メッセージの追加
 	public static function push(msg:String) {
@@ -57,7 +50,7 @@ class Message extends FlxGroup {
 	 **/
 	public function pushMsg(msg:String) {
 		var text = new FlxText(x + MSG_POS_X, 0, 480);
-		text.setFormat(PATH_FONT, FONT_SIZE);
+		text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
 		text.text = msg;
 	  if(_msgList.length >= MESSAGE_MAX) {
 	    // 最大を超えたので先頭のメッセージを削除

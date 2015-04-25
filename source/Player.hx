@@ -108,6 +108,7 @@ class Player extends Actor {
 					// 拾える
 					Message.push('${item.name}を拾った');
 					bFind = true;
+					Inventory.push(item.id);
 					item.kill();
 				}
 			}

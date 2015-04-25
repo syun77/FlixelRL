@@ -45,6 +45,9 @@ class PlayState extends FlxState
 	// CSVデータ
 	private var _csv:Csv;
 
+	// インベントリ
+	private var _inventory:Inventory;
+
 	/**
 	 * 生成
 	 */
@@ -119,6 +122,11 @@ class PlayState extends FlxState
 
 		// シーケンス管理
 		_seq = new SeqMgr(this);
+
+		// インベントリ
+		_inventory = new Inventory();
+		this.add(_inventory);
+		Inventory.instance = _inventory;
 
 
 		// デバッグ情報設定

@@ -9,6 +9,12 @@ import flixel.util.FlxSave;
  */
 class Reg
 {
+	// フォントのパス
+	public static inline var PATH_FONT = "assets/font/PixelMplus10-Regular.ttf";
+
+	// フォントサイズ
+	public static inline var FONT_SIZE = 20;
+
 	/**
 	 * Generic levels Array that can be used for cross-state stuff.
 	 * Example usage: Storing the levels of a platformer.
