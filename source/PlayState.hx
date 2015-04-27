@@ -1,5 +1,6 @@
 package;
 
+import ItemUtil;
 import flixel.util.FlxRandom;
 import DirUtil.Dir;
 import flixel.group.FlxTypedGroup;
@@ -29,7 +30,7 @@ class PlayState extends FlxState
 	// 敵管理
 	private var _enemies:FlxTypedGroup<Enemy>;
 	// アイテム管理
-	private var _items:FlxTypedGroup<Item>;
+	private var _items:FlxTypedGroup<DropItem>;
 	// パーティクル
 	private var _particles:FlxTypedGroup<Particle>;
 
@@ -58,6 +59,8 @@ class PlayState extends FlxState
 		// CSV読み込み
 		_csv = new Csv();
 		Enemy.csv = _csv.enemy;
+		ItemUtil.csvConsumable = _csv.itemConsumable;
+		ItemUtil.csvEquipment = _csv.itemEquipment;
 
 		// マップ読み込み
 		var tmx = new TmxLoader();
@@ -72,12 +75,12 @@ class PlayState extends FlxState
 		setFieldLayer(layer);
 
 		// アイテム管理生成
-		_items = new FlxTypedGroup<Item>(32);
+		_items = new FlxTypedGroup<DropItem>(32);
 		for(i in 0..._items.maxSize) {
-			_items.add(new Item());
+			_items.add(new DropItem());
 		}
 		this.add(_items);
-		Item.parent = _items;
+		DropItem.parent = _items;
 
 		// 敵管理生成
 		_enemies = new FlxTypedGroup<Enemy>(32);
@@ -111,8 +114,8 @@ class PlayState extends FlxState
 			e.init(3, 2, Dir.Down, params, true);
 
 			// TODO: デバッグ用のアイテムを配置
-			var item:Item = _items.recycle();
-			item.init(10, 3, 1);
+			var item:DropItem = _items.recycle();
+			item.init(10, 3, IType.Weapon, 1001);
 		}
 
 		// メッセージ生成
@@ -157,7 +160,7 @@ class PlayState extends FlxState
 	override public function destroy():Void
 	{
 		Particle.parent = null;
-		Item.parent = null;
+		DropItem.parent = null;
 		Enemy.parent = null;
 		Message.instance = null;
 		super.destroy();

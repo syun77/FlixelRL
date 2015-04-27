@@ -103,7 +103,7 @@ class Player extends Actor {
 		if(FlxG.keys.justPressed.SPACE) {
 			// アイテムを拾えるかどうかをチェック
 			var bFind = false;
-			var func = function(item:Item) {
+			var func = function(item:DropItem) {
 				if(checkPosition(item.xchip, item.ychip)) {
 					// 拾える
 					Message.push('${item.name}を拾った');
@@ -112,7 +112,7 @@ class Player extends Actor {
 					item.kill();
 				}
 			}
-			Item.parent.forEachAlive(func);
+			DropItem.parent.forEachAlive(func);
 			if(bFind) {
 				// アイテムを拾った
 				return;

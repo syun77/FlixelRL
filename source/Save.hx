@@ -103,7 +103,7 @@ private class _Items {
 		// いったん初期化
 		array = new Array<_Item>();
 
-		var func = function(item:Item) {
+		var func = function(item:DropItem) {
 			var i = new _Item();
 			i.x = item.xchip;
 			i.y = item.ychip;
@@ -112,20 +112,20 @@ private class _Items {
 			array.push(i);
 		}
 
-		Item.parent.forEachAlive(func);
+		DropItem.parent.forEachAlive(func);
 	}
 	// ロード
 	public function load(data:Dynamic) {
-		var items = Item.parent;
+		var items = DropItem.parent;
 		// アイテムを全部消す
 		items.kill();
 		items.revive();
 		var arr:Array<_Item> = data.array;
 		// 作り直し
 		for(i in arr) {
-			var item:Item = items.recycle();
+			var item:DropItem = items.recycle();
 			var type = ItemUtil.fromString(i.type);
-			item.init(i.x, i.y, i.id);
+			item.init(i.x, i.y, type, i.id);
 		}
 	}
 }
