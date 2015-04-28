@@ -1,5 +1,6 @@
 package;
 
+import flash.Lib;
 import ItemUtil;
 import flixel.util.FlxRandom;
 import DirUtil.Dir;
@@ -114,8 +115,15 @@ class PlayState extends FlxState
 			e.init(3, 2, Dir.Down, params, true);
 
 			// TODO: デバッグ用のアイテムを配置
+			FlxRandom.globalSeed = flash.Lib.getTimer();
 			var item:DropItem = _items.recycle();
-			item.init(10, 3, IType.Weapon, 1001);
+			item.init(10, 2, IType.Weapon, ItemUtil.random(IType.Weapon));
+			item = _items.recycle();
+			item.init(10, 3, IType.Armor, ItemUtil.random(IType.Armor));
+			item = _items.recycle();
+			item.init(10, 4, IType.Food, ItemUtil.random(IType.Food));
+			item = _items.recycle();
+			item.init(10, 5, IType.Portion, ItemUtil.random(IType.Portion));
 		}
 
 		// メッセージ生成

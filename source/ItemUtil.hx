@@ -1,5 +1,6 @@
 package ;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.CsvLoader;
 
 /**
@@ -25,8 +26,8 @@ class ItemUtil {
 	public static var csvConsumable:CsvLoader = null;
 	public static var csvEquipment:CsvLoader = null;
 
-	public static function getCsv(type:IType):CsvLoader {
-		if(isConsumable(type)) {
+	public static function getCsv(id:Int):CsvLoader {
+		if(isConsumable(id)) {
 			return csvConsumable;
 		}
 		else {
@@ -34,8 +35,8 @@ class ItemUtil {
 		}
 	}
 
-	public static function getName(type:IType, id:Int):String {
-		var csv = getCsv(type);
+	public static function getName(id:Int):String {
+		var csv = getCsv(id);
 		return csv.searchItem("id", '${id}', "name");
 	}
 
@@ -56,31 +57,36 @@ class ItemUtil {
 	}
 
 	// 装備アイテムかどうか
-	public static function isEquip(type:IType):Bool {
-		switch(type) {
-			case IType.Weapon: return true;
-			case IType.Armor: return true;
-			case IType.Ring: return true;
-			default: return false;
+	public static function isEquip(id:Int):Bool {
+		if(id < ID_OFFSET) {
+			return false;
+		}
+		else {
+			return true;
 		}
 	}
 
 	// 消費アイテムかどうか
-	public static function isConsumable(type:IType):Bool {
+	public static function isConsumable(id:Int):Bool {
 		// 装備アイテムでなければ消費アイテム
-		return !isEquip(type);
+		return !isEquip(id);
 	}
 
-	// アイテムの通し番号を取得する
-	public static function toIdx(type:IType, id:Int):Int {
-		if(isConsumable(type)) {
-			// 消費アイテムはそのままの番号
-			return id;
-		}
-		else {
-			// 装備アイテムはオフセットして返す
-			return ID_OFFSET + id;
+	// ランダムでアイテムを取得する
+	public static function random(type:IType):Int {
+		switch(type) {
+			case IType.Weapon:
+				return FlxRandom.intRanged(1001, 1007);
+			case IType.Armor:
+				return FlxRandom.intRanged(1021, 1027);
+			case IType.Ring:
+				return FlxRandom.intRanged(0, 1);
+			case IType.Food:
+				return FlxRandom.intRanged(1, 2);
+			case IType.Portion:
+				return FlxRandom.intRanged(3, 4);
+			default:
+				return 0;
 		}
 	}
-
 }

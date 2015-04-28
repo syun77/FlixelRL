@@ -52,7 +52,7 @@ class DropItem extends FlxSprite {
 		y = Field.toWorldY(Y);
 
 		// 名前
-		name = ItemUtil.getName(type, id);
+		name = ItemUtil.getName(id);
 
 		// アニメーション再生
 		animation.play(ItemUtil.toString(type));

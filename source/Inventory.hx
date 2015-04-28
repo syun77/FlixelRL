@@ -60,7 +60,7 @@ class Inventory extends FlxGroup {
 	// アイテムの追加
 	public function pushItem(itemid:Int):Void {
 		var idx = _itemList.length;
-		var name = "アイテム";
+		var name = ItemUtil.getName(itemid);
 		var i = 0;
 		for(txt in _txtList) {
 			if(i == idx) {
