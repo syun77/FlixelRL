@@ -184,6 +184,8 @@ class PlayState extends FlxState
 		// シーケンス更新
 		_seq.update();
 
+		_inventory.proc();
+
 		// デバッグ処理
 		updateDebug();
 	}

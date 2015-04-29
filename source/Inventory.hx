@@ -1,4 +1,5 @@
 package ;
+import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
@@ -30,6 +31,10 @@ class Inventory extends FlxGroup {
 	private var x:Float = POS_X; // X座標
 	private var y:Float = POS_Y; // Y座標
 
+	// カーソル
+	private var _cursor:FlxSprite;
+	private var _nCursor:Int = 0;
+
 	// アイテムの追加
 	public static function push(itemid:Int) {
 		instance.pushItem(itemid);
@@ -47,6 +52,12 @@ class Inventory extends FlxGroup {
 		spr.alpha = 0.2;
 		this.add(spr);
 
+		// カーソル
+		_cursor = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, DY+MSG_POS_Y, FlxColor.AZURE);
+		_cursor.alpha = 0.5;
+		this.add(_cursor);
+
+		// テキストを登録
 		_txtList = new List<FlxText>();
 		for(i in 0...MAX) {
 			var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i*DY, 0, 160);
@@ -57,7 +68,34 @@ class Inventory extends FlxGroup {
 		_itemList = new List<Int>();
 	}
 
-	// アイテムの追加
+	/**
+	 * 更新
+	 **/
+	public function proc():Void {
+		// カーソル更新
+		_procCursor();
+	}
+
+	private function _procCursor():Void {
+		if(FlxG.keys.justPressed.UP) {
+			_nCursor--;
+			if(_nCursor < 0) {
+				_nCursor = _itemList.length - 1;
+			}
+		}
+		if(FlxG.keys.justPressed.DOWN) {
+			_nCursor++;
+			if(_nCursor >= _itemList.length) {
+				_nCursor = 0;
+			}
+		}
+		// カーソルの座標を更新
+		_cursor.y = POS_Y + (_nCursor * DY);
+	}
+
+	/**
+	 * アイテムの追加
+	 **/
 	public function pushItem(itemid:Int):Void {
 		var idx = _itemList.length;
 		var name = ItemUtil.getName(itemid);
