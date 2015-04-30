@@ -9,6 +9,7 @@ import flixel.FlxSprite;
  **/
 enum State {
 	KeyInput;  // キー入力待ち
+	Inventory; // イベントリ
 	Standby;   // 待機中
 	// 行動
 	ActBegin;  // 行動開始
@@ -26,11 +27,12 @@ enum State {
  * 行動タイプ
  **/
 enum Action {
-	None;    // なし
-	Standby; // 待機中
-	Act;     // 攻撃
-	Move;    // 移動
-	TurnEnd; // ターン終了
+	None;      // なし
+	Standby;   // 待機中
+	Inventory; // インベントリを開く
+	Act;       // 攻撃
+	Move;      // 移動
+	TurnEnd;   // ターン終了
 }
 
 /**
@@ -43,6 +45,7 @@ class Actor extends FlxSprite {
 
 	// 状態
 	private var _state:State;
+	private var _stateprev:State; // 1つ前の状態
 	private var _tMove:Int = 0;
 	// 向き
 	private var _dir:Dir = Dir.Down;
@@ -103,6 +106,8 @@ class Actor extends FlxSprite {
 				return Action.Standby; // 待機中
 			case State.KeyInput:
 				return Action.Standby; // 待機中
+			case State.Inventory:
+				return Action.Inventory; // イベントリを開く
 			case State.ActBegin:
 				return Action.Act; // 攻撃開始
 			case State.MoveBegin:
@@ -135,6 +140,7 @@ class Actor extends FlxSprite {
 		y = Field.toWorldY(Y);
 
 		_state = State.KeyInput;
+		_stateprev = _state;
 		_tMove = 0;
 		// 向き
 		_dir = dir;
@@ -148,7 +154,7 @@ class Actor extends FlxSprite {
 	public function beginAction():Void {
 		switch(_state) {
 		case State.ActBegin:
-			_state = State.Act;
+			_change(State.Act);
 		case State.TurnEnd:
 			// 何もしない
 		default:
@@ -159,7 +165,7 @@ class Actor extends FlxSprite {
 	public function beginMove():Void {
 		switch(_state) {
 			case State.MoveBegin:
-				_state = State.Move;
+				_change(State.Move);
 			case State.TurnEnd:
 				// 何もしない
 			default:
@@ -173,7 +179,7 @@ class Actor extends FlxSprite {
 	}
 	// ターン終了
 	public function turnEnd():Void {
-		_state = State.KeyInput;
+		_change(State.KeyInput);
 	}
 	// 指定の座標に存在するかどうかをチェックする
 	public function checkPosition(xc:Int, yc:Int):Bool {
@@ -183,6 +189,17 @@ class Actor extends FlxSprite {
 		}
 		// 一致しない
 		return false;
+	}
+	// 状態遷移
+	private function _change(next:State):Void {
+		_stateprev = _state;
+		_state = next;
+	}
+	// 状態を1つ前に戻す
+	public function changeprev():Void {
+		var prev = _state;
+		_state = _stateprev;
+		_stateprev = prev;
 	}
 
 	/**

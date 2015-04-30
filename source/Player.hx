@@ -34,7 +34,8 @@ class Player extends Actor {
 		offset.set(width/2, height/2);
 
 		// キー入力待ち状態にする
-		_state = Actor.State.KeyInput;
+		_change(Actor.State.KeyInput);
+		_stateprev = _state;
 	}
 
 	// アニメーション名を取得する
@@ -55,7 +56,10 @@ class Player extends Actor {
 	override public function proc():Void {
 		switch(_state) {
 		case Actor.State.KeyInput:
-			_updateStandby();
+			_updateKeyInput();
+
+		case Actor.State.Inventory:
+			// 何もしない
 
 		case Actor.State.Standby:
 			// 何もしない
@@ -71,7 +75,7 @@ class Player extends Actor {
 				_target.kill();
 				Particle.start(Particle.PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
 			}
-			_state = Actor.State.TurnEnd;
+			_change(Actor.State.TurnEnd);
 
 		case Actor.State.ActEnd:
 			// 何もしない
@@ -81,7 +85,7 @@ class Player extends Actor {
 
 		case Actor.State.Move:
 			if(_updateWalk()) {
-				_state = Actor.State.TurnEnd;
+				_change(Actor.State.TurnEnd);
 			}
 
 		case Actor.State.MoveEnd:
@@ -95,9 +99,9 @@ class Player extends Actor {
 	}
 
 	/**
-	 * 更新・待機中
+	 * 更新・キー入力待ち
 	 **/
-	private function _updateStandby():Void {
+	private function _updateKeyInput():Void {
 		_bStop = true;
 
 		if(FlxG.keys.justPressed.SPACE) {
@@ -117,6 +121,12 @@ class Player extends Actor {
 				// アイテムを拾った
 				return;
 			}
+		}
+
+		if(FlxG.keys.justPressed.SHIFT) {
+			// メニューを開く
+			_change(Actor.State.Inventory);
+			return;
 		}
 
 		var xnext = Std.int(_xnext);
@@ -160,7 +170,7 @@ class Player extends Actor {
 			// 敵がいるので攻撃する
 			_xtarget = xnext;
 			_ytarget = ynext;
-			_state = Actor.State.ActBegin;
+			_change(Actor.State.ActBegin);
 			return;
 		}
 
@@ -170,7 +180,7 @@ class Player extends Actor {
 			_xnext = xnext;
 			_ynext = ynext;
 			_bStop = false;
-			_state = Actor.State.MoveBegin;
+			_change(Actor.State.MoveBegin);
 			_tMove = 0;
 		}
 	}

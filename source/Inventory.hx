@@ -56,6 +56,7 @@ class Inventory extends FlxGroup {
 		_cursor = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, DY+MSG_POS_Y, FlxColor.AZURE);
 		_cursor.alpha = 0.5;
 		this.add(_cursor);
+		_cursor.visible = false;
 
 		// テキストを登録
 		_txtList = new List<FlxText>();
@@ -68,12 +69,25 @@ class Inventory extends FlxGroup {
 		_itemList = new List<Int>();
 	}
 
+	// アクティブフラグの設定
+	public function setActive(b:Bool) {
+		_cursor.visible = b;
+	}
+
 	/**
 	 * 更新
 	 **/
-	public function proc():Void {
+	public function proc():Bool {
 		// カーソル更新
 		_procCursor();
+
+		if(FlxG.keys.justPressed.SHIFT) {
+			// メニューを閉じる
+			return false;
+		}
+
+		// 更新を続ける
+		return true;
 	}
 
 	private function _procCursor():Void {

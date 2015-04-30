@@ -6,13 +6,14 @@ import flixel.group.FlxTypedGroup;
  * 状態
  **/
 private enum State {
-	KeyInput; // キー入力待ち
-	PlayerAct; // プレイヤーの行動
+	KeyInput;       // キー入力待ち
+	InventoryInput; // インベントリの操作中
+	PlayerAct;      // プレイヤーの行動
 	EnemyRequestAI; // 敵のAI
-	Move; // 移動
-	EnemyActBegin; // 敵の行動開始
-	EnemyAct; // 敵の行動
-	TurnEnd; // ターン終了
+	Move;           // 移動
+	EnemyActBegin;  // 敵の行動開始
+	EnemyAct;       // 敵の行動
+	TurnEnd;        // ターン終了
 }
 
 /**
@@ -21,6 +22,7 @@ private enum State {
 class SeqMgr {
 	private var _player:Player;
 	private var _enemies:FlxTypedGroup<Enemy>;
+	private var _inventory:Inventory;
 
 	// 状態
 	private var _state:State;
@@ -31,6 +33,7 @@ class SeqMgr {
 	public function new(state:PlayState) {
 		_player = state.player;
 		_enemies = Enemy.parent;
+		_inventory = Inventory.instance;
 		_state = State.KeyInput;
 	}
 
@@ -69,9 +72,23 @@ class SeqMgr {
 						// 移動した
 						_state = State.EnemyRequestAI;
 						ret = true;
+					case Actor.Action.Inventory:
+						// インベントリを開く
+						_inventory.setActive(true);
+						_state = State.InventoryInput;
 					default:
 						// 何もしていない
 				}
+
+			case State.InventoryInput:
+				// ■イベントリ操作中
+				if(_inventory.proc() == false) {
+					// キー入力に戻る
+					_player.changeprev();
+					_inventory.setActive(false);
+					_state = State.KeyInput;
+				}
+
 			case State.PlayerAct:
 				// ■プレイヤーの行動
 				if(_player.isTurnEnd()) {

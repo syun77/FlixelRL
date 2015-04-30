@@ -131,17 +131,17 @@ class PlayState extends FlxState
 		this.add(_message);
 		Message.instance = _message;
 
-		// シーケンス管理
-		_seq = new SeqMgr(this);
-
 		// インベントリ
 		_inventory = new Inventory();
 		this.add(_inventory);
 		Inventory.instance = _inventory;
 
+		// シーケンス管理
+		_seq = new SeqMgr(this);
 
 		// デバッグ情報設定
 		FlxG.watch.add(player, "_state");
+		FlxG.watch.add(player, "_stateprev");
 		FlxG.watch.add(_seq, "_state");
 
 //		FlxG.debugger.visible = true;
@@ -183,8 +183,6 @@ class PlayState extends FlxState
 
 		// シーケンス更新
 		_seq.update();
-
-		_inventory.proc();
 
 		// デバッグ処理
 		updateDebug();

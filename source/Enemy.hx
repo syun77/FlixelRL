@@ -56,27 +56,37 @@ class Enemy extends Actor {
 	override public function proc():Void {
 		switch(_state) {
 		case Actor.State.KeyInput:
+			// 何もしない
+
+		case Actor.State.Inventory:
+			// 何もしない
 
 		case Actor.State.Standby:
+			// 何もしない
 
 		case Actor.State.ActBegin:
+			// 何もしない
 
 		case Actor.State.Act:
 			target.damage(30);
-			_state = Actor.State.TurnEnd;
+			_change(Actor.State.TurnEnd);
 
 		case Actor.State.ActEnd:
+			// 何もしない
 
 		case Actor.State.MoveBegin:
+			// 何もしない
 
 		case Actor.State.Move:
 			if(_updateWalk()) {
-				_state = Actor.State.TurnEnd;
+				_change(Actor.State.TurnEnd);
 			}
 
 		case Actor.State.MoveEnd:
+			// 何もしない
 
 		case Actor.State.TurnEnd:
+			// 何もしない
 		}
 	}
 
@@ -154,7 +164,7 @@ class Enemy extends Actor {
 		// 移動先にプレイヤーがいるかどうかをチェック
 		if(target.checkPosition(xnext, ynext)) {
 			// プレイヤーがいるので攻撃
-			_state = Actor.State.ActBegin;
+			_change(Actor.State.ActBegin);
 			return;
 		}
 
@@ -163,12 +173,12 @@ class Enemy extends Actor {
 			// 移動可能
 			_xnext = xnext;
 			_ynext = ynext;
-			_state = Actor.State.MoveBegin;
+			_change(Actor.State.MoveBegin);
 			_tMove = 0;
 		}
 		else {
 			// 移動できないのでターン終了
-			_state = Actor.State.TurnEnd;
+			_change(Actor.State.TurnEnd);
 		}
 	}
 
