@@ -56,6 +56,7 @@ class Inventory extends FlxGroup {
 		_cursor = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, DY+MSG_POS_Y, FlxColor.AZURE);
 		_cursor.alpha = 0.5;
 		this.add(_cursor);
+		// カーソルは初期状態非表示
 		_cursor.visible = false;
 
 		// テキストを登録
