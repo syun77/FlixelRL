@@ -5,6 +5,11 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 
+private enum State {
+	Main; // 選択中
+	Sub;  // サブニュー操作中
+}
+
 /**
  * インベントリ
  **/
@@ -34,6 +39,9 @@ class Inventory extends FlxGroup {
 	// カーソル
 	private var _cursor:FlxSprite;
 	private var _nCursor:Int = 0;
+
+	// 状態
+	private var _state:State = State.Main;
 
 	// アイテムの追加
 	public static function push(itemid:Int) {
@@ -75,17 +83,39 @@ class Inventory extends FlxGroup {
 		_cursor.visible = b;
 	}
 
+	private var _sub:InventoryAction = null;
+
 	/**
 	 * 更新
 	 **/
 	public function proc():Bool {
-		// カーソル更新
-		_procCursor();
 
-		if(FlxG.keys.justPressed.SHIFT) {
-			// メニューを閉じる
-			return false;
+		switch(_state) {
+			case State.Main:
+				// カーソル更新
+				_procCursor();
+
+				if(FlxG.keys.justPressed.SHIFT) {
+					// メニューを閉じる
+					return false;
+				}
+
+				if(FlxG.keys.justPressed.SPACE) {
+					// サブメニューを開く
+					_sub = new InventoryAction(x, y, ["使う", "捨てる"]);
+					this.add(_sub);
+					_state = State.Sub;
+				}
+
+			case State.Sub:
+				if(FlxG.keys.justPressed.SHIFT) {
+					// メインに戻る
+					this.remove(_sub);
+					_sub = null;
+					_state = State.Main;
+				}
 		}
+
 
 		// 更新を続ける
 		return true;
