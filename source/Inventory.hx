@@ -5,6 +5,9 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 
+/**
+ * 状態
+ **/
 private enum State {
 	Main; // 選択中
 	Sub;  // サブニュー操作中
@@ -45,13 +48,13 @@ class Inventory extends FlxGroup {
 
 	// アイテムの追加
 	public static function push(itemid:Int) {
-		instance.pushItem(itemid);
+		instance.addItem(itemid);
 	}
 
 	// アイテムテキスト
 	private var _txtList:List<FlxText>;
 	// アイテムリスト
-	private var _itemList:List<Int>;
+	private var _itemList:Array<Int>;
 
 	public function new() {
 		super();
@@ -75,7 +78,7 @@ class Inventory extends FlxGroup {
 			_txtList.add(txt);
 			this.add(txt);
 		}
-		_itemList = new List<Int>();
+		_itemList = new Array<Int>();
 	}
 
 	// アクティブフラグの設定
@@ -108,7 +111,21 @@ class Inventory extends FlxGroup {
 				}
 
 			case State.Sub:
-				if(FlxG.keys.justPressed.SHIFT) {
+				if(_sub.proc() == false) {
+					// 項目決定
+					switch(_sub.cursor) {
+						case 0:
+							// アイテムを使う
+						case 1:
+							// アイテムを捨てる
+							delItem(-1);
+					}
+					// メインに戻る
+					this.remove(_sub);
+					_sub = null;
+					_state = State.Main;
+				}
+				else if(FlxG.keys.justPressed.SHIFT) {
 					// メインに戻る
 					this.remove(_sub);
 					_sub = null;
@@ -141,17 +158,54 @@ class Inventory extends FlxGroup {
 	/**
 	 * アイテムの追加
 	 **/
-	public function pushItem(itemid:Int):Void {
-		var idx = _itemList.length;
-		var name = ItemUtil.getName(itemid);
-		var i = 0;
+	public function addItem(itemid:Int):Void {
+		_itemList.push(itemid);
+		_updateText();
+	}
+
+	/**
+	 * アイテムの削除
+	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
+	 * @return アイテムがすべてなくなったらtrue
+	 **/
+	public function delItem(idx:Int):Bool {
+		if(idx == -1) {
+			// 現在のカーソルを使う
+			idx = _nCursor;
+		}
+
+		// アイテムを削除する
+		_itemList.splice(idx, 1);
+
+		if(_nCursor >= _itemList.length) {
+			// 範囲外のカーソルの位置をずらす
+			_nCursor = _itemList.length - 1;
+			if(_nCursor < 0) {
+				_nCursor = 0;
+			}
+		}
+
+		// テキストを更新
+		_updateText();
+
+		return _itemList.length == 0;
+	}
+
+	/**
+	 * テキストを更新
+	 **/
+	private function _updateText():Void {
+		var i:Int = 0;
 		for(txt in _txtList) {
-			if(i == idx) {
+			if(i < _itemList.length) {
+				var itemid = _itemList[i];
+				var name = ItemUtil.getName(itemid);
 				txt.text = name;
+			}
+			else {
+				txt.text = "";
 			}
 			i++;
 		}
-		_itemList.push(itemid);
-
 	}
 }
