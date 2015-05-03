@@ -18,6 +18,12 @@ private enum State {
  **/
 class Inventory extends FlxGroup {
 
+	// 消費アイテムメニュー
+	private static inline var MENU_CONSUMABLE = "使う";
+	private static inline var MENU_EQUIPMENT = "装備";
+	private static inline var MENU_THROW = "投げる";
+	private static inline var MENU_PUT = "捨てる";
+
 	// 最大
 	private static inline var MAX:Int = 16;
 	// ウィンドウ座標
@@ -105,7 +111,13 @@ class Inventory extends FlxGroup {
 
 				if(FlxG.keys.justPressed.SPACE) {
 					// サブメニューを開く
-					_sub = new InventoryAction(x, y, ["使う", "捨てる"]);
+					var itemid = getSelectedItem();
+					var act = MENU_CONSUMABLE;
+					if(ItemUtil.isEquip(itemid)) {
+						// 装備アイテム
+						act = MENU_EQUIPMENT;
+					}
+					_sub = new InventoryAction(x, y, [act, MENU_PUT]);
 					this.add(_sub);
 					_state = State.Sub;
 				}
@@ -189,6 +201,19 @@ class Inventory extends FlxGroup {
 		_updateText();
 
 		return _itemList.length == 0;
+	}
+
+	/**
+	 * 選択中のアイテムを取得する
+	 * @return 選択中のアイテム番号。アイテムがない場合は-1
+	 **/
+	public function getSelectedItem():Int {
+		if(_itemList.length == 0) {
+			// アイテムを持っていない
+			return -1;
+		}
+
+		return _itemList[_nCursor];
 	}
 
 	/**
