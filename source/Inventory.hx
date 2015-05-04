@@ -30,6 +30,10 @@ private class _Item {
  **/
 class Inventory extends FlxGroup {
 
+	private static inline var EQUIP_WEAPON:Int = 0;
+	private static inline var EQUIP_ARMOR:Int = 1;
+	private static inline var EQUIP_RING:Int = 2;
+
 	// 消費アイテムメニュー
 	private static inline var MENU_CONSUME = "使う";
 	private static inline var MENU_EQUIP = "装備";
@@ -48,6 +52,9 @@ class Inventory extends FlxGroup {
 	// メッセージ座標オフセット
 	private static inline var MSG_POS_X = 8;
 	private static inline var MSG_POS_Y = 8;
+	// 'E'の座標オフセット
+	private static inline var EQUIP_POS_X = -8;
+	private static inline var EQUIP_POS_Y = 14;
 	// メッセージ表示間隔
 	private static inline var DY = 26;
 
@@ -69,6 +76,9 @@ class Inventory extends FlxGroup {
 	private var _weapon:Int = ItemUtil.NONE;
 	private var _armor:Int = ItemUtil.NONE;
 	private var _ring:Int = ItemUtil.NONE;
+
+	// フォント
+	private var _fonts:Array<FlxSprite>;
 
 	// アイテムの追加
 	public static function push(itemid:Int) {
@@ -103,6 +113,21 @@ class Inventory extends FlxGroup {
 			this.add(txt);
 		}
 		_itemList = new Array<_Item>();
+
+		// フォント読み込み
+		_fonts = new Array<FlxSprite>();
+		for(i in 0...3) {
+			// var str_map = "0123456789";
+			// str_map    += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			// str_map    += ".()[]#$%&'" + '"' + "!?^+-*/=;:_<>";
+			// str_map    += "|@`";
+			var spr = new FlxSprite(x + EQUIP_POS_X, 0).loadGraphic("assets/font/font16x16.png", true);
+			spr.animation.add("1", [14], 1); // 'E'
+			spr.animation.play("1");
+			spr.visible = false;
+			this.add(spr);
+			_fonts.push(spr);
+		}
 	}
 
 	// アクティブフラグの設定
@@ -274,18 +299,27 @@ class Inventory extends FlxGroup {
 		}
 		forEachItemList(func);
 
+		// 'E'文字の取得
+		var spr:FlxSprite = _fonts[0];
 		// 装備する
 		itemdata.isEquip = true;
 		switch(itemdata.type) {
 			case IType.Weapon:
 				_weapon = itemdata.id;
+				spr = _fonts[EQUIP_WEAPON];
 			case IType.Armor:
 				_armor = itemdata.id;
+				spr = _fonts[EQUIP_ARMOR];
 			case IType.Ring:
 				_ring = itemdata.id;
+				spr = _fonts[EQUIP_RING];
 			default:
 				trace('warning: invalid itemid = ${itemdata.id}');
 		}
+
+		// 'E'の表示
+		spr.visible = true;
+		spr.y = y + EQUIP_POS_Y + (idx*DY);
 	}
 
 	/**
