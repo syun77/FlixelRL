@@ -184,6 +184,10 @@ class Inventory extends FlxGroup {
 					if(ItemUtil.isEquip(itemid)) {
 						// 装備アイテム
 						act = MENU_EQUIP;
+						if(_isEquipSelectedItem()) {
+							// 装備中なので外す
+							act = MENU_UNEQUIP;
+						}
 					}
 					_sub = new InventoryAction(x, y, [act, MENU_PUT]);
 					this.add(_sub);
@@ -195,11 +199,17 @@ class Inventory extends FlxGroup {
 					// 項目決定
 					switch(_sub.cursor) {
 						case 0:
-							// アイテムを使う・装備する
+							// アイテムを使う・装備する・外す
 							var itemid = getSelectedItem();
 							if(ItemUtil.isEquip(itemid)) {
-								// 装備する
-								equip(-1);
+								if(_isEquipSelectedItem()) {
+									// 外す
+									unequip(ItemUtil.getType(itemid));
+								}
+								else {
+									// 装備する
+									equip(-1);
+								}
 							}
 						case 1:
 							// アイテムを捨てる
@@ -290,6 +300,19 @@ class Inventory extends FlxGroup {
 	}
 
 	/**
+	 * 選択中のアイテムを装備中かどうか
+	 * @return 装備していればtrue
+	 **/
+	private function _isEquipSelectedItem():Bool {
+		if(_itemList.length == 0) {
+			// アイテムを持っていない
+			return false;
+		}
+
+		return _itemList[_nCursor].isEquip;
+	}
+
+	/**
 	 * テキストを更新
 	 **/
 	private function _updateText():Void {
@@ -317,12 +340,7 @@ class Inventory extends FlxGroup {
 		}
 		var itemdata = _itemList[idx];
 		// 同じ種類の装備を外す
-		var func = function(item:_Item) {
-			if(itemdata.type == item.type) {
-				item.isEquip = false;
-			}
-		}
-		forEachItemList(func);
+		unequip(itemdata.type);
 
 		// 'E'文字の取得
 		var spr:FlxSprite = _fonts[0];
@@ -345,6 +363,34 @@ class Inventory extends FlxGroup {
 		// 'E'の表示
 		spr.visible = true;
 		spr.y = y + EQUIP_POS_Y + (idx*DY);
+	}
+
+	/**
+	 * 装備を外す
+	 * @param type 装備の種類
+	 **/
+	public function unequip(type:IType):Void {
+		// 同じ種類の装備を外す
+		var func = function(item:_Item) {
+			if(type == item.type) {
+				item.isEquip = false;
+			}
+		}
+		forEachItemList(func);
+
+		// 'E'を非表示にする
+		var spr = _fonts[0];
+		switch(type) {
+			case IType.Weapon:
+				spr = _fonts[EQUIP_WEAPON];
+			case IType.Armor:
+				spr = _fonts[EQUIP_ARMOR];
+			case IType.Ring:
+				spr = _fonts[EQUIP_RING];
+			default:
+				trace('warning: invalid type = ${type}');
+		}
+		spr.visible = false;
 	}
 
 	/**
