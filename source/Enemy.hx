@@ -68,7 +68,8 @@ class Enemy extends Actor {
 			// 何もしない
 
 		case Actor.State.Act:
-			target.damage(30);
+			var val = Calc.damage(this, target, ItemUtil.NONE, Inventory.getArmor());
+			target.damage(val);
 			_change(Actor.State.TurnEnd);
 
 		case Actor.State.ActEnd:

@@ -68,7 +68,7 @@ class Player extends Actor {
 			// 何もしない
 
 		case Actor.State.Act:
-			var val = Calc.damage(this, _target, 0, 0);
+			var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
 			if(_target.damage(val)) {
 				// 敵を倒した
 				Message.push('${_target.name}を倒した');

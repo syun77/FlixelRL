@@ -72,10 +72,25 @@ class Inventory extends FlxGroup {
 	// 状態
 	private var _state:State = State.Main;
 
-	// 装備アイテム
+	// ■装備アイテム
+	// 武器
 	private var _weapon:Int = ItemUtil.NONE;
+	public var weapon(get_weapon, null):Int;
+	private function get_weapon() {
+		return _weapon;
+	}
+	// 防具
 	private var _armor:Int = ItemUtil.NONE;
+	public var armor(get_armor, null):Int;
+	private function get_armor() {
+		return _armor;
+	}
+	// 指輪
 	private var _ring:Int = ItemUtil.NONE;
+	public var ring(get_ring, null):Int;
+	private function get_ring() {
+		return _ring;
+	}
 
 	// フォント
 	private var _fonts:Array<FlxSprite>;
@@ -83,6 +98,16 @@ class Inventory extends FlxGroup {
 	// アイテムの追加
 	public static function push(itemid:Int) {
 		instance.addItem(itemid);
+	}
+	// 装備品の取得
+	public static function getWeapon():Int {
+		return instance.weapon;
+	}
+	public static function getArmor():Int {
+		return instance.armor;
+	}
+	public static function getRing():Int {
+		return instance.ring;
 	}
 
 	// アイテムテキスト

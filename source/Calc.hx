@@ -21,13 +21,15 @@ class Calc {
 		var vit = act2.params.vit;
 		// 攻撃力
 		var atk = 0;
-		if(item1 > 0) {
-			// TODO: 攻撃力を取得
+		if(item1 > ItemUtil.NONE) {
+			// 攻撃力を取得
+			atk = ItemUtil.getParam(item1, "atk");
 		}
 		// 防御力
 		var def = 0;
-		if(item2 > 0) {
-			// TODO: 防御力を取得
+		if(item2 > ItemUtil.NONE) {
+			// 防御力を取得
+			def = ItemUtil.getParam(item2, "def");
 		}
 
 		// 威力
@@ -37,7 +39,7 @@ class Calc {
 		var str_rate = Math.pow(1.02, str - vit);
 
 		// 威力係数 (装備アイテムの差)
-		var power_rate = Math.pow(10.15, atk - def);
+		var power_rate = Math.pow(1.15, atk - def);
 
 		trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 

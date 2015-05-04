@@ -51,6 +51,14 @@ class ItemUtil {
 		return fromString(str);
 	}
 
+	/**
+	 * 指定のパラメータ名に対応するパラメータを取得する
+	 **/
+	public static function getParam(id:Int, key:String):Int {
+		var csv = getCsv(id);
+		return csv.searchItemInt("id", '${id}', key);
+	}
+
 	public static function toString(type:IType):String {
 		return '${type}';
 	}
