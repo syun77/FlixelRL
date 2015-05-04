@@ -1,4 +1,5 @@
 package ;
+import ItemUtil.IType;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -13,14 +14,26 @@ private enum State {
 	Sub;  // サブニュー操作中
 }
 
+private class _Item {
+	public var id(default, default):Int;       // アイテムID
+	public var type(default, default):IType;   // アイテム種別
+	public var isEquip(default, default):Bool; // 装備しているかどうか
+	public function new(itemid:Int) {
+		id = itemid;
+		type = ItemUtil.getType(id);
+		isEquip = false;
+	}
+}
+
 /**
  * インベントリ
  **/
 class Inventory extends FlxGroup {
 
 	// 消費アイテムメニュー
-	private static inline var MENU_CONSUMABLE = "使う";
-	private static inline var MENU_EQUIPMENT = "装備";
+	private static inline var MENU_CONSUME = "使う";
+	private static inline var MENU_EQUIP = "装備";
+	private static inline var MENU_UNEQUIP = "外す";
 	private static inline var MENU_THROW = "投げる";
 	private static inline var MENU_PUT = "捨てる";
 
@@ -52,6 +65,11 @@ class Inventory extends FlxGroup {
 	// 状態
 	private var _state:State = State.Main;
 
+	// 装備アイテム
+	private var _weapon:Int = ItemUtil.NONE;
+	private var _armor:Int = ItemUtil.NONE;
+	private var _ring:Int = ItemUtil.NONE;
+
 	// アイテムの追加
 	public static function push(itemid:Int) {
 		instance.addItem(itemid);
@@ -60,7 +78,7 @@ class Inventory extends FlxGroup {
 	// アイテムテキスト
 	private var _txtList:List<FlxText>;
 	// アイテムリスト
-	private var _itemList:Array<Int>;
+	private var _itemList:Array<_Item>;
 
 	public function new() {
 		super();
@@ -84,7 +102,7 @@ class Inventory extends FlxGroup {
 			_txtList.add(txt);
 			this.add(txt);
 		}
-		_itemList = new Array<Int>();
+		_itemList = new Array<_Item>();
 	}
 
 	// アクティブフラグの設定
@@ -112,10 +130,10 @@ class Inventory extends FlxGroup {
 				if(FlxG.keys.justPressed.SPACE) {
 					// サブメニューを開く
 					var itemid = getSelectedItem();
-					var act = MENU_CONSUMABLE;
+					var act = MENU_CONSUME;
 					if(ItemUtil.isEquip(itemid)) {
 						// 装備アイテム
-						act = MENU_EQUIPMENT;
+						act = MENU_EQUIP;
 					}
 					_sub = new InventoryAction(x, y, [act, MENU_PUT]);
 					this.add(_sub);
@@ -127,7 +145,12 @@ class Inventory extends FlxGroup {
 					// 項目決定
 					switch(_sub.cursor) {
 						case 0:
-							// アイテムを使う
+							// アイテムを使う・装備する
+							var itemid = getSelectedItem();
+							if(ItemUtil.isEquip(itemid)) {
+								// 装備する
+								equip(-1);
+							}
 						case 1:
 							// アイテムを捨てる
 							delItem(-1);
@@ -171,7 +194,7 @@ class Inventory extends FlxGroup {
 	 * アイテムの追加
 	 **/
 	public function addItem(itemid:Int):Void {
-		_itemList.push(itemid);
+		_itemList.push(new _Item(itemid));
 		_updateText();
 	}
 
@@ -210,10 +233,10 @@ class Inventory extends FlxGroup {
 	public function getSelectedItem():Int {
 		if(_itemList.length == 0) {
 			// アイテムを持っていない
-			return -1;
+			return ItemUtil.NONE;
 		}
 
-		return _itemList[_nCursor];
+		return _itemList[_nCursor].id;
 	}
 
 	/**
@@ -223,7 +246,7 @@ class Inventory extends FlxGroup {
 		var i:Int = 0;
 		for(txt in _txtList) {
 			if(i < _itemList.length) {
-				var itemid = _itemList[i];
+				var itemid = _itemList[i].id;
 				var name = ItemUtil.getName(itemid);
 				txt.text = name;
 			}
@@ -231,6 +254,46 @@ class Inventory extends FlxGroup {
 				txt.text = "";
 			}
 			i++;
+		}
+	}
+
+	/**
+	 * 装備する
+	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
+	 **/
+	public function equip(idx:Int):Void {
+		if(idx == -1) {
+			idx = _nCursor;
+		}
+		var itemdata = _itemList[idx];
+		// 同じ種類の装備を外す
+		var func = function(item:_Item) {
+			if(itemdata.type == item.type) {
+				item.isEquip = false;
+			}
+		}
+		forEachItemList(func);
+
+		// 装備する
+		itemdata.isEquip = true;
+		switch(itemdata.type) {
+			case IType.Weapon:
+				_weapon = itemdata.id;
+			case IType.Armor:
+				_armor = itemdata.id;
+			case IType.Ring:
+				_ring = itemdata.id;
+			default:
+				trace('warning: invalid itemid = ${itemdata.id}');
+		}
+	}
+
+	/**
+	 * ItemListを連続操作する
+	 **/
+	private function forEachItemList(func:_Item->Void):Void {
+		for(item in _itemList) {
+			func(item);
 		}
 	}
 }

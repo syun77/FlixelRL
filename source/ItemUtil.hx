@@ -21,7 +21,9 @@ enum IType {
  * アイテムユーティリティ
  **/
 class ItemUtil {
-	private static inline var ID_OFFSET:Int = 1000;
+	// 無効なアイテム番号
+	public static inline var NONE = -1;
+ static inline var ID_OFFSET:Int = 1000;
 
 	public static var csvConsumable:CsvLoader = null;
 	public static var csvEquipment:CsvLoader = null;
@@ -40,19 +42,53 @@ class ItemUtil {
 		return csv.searchItem("id", '${id}', "name");
 	}
 
+	/**
+	 * アイテムIDからアイテム種別を求める
+	 **/
+	public static function getType(id:Int):IType {
+		var csv = getCsv(id);
+		var str = csv.searchItem("id", '${id}', "type");
+		return fromString(str);
+	}
+
 	public static function toString(type:IType):String {
 		return '${type}';
 	}
 	public static function fromString(str:String):IType {
-		switch(str) {
-			case '${IType.Weapon}': return IType.Weapon;
-			case '${IType.Armor}': return IType.Armor;
-			case '${IType.Scroll}': return IType.Scroll;
-			case '${IType.Wand}': return IType.Wand;
-			case '${IType.Portion}': return IType.Portion;
-			case '${IType.Ring}': return IType.Ring;
-			case '${IType.Food}': return IType.Food;
-			default: return IType.None;
+		// switchの条件に'${IType.###}'は使えない
+//		switch(str) {
+//			case '${IType.Weapon}': return IType.Weapon;
+//			case '${IType.Armor}': return IType.Armor;
+//			case '${IType.Scroll}': return IType.Scroll;
+//			case '${IType.Wand}': return IType.Wand;
+//			case '${IType.Portion}': return IType.Portion;
+//			case '${IType.Ring}': return IType.Ring;
+//			case '${IType.Food}': return IType.Food;
+//			default: throw "Error"; return IType.None;
+//		}
+		if(str == '${IType.Weapon}') {
+			return IType.Weapon;
+		}
+		else if(str == '${IType.Armor}') {
+			return IType.Armor;
+		}
+		else if(str == '${IType.Scroll}') {
+			return IType.Scroll;
+		}
+		else if(str == '${IType.Wand}') {
+			return IType.Wand;
+		}
+		else if(str == '${IType.Portion}') {
+			return IType.Portion;
+		}
+		else if(str == '${IType.Ring}') {
+			return IType.Ring;
+		}
+		else if(str == '${IType.Food}') {
+			return IType.Food;
+		}
+		else {
+			return IType.None;
 		}
 	}
 
