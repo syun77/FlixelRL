@@ -42,6 +42,8 @@ class Actor extends FlxSprite {
 
 	// 1マス進むのにかかるフレーム数
 	private static inline var TIMER_WALK:Int = 16;
+	// ダメージアニメーションのフレーム数
+	private static inline var TIMER_DAMAGE:Int = 8;
 
 	// 状態
 	private var _state:State;
@@ -51,6 +53,8 @@ class Actor extends FlxSprite {
 	private var _dir:Dir = Dir.Down;
 	// アニメーション状態
 	private var _bStop = true;
+	// ダメージ揺らし用のタイマー
+	private var _tShake:Int = 0;
 	// 移動元座標
 	private var _xprev:Float = 0;
 	private var _yprev:Float = 0;
@@ -205,6 +209,15 @@ class Actor extends FlxSprite {
 	/**
 	 * 更新
 	 **/
+	override public function update():Void {
+		super.update();
+		if(_tShake > 0) {
+			_tShake--;
+			var ox = width/2;
+			ox += (_tShake%4 < 2 ? _tShake : -_tShake) * 2;
+			offset.set(ox, height/2);
+		}
+	}
 	public function proc():Void {
 		// サブクラスで実装する
 	}
@@ -238,6 +251,7 @@ class Actor extends FlxSprite {
 	 * ダメージを与える
 	 **/
 	public function damage(val:Int):Bool {
+		_tShake = TIMER_DAMAGE;
 		if(id == 0) {
 			Message.push('${name}は${val}ダメージを受けた');
 		}

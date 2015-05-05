@@ -1,5 +1,7 @@
 package ;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -53,6 +55,41 @@ class Player extends Actor {
 		animation.play(name);
 	}
 
+	/**
+	 * 攻撃開始
+	 **/
+	override public function beginAction():Void {
+		if(_state == Actor.State.ActBegin) {
+			// 攻撃アニメーション開始
+			var x1:Float = x;
+			var y1:Float = y;
+			var x2:Float = _target.x;
+			var y2:Float = _target.y;
+
+			// 攻撃終了の処理
+			var cbEnd = function(tween:FlxTween) {
+				_change(Actor.State.TurnEnd);
+			}
+
+			// 攻撃開始の処理
+			var cbStart = function(tween:FlxTween) {
+				// 攻撃開始
+				var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
+				if(_target.damage(val)) {
+					// 敵を倒した
+					Message.push('${_target.name}を倒した');
+					_target.kill();
+					Particle.start(Particle.PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+				}
+				FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
+			}
+
+			// アニメーション開始
+			FlxTween.tween(this, {x:x2, y:y2}, 0.2, {ease:FlxEase.expoIn, complete:cbStart});
+		}
+		super.beginAction();
+	}
+
 	// 更新
 	override public function proc():Void {
 		switch(_state) {
@@ -67,20 +104,9 @@ class Player extends Actor {
 
 		case Actor.State.ActBegin:
 			// 何もしない
-			_timer = 0;
 
 		case Actor.State.Act:
-			_timer++;
-			if(_timer > 10) {
-				var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
-				if(_target.damage(val)) {
-					// 敵を倒した
-					Message.push('${_target.name}を倒した');
-					_target.kill();
-					Particle.start(Particle.PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
-				}
-				_change(Actor.State.TurnEnd);
-			}
+			// Tweenアニメ中
 
 		case Actor.State.ActEnd:
 			// 何もしない

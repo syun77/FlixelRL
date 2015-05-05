@@ -1,4 +1,6 @@
 package ;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.group.FlxTypedGroup;
 import jp_2dgames.CsvLoader;
 import flixel.util.FlxPoint;
@@ -29,6 +31,34 @@ class Enemy extends Actor {
 
 		// 消しておく
 		kill();
+	}
+
+	/**
+	 * 攻撃開始
+	 **/
+	override public function beginAction():Void {
+		if(_state == Actor.State.ActBegin) {
+			// 攻撃アニメーション開始
+			var x1:Float = x;
+			var y1:Float = y;
+			var x2:Float = target.x;
+			var y2:Float = target.y;
+
+			// 攻撃終了の処理
+			var cbEnd = function(tween:FlxTween) {
+				_change(Actor.State.TurnEnd);
+			}
+
+			// 攻撃開始の処理
+			var cbStart = function(tween:FlxTween) {
+				// 攻撃開始
+				var val = Calc.damage(this, target, ItemUtil.NONE, Inventory.getArmor());
+				target.damage(val);
+				FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
+			}
+
+			FlxTween.tween(this, {x:x2, y:y2}, 0.2, {ease:FlxEase.expoIn, complete:cbStart});
+		}
 	}
 
 	/**
@@ -68,9 +98,7 @@ class Enemy extends Actor {
 			// 何もしない
 
 		case Actor.State.Act:
-			var val = Calc.damage(this, target, ItemUtil.NONE, Inventory.getArmor());
-			target.damage(val);
-			_change(Actor.State.TurnEnd);
+			// Tweenアニメ中
 
 		case Actor.State.ActEnd:
 			// 何もしない

@@ -21,7 +21,16 @@ private enum State {
  **/
 class ParticleDamage extends FlxSprite {
 
+	// フォントサイズ
 	private static inline var FONT_SIZE:Int = 16;
+
+	// ■速度関連
+	// 開始速度
+	private static inline var SPEED_Y_INIT:Float = -200;
+	// 重力加速度
+	private static inline var GRAVITY:Float = 15;
+	// 床との反発係数
+	private static inline var FRICTION:Float = 0.5;
 
 	// パーティクル管理
 	public static var parent:FlxTypedGroup<ParticleDamage>;
@@ -58,12 +67,14 @@ class ParticleDamage extends FlxSprite {
 		// 描画をクリアする
 		pixels.fillRect(new Rectangle(0, 0, FONT_SIZE*8, FONT_SIZE), FlxColor.TRANSPARENT);
 
+		// フォント画像読み込み
 		var bmp = FlxG.bitmap.add("assets/font/font16x16.png");
 		var pt = new Point();
 		var rect = new Rectangle(0, 0, FONT_SIZE, FONT_SIZE);
+		// 数字の桁数を求める
 		var digit = Std.string(val).length;
-		trace('digit=${digit} val=${val}');
 		for(i in 0...digit) {
+			// フォントをレンダリングする
 			pt.x = (digit - i - 1) * FONT_SIZE;
 			trace(pt);
 			var v = Std.int(val / Math.pow(10, i)) % 10;
@@ -74,11 +85,13 @@ class ParticleDamage extends FlxSprite {
 		dirty = true;
 		updateFrameData();
 
-		// 指定の位置を中心にするように調整
+		// フォントを中央揃えする
 		x = X - (FONT_SIZE * digit / 2);
 
-		// 移動する
-		velocity.y = -200;
+		// 移動開始
+		velocity.y = SPEED_Y_INIT;
+
+		visible = true;
 
 		// メイン状態へ
 		_state = State.Main;
@@ -92,12 +105,15 @@ class ParticleDamage extends FlxSprite {
 
 		switch(_state) {
 			case State.Main:
-				velocity.y += 15;
+				// 落下中
+				velocity.y += GRAVITY;
 				if(y > _ystart) {
+					// 出現位置より下に下がった
 					y = _ystart;
-					velocity.y *= -0.5;
-					trace(velocity.y);
+					// バウンドする
+					velocity.y *= -FRICTION;
 					if(Math.abs(velocity.y) < 30) {
+						// 一定速度以下でバウンド終了
 						velocity.y = 0;
 						_timer = 30;
 						_state = State.Wait;
@@ -107,7 +123,7 @@ class ParticleDamage extends FlxSprite {
 				// ちょっと待つ
 				_timer--;
 				if(_timer < 1) {
-					_timer = 30;
+					_timer = 15;
 					_state = State.Blink;
 				}
 			case State.Blink:
