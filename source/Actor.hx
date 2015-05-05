@@ -246,6 +246,7 @@ class Actor extends FlxSprite {
 		}
 
 		Particle.start(Particle.PType.Circle, x, y, FlxColor.RED);
+		ParticleDamage.start(x, y, val);
 
 		_params.hp -= val;
 		if(_params.hp <= 0) {

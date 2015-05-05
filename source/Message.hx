@@ -36,6 +36,9 @@ class Message extends FlxGroup {
 
 	private var _msgList:List<FlxText>;
 
+	/**
+	 * コンストラクタ
+	 **/
 	public function new() {
 		super();
 		// 背景枠

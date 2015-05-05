@@ -28,15 +28,6 @@ class PlayState extends FlxState
 	private function get_lField() {
 		return _lField;
 	}
-	// 敵管理
-	private var _enemies:FlxTypedGroup<Enemy>;
-	// アイテム管理
-	private var _items:FlxTypedGroup<DropItem>;
-	// パーティクル
-	private var _particles:FlxTypedGroup<Particle>;
-
-	// メッセージ
-	private var _message:Message;
 
 	// シーケンス管理
 	private var _seq:SeqMgr;
@@ -46,9 +37,6 @@ class PlayState extends FlxState
 
 	// CSVデータ
 	private var _csv:Csv;
-
-	// インベントリ
-	private var _inventory:Inventory;
 
 	/**
 	 * 生成
@@ -76,20 +64,20 @@ class PlayState extends FlxState
 		setFieldLayer(layer);
 
 		// アイテム管理生成
-		_items = new FlxTypedGroup<DropItem>(32);
-		for(i in 0..._items.maxSize) {
-			_items.add(new DropItem());
+		var items = new FlxTypedGroup<DropItem>(32);
+		for(i in 0...items.maxSize) {
+			items.add(new DropItem());
 		}
-		this.add(_items);
-		DropItem.parent = _items;
+		this.add(items);
+		DropItem.parent = items;
 
 		// 敵管理生成
-		_enemies = new FlxTypedGroup<Enemy>(32);
-		for(i in  0..._enemies.maxSize) {
-			_enemies.add(new Enemy());
+		var enemies = new FlxTypedGroup<Enemy>(32);
+		for(i in  0...enemies.maxSize) {
+			enemies.add(new Enemy());
 		}
-		this.add(_enemies);
-		Enemy.parent = _enemies;
+		this.add(enemies);
+		Enemy.parent = enemies;
 
 		var pt = layer.search(Field.PLAYER);
 
@@ -100,41 +88,49 @@ class PlayState extends FlxState
 		Enemy.target = _player;
 
 		// パーティクル
-		_particles = new FlxTypedGroup<Particle>(256);
-		for(i in 0..._particles.maxSize) {
-			_particles.add(new Particle());
+		var particles = new FlxTypedGroup<Particle>(256);
+		for(i in 0...particles.maxSize) {
+			particles.add(new Particle());
 		}
-		this.add(_particles);
-		Particle.parent = _particles;
+		this.add(particles);
+		Particle.parent = particles;
+
+		// パーティクル（ダメージ数値）
+		var partDamage = new FlxTypedGroup<ParticleDamage>(16);
+		for(i in 0...partDamage.maxSize) {
+			partDamage.add(new ParticleDamage());
+		}
+		this.add(partDamage);
+		ParticleDamage.parent = partDamage;
 
 		if(true) {
 			// TODO: デバッグ用に敵を生成
-			var e:Enemy = _enemies.recycle();
+			var e:Enemy = enemies.recycle();
 			var params = new Params();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(3, 2, Dir.Down, params, true);
 
 			// TODO: デバッグ用のアイテムを配置
 			FlxRandom.globalSeed = flash.Lib.getTimer();
-			var item:DropItem = _items.recycle();
+			var item:DropItem = items.recycle();
 			item.init(10, 2, IType.Weapon, ItemUtil.random(IType.Weapon));
-			item = _items.recycle();
+			item = items.recycle();
 			item.init(10, 3, IType.Armor, ItemUtil.random(IType.Armor));
-			item = _items.recycle();
+			item = items.recycle();
 			item.init(10, 4, IType.Food, ItemUtil.random(IType.Food));
-			item = _items.recycle();
+			item = items.recycle();
 			item.init(10, 5, IType.Portion, ItemUtil.random(IType.Portion));
 		}
 
 		// メッセージ生成
-		_message = new Message();
-		this.add(_message);
-		Message.instance = _message;
+		var message = new Message();
+		this.add(message);
+		Message.instance = message;
 
 		// インベントリ
-		_inventory = new Inventory();
-		this.add(_inventory);
-		Inventory.instance = _inventory;
+		var inventory = new Inventory();
+		this.add(inventory);
+		Inventory.instance = inventory;
 
 		// シーケンス管理
 		_seq = new SeqMgr(this);
@@ -168,9 +164,11 @@ class PlayState extends FlxState
 	override public function destroy():Void
 	{
 		Particle.parent = null;
+		ParticleDamage.parent = null;
 		DropItem.parent = null;
 		Enemy.parent = null;
 		Message.instance = null;
+		Inventory.instance = null;
 		super.destroy();
 	}
 
@@ -186,6 +184,10 @@ class PlayState extends FlxState
 
 		// デバッグ処理
 		updateDebug();
+
+		if(FlxG.keys.justPressed.A) {
+			ParticleDamage.start(320, 240, 100);
+		}
 	}
 
 	private function updateDebug():Void {
