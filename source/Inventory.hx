@@ -14,7 +14,7 @@ private enum State {
 	Sub;  // サブニュー操作中
 }
 
-private class _Item {
+class ItemData {
 	public var id(default, default):Int;       // アイテムID
 	public var type(default, default):IType;   // アイテム種別
 	public var isEquip(default, default):Bool; // 装備しているかどうか
@@ -109,11 +109,47 @@ class Inventory extends FlxGroup {
 	public static function getRing():Int {
 		return instance.ring;
 	}
+	public static function setItemList(items:Array<ItemData>):Void {
+		instance.init(items);
+	}
+	public function init(items:Array<ItemData>):Void {
+		// カーソルは初期状態非表示
+		_cursor.visible = false;
+		_nCursor = 0;
+
+		// 装備を外す
+		_weapon = ItemUtil.NONE;
+		_armor = ItemUtil.NONE;
+		_ring = ItemUtil.NONE;
+		for(spr in _fonts) {
+			spr.visible = false;
+		}
+
+		// アイテムを登録
+		_itemList = items;
+		var i = 0;
+		for(item in items) {
+			if(item.isEquip) {
+				equip(i);
+			}
+			i++;
+		}
+
+		// テキスト更新
+		_updateText();
+	}
+	public static function getItemList():Array<ItemData> {
+		return instance.itemList;
+	}
 
 	// アイテムテキスト
 	private var _txtList:List<FlxText>;
 	// アイテムリスト
-	private var _itemList:Array<_Item>;
+	private var _itemList:Array<ItemData>;
+	public var itemList(get_itemList, null):Array<ItemData>;
+	private function get_itemList() {
+		return _itemList;
+	}
 
 	public function new() {
 		super();
@@ -137,7 +173,6 @@ class Inventory extends FlxGroup {
 			_txtList.add(txt);
 			this.add(txt);
 		}
-		_itemList = new Array<_Item>();
 
 		// フォント読み込み
 		_fonts = new Array<FlxSprite>();
@@ -153,6 +188,9 @@ class Inventory extends FlxGroup {
 			this.add(spr);
 			_fonts.push(spr);
 		}
+
+		// 初期化
+		init(new Array<ItemData>());
 	}
 
 	// アクティブフラグの設定
@@ -254,7 +292,7 @@ class Inventory extends FlxGroup {
 	 * アイテムの追加
 	 **/
 	public function addItem(itemid:Int):Void {
-		_itemList.push(new _Item(itemid));
+		_itemList.push(new ItemData(itemid));
 		_updateText();
 	}
 
@@ -371,7 +409,7 @@ class Inventory extends FlxGroup {
 	 **/
 	public function unequip(type:IType):Void {
 		// 同じ種類の装備を外す
-		var func = function(item:_Item) {
+		var func = function(item:ItemData) {
 			if(type == item.type) {
 				item.isEquip = false;
 			}
@@ -382,10 +420,13 @@ class Inventory extends FlxGroup {
 		var spr = _fonts[0];
 		switch(type) {
 			case IType.Weapon:
+				_weapon = ItemUtil.NONE;
 				spr = _fonts[EQUIP_WEAPON];
 			case IType.Armor:
+				_armor = ItemUtil.NONE;
 				spr = _fonts[EQUIP_ARMOR];
 			case IType.Ring:
+				_ring = ItemUtil.NONE;
 				spr = _fonts[EQUIP_RING];
 			default:
 				trace('warning: invalid type = ${type}');
@@ -396,7 +437,7 @@ class Inventory extends FlxGroup {
 	/**
 	 * ItemListを連続操作する
 	 **/
-	private function forEachItemList(func:_Item->Void):Void {
+	private function forEachItemList(func:ItemData->Void):Void {
 		for(item in _itemList) {
 			func(item);
 		}

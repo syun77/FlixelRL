@@ -35,6 +35,30 @@ private class _Player {
 }
 
 /**
+ * イベントリ
+ **/
+private class _Inventory {
+	public var array:Array<Inventory.ItemData>;
+	public function new() {
+	}
+	// セーブ
+	public function save() {
+		array = Inventory.getItemList();
+	}
+	// ロード
+	public function load(data:Dynamic) {
+		var array = new Array<Inventory.ItemData>();
+		for(idx in 0...data.array.length) {
+			var item = data.array[idx];
+			var i = new Inventory.ItemData(item.id);
+			i.isEquip = item.isEquip;
+			array.push(i);
+		}
+		Inventory.setItemList(array);
+	}
+}
+
+/**
  * 敵データ
  **/
 private class _Enemy {
@@ -105,6 +129,7 @@ private class _Items {
 
 		var func = function(item:DropItem) {
 			var i = new _Item();
+			trace(item.type);
 			i.x = item.xchip;
 			i.y = item.ychip;
 			i.id = item.id;
@@ -164,12 +189,14 @@ private class _Map {
  **/
 private class SaveData {
 	public var player:_Player;
+	public var inventory:_Inventory;
 	public var enemies:_Enemies;
 	public var items:_Items;
 	public var map:_Map;
 
 	public function new() {
 		player = new _Player();
+		inventory = new _Inventory();
 		enemies = new _Enemies();
 		items = new _Items();
 		map = new _Map();
@@ -178,6 +205,7 @@ private class SaveData {
 	// セーブ
 	public function save():Void {
 		player.save();
+		inventory.save();
 		enemies.save();
 		items.save();
 		map.save();
@@ -186,6 +214,7 @@ private class SaveData {
 	// ロード
 	public function load(data:Dynamic):Void {
 		player.load(data.player);
+		inventory.load(data.inventory);
 		enemies.load(data.enemies);
 		items.load(data.items);
 		map.load(data.map);

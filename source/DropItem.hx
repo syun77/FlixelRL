@@ -46,6 +46,7 @@ class DropItem extends FlxSprite {
 	 **/
 	public function init(X:Int, Y:Int, type:IType, itemid:Int) {
 		id = itemid;
+		this.type = type;
 		xchip = X;
 		ychip = Y;
 		x = Field.toWorldX(X);
