@@ -11,6 +11,7 @@ import DirUtil;
 class Player extends Actor {
 
 	private var _target:Enemy = null;
+	private var _timer:Int = 0;
 
 	/**
 	 * 生成
@@ -66,16 +67,20 @@ class Player extends Actor {
 
 		case Actor.State.ActBegin:
 			// 何もしない
+			_timer = 0;
 
 		case Actor.State.Act:
-			var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
-			if(_target.damage(val)) {
-				// 敵を倒した
-				Message.push('${_target.name}を倒した');
-				_target.kill();
-				Particle.start(Particle.PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+			_timer++;
+			if(_timer > 10) {
+				var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
+				if(_target.damage(val)) {
+					// 敵を倒した
+					Message.push('${_target.name}を倒した');
+					_target.kill();
+					Particle.start(Particle.PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+				}
+				_change(Actor.State.TurnEnd);
 			}
-			_change(Actor.State.TurnEnd);
 
 		case Actor.State.ActEnd:
 			// 何もしない

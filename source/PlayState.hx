@@ -206,5 +206,9 @@ class PlayState extends FlxState
 			// ロード
 			Save.load();
 		}
+		if(FlxG.keys.justPressed.R) {
+			// リスタート
+			FlxG.switchState(new PlayState());
+		}
 	}
 }
