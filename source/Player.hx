@@ -13,7 +13,6 @@ import DirUtil;
 class Player extends Actor {
 
 	private var _target:Enemy = null;
-	private var _timer:Int = 0;
 
 	/**
 	 * 生成

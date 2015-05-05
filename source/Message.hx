@@ -86,14 +86,14 @@ class Message extends FlxGroup {
 					pop();
 				}
 			}
+		}
 
-			// 座標更新
-			_window.y = ofsY;
-			var idx = 0;
-			for(text in _msgList) {
-				text.y = ofsY + MSG_POS_Y + idx * DY;
-				idx++;
-			}
+		// 座標更新
+		_window.y = ofsY;
+		var idx = 0;
+		for(text in _msgList) {
+			text.y = ofsY + MSG_POS_Y + idx * DY;
+			idx++;
 		}
 	}
 
