@@ -76,7 +76,6 @@ class ParticleDamage extends FlxSprite {
 		for(i in 0...digit) {
 			// フォントをレンダリングする
 			pt.x = (digit - i - 1) * FONT_SIZE;
-			trace(pt);
 			var v = Std.int(val / Math.pow(10, i)) % 10;
 			rect.left = v * FONT_SIZE;
 			rect.right = rect.left + FONT_SIZE;
