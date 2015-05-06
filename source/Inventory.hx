@@ -45,15 +45,15 @@ class Inventory extends FlxGroup {
 	private static inline var MAX:Int = 16;
 	// ウィンドウ座標
 	private static inline var POS_X = 640 + 8;
-	private static inline var POS_Y = 8;
+	private static inline var POS_Y = 80 + 8;
 	// ウィンドウサイズ
-	private static inline var WIDTH = 160 - 8*2;
-	private static inline var HEIGHT = 480 - 8*2;
+	private static inline var WIDTH = 212 - 8*2;
+	private static inline var HEIGHT = 480 - 64 - 8*2;
 	// メッセージ座標オフセット
-	private static inline var MSG_POS_X = 8;
+	private static inline var MSG_POS_X = 24;
 	private static inline var MSG_POS_Y = 8;
 	// 'E'の座標オフセット
-	private static inline var EQUIP_POS_X = -8;
+	private static inline var EQUIP_POS_X = 4;
 	private static inline var EQUIP_POS_Y = 14;
 	// メッセージ表示間隔
 	private static inline var DY = 26;

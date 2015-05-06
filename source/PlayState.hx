@@ -63,6 +63,10 @@ class PlayState extends FlxState
 		// フィールドを登録
 		setFieldLayer(layer);
 
+		// ステータス表示
+		var guistatus = new GuiStatus();
+		this.add(guistatus);
+
 		// アイテム管理生成
 		var items = new FlxTypedGroup<DropItem>(32);
 		for(i in 0...items.maxSize) {

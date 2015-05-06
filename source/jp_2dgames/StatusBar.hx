@@ -20,10 +20,9 @@ class StatusBar extends FlxBar {
 	}
 
 	/**
-     * 値を設定
-     * @param v 0〜100で指定します
-     **/
-
+   * 値を設定
+   * @param v 0〜100で指定します
+   **/
 	public function setPercent(v:Float):Void {
 
 		if(v != _prev || (v == _prev && v != _next)) {
@@ -42,9 +41,8 @@ class StatusBar extends FlxBar {
 	}
 
 	/**
-     * 更新
-     **/
-
+   * 更新
+   **/
 	override function update():Void {
 		super.update();
 
