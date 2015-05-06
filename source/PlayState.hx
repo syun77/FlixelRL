@@ -113,6 +113,15 @@ class PlayState extends FlxState
 			var params = new Params();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(3, 2, Dir.Down, params, true);
+			e = enemies.recycle();
+			params.id = FlxRandom.intRanged(1, 5);
+			e.init(3, 3, Dir.Down, params, true);
+			e = enemies.recycle();
+			params.id = FlxRandom.intRanged(1, 5);
+			e.init(3, 1, Dir.Down, params, true);
+			e = enemies.recycle();
+			params.id = FlxRandom.intRanged(1, 5);
+			e.init(4, 3, Dir.Down, params, true);
 
 			// TODO: デバッグ用のアイテムを配置
 			FlxRandom.globalSeed = flash.Lib.getTimer();
@@ -143,6 +152,7 @@ class PlayState extends FlxState
 		FlxG.watch.add(player, "_state");
 		FlxG.watch.add(player, "_stateprev");
 		FlxG.watch.add(_seq, "_state");
+		FlxG.watch.add(_seq, "_stateprev");
 
 //		FlxG.debugger.visible = true;
 		FlxG.debugger.toggleKeys = ["ALT"];

@@ -26,6 +26,7 @@ class SeqMgr {
 
 	// 状態
 	private var _state:State;
+	private var _stateprev:State;
 
 	/**
 	 * コンストラクタ
@@ -35,6 +36,15 @@ class SeqMgr {
 		_enemies = Enemy.parent;
 		_inventory = Inventory.instance;
 		_state = State.KeyInput;
+		_stateprev = _state;
+	}
+
+	/**
+	 * 状態遷移
+	 **/
+	private function _change(s:State):Void {
+		_stateprev = _state;
+		_state = s;
 	}
 
 	/**
@@ -52,6 +62,17 @@ class SeqMgr {
 		}
 	}
 
+	/**
+	 * 敵をすべて動かす
+	 **/
+	private function _moveAllEnemy():Void {
+		_enemies.forEachAlive(function(e:Enemy) {
+			if(e.action == Actor.Action.Move) {
+				e.beginMove();
+			}
+		});
+	}
+
 	private function proc():Bool {
 		_player.proc();
 		_enemies.forEachAlive(function(e:Enemy) e.proc());
@@ -66,16 +87,16 @@ class SeqMgr {
 					case Actor.Action.Act:
 						// プレイヤー行動
 						_player.beginAction();
-						_state = State.PlayerAct;
+						_change(State.PlayerAct);
 						ret = true;
 					case Actor.Action.Move:
 						// 移動した
-						_state = State.EnemyRequestAI;
+						_change(State.EnemyRequestAI);
 						ret = true;
 					case Actor.Action.Inventory:
 						// インベントリを開く
 						_inventory.setActive(true);
-						_state = State.InventoryInput;
+						_change(State.InventoryInput);
 					default:
 						// 何もしていない
 				}
@@ -86,70 +107,98 @@ class SeqMgr {
 					// キー入力に戻る
 					_player.changeprev();
 					_inventory.setActive(false);
-					_state = State.KeyInput;
+					_change(State.KeyInput);
 				}
 
 			case State.PlayerAct:
 				// ■プレイヤーの行動
 				if(_player.isTurnEnd()) {
 					// 移動完了
-					_state = State.EnemyRequestAI;
+					_change(State.EnemyRequestAI);
 					ret = true;
 				}
 			case State.EnemyRequestAI:
 				// 敵に行動を要求する
 				_enemies.forEachAlive(function(e:Enemy) e.requestMove());
 				if(_player.isTurnEnd()) {
-					_state = State.EnemyActBegin;
+					_change(State.EnemyActBegin);
 					ret = true;
 				}
 				else {
 					// プレイヤーの移動を開始する
 					_player.beginMove();
 					// 敵も移動する
-					_enemies.forEachAlive(function(e:Enemy) {
-						if(e.action == Actor.Action.Move) {
-							e.beginMove();
-						}
-					});
-					_state = State.Move;
+					_moveAllEnemy();
+					_change(State.Move);
 					ret = true;
 				}
 
 			case State.Move:
 				if(_player.isTurnEnd()) {
-					_state = State.EnemyActBegin;
+					_change(State.EnemyActBegin);
 					ret = true;
 				}
 
 			case State.EnemyActBegin:
+				var bStart = false;
 				_enemies.forEachAlive(function(e:Enemy) {
-					if(e.action == Actor.Action.Act) {
-						e.beginAction();
+					if(bStart == false) {
+						// 誰も行動していなければ行動する
+						if(e.action == Actor.Action.Act) {
+							e.beginAction();
+							bStart = true;
+						}
 					}
 				});
 				ret = true;
-				_state = State.EnemyAct;
+				_change(State.EnemyAct);
 
 			case State.EnemyAct:
 				// ■敵の行動
-				var isEnd:Bool = true;
+				var isNext = true;
+				var isActRemain = false;
+				var isMoveRemain = false;
 				_enemies.forEachAlive(function(e:Enemy) {
-					if(e.isTurnEnd() == false) {
-						// まだ終わっていない敵がいる
-						isEnd = false;
+					switch(e.action) {
+						case Actor.Action.ActExec:
+							// アクション実行中
+							isNext = false;
+						case Actor.Action.MoveExec:
+							// 移動中
+							isNext = false;
+						case Actor.Action.Act:
+							// アクション実行待ち
+							isActRemain = true;
+						case Actor.Action.Move:
+							// 移動待ち
+							isMoveRemain = true;
+						case Actor.Action.TurnEnd:
+							// ターン終了
+						default:
+							// 通常ここに来ない
+							trace('Error: Invalid action = ${e.action}');
 					}
 				});
-				if(isEnd) {
-					// 敵がすべて移動完了した
-					_state = State.TurnEnd;
+				if(isNext) {
+					// 敵が行動完了した
+					if(isActRemain) {
+						// 次の敵を動かす
+						_change(State.EnemyActBegin);
+					}
+					else if(isMoveRemain) {
+						// 移動待ちの敵がいるので動かしてやる
+						_moveAllEnemy();
+					}
+					else {
+						_change(State.TurnEnd);
+					}
 					ret = true;
 				}
 			case State.TurnEnd:
 				// ■ターン終了
 				_player.turnEnd();
 				_enemies.forEachAlive(function(e:Enemy) e.turnEnd());
-				_state = State.KeyInput;
+				_change(State.KeyInput);
 				ret = true;
 		}
 

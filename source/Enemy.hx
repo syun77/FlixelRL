@@ -31,6 +31,9 @@ class Enemy extends Actor {
 
 		// 消しておく
 		kill();
+
+		FlxG.watch.add(this, "_state");
+		FlxG.watch.add(this, "_stateprev");
 	}
 
 	/**
@@ -59,6 +62,8 @@ class Enemy extends Actor {
 
 			FlxTween.tween(this, {x:x2, y:y2}, 0.2, {ease:FlxEase.expoIn, complete:cbStart});
 		}
+
+		super.beginAction();
 	}
 
 	/**
@@ -149,14 +154,14 @@ class Enemy extends Actor {
 		// 移動方向の判定実行
 		var dir = func();
 
-		// 移動先が壁かどうかチェックする
+		// 移動先がチェックする
 		var pt = FlxPoint.get(_xnext, _ynext);
 		pt = DirUtil.move(dir, pt);
 		var xnext = Std.int(pt.x);
 		var ynext = Std.int(pt.y);
 		pt.put();
 
-		if(Field.isCollision(xnext, ynext)) {
+		if(_isMove(xnext, ynext) == false) {
 			// 移動できない
 			if(DirUtil.isHorizontal(dir)) {
 				if(dy < 0) {
@@ -179,6 +184,29 @@ class Enemy extends Actor {
 		return dir;
 	}
 
+	private function _isMove(xnext:Int, ynext:Int):Bool {
+		var bHit:Bool = false;
+		var func = function(e:Enemy) {
+			if(xnext == e.xchip && ynext == e.ychip) {
+				// 移動先に敵がいる
+				bHit = true;
+			}
+		}
+		parent.forEachAlive(func);
+		if(bHit) {
+			// 移動できない
+			return false;
+		}
+
+		if(Field.isCollision(xnext, ynext)) {
+			// 移動できない
+			return false;
+		}
+
+		// 移動できる
+		return true;
+	}
+
 	/**
 	 * 移動要求をする
 	 **/
@@ -198,7 +226,7 @@ class Enemy extends Actor {
 		}
 
 		// 移動先チェック
-		if(Field.isCollision(xnext, ynext) == false) {
+		if(_isMove(xnext, ynext)) {
 			// 移動可能
 			_xnext = xnext;
 			_ynext = ynext;

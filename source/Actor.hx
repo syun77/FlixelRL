@@ -31,7 +31,9 @@ enum Action {
 	Standby;   // 待機中
 	Inventory; // インベントリを開く
 	Act;       // 攻撃
+	ActExec;   // 攻撃実行中
 	Move;      // 移動
+	MoveExec;  // 移動実行中
 	TurnEnd;   // ターン終了
 }
 
@@ -114,13 +116,17 @@ class Actor extends FlxSprite {
 				return Action.Inventory; // イベントリを開く
 			case State.ActBegin:
 				return Action.Act; // 攻撃開始
+			case State.Act:
+				return Action.ActExec; // 攻撃実行中
 			case State.MoveBegin:
 				return Action.Move; // 移動開始
+			case State.Move:
+				return Action.MoveExec; // 移動中
 			case State.TurnEnd:
 				return Action.TurnEnd; // ターン終了
 			default:
 				// 通常はここにこない
-				trace("error");
+				trace('error: ${_state}');
 				return Action.None;
 		}
 	}

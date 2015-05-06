@@ -57,8 +57,6 @@ class DropItem extends FlxSprite {
 
 		// アニメーション再生
 		animation.play(ItemUtil.toString(type));
-
-		FlxG.watch.add(this, "animation");
 	}
 
 	/**
