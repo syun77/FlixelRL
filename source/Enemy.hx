@@ -32,8 +32,8 @@ class Enemy extends Actor {
 		// 消しておく
 		kill();
 
-		FlxG.watch.add(this, "_state");
-		FlxG.watch.add(this, "_stateprev");
+//		FlxG.watch.add(this, "_state");
+//		FlxG.watch.add(this, "_stateprev");
 	}
 
 	/**
@@ -186,20 +186,19 @@ class Enemy extends Actor {
 
 	private function _isMove(xnext:Int, ynext:Int):Bool {
 		var bHit:Bool = false;
-		var func = function(e:Enemy) {
+		parent.forEachAlive(function(e:Enemy) {
 			if(xnext == e.xchip && ynext == e.ychip) {
 				// 移動先に敵がいる
 				bHit = true;
 			}
-		}
-		parent.forEachAlive(func);
+		});
 		if(bHit) {
-			// 移動できない
+			// 敵がいるので移動できない
 			return false;
 		}
 
 		if(Field.isCollision(xnext, ynext)) {
-			// 移動できない
+			// 壁なので移動できない
 			return false;
 		}
 

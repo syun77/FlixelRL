@@ -7,6 +7,9 @@ import flixel.util.FlxRandom;
  **/
 class Calc {
 
+	// 最大ダメージ
+	private static inline var MAX_DAMAGE:Int = 9999;
+
 	/**
 	 * ダメージ計算
 	 * @param act1 攻撃する人
@@ -44,7 +47,7 @@ class Calc {
 		trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 
 		// ダメージ量を計算
-		var val = (power * str_rate + power_rate);
+		var val = (power * str_rate * power_rate);
 		if(val <= 0) {
 			// 0ダメージはランダムで1〜3ダメージ
 			val = FlxRandom.intRanged(1, 3);
@@ -55,6 +58,13 @@ class Calc {
 			if(Math.abs(d) < 1) {
 				// 1以下の場合は+1〜3する
 				val += FlxRandom.intRanged(1, 3);
+			}
+			else {
+				val += d;
+				if(val > MAX_DAMAGE) {
+					// 最大ダメージ量を超えないようにする
+					val = MAX_DAMAGE;
+				}
 			}
 		}
 
