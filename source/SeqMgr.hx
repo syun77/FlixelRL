@@ -97,6 +97,10 @@ class SeqMgr {
 						// インベントリを開く
 						_inventory.setActive(true);
 						_change(State.InventoryInput);
+					case Actor.Action.TurnEnd:
+						// 足踏み待機
+						_change(State.EnemyRequestAI);
+						ret = true;
 					default:
 						// 何もしていない
 				}

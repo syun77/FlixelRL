@@ -1,5 +1,6 @@
 package ;
 
+import flixel.util.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -132,6 +133,27 @@ class Player extends Actor {
 	}
 
 	/**
+	 * キー入力チェック
+	 **/
+	private function _isKeyInput():Bool {
+		if(FlxG.keys.pressed.SPACE) {
+			// 攻撃 or 待機
+			return true;
+		}
+		if(FlxG.keys.pressed.CONTROL) {
+			// 方向転換のみ
+			return true;
+		}
+		if(DirUtil.getInputDirection() != Dir.None) {
+			// 移動した
+			return true;
+		}
+
+		// 何もしていない
+		return false;
+	}
+
+	/**
 	 * 更新・キー入力待ち
 	 **/
 	private function _updateKeyInput():Void {
@@ -143,48 +165,64 @@ class Player extends Actor {
 			return;
 		}
 
-		var xnext = Std.int(_xnext);
-		var ynext = Std.int(_ynext);
-		if(FlxG.keys.pressed.LEFT) {
-			// 左へ進む
-			_dir = Dir.Left;
-			xnext -= 1;
-		}
-		else if(FlxG.keys.pressed.UP) {
-			// 上へ進む
-			_dir = Dir.Up;
-			ynext -= 1;
-		}
-		else if(FlxG.keys.pressed.RIGHT) {
-			// 右へ進む
-			_dir = Dir.Right;
-			xnext += 1;
-		}
-		else if(FlxG.keys.pressed.DOWN) {
-			// 下へ進む
-			_dir = Dir.Down;
-			ynext += 1;
-		}
-		else {
-			// 移動しない
+		if(_isKeyInput() == false) {
+			// キー入力をしていない
 			return;
 		}
 
+		var bAttack = false;
+		var dir = DirUtil.getInputDirection();
+		if(FlxG.keys.pressed.SPACE) {
+			// 攻撃 or 待機
+			bAttack = true;
+		}
+		var bTurn = false;
+		if(FlxG.keys.pressed.CONTROL) {
+			// 方向転換のみ
+			bTurn = true;
+		}
+		if(dir != Dir.None) {
+			// 向きを反映
+			_dir = dir;
+		}
+
+		var pt = FlxPoint.get(_xnext, _ynext);
+		pt = DirUtil.move(_dir, pt);
+		var xnext = Std.int(pt.x);
+		var ynext = Std.int(pt.y);
+		pt.put();
+
 		// 移動先に敵がいるかどうかチェック
 		_target = null;
-		var func = function(e:Enemy) {
+		Enemy.parent.forEachAlive(function(e:Enemy) {
 			if(e.checkPosition(xnext, ynext)) {
 				// 敵がいた
 				_target = e;
 			}
+		});
+
+		if(bAttack) {
+			// 攻撃 or 待機
+			if(_target != null) {
+				// 攻撃する
+				_xtarget = xnext;
+				_ytarget = ynext;
+				_change(Actor.State.ActBegin);
+			}
+			else {
+				// 足踏み待機する
+				_change(Actor.State.TurnEnd);
+			}
+			return;
 		}
-		Enemy.parent.forEachAlive(func);
+
+		if(bTurn) {
+			// 移動方向を向くだけ
+			return;
+		}
 
 		if(_target != null) {
-			// 敵がいるので攻撃する
-			_xtarget = xnext;
-			_ytarget = ynext;
-			_change(Actor.State.ActBegin);
+			// 移動方向を向くだけ
 			return;
 		}
 
