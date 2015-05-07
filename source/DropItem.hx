@@ -1,7 +1,6 @@
 package ;
 import ItemUtil;
 import flixel.group.FlxTypedGroup;
-import flixel.FlxG;
 import ItemUtil.IType;
 import flixel.FlxSprite;
 
@@ -22,6 +21,30 @@ class DropItem extends FlxSprite {
 	// 名前
 	public var name(default, null):String;
 
+	/**
+	 * 指定座標にあるアイテムを拾う
+	 * @return アイテムを拾えたらtrue
+	 **/
+	public static function pickup(xchip:Int, ychip:Int):Bool {
+		var bFind = false;
+		parent.forEachAlive(function(item:DropItem) {
+			if(xchip == item.xchip && ychip == item.ychip) {
+				// 拾える
+				Message.push('${item.name}を拾った');
+				bFind = true;
+				Inventory.push(item.id);
+				item.kill();
+			}
+		});
+
+		if(bFind) {
+			// アイテムを拾った
+			return true;
+		}
+
+		// 拾えなかった
+		return false;
+	}
 	/**
 	 * コンストラクタ
 	 **/

@@ -115,6 +115,9 @@ class Player extends Actor {
 
 		case Actor.State.Move:
 			if(_updateWalk()) {
+				// 移動完了
+				// アイテムを拾う
+				DropItem.pickup(xchip, ychip);
 				_change(Actor.State.TurnEnd);
 			}
 
@@ -133,25 +136,6 @@ class Player extends Actor {
 	 **/
 	private function _updateKeyInput():Void {
 		_bStop = true;
-
-		if(FlxG.keys.justPressed.SPACE) {
-			// アイテムを拾えるかどうかをチェック
-			var bFind = false;
-			var func = function(item:DropItem) {
-				if(checkPosition(item.xchip, item.ychip)) {
-					// 拾える
-					Message.push('${item.name}を拾った');
-					bFind = true;
-					Inventory.push(item.id);
-					item.kill();
-				}
-			}
-			DropItem.parent.forEachAlive(func);
-			if(bFind) {
-				// アイテムを拾った
-				return;
-			}
-		}
 
 		if(FlxG.keys.justPressed.SHIFT) {
 			// メニューを開く
