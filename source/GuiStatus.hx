@@ -1,4 +1,5 @@
 package ;
+import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.ui.FlxBar;
 import flixel.text.FlxText;
@@ -65,6 +66,7 @@ class GuiStatus extends FlxGroup {
 
 		// HPバー
 		_hpBar = new FlxBar(HPBAR_X, HPBAR_Y, FlxBar.FILL_LEFT_TO_RIGHT, BAR_W, BAR_H);
+		_hpBar.createFilledBar(FlxColor.CRIMSON, FlxColor.CHARTREUSE);
 		this.add(_hpBar);
 
 		// 満腹度テキスト
