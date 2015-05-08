@@ -130,6 +130,18 @@ class Actor extends FlxSprite {
 				return Action.None;
 		}
 	}
+	// 満腹度を取得する
+	public var full(get, null):Int;
+	private function get_full() {
+		// 満腹度は100倍
+		return Std.int(_params.full / 100);
+	}
+	// 最大満腹度を取得する
+	public var fullmax(get, null):Int;
+	private function get_fullmax() {
+		// 最大満腹度は100倍
+		return Std.int(_params.fullmax / 100);
+	}
 
 	/**
 	 * コンストラクタ
