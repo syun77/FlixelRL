@@ -101,8 +101,8 @@ class GuiStatus extends FlxGroup {
 		_hpBar.percent = 100 * hp / hpmax;
 
 		// 満腹度
-		var full = player.full;
-		var fullmax = player.fullmax;
+		var full = player.food;
+		var fullmax = player.foodmax;
 		_txtFull.text = '満腹度: ${full}/${fullmax}';
 
 		// 所持金

@@ -90,6 +90,17 @@ class Player extends Actor {
 		super.beginAction();
 	}
 
+	// ターン終了
+	override public function turnEnd():Void {
+		// 満腹度を減らす
+		// 10ターンで1%減る
+		if(subFood(0.1)) {
+			// 空腹ダメージ
+			subHp(1);
+		}
+		super.turnEnd();
+	}
+
 	// 更新
 	override public function proc():Void {
 		switch(_state) {

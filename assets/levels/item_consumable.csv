@@ -1,6 +1,6 @@
 id,type,name,hp,hp2,mp,mp2,food,skill,bst_rec,extra
 int,str,str,int,int,int,int,int,int,int,int
-1,Food,パン,,,,,,,,
-2,Food,大きなパン,,,,,,,,
+1,Food,パン,,,,,50,,,
+2,Food,大きなパン,,,,,100,,,
 3,Portion,薬草,25,,,,,,,
 4,Portion,弟切草,100,,,,,,,

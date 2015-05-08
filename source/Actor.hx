@@ -130,17 +130,74 @@ class Actor extends FlxSprite {
 				return Action.None;
 		}
 	}
-	// 満腹度を取得する
-	public var full(get, null):Int;
-	private function get_full() {
-		// 満腹度は100倍
-		return Std.int(_params.full / 100);
+	// HP
+	public function addHp(val:Int):Void {
+		_params.hp += val;
+		if(_params.hp > _params.hpmax) {
+			_params.hp = _params.hpmax;
+		}
 	}
-	// 最大満腹度を取得する
-	public var fullmax(get, null):Int;
-	private function get_fullmax() {
+	public function addHp2(val:Int):Void {
+		// パーセンテージで回復
+		var val2 = _params.hpmax * val / 100;
+		addHp(Std.int(val2));
+	}
+	public function subHp(val:Int):Bool {
+		_params.hp -= val;
+		if(_params.hp <= 0) {
+			// 死亡
+			_params.hp = 0;
+			return true;
+		}
+		// まだ生きている
+		return false;
+	}
+	// 最大HP
+	public function addHpMax(val:Int):Void {
+		_params.hpmax += val;
+	}
+	public function subHpMax(val:Int):Void {
+		_params.hpmax -= val;
+		if(_params.hp < _params.hpmax) {
+			_params.hp = _params.hpmax;
+		}
+	}
+	// 満腹度
+	public var food(get, null):Int;
+	private function get_food() {
+		// 満腹度は100倍
+		return Std.int(_params.food / 100);
+	}
+	public function addFood(ratio:Float):Void {
+		_params.food += Std.int(ratio * 100);
+		if(_params.food > _params.foodmax) {
+			_params.food = _params.foodmax;
+		}
+	}
+	public function subFood(ratio:Float):Bool {
+		_params.food -= Std.int(ratio * 100);
+		if(_params.food < 0) {
+			// 空腹状態
+			_params.food = 0;
+			return true;
+		}
+		// まだ満腹度は残っている
+		return false;
+	}
+	// 最大満腹度
+	public var foodmax(get, null):Int;
+	private function get_foodmax() {
 		// 最大満腹度は100倍
-		return Std.int(_params.fullmax / 100);
+		return Std.int(_params.foodmax / 100);
+	}
+	public function addFoodMax(ratio:Float):Void {
+		_params.foodmax += Std.int(ratio * 100);
+	}
+	public function subFoodMax(ratio:Float):Void {
+		_params.foodmax -= Std.int(ratio * 100);
+		if(_params.foodmax < _params.food) {
+			_params.food = _params.foodmax;
+		}
 	}
 
 	/**
@@ -280,10 +337,8 @@ class Actor extends FlxSprite {
 		Particle.start(Particle.PType.Circle, x, y, FlxColor.RED);
 		ParticleDamage.start(x, y, val);
 
-		_params.hp -= val;
-		if(_params.hp <= 0) {
+		if(subHp(val)) {
 			// 死亡
-			_params.hp = 0;
 			return true;
 		}
 

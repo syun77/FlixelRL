@@ -72,6 +72,9 @@ class Inventory extends FlxGroup {
 	// 状態
 	private var _state:State = State.Main;
 
+	// プレイヤー
+	private var _player:Player;
+
 	// ■装備アイテム
 	// 武器
 	private var _weapon:Int = ItemUtil.NONE;
@@ -116,6 +119,8 @@ class Inventory extends FlxGroup {
 		// カーソルは初期状態非表示
 		_cursor.visible = false;
 		_nCursor = 0;
+
+		_player = cast(FlxG.state, PlayState).player;
 
 		// 装備を外す
 		_weapon = ItemUtil.NONE;
@@ -240,6 +245,7 @@ class Inventory extends FlxGroup {
 							// アイテムを使う・装備する・外す
 							var itemid = getSelectedItem();
 							if(ItemUtil.isEquip(itemid)) {
+								// 装備する
 								if(_isEquipSelectedItem()) {
 									// 外す
 									unequip(ItemUtil.getType(itemid));
@@ -248,6 +254,10 @@ class Inventory extends FlxGroup {
 									// 装備する
 									equip(-1);
 								}
+							}
+							else {
+								// アイテムを使う
+								useItem(-1);
 							}
 						case 1:
 							// アイテムを捨てる
@@ -322,6 +332,41 @@ class Inventory extends FlxGroup {
 		_updateText();
 
 		return _itemList.length == 0;
+	}
+
+	/**
+	 * アイテムを使う
+	 * @param idx カーソル位置。-1の場合は現在のカーソルの位置
+	 **/
+	public function useItem(idx:Int):Void {
+		if(idx == -1) {
+			idx = _nCursor;
+		}
+		var item = _itemList[idx];
+
+		switch(item.type) {
+			case IType.Portion:
+				// 薬
+				var val = ItemUtil.getParam(item.id, "hp");
+				if(val > 0) {
+					_player.addHp(val);
+				}
+				else {
+					val = ItemUtil.getParam(item.id, "hp2");
+					_player.addHp2(val);
+				}
+			case IType.Food:
+				// 食糧
+				var val = ItemUtil.getParam(item.id, "food");
+				_player.addFood(val);
+			default:
+				// ここにくることはない
+				trace('Error: Invalid item ${item.id}');
+		}
+
+		var name = ItemUtil.getName(item.id);
+		Message.push('${name}を食べた');
+		delItem(idx);
 	}
 
 	/**
