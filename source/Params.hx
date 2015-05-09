@@ -5,6 +5,8 @@ package ;
  **/
 class Params {
 	public var id:Int      = 1;     // ID
+	public var lv:Int      = 1;     // レベル
+	public var exp:Int     = 0;     // 経験値
 	public var hp:Int      = 100;   // 現在のHP
 	public var hpmax:Int   = 100;   // 最大HP
 	public var str:Int     = 0;     // 力

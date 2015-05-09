@@ -41,7 +41,7 @@ class PlayState extends FlxState
 	// フロア数
 	private var _floor:Int;
 	public var floor(get, null):Int;
-	public var get_floor():Int {
+	public function get_floor():Int {
 		return _floor;
 	}
 
@@ -51,6 +51,9 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+
+		// 変数初期化
+		_floor = 1;
 
 		// CSV読み込み
 		_csv = new Csv();

@@ -88,13 +88,15 @@ class GuiStatus extends FlxGroup {
 		super.update();
 
 		// フロア数
-		_txtFloor.text = "1F";
+		var floor = cast(FlxG.state, PlayState).floor;
+		_txtFloor.text = '${floor}F';
 
+		var player = cast(FlxG.state, PlayState).player;
+		var lv = player.params.lv;
 		// レベル
-		_txtLv.text = "LV:1";
+		_txtLv.text = 'LV:${lv}';
 
 		// HP
-		var player = cast(FlxG.state, PlayState).player;
 		var hp = player.params.hp;
 		var hpmax = player.params.hpmax;
 		_txtHp.text = 'HP: ${hp}/${hpmax}';

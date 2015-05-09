@@ -15,6 +15,17 @@ class Player extends Actor {
 
 	private var _target:Enemy = null;
 
+	// 階段の上に乗っているかどうか
+	private var _bOnStairs:Bool;
+	public var isOnStairs(get, null):Bool;
+	private function get_isOnStairs() {
+		return _bOnStairs;
+	}
+	// 階段の上に乗ったフラグをリセットする
+	public function endOnStairs() {
+		_bOnStairs = false;
+	}
+
 	/**
 	 * 生成
 	 */
@@ -39,6 +50,9 @@ class Player extends Actor {
 		// キー入力待ち状態にする
 		_change(Actor.State.KeyInput);
 		_stateprev = _state;
+
+		// 階段の上にいるフラグ
+		_bOnStairs = false;
 	}
 
 	// アニメーション名を取得する
@@ -128,7 +142,12 @@ class Player extends Actor {
 		case Actor.State.Move:
 			if(_updateWalk()) {
 				// 移動完了
-				// アイテムを拾う
+				// 階段チェック
+				if(Field.getChip(xchip, ychip) == Field.GOAL) {
+					// 移動先が階段
+					_bOnStairs = true;
+				}
+				// アイテムがあれば拾う
 				DropItem.pickup(xchip, ychip);
 				_change(Actor.State.TurnEnd);
 			}

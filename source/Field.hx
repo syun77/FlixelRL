@@ -49,7 +49,11 @@ class Field {
 		// コリジョンでない
 		return false;
 	}
-
+	// 指定の座標にあるチップを取得する
+	public static function getChip(i:Int, j:Int):Int {
+		var v = _cLayer.get(i, j);
+		return v;
+	}
 
 	/**
 	 * 背景画像を作成する

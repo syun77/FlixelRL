@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxG;
 import flixel.group.FlxTypedGroup;
 
 /**
@@ -14,6 +15,7 @@ private enum State {
 	EnemyActBegin;  // 敵の行動開始
 	EnemyAct;       // 敵の行動
 	TurnEnd;        // ターン終了
+	NextFloor;      // 次のフロアに進むかどうか
 }
 
 /**
@@ -200,10 +202,33 @@ class SeqMgr {
 				}
 			case State.TurnEnd:
 				// ■ターン終了
-				_player.turnEnd();
 				_enemies.forEachAlive(function(e:Enemy) e.turnEnd());
-				_change(State.KeyInput);
+				if(_player.isOnStairs) {
+					// 次のフロアに進む
+					_change(State.NextFloor);
+					Dialog.open(Dialog.SELECT2, "階段がある", ["降りる", "そのまま"]);
+				}
+				else {
+					// キー入力に戻る
+					_player.turnEnd();
+					_change(State.KeyInput);
+				}
 				ret = true;
+
+			case State.NextFloor:
+				// ■次のフロアに進む
+				if(Dialog.isClosed()) {
+					if(Dialog.getCursor() == 0) {
+						FlxG.switchState(new PlayState());
+					}
+					else {
+						// 階段を降りない
+						_change(State.KeyInput);
+						// 階段フラグを下げる
+						_player.endOnStairs();
+						_player.turnEnd();
+					}
+				}
 		}
 
 		return ret;
