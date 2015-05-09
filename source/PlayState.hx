@@ -38,6 +38,13 @@ class PlayState extends FlxState
 	// CSVデータ
 	private var _csv:Csv;
 
+	// フロア数
+	private var _floor:Int;
+	public var floor(get, null):Int;
+	public var get_floor():Int {
+		return _floor;
+	}
+
 	/**
 	 * 生成
 	 */
