@@ -1,4 +1,6 @@
 package ;
+import flixel.util.FlxColor;
+import flixel.ui.FlxBar;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxTypedGroup;
@@ -13,12 +15,22 @@ import flixel.FlxSprite;
  **/
 class Enemy extends Actor {
 
+	private static inline var HP_BAR_MARGIN_W:Int = 4;
+	private static inline var HP_BAR_MARGIN_H:Int = 2;
+
 	// 管理クラス
 	public static var parent:FlxTypedGroup<Enemy> = null;
 	// プレイヤー
 	public static var target:Player = null;
 	// 敵パラメータ
 	public static var csv:CsvLoader = null;
+
+	// HPバー
+	private var _hpBar:FlxBar;
+	public var hpBar(get, null):FlxBar;
+	private function get_hpBar() {
+		return _hpBar;
+	}
 
 	public function new() {
 		super();
@@ -29,11 +41,20 @@ class Enemy extends Actor {
 		// 中心を基準に描画
 		offset.set(width/2, height/2);
 
+		// HPバー生成
+		_hpBar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, Std.int(width-HP_BAR_MARGIN_W), 4);
+		_hpBar.createFilledBar(FlxColor.CRIMSON, FlxColor.CHARTREUSE);
+
 		// 消しておく
 		kill();
 
 //		FlxG.watch.add(this, "_state");
 //		FlxG.watch.add(this, "_stateprev");
+	}
+
+	override public function kill():Void {
+		_hpBar.visible = false;
+		super.kill();
 	}
 
 	/**
@@ -79,6 +100,7 @@ class Enemy extends Actor {
 		if(bCreate) {
 			// 生成なのでCSVからパラメータを取得する
 			params.hp = csv.searchItemInt("id", '${_id}', "hp");
+			params.hpmax = params.hp;
 		}
 		super.init(X, Y, Dir.Down, params);
 		// 名前を設定
@@ -88,7 +110,26 @@ class Enemy extends Actor {
 	/**
 	 * 更新
 	 **/
+	override public function update():Void {
+		super.update();
+		// HPバーの更新
+		if(hpratio < 100) {
+			_hpBar.visible = true;
+			_hpBar.x = x-width/2 + HP_BAR_MARGIN_W;
+			_hpBar.y = y-height/2 - HP_BAR_MARGIN_H;
+			_hpBar.percent = hpratio;
+		}
+		else {
+			// 満タンの場合は表示しない
+			_hpBar.visible = false;
+		}
+	}
+
+	/**
+	 * 更新
+	 **/
 	override public function proc():Void {
+
 		switch(_state) {
 		case Actor.State.KeyInput:
 			// 何もしない

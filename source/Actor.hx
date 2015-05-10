@@ -131,6 +131,10 @@ class Actor extends FlxSprite {
 		}
 	}
 	// HP
+	public var hpratio(get, null):Float;
+	private function get_hpratio() {
+		return 100 * _params.hp / _params.hpmax;
+	}
 	public function addHp(val:Int):Void {
 		_params.hp += val;
 		if(_params.hp > _params.hpmax) {

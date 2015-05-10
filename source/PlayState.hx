@@ -101,6 +101,11 @@ class PlayState extends FlxState
 		// 敵からアクセスしやすいようにする
 		Enemy.target = _player;
 
+		// 敵のHPバー登録
+		enemies.forEach(function(e:Enemy) {
+			this.add(e.hpBar);
+		});
+
 		// パーティクル
 		var particles = new FlxTypedGroup<Particle>(256);
 		for(i in 0...particles.maxSize) {
@@ -123,15 +128,19 @@ class PlayState extends FlxState
 			var params = new Params();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(3, 2, Dir.Down, params, true);
+			params = new Params();
 			e = enemies.recycle();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(3, 3, Dir.Down, params, true);
+			params = new Params();
 			e = enemies.recycle();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(3, 1, Dir.Down, params, true);
+			params = new Params();
 			e = enemies.recycle();
 			params.id = FlxRandom.intRanged(1, 5);
 			e.init(4, 3, Dir.Down, params, true);
+			params = new Params();
 
 			// TODO: デバッグ用のアイテムを配置
 			FlxRandom.globalSeed = flash.Lib.getTimer();
