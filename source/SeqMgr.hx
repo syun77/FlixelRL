@@ -206,7 +206,7 @@ class SeqMgr {
 				if(_player.isOnStairs) {
 					// 次のフロアに進む
 					_change(State.NextFloor);
-					Dialog.open(Dialog.SELECT2, "階段がある", ["降りる", "そのまま"]);
+					Dialog.open(Dialog.SELECT2, "階段がある", ["下りる", "そのまま"]);
 				}
 				else {
 					// キー入力に戻る

@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.util.FlxSave;
 
 /**
@@ -14,6 +15,17 @@ class Reg
 
 	// フォントサイズ
 	public static inline var FONT_SIZE = 20;
+
+	// UI領域
+	public static inline var UI_WIDTH = 212;
+
+	// ゲーム領域の中心座標を取得する
+	public static function centerX():Float {
+		return (FlxG.width - UI_WIDTH) / 2;
+	}
+	public static function centerY():Float {
+		return FlxG.height / 2;
+	}
 
 	/**
 	 * Generic levels Array that can be used for cross-state stuff.

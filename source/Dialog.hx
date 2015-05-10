@@ -20,18 +20,24 @@ class Dialog extends FlxGroup {
 	public static inline var SELECT2:Int = 2; // 2択ダイアログ
 
 	private static var _instance:Dialog = null;
+	// カーソル番号
 	private static var _nCursor:Int = 0;
 	public static function getCursor():Int {
 		return _nCursor;
 	}
 
+	// ダイアログの種類
 	private var _type:Int;
+	// 状態
 	private var _state:State = State.Main;
 	public var state(get, null):State;
 	private function get_state() {
 		return _state;
 	}
+	// カーソル
 	private var _cursor:FlxSprite = null;
+	// カーソルの最大
+	private var _cursorMax:Int = 0;
 
 	/**
 	 * 閉じたかどうか
@@ -55,9 +61,8 @@ class Dialog extends FlxGroup {
 	private function new(type:Int, msg:String, sels:Array<String>) {
 		super();
 
-		var px = FlxG.width / 2 ;
-		px -= 160 / 2; // UI領域を差し引く
-		var py = FlxG.height / 2;
+		var px = Reg.centerX();
+		var py = Reg.centerY();
 		var height = 64;
 		// ウィンドウ
 		var spr = new FlxSprite(px, py-height);
@@ -86,6 +91,7 @@ class Dialog extends FlxGroup {
 				txtOk.text = "OK";
 				txtOk.x = px - txtOk.textField.width / 2;
 				this.add(txtOk);
+				_cursorMax = 1;
 			case YESNO:
 				var txtYes = new FlxText(px, py2, 0, 64);
 				txtYes.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
@@ -97,22 +103,26 @@ class Dialog extends FlxGroup {
 				txtNo.text = "いいえ";
 				txtNo.x = px + 24;
 				this.add(txtNo);
+				_cursorMax = 2;
 			case SELECT2:
 				var txtYes = new FlxText(px, py2, 0, 64);
 				txtYes.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+				txtYes.alignment = "center";
 				txtYes.text = sels[0];
 				txtYes.x = px - 80;
 				this.add(txtYes);
 				var txtNo = new FlxText(px, py2, 0, 64);
 				txtNo.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
 				txtNo.text = sels[1];
+				txtNo.alignment = "center";
 				txtNo.x = px + 12;
 				this.add(txtNo);
+				_cursorMax = 2;
 		}
 
 		// カーソル
 		_cursor = new FlxSprite(px - 80, py2);
-		_cursor.makeGraphic(80, 32, FlxColor.AQUAMARINE);
+		_cursor.makeGraphic(84, 32, FlxColor.AQUAMARINE);
 		_cursor.alpha = 0.3;
 		this.add(_cursor);
 	}
@@ -128,12 +138,12 @@ class Dialog extends FlxGroup {
 				if(FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.UP) {
 					_nCursor--;
 					if(_nCursor < 0) {
-						_nCursor = 1;
+						_nCursor = _cursorMax - 1;
 					}
 				}
 				else if(FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.DOWN) {
 					_nCursor++;
-					if(_nCursor >= 2) {
+					if(_nCursor >= _cursorMax) {
 						_nCursor = 0;
 					}
 				}
@@ -153,7 +163,7 @@ class Dialog extends FlxGroup {
 	 * カーソル位置の更新
 	 **/
 	private function _updataeCursor():Void {
-		var px = FlxG.width/2 - 160/2;
+		var px = Reg.centerX();
 		switch(_nCursor) {
 			case 0:
 				_cursor.x = px - 80;
