@@ -135,13 +135,13 @@ class Dialog extends FlxGroup {
 
 		switch(_state) {
 			case State.Main:
-				if(FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.UP) {
+				if(Key.press.LEFT || Key.press.UP) {
 					_nCursor--;
 					if(_nCursor < 0) {
 						_nCursor = _cursorMax - 1;
 					}
 				}
-				else if(FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.DOWN) {
+				else if(Key.press.RIGHT || Key.press.DOWN) {
 					_nCursor++;
 					if(_nCursor >= _cursorMax) {
 						_nCursor = 0;
@@ -149,7 +149,7 @@ class Dialog extends FlxGroup {
 				}
 				_updataeCursor();
 
-				if(FlxG.keys.justPressed.SPACE) {
+				if(Key.press.A) {
 					_state = State.Closed;
 					FlxG.state.remove(this);
 				}

@@ -3,7 +3,6 @@ package ;
 /**
  * 方向
  */
-import flixel.FlxG;
 import flixel.util.FlxPoint;
 enum Dir {
 	None;
@@ -105,16 +104,16 @@ class DirUtil {
 	 * @return 入力した方向
 	 **/
 	public static function getInputDirection():Dir {
-		if(FlxG.keys.pressed.LEFT) {
+		if(Key.on.LEFT) {
 			return Dir.Left;
 		}
-		else if(FlxG.keys.pressed.RIGHT) {
+		else if(Key.on.RIGHT) {
 			return Dir.Right;
 		}
-		else if(FlxG.keys.pressed.UP) {
+		else if(Key.on.UP) {
 			return Dir.Up;
 		}
-		else if(FlxG.keys.pressed.DOWN) {
+		else if(Key.on.DOWN) {
 			return Dir.Down;
 		}
 		else {

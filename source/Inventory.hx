@@ -215,12 +215,12 @@ class Inventory extends FlxGroup {
 				// カーソル更新
 				_procCursor();
 
-				if(FlxG.keys.justPressed.SHIFT) {
+				if(Key.press.B) {
 					// メニューを閉じる
 					return false;
 				}
 
-				if(FlxG.keys.justPressed.SPACE) {
+				if(Key.press.A) {
 					// サブメニューを開く
 					var itemid = getSelectedItem();
 					var act = MENU_CONSUME;
@@ -248,11 +248,11 @@ class Inventory extends FlxGroup {
 								// 装備する
 								if(_isEquipSelectedItem()) {
 									// 外す
-									unequip(ItemUtil.getType(itemid));
+									unequip(ItemUtil.getType(itemid), true);
 								}
 								else {
 									// 装備する
-									equip(-1);
+									equip(-1, true);
 								}
 							}
 							else {
@@ -261,14 +261,14 @@ class Inventory extends FlxGroup {
 							}
 						case 1:
 							// アイテムを捨てる
-							delItem(-1);
+							delItem(-1, true);
 					}
 					// メインに戻る
 					this.remove(_sub);
 					_sub = null;
 					_state = State.Main;
 				}
-				else if(FlxG.keys.justPressed.SHIFT) {
+				else if(Key.press.B) {
 					// メインに戻る
 					this.remove(_sub);
 					_sub = null;
@@ -282,13 +282,13 @@ class Inventory extends FlxGroup {
 	}
 
 	private function _procCursor():Void {
-		if(FlxG.keys.justPressed.UP) {
+		if(Key.press.UP) {
 			_nCursor--;
 			if(_nCursor < 0) {
 				_nCursor = _itemList.length - 1;
 			}
 		}
-		if(FlxG.keys.justPressed.DOWN) {
+		if(Key.press.DOWN) {
 			_nCursor++;
 			if(_nCursor >= _itemList.length) {
 				_nCursor = 0;
@@ -311,11 +311,13 @@ class Inventory extends FlxGroup {
 	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
 	 * @return アイテムがすべてなくなったらtrue
 	 **/
-	public function delItem(idx:Int):Bool {
+	public function delItem(idx:Int, bMsg:Bool=false):Bool {
 		if(idx == -1) {
 			// 現在のカーソルを使う
 			idx = _nCursor;
 		}
+		// 削除アイテムの番号を保持しておく
+		var itemid = _itemList[idx].id;
 
 		// アイテムを削除する
 		_itemList.splice(idx, 1);
@@ -330,6 +332,11 @@ class Inventory extends FlxGroup {
 
 		// テキストを更新
 		_updateText();
+
+		if(bMsg) {
+			var name = ItemUtil.getName(itemid);
+			Message.push('${name}を捨てた');
+		}
 
 		return _itemList.length == 0;
 	}
@@ -417,7 +424,7 @@ class Inventory extends FlxGroup {
 	 * 装備する
 	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
 	 **/
-	public function equip(idx:Int):Void {
+	public function equip(idx:Int, bMsg:Bool=false):Void {
 		if(idx == -1) {
 			idx = _nCursor;
 		}
@@ -446,20 +453,34 @@ class Inventory extends FlxGroup {
 		// 'E'の表示
 		spr.visible = true;
 		spr.y = y + EQUIP_POS_Y + (idx*DY);
+
+		if(bMsg) {
+			// 装備メッセージの表示
+			var name = ItemUtil.getName(itemdata.id);
+			Message.push('${name}を装備した');
+		}
 	}
 
 	/**
 	 * 装備を外す
 	 * @param type 装備の種類
 	 **/
-	public function unequip(type:IType):Void {
+	public function unequip(type:IType, bMsg:Bool=false):Void {
 		// 同じ種類の装備を外す
+		var itemid:Int = -1;
 		var func = function(item:ItemData) {
 			if(type == item.type) {
 				item.isEquip = false;
+				itemid = item.id;
 			}
 		}
 		forEachItemList(func);
+
+		if(bMsg && itemid >= 0) {
+			// 装備を外したメッセージの表示
+			var name = ItemUtil.getName(itemid);
+			Message.push('${name}を外した');
+		}
 
 		// 'E'を非表示にする
 		var spr = _fonts[0];

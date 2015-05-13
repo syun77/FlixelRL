@@ -166,11 +166,11 @@ class Player extends Actor {
 	 * キー入力チェック
 	 **/
 	private function _isKeyInput():Bool {
-		if(FlxG.keys.pressed.SPACE) {
+		if(Key.on.A) {
 			// 攻撃 or 待機
 			return true;
 		}
-		if(FlxG.keys.pressed.CONTROL) {
+		if(Key.on.X) {
 			// 方向転換のみ
 			return true;
 		}
@@ -189,7 +189,7 @@ class Player extends Actor {
 	private function _updateKeyInput():Void {
 		_bStop = true;
 
-		if(FlxG.keys.justPressed.SHIFT) {
+		if(Key.press.B) {
 			// メニューを開く
 			_change(Actor.State.Inventory);
 			return;
@@ -202,12 +202,13 @@ class Player extends Actor {
 
 		var bAttack = false;
 		var dir = DirUtil.getInputDirection();
-		if(FlxG.keys.pressed.SPACE) {
+
+		if(Key.on.A) {
 			// 攻撃 or 待機
 			bAttack = true;
 		}
 		var bTurn = false;
-		if(FlxG.keys.pressed.CONTROL) {
+		if(Key.on.X) {
 			// 方向転換のみ
 			bTurn = true;
 		}

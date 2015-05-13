@@ -84,7 +84,7 @@ class InventoryAction extends FlxGroup {
 			case State.Main:
 				// カーソル更新
 				_procCursor();
-				if(FlxG.keys.justPressed.SPACE) {
+				if(Key.press.A) {
 					_state = State.End;
 				}
 
@@ -100,13 +100,13 @@ class InventoryAction extends FlxGroup {
 	 * カーソル更新
 	 **/
 	private function _procCursor():Void {
-		if(FlxG.keys.justPressed.UP) {
+		if(Key.press.UP) {
 			_nCursor--;
 			if(_nCursor < 0) {
 				_nCursor = _txtList.length - 1;
 			}
 		}
-		if(FlxG.keys.justPressed.DOWN) {
+		if(Key.press.DOWN) {
 			_nCursor++;
 			if(_nCursor >= _txtList.length) {
 				_nCursor = 0;
