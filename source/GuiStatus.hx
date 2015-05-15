@@ -88,7 +88,7 @@ class GuiStatus extends FlxGroup {
 		super.update();
 
 		// フロア数
-		var floor = cast(FlxG.state, PlayState).floor;
+		var floor = Global.getFloor();
 		_txtFloor.text = '${floor}F';
 
 		var player = cast(FlxG.state, PlayState).player;
