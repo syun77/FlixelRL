@@ -63,7 +63,7 @@ class PlayState extends FlxState
 
 		// マップ読み込み
 		var tmx = new TmxLoader();
-		tmx.load("assets/levels/001.tmx");
+		tmx.load(Global.getFloorMap());
 		var layer = tmx.getLayer(0);
 		// 背景レイヤーを生成
 		_lField = new Layer2D();
@@ -155,6 +155,7 @@ class PlayState extends FlxState
 		}
 
 		// メッセージ生成
+
 		var message = new Message();
 		this.add(message);
 		Message.instance = message;

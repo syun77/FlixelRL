@@ -228,7 +228,7 @@ class Save {
 
 #if neko
 	// セーブデータ保存先
-	private static inline var PATH_SAVE = "/Users/syun/Desktop/HaxeFlixel_RogueLike/save.txt";
+	private static inline var PATH_SAVE = "/Users/syun/Desktop/FlixelRL/save.txt";
 #end
 
   /**

@@ -219,6 +219,8 @@ class SeqMgr {
 				// ■次のフロアに進む
 				if(Dialog.isClosed()) {
 					if(Dialog.getCursor() == 0) {
+						// 次のフロアに進む
+						Global.nextFloor();
 						FlxG.switchState(new PlayState());
 					}
 					else {
