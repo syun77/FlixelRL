@@ -164,6 +164,8 @@ class PlayState extends FlxState
 		var inventory = new Inventory();
 		this.add(inventory);
 		Inventory.instance = inventory;
+		// アイテムデータ設定
+		Global.setItemList();
 
 		// シーケンス管理
 		_seq = new SeqMgr(this);

@@ -38,7 +38,7 @@ private class _Player {
  * イベントリ
  **/
 private class _Inventory {
-	public var array:Array<Inventory.ItemData>;
+	public var array:Array<ItemData>;
 	public function new() {
 	}
 	// セーブ
@@ -47,14 +47,14 @@ private class _Inventory {
 	}
 	// ロード
 	public function load(data:Dynamic) {
-		var array = new Array<Inventory.ItemData>();
+		var array = new Array<ItemData>();
 		for(idx in 0...data.array.length) {
 			var item = data.array[idx];
-			var i = new Inventory.ItemData(item.id);
+			var i = new ItemData(item.id);
 			i.isEquip = item.isEquip;
 			array.push(i);
 		}
-		Inventory.setItemList(array);
+		Global.setItemList(array);
 	}
 }
 

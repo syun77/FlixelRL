@@ -14,17 +14,6 @@ private enum State {
 	Sub;  // サブニュー操作中
 }
 
-class ItemData {
-	public var id(default, default):Int;       // アイテムID
-	public var type(default, default):IType;   // アイテム種別
-	public var isEquip(default, default):Bool; // 装備しているかどうか
-	public function new(itemid:Int) {
-		id = itemid;
-		type = ItemUtil.getType(id);
-		isEquip = false;
-	}
-}
-
 /**
  * インベントリ
  **/
@@ -195,7 +184,7 @@ class Inventory extends FlxGroup {
 		}
 
 		// 初期化
-		init(new Array<ItemData>());
+//		init(new Array<ItemData>());
 	}
 
 	// アクティブフラグの設定
