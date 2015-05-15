@@ -1,5 +1,6 @@
 package ;
 
+import DirUtil.Dir;
 import jp_2dgames.TextUtil;
 
 /**
@@ -51,5 +52,20 @@ class Global {
 			_items = items;
 		}
 		Inventory.setItemList(items);
+	}
+
+	// プレイヤーステータス
+	private static var _params:Params = new Params();
+	public static function initPlayer(player:Player, x:Int, y:Int, dir:Dir, params:Params=null):Void {
+		if(params == null) {
+			// グローバルデータにあるパラメータを使う
+			params = _params;
+		}
+		else {
+			// 外部のデータを使う
+			_params = params;
+		}
+
+		player.init(x, y, dir, params);
 	}
 }

@@ -30,7 +30,7 @@ private class _Player {
 	public function load(data:Dynamic) {
 		var p = cast(FlxG.state, PlayState).player;
 		var dir = DirUtil.fromString(data.dir);
-		p.init(data.x, data.y, dir, data.params);
+		Global.initPlayer(p, data.x, data.y, dir, data.params);
 	}
 }
 

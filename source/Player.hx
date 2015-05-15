@@ -32,10 +32,8 @@ class Player extends Actor {
 	public function new(X:Int, Y:Int) {
 		super();
 
-		var params = new Params();
-
 		// 初期化
-		init(X, Y, Dir.Down, params);
+		Global.initPlayer(this, X, Y, Dir.Down, null);
 		// プレイヤーはID「0」にしておく
 		_id = 0;
 		// 名前を設定
