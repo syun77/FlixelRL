@@ -1,5 +1,6 @@
 package jp_2dgames.lib;
 
+import flixel.util.FlxRandom;
 import flixel.util.FlxPoint;
 
 /**
@@ -115,7 +116,7 @@ class Layer2D {
 	 * @return
 	 */
 
-	public function getIdx(x:Int, y:Int):Int {
+	public function toIdx(x:Int, y:Int):Int {
 		return x + y * _width;
 	}
 
@@ -133,16 +134,20 @@ class Layer2D {
 			return m_OutOfRange;
 		}
 
-		var idx:Int = getIdx(x, y);
-		if(_pool.exists(idx)) {
-			return _pool[idx];
-		}
-		return m_Default;
+		var idx:Int = toIdx(x, y);
+    return getIdx(idx);
 	}
+
+  public function getIdx(idx:Int):Int {
+    if(_pool.exists(idx)) {
+      return _pool[idx];
+    }
+    return m_Default;
+  }
 
 	public function set(x:Int, y:Int, val:Int):Void {
 		if(check(x, y) == false) { return; }
-		var idx:Int = getIdx(x, y);
+		var idx:Int = toIdx(x, y);
 		_pool[idx] = val;
 	}
 
@@ -151,7 +156,6 @@ class Layer2D {
      * @param v 検索する値
      * @return 座標を表す二次元ベクトル
      **/
-
 	public function search(v:Int):FlxPoint {
 		for(idx in _pool.keys()) {
 			var val = _pool.get(idx);
@@ -164,12 +168,35 @@ class Layer2D {
 		return null;
 	}
 
-	/**
-     * 指定の値が存在する数を返す
-     * @param v 検索する値
-     * @return 存在する数
-     **/
+  /**
+   * 指定の値が存在する座標をランダムで返す
+   * @return 見つからなかったら null
+   **/
+  public function searchRandom(v:Int):FlxPoint {
+    var arr = [];
+    forEach2(function(idx, val) {
+      if(val == v) {
+        arr.push(idx);
+      }
+    });
 
+    if(arr.length == 0) {
+      return null;
+    }
+
+    var idx = arr[FlxRandom.intRanged(0, arr.length)];
+    var p = FlxPoint.get();
+    p.x = idxToX(idx);
+    p.y = idxToY(idx);
+
+    return p;
+  }
+
+	/**
+   * 指定の値が存在する数を返す
+   * @param v 検索する値
+   * @return 存在する数
+   **/
 	public function count(v:Int):Int {
 		var ret:Int = 0;
 		for(idx in _pool.keys()) {
@@ -183,6 +210,7 @@ class Layer2D {
 
 	/**
 	 * レイヤー内の値を順番に走査する
+	 * ※引数は(i, j, v)
 	 **/
 	public function forEach(Function:Int -> Int -> Int -> Void):Void {
 		for(j in 0...height) {
@@ -192,6 +220,12 @@ class Layer2D {
 			}
 		}
 	}
+  public function forEach2(Function:Int ->  Int -> Void):Void {
+    for(idx in 0...(width * height)) {
+      var v = getIdx(idx);
+      Function(idx, v);
+    }
+  }
 
 	/**
 	 * デバッグ出力

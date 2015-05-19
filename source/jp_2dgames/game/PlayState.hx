@@ -29,13 +29,13 @@ class PlayState extends FlxState
 {
 	// プレイヤー情報
 	private var _player:Player;
-	public var player(get_player, null):Player;
+	public var player(get, null):Player;
 	private function get_player() {
 		return _player;
 	}
 	// マップ情報
 	private var _lField:Layer2D;
-	public var lField(get_lField, null):Layer2D;
+	public var lField(get, null):Layer2D;
 	private function get_lField() {
 		return _lField;
 	}
@@ -81,6 +81,12 @@ class PlayState extends FlxState
 		// 背景画像を登録
 		_back = new FlxSprite();
 		this.add(_back);
+
+    if(true) {
+      // 階段の位置をランダムに配置する
+      Field.randomize(layer);
+    }
+
 		// フィールドを登録
 		setFieldLayer(layer);
 

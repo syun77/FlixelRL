@@ -1,14 +1,15 @@
 package jp_2dgames.game;
 
-/**
- * フィールド管理
- **/
 import flixel.FlxG;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import jp_2dgames.lib.Layer2D;
+
+/**
+ * フィールド管理
+ **/
 class Field {
 	// グリッドサイズ
 	public static inline var GRID_SIZE:Int = 32;
@@ -54,6 +55,25 @@ class Field {
 		var v = _cLayer.get(i, j);
 		return v;
 	}
+
+	/**
+   * プレイヤーの位置や階段をランダムで配置する
+   **/
+  public static function randomize(layer:Layer2D) {
+    // プレイヤーを配置
+    {
+      var p = layer.searchRandom(NONE);
+      trace(p);
+      layer.set(Std.int(p.x), Std.int(p.y), PLAYER);
+      p.put();
+    }
+    // 階段を配置
+    {
+      var p = layer.searchRandom(NONE);
+      layer.set(Std.int(p.x), Std.int(p.y), GOAL);
+      p.put();
+    }
+  }
 
 	/**
 	 * 背景画像を作成する
