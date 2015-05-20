@@ -232,6 +232,7 @@ class Actor extends FlxSprite {
   /**
 	 * コンストラクタ
 	 **/
+
   public function new() {
     super();
   }
@@ -239,6 +240,7 @@ class Actor extends FlxSprite {
   /**
 	 * 初期化
 	 **/
+
   public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
     _xprev = X;
     _yprev = Y;
@@ -259,6 +261,7 @@ class Actor extends FlxSprite {
   }
 
   // 行動開始する
+
   public function beginAction():Void {
     switch(_state) {
       case State.ActBegin:
@@ -270,6 +273,7 @@ class Actor extends FlxSprite {
     }
   }
   // 移動開始する
+
   public function beginMove():Void {
     switch(_state) {
       case State.MoveBegin:
@@ -282,10 +286,12 @@ class Actor extends FlxSprite {
   }
 
   // ターン終了しているかどうか
+
   public function isTurnEnd():Bool {
     return _state == State.TurnEnd;
   }
   // ターン終了
+
   public function turnEnd():Void {
     _change(State.KeyInput);
   }
@@ -316,6 +322,7 @@ class Actor extends FlxSprite {
   /**
 	 * 更新
 	 **/
+
   override public function update():Void {
     super.update();
     if(_tShake > 0) {
@@ -333,6 +340,7 @@ class Actor extends FlxSprite {
   /**
 	 * 更新・歩く
 	 **/
+
   private function _updateWalk():Bool {
     // 経過フレームの割合を求める
     var t = _tMove / TIMER_WALK;
@@ -358,6 +366,7 @@ class Actor extends FlxSprite {
   /**
 	 * ダメージを与える
 	 **/
+
   public function damage(val:Int):Bool {
     _tShake = TIMER_DAMAGE;
     if(id == 0) {

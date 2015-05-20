@@ -32,6 +32,7 @@ class Message extends FlxGroup {
   public static var instance:Message = null;
 
   // メッセージの追加
+
   public static function push(msg:String) {
     Message.instance.pushMsg(msg);
   }
@@ -52,6 +53,7 @@ class Message extends FlxGroup {
   /**
 	 * コンストラクタ
 	 **/
+
   public function new(csv:CsvLoader) {
     super();
     // 背景枠
@@ -85,6 +87,7 @@ class Message extends FlxGroup {
   /**
 	 * 更新
 	 **/
+
   override public function update():Void {
     super.update();
 
@@ -112,6 +115,7 @@ class Message extends FlxGroup {
   /**
 	 * メッセージを末尾に追加
 	 **/
+
   public function pushMsg(msg:String) {
     var text = new FlxText(POS_X + MSG_POS_X, 0, 480);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
@@ -134,6 +138,7 @@ class Message extends FlxGroup {
     visible = true;
     _timer = TIMER_DISAPPEAR;
   }
+
   public function pushMsg2(msgId:Int, args:Array<Dynamic>):Void {
     var msg = _csv.searchItem("id", '${msgId}', "msg");
     var idx:Int = 1;
@@ -147,6 +152,7 @@ class Message extends FlxGroup {
   /**
 	 * 先頭のメッセージを削除
 	 **/
+
   public function pop() {
     var t = _msgList.pop();
     this.remove(t);
