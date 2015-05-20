@@ -1,9 +1,7 @@
 package jp_2dgames.game;
 
-import jp_2dgames.game.item.DropItem;
 import flash.Lib;
 import flixel.util.FlxRandom;
-import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -19,12 +17,13 @@ class Field {
   public static inline var GRID_SIZE:Int = 32;
 
   // チップの種類
-  public static inline var NONE:Int = 0; // 何もない
-  public static inline var PLAYER:Int = 1; // プレイヤー
-  public static inline var GOAL:Int = 2; // ゴール
-  public static inline var WALL:Int = 3; // 壁
-  public static inline var ENEMY:Int = 4; // 敵
-  public static inline var ITEM:Int = 5; // アイテム
+  public static inline var NONE:Int    = 0; // 何もない
+  public static inline var PLAYER:Int  = 1; // プレイヤー
+  public static inline var GOAL:Int    = 2; // ゴール
+  public static inline var WALL:Int    = 3; // 壁
+  public static inline var PASSAGE:Int = 4; // 通路
+  public static inline var ENEMY:Int   = 16; // 敵
+  public static inline var ITEM:Int    = 17; // アイテム
 
   // 座標変換
   public static function toWorldX(i:Float):Float {
