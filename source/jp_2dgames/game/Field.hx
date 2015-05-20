@@ -19,9 +19,9 @@ class Field {
   public static inline var PLAYER:Int = 1; // プレイヤー
   public static inline var GOAL:Int = 2; // ゴール
   public static inline var WALL:Int = 3; // 壁
+  public static inline var ENEMY:Int = 4; // 敵
 
   // 座標変換
-
   public static function toWorldX(i:Float):Float {
     return i * GRID_SIZE + GRID_SIZE / 2;
   }
@@ -45,7 +45,6 @@ class Field {
     _cLayer = layer;
   }
   // 指定した座標がコリジョンかどうか
-
   public static function isCollision(i:Int, j:Int):Bool {
     var v = _cLayer.get(i, j);
     if(v == WALL) {
@@ -57,7 +56,6 @@ class Field {
     return false;
   }
   // 指定の座標にあるチップを取得する
-
   public static function getChip(i:Int, j:Int):Int {
     var v = _cLayer.get(i, j);
     return v;
@@ -66,19 +64,23 @@ class Field {
   /**
    * プレイヤーの位置や階段をランダムで配置する
    **/
-
   public static function randomize(layer:Layer2D) {
     // プレイヤーを配置
     {
       var p = layer.searchRandom(NONE);
-      trace(p);
-      layer.set(Std.int(p.x), Std.int(p.y), PLAYER);
+      layer.setFromFlxPoint(p, PLAYER);
       p.put();
     }
     // 階段を配置
     {
       var p = layer.searchRandom(NONE);
-      layer.set(Std.int(p.x), Std.int(p.y), GOAL);
+      layer.setFromFlxPoint(p, GOAL);
+      p.put();
+    }
+    // 敵を配置
+    for(i in 0...4) {
+      var p = layer.searchRandom(NONE);
+      layer.setFromFlxPoint(p ,ENEMY);
       p.put();
     }
   }
@@ -86,7 +88,6 @@ class Field {
   /**
 	 * 背景画像を作成する
 	 **/
-
   public static function createBackground(layer:Layer2D, spr:FlxSprite):FlxSprite {
     var w = layer.width * GRID_SIZE;
     var h = layer.height * GRID_SIZE;

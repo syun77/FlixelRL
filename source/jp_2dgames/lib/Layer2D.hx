@@ -152,13 +152,17 @@ class Layer2D {
     var idx:Int = toIdx(x, y);
     _pool[idx] = val;
   }
+  public function setFromFlxPoint(pt:FlxPoint, val:Int):Void {
+    var x:Int = Std.int(pt.x);
+    var y:Int = Std.int(pt.y);
+    set(x, y, val);
+  }
 
   /**
-     * 指定の値が存在する座標を返す
-     * @param v 検索する値
-     * @return 座標を表す二次元ベクトル
-     **/
-
+   * 指定の値が存在する座標を返す
+   * @param v 検索する値
+   * @return 座標を表す二次元ベクトル
+   **/
   public function search(v:Int):FlxPoint {
     for(idx in _pool.keys()) {
       var val = _pool.get(idx);

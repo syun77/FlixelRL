@@ -141,26 +141,18 @@ class PlayState extends FlxState {
     this.add(partDamage);
     ParticleDamage.parent = partDamage;
 
-    if(true) {
-      // TODO: デバッグ用に敵を生成
-      var e:Enemy = enemies.recycle();
-      var params = new Params();
-      params.id = FlxRandom.intRanged(1, 5);
-      e.init(3, 2, Dir.Down, params, true);
-      params = new Params();
-      e = enemies.recycle();
-      params.id = FlxRandom.intRanged(1, 5);
-      e.init(3, 3, Dir.Down, params, true);
-      params = new Params();
-      e = enemies.recycle();
-      params.id = FlxRandom.intRanged(1, 5);
-      e.init(3, 1, Dir.Down, params, true);
-      params = new Params();
-      e = enemies.recycle();
-      params.id = FlxRandom.intRanged(1, 5);
-      e.init(4, 3, Dir.Down, params, true);
-      params = new Params();
+    // 各種オブジェクトを配置
+    layer.forEach(function(i, j, v) {
+      switch(v) {
+        case Field.ENEMY:
+          var e:Enemy = enemies.recycle();
+          var params = new Params();
+          params.id = FlxRandom.intRanged(1, 5);
+          e.init(i, j, Dir.Down, params, true);
+      }
+    });
 
+    if(true) {
       // TODO: デバッグ用のアイテムを配置
       FlxRandom.globalSeed = flash.Lib.getTimer();
       var item:DropItem = items.recycle();
