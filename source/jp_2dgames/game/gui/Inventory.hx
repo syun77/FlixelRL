@@ -327,7 +327,7 @@ class Inventory extends FlxGroup {
 
 		if(bMsg) {
 			var name = ItemUtil.getName(itemid);
-			Message.push('${name}を捨てた');
+			Message.push2(4, [name]);
 		}
 
 		return _itemList.length == 0;
@@ -364,7 +364,7 @@ class Inventory extends FlxGroup {
 		}
 
 		var name = ItemUtil.getName(item.id);
-		Message.push('${name}を食べた');
+		Message.push2(5, [name]);
 		delItem(idx);
 	}
 
@@ -449,7 +449,7 @@ class Inventory extends FlxGroup {
 		if(bMsg) {
 			// 装備メッセージの表示
 			var name = ItemUtil.getName(itemdata.id);
-			Message.push('${name}を装備した');
+			Message.push2(6, [name]);
 		}
 	}
 
@@ -471,7 +471,7 @@ class Inventory extends FlxGroup {
 		if(bMsg && itemid >= 0) {
 			// 装備を外したメッセージの表示
 			var name = ItemUtil.getName(itemid);
-			Message.push('${name}を外した');
+			Message.push2(7, [name]);
 		}
 
 		// 'E'を非表示にする

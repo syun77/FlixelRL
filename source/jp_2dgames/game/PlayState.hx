@@ -173,7 +173,7 @@ class PlayState extends FlxState
 
 		// メッセージ生成
 
-		var message = new Message();
+		var message = new Message(_csv.message);
 		this.add(message);
 		Message.instance = message;
 

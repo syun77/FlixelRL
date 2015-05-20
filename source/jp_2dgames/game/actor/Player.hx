@@ -95,7 +95,7 @@ class Player extends Actor {
 				var val = Calc.damage(this, _target, jp_2dgames.game.gui.Inventory.getWeapon(), ItemUtil.NONE);
 				if(_target.damage(val)) {
 					// 敵を倒した
-					Message.push('${_target.name}を倒した');
+					Message.push2(3, [_target.name]);
 					_target.kill();
 					Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
 				}

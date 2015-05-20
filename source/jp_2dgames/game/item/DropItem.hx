@@ -31,7 +31,7 @@ class DropItem extends FlxSprite {
 		parent.forEachAlive(function(item:DropItem) {
 			if(xchip == item.xchip && ychip == item.ychip) {
 				// 拾える
-				Message.push('${item.name}を拾った');
+				Message.push2(8, [item.name]);
 				bFind = true;
 				Inventory.push(item.id);
 				item.kill();
