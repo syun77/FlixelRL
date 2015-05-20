@@ -7,15 +7,14 @@ import jp_2dgames.lib.CsvLoader;
  * アイテム種別
  **/
 enum IType {
-  None; // なし
-  Weapon; // 武器
-  Armor; // よろい
-  Scroll; // 巻物
-  Wand; // 杖
+  None;    // なし
+  Weapon;  // 武器
+  Armor;   // よろい
+  Scroll;  // 巻物
+  Wand;    // 杖
   Portion; // ポーション
-  Ring; // 指輪
-  Food;
-  // 食べ物
+  Ring;    // 指輪
+  Food;    // 食べ物
 }
 
 /**
@@ -46,7 +45,6 @@ class ItemUtil {
   /**
 	 * アイテムIDからアイテム種別を求める
 	 **/
-
   public static function getType(id:Int):IType {
     var csv = getCsv(id);
     var str = csv.searchItem("id", '${id}', "type");
@@ -56,7 +54,6 @@ class ItemUtil {
   /**
 	 * 指定のパラメータ名に対応するパラメータを取得する
 	 **/
-
   public static function getParam(id:Int, key:String):Int {
     var csv = getCsv(id);
     return csv.searchItemInt("id", '${id}', key);
@@ -116,14 +113,12 @@ class ItemUtil {
   }
 
   // 消費アイテムかどうか
-
   public static function isConsumable(id:Int):Bool {
     // 装備アイテムでなければ消費アイテム
     return !isEquip(id);
   }
 
   // ランダムでアイテムを取得する
-
   public static function random(type:IType):Int {
     switch(type) {
       case IType.Weapon:
@@ -137,7 +132,22 @@ class ItemUtil {
       case IType.Portion:
         return FlxRandom.intRanged(3, 4);
       default:
+        trace('Warning: invalid type ${type}');
         return 0;
     }
+  }
+
+  // ランダムでアイテム種別を取得する
+  public static function randomType():IType {
+    var tbl = [
+      IType.Weapon,
+      IType.Armor,
+//      IType.Scroll,
+//      IType.Wand,
+      IType.Portion,
+//      IType.Ring,
+      IType.Food,
+    ];
+    return tbl[FlxRandom.intRanged(0, tbl.length-1)];
   }
 }

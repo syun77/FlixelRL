@@ -145,28 +145,23 @@ class PlayState extends FlxState {
     layer.forEach(function(i, j, v) {
       switch(v) {
         case Field.ENEMY:
+          // 敵を生成
           var e:Enemy = enemies.recycle();
           var params = new Params();
           params.id = FlxRandom.intRanged(1, 5);
           e.init(i, j, Dir.Down, params, true);
+        case Field.ITEM:
+          // アイテムを生成
+          var item:DropItem = items.recycle();
+          var type = ItemUtil.randomType();
+          var id = ItemUtil.random(type);
+          trace('${type} ${id}');
+          item.init(i, j, type, id);
       }
     });
 
-    if(true) {
-      // TODO: デバッグ用のアイテムを配置
-      FlxRandom.globalSeed = flash.Lib.getTimer();
-      var item:DropItem = items.recycle();
-      item.init(10, 2, IType.Weapon, ItemUtil.random(IType.Weapon));
-      item = items.recycle();
-      item.init(10, 3, IType.Armor, ItemUtil.random(IType.Armor));
-      item = items.recycle();
-      item.init(10, 4, IType.Food, ItemUtil.random(IType.Food));
-      item = items.recycle();
-      item.init(10, 5, IType.Portion, ItemUtil.random(IType.Portion));
-    }
 
     // メッセージ生成
-
     var message = new Message(_csv.message);
     this.add(message);
     Message.instance = message;

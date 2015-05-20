@@ -1,5 +1,9 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.item.DropItem;
+import flash.Lib;
+import flixel.util.FlxRandom;
+import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -20,6 +24,7 @@ class Field {
   public static inline var GOAL:Int = 2; // ゴール
   public static inline var WALL:Int = 3; // 壁
   public static inline var ENEMY:Int = 4; // 敵
+  public static inline var ITEM:Int = 5; // アイテム
 
   // 座標変換
   public static function toWorldX(i:Float):Float {
@@ -65,6 +70,10 @@ class Field {
    * プレイヤーの位置や階段をランダムで配置する
    **/
   public static function randomize(layer:Layer2D) {
+
+    // 乱数を初期化
+    FlxRandom.globalSeed = flash.Lib.getTimer();
+
     // プレイヤーを配置
     {
       var p = layer.searchRandom(NONE);
@@ -81,6 +90,12 @@ class Field {
     for(i in 0...4) {
       var p = layer.searchRandom(NONE);
       layer.setFromFlxPoint(p ,ENEMY);
+      p.put();
+    }
+    // アイテムを配置
+    for(i in 0...4) {
+      var p = layer.searchRandom(NONE);
+      layer.setFromFlxPoint(p, ITEM);
       p.put();
     }
   }
