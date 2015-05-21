@@ -11,7 +11,6 @@ import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.item.ItemUtil.IType;
-import flash.Lib;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.DirUtil.Dir;
 import flixel.group.FlxTypedGroup;
@@ -112,11 +111,13 @@ class PlayState extends FlxState {
     this.add(enemies);
     Enemy.parent = enemies;
 
-    var pt = layer.search(Field.PLAYER);
-
     // プレイヤー生成
-    _player = new Player(Std.int(pt.x), Std.int(pt.y));
-    this.add(_player);
+    {
+      var pt = layer.search(Field.PLAYER);
+      _player = new Player(Std.int(pt.x), Std.int(pt.y));
+      this.add(_player);
+      pt.put();
+    }
     // 敵からアクセスしやすいようにする
     Enemy.target = _player;
 

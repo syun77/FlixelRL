@@ -40,11 +40,8 @@ class Enemy extends Actor {
   public function new() {
     super();
 
-    // アニメーションを登録
-    _registAnim();
-
-    // 中心を基準に描画
-    offset.set(width / 2, height / 2);
+    // ダミー画像を読み込み
+    _registAnim(1);
 
     // HPバー生成
     _hpBar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, Std.int(width - HP_BAR_MARGIN_W), 4);
@@ -65,7 +62,6 @@ class Enemy extends Actor {
   /**
 	 * 攻撃開始
 	 **/
-
   override public function beginAction():Void {
     if(_state == Actor.State.ActBegin) {
       // 攻撃アニメーション開始
@@ -96,13 +92,17 @@ class Enemy extends Actor {
   /**
 	 * 初期化
 	 **/
-
   override public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
+
+    // アニメーションを登録
+    _registAnim(params.id);
+    _changeAnime();
+
+    // 中心を基準に描画
+    offset.set(width / 2, height / 2);
 
     // ID取得
     _id = params.id;
-    // アニメーション再生開始
-    animation.play(Std.string(_id));
 
     if(bCreate) {
       // 生成なのでCSVからパラメータを取得する
@@ -117,7 +117,6 @@ class Enemy extends Actor {
   /**
 	 * 更新
 	 **/
-
   override public function update():Void {
     super.update();
     // HPバーの更新
@@ -136,7 +135,6 @@ class Enemy extends Actor {
   /**
 	 * 更新
 	 **/
-
   override public function proc():Void {
 
     switch(_state) {
@@ -269,6 +267,9 @@ class Enemy extends Actor {
     var ynext = Std.int(pt.y);
     pt.put();
 
+    // 移動方向を反映
+    _changeAnime();
+
     // 移動先にプレイヤーがいるかどうかをチェック
     if(target.checkPosition(xnext, ynext)) {
       // プレイヤーがいるので攻撃
@@ -293,17 +294,24 @@ class Enemy extends Actor {
   /**
 	 * アニメーションの登録
 	 **/
-
-  private function _registAnim():Void {
+  private function _registAnim(eid:Int):Void {
     // 敵画像をアニメーションとして読み込む
-    loadGraphic("assets/images/enemy.png", true);
+    var name = csv.searchItem("id", '${eid}', "image");
+    loadGraphic('assets/images/monster/${name}.png', true);
 
     // アニメーションを登録
-    var speed = 2;
-    animation.add("1", [0, 1], speed); // スライム
-    animation.add("2", [2, 3], speed); // コウモリ
-    animation.add("3", [4, 5], speed); // ゴースト
-    animation.add("4", [6, 7], speed); // ヘビ
-    animation.add("5", [8, 9], speed); // ドクロ
+    var speed = 6;
+    animation.add(DirUtil.toString(Dir.Left),  [0, 1, 2, 1], speed); // スライム
+    animation.add(DirUtil.toString(Dir.Up),    [3, 4, 5, 4], speed); // スライム
+    animation.add(DirUtil.toString(Dir.Right), [6, 7, 8, 7], speed); // スライム
+    animation.add(DirUtil.toString(Dir.Down),  [9, 10, 11, 10], speed); // スライム
+  }
+
+  /**
+   * アニメーションを切り替える
+   **/
+  private function _changeAnime():Void {
+    var name = DirUtil.toString(_dir);
+    animation.play(name);
   }
 }

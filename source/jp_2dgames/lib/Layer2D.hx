@@ -22,7 +22,6 @@ class Layer2D {
      * @param w 幅
      * @param h 高さ
      */
-
   public function new(w:Int = 0, h:Int = 0) {
     if(w > 0 && h > 0) {
       initialize(w, h);
@@ -50,7 +49,6 @@ class Layer2D {
   /**
 	 * 指定のレイヤーから情報をコピーする
    **/
-
   public function copy(layer:Layer2D):Void {
     initialize(layer.width, layer.height);
     var func = function(i, j, v) {
@@ -62,7 +60,6 @@ class Layer2D {
   /**
 	 * 指定のレイヤーへ情報をコピーする
    **/
-
   public function copyTo(layer:Layer2D):Void {
     layer.initialize(_width, _height);
     var func = function(i, j, v) {
@@ -102,7 +99,6 @@ class Layer2D {
 	 * @param	y
 	 * @return
 	 */
-
   public function check(x:Int, y:Int):Bool {
     if(x < 0) { return false; }
     if(x >= _width) { return false; }
@@ -117,7 +113,6 @@ class Layer2D {
 	 * @param	y
 	 * @return
 	 */
-
   public function toIdx(x:Int, y:Int):Int {
     return x + y * _width;
   }
@@ -179,7 +174,6 @@ class Layer2D {
    * 指定の値が存在する座標をランダムで返す
    * @return 見つからなかったら null
    **/
-
   public function searchRandom(v:Int):FlxPoint {
     var arr = [];
     forEach2(function(idx, val) {
@@ -192,7 +186,7 @@ class Layer2D {
       return null;
     }
 
-    var idx = arr[FlxRandom.intRanged(0, arr.length)];
+    var idx = arr[FlxRandom.intRanged(0, arr.length-1)];
     var p = FlxPoint.get();
     p.x = idxToX(idx);
     p.y = idxToY(idx);
@@ -205,7 +199,6 @@ class Layer2D {
    * @param v 検索する値
    * @return 存在する数
    **/
-
   public function count(v:Int):Int {
     var ret:Int = 0;
     for(idx in _pool.keys()) {
@@ -221,7 +214,6 @@ class Layer2D {
 	 * レイヤー内の値を順番に走査する
 	 * ※引数は(i, j, v)
 	 **/
-
   public function forEach(Function:Int -> Int -> Int -> Void):Void {
     for(j in 0...height) {
       for(i in 0...width) {
@@ -241,7 +233,6 @@ class Layer2D {
   /**
 	 * デバッグ出力
    **/
-
   public function dump():Void {
     trace("<<Layer2D>> (width, height)=(" + _width + ", " + _height + ")");
     for(j in 0..._height) {
@@ -256,7 +247,6 @@ class Layer2D {
   /**
 	 * マップ情報をCSV文字列として取得する
    **/
-
   public function getCsv():String {
     var buf = new StringBuf();
     var func = function(i:Int, j:Int, v:Int) {
@@ -273,7 +263,6 @@ class Layer2D {
   /**
 	 * CSV文字列からマップ情報を設定する
 	 **/
-
   public function setCsv(w:Int, h:Int, csv:String) {
     initialize(w, h);
     var idx:Int = 0;
