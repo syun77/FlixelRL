@@ -4,3 +4,5 @@ assets/.DS_Store
 assets/levels/.DS_Store
 .DS_Store
 save.txt
+docs/monster/out/*.png
+docs/monster/tmp/*.png
