@@ -114,7 +114,7 @@ class PlayState extends FlxState {
     // プレイヤー生成
     {
       var pt = layer.search(Field.PLAYER);
-      _player = new Player(Std.int(pt.x), Std.int(pt.y));
+      _player = new Player(Std.int(pt.x), Std.int(pt.y), _csv.player);
       this.add(_player);
       pt.put();
     }
@@ -156,7 +156,6 @@ class PlayState extends FlxState {
           var item:DropItem = items.recycle();
           var type = ItemUtil.randomType();
           var id = ItemUtil.random(type);
-          trace('${type} ${id}');
           item.init(i, j, type, id);
       }
     });
@@ -211,8 +210,11 @@ class PlayState extends FlxState {
     ParticleDamage.parent = null;
     DropItem.parent = null;
     Enemy.parent = null;
+    Enemy.csv = null;
     Message.instance = null;
     Inventory.instance = null;
+    ItemUtil.csvConsumable = null;
+    ItemUtil.csvEquipment = null;
     super.destroy();
   }
 

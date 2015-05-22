@@ -143,11 +143,10 @@ class CsvLoader {
   }
 
   /**
-     * 関数指定でIDを検索する
-     * @param データをチェックする関数
-     * @return 見つからなかったら-1
-     **/
-
+   * 関数指定でIDを検索する
+   * @param データをチェックする関数
+   * @return 見つからなかったら-1
+   **/
   public function foreachSearchID(func:Map<String, String> -> Bool):Int {
     for(i in 0...size() + 1) {
       if(hasId(i) == false) {
@@ -162,22 +161,20 @@ class CsvLoader {
   }
 
   /**
-     * 値を数値として取得する
-     * @param id id
-     * @param key キー文字列
-     * @return 値
-     **/
-
+   * 値を数値として取得する
+   * @param id id
+   * @param key キー文字列
+   * @return 値
+   **/
   public function getInt(id:Int, key:String):Int {
     return Std.parseInt(getString(id, key));
   }
   /**
-     * 値を小数値として取得する
-     * @param id id
-     * @param key キー文字列
-     * @return 値
-     **/
-
+   * 値を小数値として取得する
+   * @param id id
+   * @param key キー文字列
+   * @return 値
+   **/
   public function getFloat(id:Int, key:String):Float {
     return Std.parseFloat(getString(id, key));
   }

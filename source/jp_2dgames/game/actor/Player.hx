@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.Particle.PType;
 import jp_2dgames.game.item.ItemUtil;
@@ -20,6 +21,7 @@ import flixel.FlxSprite;
 class Player extends Actor {
 
   private var _target:Enemy = null;
+  private var _csv:CsvLoader = null;
 
   // 階段の上に乗っているかどうか
   private var _bOnStairs:Bool;
@@ -38,8 +40,11 @@ class Player extends Actor {
 	 * 生成
 	 */
 
-  public function new(X:Int, Y:Int) {
+  public function new(X:Int, Y:Int, csv:CsvLoader) {
     super();
+
+    // CSVを設定
+    _csv = csv;
 
     // 初期化
     Global.initPlayer(this, X, Y, Dir.Down, null);
@@ -78,10 +83,26 @@ class Player extends Actor {
     animation.play(name);
   }
 
+  private function _addExp(v:Int):Void {
+    addExp(v);
+
+    var bLevelUp = false;
+    var nextExp = _csv.getInt(params.lv+1, "exp");
+    while(params.exp >= nextExp) {
+      params.lv++;
+      bLevelUp = true;
+      nextExp = _csv.getInt(params.lv+1, "exp");
+    }
+
+    if(bLevelUp) {
+      Message.push('${name}はレベルアップした');
+      Message.push('レベル${params.lv}になった');
+    }
+  }
+
   /**
 	 * 攻撃開始
 	 **/
-
   override public function beginAction():Void {
     if(_state == Actor.State.ActBegin) {
       // 攻撃アニメーション開始
@@ -104,7 +125,7 @@ class Player extends Actor {
           Message.push2(3, [_target.name]);
           _target.kill();
           // 経験値獲得
-          addExp(_target.params.xp);
+          _addExp(_target.params.xp);
           // エフェクト再生
           Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
         }
