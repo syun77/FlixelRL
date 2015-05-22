@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import flixel.util.FlxRandom;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Player;
@@ -37,6 +38,9 @@ class Enemy extends Actor {
     return _hpBar;
   }
 
+  /**
+   * コンストラクタ
+   **/
   public function new() {
     super();
 
@@ -117,6 +121,8 @@ class Enemy extends Actor {
       // 生成なのでCSVからパラメータを取得する
       params.hp = _getCsvParamInt("hp");
       params.hpmax = params.hp;
+      params.str = _getCsvParamInt("str");
+      params.vit = _getCsvParamInt("vit");
     }
     super.init(X, Y, dir, params);
     // 名前を設定
@@ -196,7 +202,13 @@ class Enemy extends Actor {
     var dx = player.xchip - xchip;
     var dy = player.ychip - ychip;
     var func = function() {
-      if(Math.abs(dx) > Math.abs(dy)) {
+      // 水平方向に移動するかどうか
+      var bHorizon = Math.abs(dx) > Math.abs(dy);
+      if(Math.abs(dx) == Math.abs(dy)) {
+        // 水平方向と垂直方向の距離が一緒の場合はランダム移動
+        bHorizon = FlxRandom.intRanged(0, 1) == 0;
+      }
+      if(bHorizon) {
         if(dx < 0) {
           return Dir.Left;
         }
