@@ -150,7 +150,7 @@ class PlayState extends FlxState {
           var e:Enemy = enemies.recycle();
           var params = new Params();
           params.id = FlxRandom.intRanged(1, 5);
-          e.init(i, j, Dir.Down, params, true);
+          e.init(i, j, DirUtil.random(), params, true);
         case Field.ITEM:
           // アイテムを生成
           var item:DropItem = items.recycle();

@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxRandom;
 import flixel.util.FlxPoint;
 
 /**
@@ -36,7 +37,6 @@ class DirUtil {
   /**
    * 文字列を定数に変換
    **/
-
   public static function fromString(str:String):Dir {
     switch(str) {
       case "none":
@@ -106,7 +106,6 @@ class DirUtil {
 	 * 入力キーを方向に変換する
 	 * @return 入力した方向
 	 **/
-
   public static function getInputDirection():Dir {
     if(Key.on.LEFT) {
       return Dir.Left;
@@ -123,6 +122,19 @@ class DirUtil {
     else {
       // 入力がない
       return Dir.None;
+    }
+  }
+
+  /**
+   * ランダムな方向を返す
+   **/
+  public static function random():Dir {
+    switch(FlxRandom.intRanged(0, 3)) {
+      case 0: return Dir.Left;
+      case 1: return Dir.Up;
+      case 2: return Dir.Right;
+      case 3: return Dir.Down;
+      default: return Dir.None;
     }
   }
 }

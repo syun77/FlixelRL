@@ -103,6 +103,9 @@ class Player extends Actor {
           // 敵を倒した
           Message.push2(3, [_target.name]);
           _target.kill();
+          // 経験値獲得
+          addExp(_target.params.xp);
+          // エフェクト再生
           Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
         }
         FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});

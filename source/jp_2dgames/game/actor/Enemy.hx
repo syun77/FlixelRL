@@ -90,13 +90,22 @@ class Enemy extends Actor {
   }
 
   /**
+   * CSVから値を取得する
+   **/
+  private function _getCsvParam(name:String):String {
+    return csv.searchItem("id", '${id}', name);
+  }
+  private function _getCsvParamInt(name:String):Int {
+    return Std.parseInt(_getCsvParam(name));
+  }
+
+  /**
 	 * 初期化
 	 **/
   override public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
 
     // アニメーションを登録
     _registAnim(params.id);
-    _changeAnime();
 
     // 中心を基準に描画
     offset.set(width / 2, height / 2);
@@ -106,12 +115,17 @@ class Enemy extends Actor {
 
     if(bCreate) {
       // 生成なのでCSVからパラメータを取得する
-      params.hp = csv.searchItemInt("id", '${_id}', "hp");
+      params.hp = _getCsvParamInt("hp");
       params.hpmax = params.hp;
     }
-    super.init(X, Y, Dir.Down, params);
+    super.init(X, Y, dir, params);
     // 名前を設定
-    _name = csv.searchItem("id", '${_id}', "name");
+    _name = _getCsvParam("name");
+    // 獲得経験値を設定
+    params.xp = _getCsvParamInt("xp");
+
+    // アニメーション変更
+    _changeAnime();
   }
 
   /**

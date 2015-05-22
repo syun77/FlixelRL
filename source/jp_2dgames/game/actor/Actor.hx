@@ -190,7 +190,8 @@ class Actor extends FlxSprite {
 
   private function get_food() {
     // 満腹度は100倍
-    return Std.int(_params.food / 100);
+    // 端数切り上げ
+    return Std.int(Math.ceil(_params.food / 100));
   }
 
   public function addFood(ratio:Float):Void {
@@ -212,7 +213,6 @@ class Actor extends FlxSprite {
   }
   // 最大満腹度
   public var foodmax(get, null):Int;
-
   private function get_foodmax() {
     // 最大満腹度は100倍
     return Std.int(_params.foodmax / 100);
@@ -227,6 +227,11 @@ class Actor extends FlxSprite {
     if(_params.foodmax < _params.food) {
       _params.food = _params.foodmax;
     }
+  }
+
+  // 経験値
+  public function addExp(exp:Int):Void {
+    _params.exp += exp;
   }
 
   /**
