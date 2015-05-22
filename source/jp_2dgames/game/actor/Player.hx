@@ -89,7 +89,10 @@ class Player extends Actor {
     var bLevelUp = false;
     var nextExp = _csv.getInt(params.lv+1, "exp");
     while(params.exp >= nextExp) {
+      // レベルアップ
       params.lv++;
+      // パラメータ上昇
+      _levelup();
       bLevelUp = true;
       nextExp = _csv.getInt(params.lv+1, "exp");
     }
@@ -97,17 +100,15 @@ class Player extends Actor {
     if(bLevelUp) {
       Message.push('${name}はレベルアップした');
       Message.push('レベル${params.lv}になった');
-      // パラメータを再更新する
-      _refreshParams();
     }
   }
 
   /**
-   * パラメータを再更新する
+   * レベルアップによるパラメータ上昇
    **/
-  private function _refreshParams():Void {
+  private function _levelup():Void {
     // 最大HPを更新
-    params.hpmax = _csv.getInt(params.lv, "hp");
+    params.hpmax += _csv.getInt(params.lv, "hp");
   }
 
   /**
