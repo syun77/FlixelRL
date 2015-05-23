@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.GuiStatusDetail;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.item.ItemUtil;
@@ -28,14 +29,12 @@ class PlayState extends FlxState {
   // プレイヤー情報
   private var _player:Player;
   public var player(get, null):Player;
-
   private function get_player() {
     return _player;
   }
   // マップ情報
   private var _lField:Layer2D;
   public var lField(get, null):Layer2D;
-
   private function get_lField() {
     return _lField;
   }
@@ -52,9 +51,15 @@ class PlayState extends FlxState {
   // フロア数
   private var _floor:Int;
   public var floor(get, null):Int;
-
-  public function get_floor():Int {
+  public function get_floor() {
     return _floor;
+  }
+
+  // ステータス
+  private var _guistatus:GuiStatus;
+  public var guistatus(get, null):GuiStatus;
+  public function get_guistatus() {
+    return _guistatus;
   }
 
   /**
@@ -91,10 +96,6 @@ class PlayState extends FlxState {
     // フィールドを登録
     setFieldLayer(layer);
 
-    // ステータス表示
-    var guistatus = new GuiStatus();
-    this.add(guistatus);
-
     // アイテム管理生成
     var items = new FlxTypedGroup<DropItem>(32);
     for(i in 0...items.maxSize) {
@@ -125,6 +126,10 @@ class PlayState extends FlxState {
     enemies.forEach(function(e:Enemy) {
       this.add(e.hpBar);
     });
+
+    // ステータス表示
+    _guistatus = new GuiStatus();
+    this.add(_guistatus);
 
     // パーティクル
     var particles = new FlxTypedGroup<Particle>(256);

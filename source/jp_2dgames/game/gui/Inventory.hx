@@ -63,6 +63,10 @@ class Inventory extends FlxGroup {
   private var _cursor:FlxSprite;
   private var _nCursor:Int = 0;
 
+  // 詳細ステータス
+  private var _detail:GuiStatusDetail;
+  private var _bShowDetail:Bool = false;
+
   // 状態
   private var _state:State = State.Main;
 
@@ -96,12 +100,10 @@ class Inventory extends FlxGroup {
   private var _fonts:Array<FlxSprite>;
 
   // アイテムの追加
-
   public static function push(itemid:Int) {
     instance.addItem(itemid);
   }
   // 装備品の取得
-
   public static function getWeapon():Int {
     return instance.weapon;
   }
@@ -145,7 +147,13 @@ class Inventory extends FlxGroup {
 
     // テキスト更新
     _updateText();
+
+    // 詳細ステータス
+    _detail = new GuiStatusDetail();
+    // 初期状態は非表示
+    _bShowDetail = false;
   }
+
 
   public static function getItemList():Array<ItemData> {
     return instance.itemList;
@@ -203,10 +211,14 @@ class Inventory extends FlxGroup {
     //		init(new Array<ItemData>());
   }
 
-  // アクティブフラグの設定
-
+  /**
+   * アクティブフラグの設定
+   **/
   public function setActive(b:Bool) {
     _cursor.visible = b;
+
+    // 詳細表示切り替え
+    showDetail(b);
   }
 
   private var _sub:InventoryAction = null;
@@ -523,6 +535,28 @@ class Inventory extends FlxGroup {
   private function forEachItemList(func:ItemData -> Void):Void {
     for(item in _itemList) {
       func(item);
+    }
+  }
+
+  /**
+   * 詳細表示を切り替え
+   **/
+  public function showDetail(b:Bool):Void {
+    if(b) {
+      // 表示要求
+      if(_bShowDetail == false) {
+        // 非表示なら表示する
+        this.add(_detail);
+        _bShowDetail = true;
+      }
+    }
+    else {
+      // 非表示要求
+      if(_bShowDetail) {
+        // 表示していたら消す
+        this.remove(_detail);
+        _bShowDetail = false;
+      }
     }
   }
 }

@@ -46,7 +46,6 @@ class GuiStatus extends FlxGroup {
   /**
 	 * コンストラクタ
 	 **/
-
   public function new() {
     super();
 
@@ -85,7 +84,6 @@ class GuiStatus extends FlxGroup {
   /**
 	 * 更新
 	 **/
-
   override public function update() {
     super.update();
 

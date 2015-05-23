@@ -49,13 +49,17 @@ class Message extends FlxGroup {
   public static var instance:Message = null;
 
   // メッセージの追加
-
   public static function push(msg:String) {
     Message.instance.pushMsg(msg);
   }
 
   public static function push2(msgId:Int, args:Array<Dynamic>) {
     Message.instance.pushMsg2(msgId, args);
+  }
+
+  // メッセージウィンドウを消す
+  public static function hide() {
+    Message.instance.visible = false;
   }
 
   private var _window:FlxSprite;
@@ -104,7 +108,6 @@ class Message extends FlxGroup {
   /**
 	 * 更新
 	 **/
-
   override public function update():Void {
     super.update();
 
@@ -132,7 +135,6 @@ class Message extends FlxGroup {
   /**
 	 * メッセージを末尾に追加
 	 **/
-
   public function pushMsg(msg:String) {
     var text = new FlxText(POS_X + MSG_POS_X, 0, 480);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
@@ -169,7 +171,6 @@ class Message extends FlxGroup {
   /**
 	 * 先頭のメッセージを削除
 	 **/
-
   public function pop() {
     var t = _msgList.pop();
     this.remove(t);

@@ -36,15 +36,36 @@ class Player extends Actor {
     return _bOnStairs;
   }
   // 階段の上に乗ったフラグをリセットする
-
   public function endOnStairs() {
     _bOnStairs = false;
+  }
+
+  // 攻撃力
+  public var atk(get, null):Int;
+  private function get_atk() {
+    var weapon = jp_2dgames.game.gui.Inventory.getWeapon();
+    if(weapon == ItemUtil.NONE) {
+      // 何も装備していない
+      return 0;
+    }
+    var atk = ItemUtil.getParam(weapon, "atk");
+    return atk;
+  }
+  // 守備力
+  public var def(get, null):Int;
+  private function get_def() {
+    var armor = jp_2dgames.game.gui.Inventory.getArmor();
+    if(armor == ItemUtil.NONE) {
+      // 何も装備していない
+      return 0;
+    }
+    var def = ItemUtil.getParam(armor, "def");
+    return def;
   }
 
   /**
 	 * 生成
 	 */
-
   public function new(X:Int, Y:Int, csv:CsvLoader) {
     super();
 

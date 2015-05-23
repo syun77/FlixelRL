@@ -40,11 +40,11 @@ class SeqMgr {
   /**
 	 * コンストラクタ
 	 **/
-
   public function new(state:PlayState) {
     _player = state.player;
     _enemies = Enemy.parent;
     _inventory = jp_2dgames.game.gui.Inventory.instance;
+
     _state = State.KeyInput;
     _stateprev = _state;
   }
@@ -52,7 +52,6 @@ class SeqMgr {
   /**
 	 * 状態遷移
 	 **/
-
   private function _change(s:State):Void {
     _stateprev = _state;
     _state = s;
@@ -61,7 +60,6 @@ class SeqMgr {
   /**
 	 * 更新
 	 **/
-
   public function update():Void {
     var cnt:Int = 0;
     var bLoop:Bool = true;
@@ -77,7 +75,6 @@ class SeqMgr {
   /**
 	 * 敵をすべて動かす
 	 **/
-
   private function _moveAllEnemy():Void {
     _enemies.forEachAlive(function(e:Enemy) {
       if(e.action == Action.Move) {
@@ -123,6 +120,7 @@ class SeqMgr {
         if(_inventory.proc() == false) {
           // キー入力に戻る
           _player.changeprev();
+          // 非表示
           _inventory.setActive(false);
           _change(State.KeyInput);
         }
