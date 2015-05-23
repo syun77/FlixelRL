@@ -85,7 +85,7 @@ class PlayState extends FlxState {
 
     if(true) {
       // 階段の位置をランダムに配置する
-      Field.randomize(layer);
+      Field.randomize(layer, Global.getFloor(), _csv);
     }
 
     // フィールドを登録
@@ -142,15 +142,52 @@ class PlayState extends FlxState {
     this.add(partDamage);
     ParticleDamage.parent = partDamage;
 
+    // 敵出現情報を計算
+    var eIds = [];
+    var eRatios = [];
+    var sum:Int = 0;
+    {
+      var id = _csv.getEnemyAppearId(Global.getFloor());
+      for(i in 0...5) {
+        var eid = _csv.enemy_appear.getInt(id, 'e${i}');
+        if(eid <= 0) {
+          continue;
+        }
+        var ratio = _csv.enemy_appear.getInt(id, 'e${i}_r');
+        if(ratio <= 0) {
+          continue;
+        }
+        eIds.push(eid);
+        eRatios.push(ratio);
+        sum += ratio;
+      }
+      trace(eIds, eRatios, sum);
+    }
+
     // 各種オブジェクトを配置
     layer.forEach(function(i, j, v) {
       switch(v) {
         case Field.ENEMY:
           // 敵を生成
-          var e:Enemy = enemies.recycle();
-          var params = new Params();
-          params.id = FlxRandom.intRanged(1, 5);
-          e.init(i, j, DirUtil.random(), params, true);
+          var func = function() {
+            var rnd = FlxRandom.intRanged(0, sum-1);
+            var idx = 0;
+            for(ratio in eRatios) {
+              if(rnd < ratio) {
+                return eIds[idx];
+              }
+              rnd -= ratio;
+              idx++;
+            }
+            return 0;
+          };
+          var eid = func();
+          if(eid > 0) {
+            var e:Enemy = enemies.recycle();
+            var params = new Params();
+            params.id = eid;
+            e.init(i, j, DirUtil.random(), params, true);
+          }
         case Field.ITEM:
           // アイテムを生成
           var item:DropItem = items.recycle();

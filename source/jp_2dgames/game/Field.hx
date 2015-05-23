@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.CsvLoader;
 import flash.Lib;
 import flixel.util.FlxRandom;
 import flixel.FlxG;
@@ -67,8 +68,11 @@ class Field {
 
   /**
    * プレイヤーの位置や階段をランダムで配置する
+   * @param layer 地形レイヤー
+   * @param floor フロア数
+   * @param csv Csv管理
    **/
-  public static function randomize(layer:Layer2D) {
+  public static function randomize(layer:Layer2D, floor:Int, csv:Csv) {
 
     // 乱数を初期化
     FlxRandom.globalSeed = flash.Lib.getTimer();
@@ -86,11 +90,20 @@ class Field {
       p.put();
     }
     // 敵を配置
-    for(i in 0...4) {
-      var p = layer.searchRandom(NONE);
-      layer.setFromFlxPoint(p ,ENEMY);
-      p.put();
+    {
+      // 参照するデータ番号を調べる
+      var id = csv.getEnemyAppearId(floor);
+
+      // 敵の出現数
+      var cnt = csv.enemy_appear.getInt(id, "cnt");
+      // 敵配置
+      for(i in 0...cnt) {
+        var p = layer.searchRandom(NONE);
+        layer.setFromFlxPoint(p ,ENEMY);
+        p.put();
+      }
     }
+
     // アイテムを配置
     for(i in 0...4) {
       var p = layer.searchRandom(NONE);
