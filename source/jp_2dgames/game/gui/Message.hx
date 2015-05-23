@@ -7,11 +7,28 @@ import flixel.text.FlxText;
 import flixel.group.FlxGroup;
 
 /**
+ * メッセージ定数
+ **/
+class Msg {
+  public static inline var PLAYER_DAMAGE:Int = 1; // プレイヤーダメージ
+  public static inline var ENEMY_DAMAGE:Int = 2; // 敵ダメージ
+  public static inline var ENEMY_DEFEAT:Int = 3; // 敵を倒した
+  public static inline var ITEM_DISCARD:Int = 4; // アイテムを捨てた
+  public static inline var ITEM_EAT:Int = 5; // アイテムを食べた
+  public static inline var ITEM_EQUIP:Int = 6; // アイテムを装備した
+  public static inline var ITEM_UNEQUIP:Int = 7; // アイテムを外した
+  public static inline var ITEM_PICKUP:Int = 8; // アイテムを拾った
+  public static inline var MISS:Int = 9; // 攻撃を外した
+  public static inline var LEVELUP:Int = 10; // レベルアップした
+  public static inline var LEVELUP2:Int = 11; // レベル数値を表示
+}
+
+/**
  * メッセージウィンドウ
  **/
 class Message extends FlxGroup {
 
-  // メッセージの最大
+  // メッセージログの最大
   private static inline var MESSAGE_MAX = 5;
   // ウィンドウ座標
   private static inline var POS_X = 8;

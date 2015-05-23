@@ -113,8 +113,9 @@ class Player extends Actor {
     }
 
     if(bLevelUp) {
-      Message.push('${name}はレベルアップした');
-      Message.push('レベル${params.lv}になった');
+      // レベルアップメッセージの表示
+      Message.push2(Msg.LEVELUP, [name]);
+      Message.push2(Msg.LEVELUP2, [name, params.lv]);
     }
   }
 
@@ -147,15 +148,22 @@ class Player extends Actor {
       // 攻撃開始の処理
       var cbStart = function(tween:FlxTween) {
         // 攻撃開始
-        var val = Calc.damage(this, _target, jp_2dgames.game.gui.Inventory.getWeapon(), ItemUtil.NONE);
-        if(_target.damage(val)) {
-          // 敵を倒した
-          Message.push2(3, [_target.name]);
-          _target.kill();
-          // 経験値獲得
-          _addExp(_target.params.xp);
-          // エフェクト再生
-          Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+        if(Calc.checkHitAttack()) {
+          // 攻撃が当たった
+          var val = Calc.damage(this, _target, jp_2dgames.game.gui.Inventory.getWeapon(), ItemUtil.NONE);
+          if(_target.damage(val)) {
+            // 敵を倒した
+            Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
+            _target.kill();
+            // 経験値獲得
+            _addExp(_target.params.xp);
+            // エフェクト再生
+            Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+          }
+        }
+        else {
+          // 攻撃を外した
+          Message.push2(Msg.MISS, [_target.name]);
         }
         FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
       }

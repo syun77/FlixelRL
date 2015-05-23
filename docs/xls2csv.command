@@ -10,6 +10,8 @@ python xls2csv.py enemy.xlsx ../assets/levels/enemy.csv
 python xls2csv.py enemy_appear.xlsx ../assets/levels/enemy_appear.csv
 # プレイヤーデータ
 python xls2csv.py player.xlsx ../assets/levels/player.csv
+# メッセージデータ
+python xls2csv.py message.xlsx ../assets/data/message.csv
 
 # ターミナルを閉じる
 killall Terminal

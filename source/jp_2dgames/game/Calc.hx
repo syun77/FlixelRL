@@ -19,7 +19,6 @@ class Calc {
 	 * @param item1 act1の装備アイテム
 	 * @param item2 act2の装備アイテム
 	 **/
-
   public static function damage(act1:Actor, act2:Actor, item1:Int, item2:Int):Int {
     // 力
     var str = act1.params.str;
@@ -72,5 +71,21 @@ class Calc {
     }
 
     return Std.int(val);
+  }
+
+  /**
+   * 攻撃が当たるかどうかをチェック
+   **/
+  public static function checkHitAttack():Bool {
+    // 92%の確率で当たる
+    return FlxRandom.chanceRoll(92);
+  }
+
+  /**
+   * 敵の攻撃が当たるかどうかをチェック
+   **/
+  public static function checkHitAttackForEnemy():Bool {
+    // 87%の確率で当たる
+    return FlxRandom.chanceRoll(87);
   }
 }

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.Player;
@@ -342,8 +343,9 @@ class Inventory extends FlxGroup {
     _updateText();
 
     if(bMsg) {
+      // アイテムを捨てたメッセージ
       var name = ItemUtil.getName(itemid);
-      Message.push2(4, [name]);
+      Message.push2(Msg.ITEM_DISCARD, [name]);
     }
 
     return _itemList.length == 0;
@@ -381,7 +383,7 @@ class Inventory extends FlxGroup {
     }
 
     var name = ItemUtil.getName(item.id);
-    Message.push2(5, [name]);
+    Message.push2(Msg.ITEM_EAT, [name]);
     delItem(idx);
   }
 
@@ -470,7 +472,7 @@ class Inventory extends FlxGroup {
     if(bMsg) {
       // 装備メッセージの表示
       var name = ItemUtil.getName(itemdata.id);
-      Message.push2(6, [name]);
+      Message.push2(Msg.ITEM_EQUIP, [name]);
     }
   }
 
@@ -493,7 +495,7 @@ class Inventory extends FlxGroup {
     if(bMsg && itemid >= 0) {
       // 装備を外したメッセージの表示
       var name = ItemUtil.getName(itemid);
-      Message.push2(7, [name]);
+      Message.push2(Msg.ITEM_UNEQUIP, [name]);
     }
 
     // 'E'を非表示にする

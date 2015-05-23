@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.gui.Message;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.gui.Inventory;
@@ -82,8 +83,15 @@ class Enemy extends Actor {
       // 攻撃開始の処理
       var cbStart = function(tween:FlxTween) {
         // 攻撃開始
-        var val = Calc.damage(this, target, ItemUtil.NONE, jp_2dgames.game.gui.Inventory.getArmor());
-        target.damage(val);
+        if(Calc.checkHitAttackForEnemy()) {
+          // 攻撃が当たった
+          var val = Calc.damage(this, target, ItemUtil.NONE, jp_2dgames.game.gui.Inventory.getArmor());
+          target.damage(val);
+        }
+        else {
+          // 攻撃が外れた
+          Message.push2(Msg.MISS, [target.name]);
+        }
         FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
       }
 

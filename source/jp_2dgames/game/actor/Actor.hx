@@ -373,10 +373,12 @@ class Actor extends FlxSprite {
   public function damage(val:Int):Bool {
     _tShake = TIMER_DAMAGE;
     if(id == 0) {
-      Message.push2(1, [name, val]);
+      // プレイヤーダメージ
+      Message.push2(Msg.PLAYER_DAMAGE, [name, val]);
     }
     else {
-      Message.push2(2, [name, val]);
+      // 敵ダメージ
+      Message.push2(Msg.ENEMY_DAMAGE, [name, val]);
     }
 
     Particle.start(PType.Circle, x, y, FlxColor.RED);
