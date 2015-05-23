@@ -20,6 +20,8 @@ import flixel.FlxSprite;
  */
 class Player extends Actor {
 
+  // プレイヤーの名前
+  private static inline var NAME:String = "プレイヤー";
   // 1ターンの自動回復HP割合
   private static inline var AUTOHEAL_RATIO:Int = 3;
 
@@ -54,7 +56,7 @@ class Player extends Actor {
     // プレイヤーはID「0」にしておく
     _id = 0;
     // 名前を設定
-    _name = "プレイヤー";
+    _name = NAME;
 
     // アニメーションを登録
     _registAnim();
@@ -70,8 +72,19 @@ class Player extends Actor {
     _bOnStairs = false;
   }
 
-  // アニメーション名を取得する
+  // 初期化
+  override public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
+    if(bCreate) {
+      // 初回の初期化を行う (Lv1のパラメータが初期化用）
+      params.hpmax = _csv.getInt(1, "hp");
+      params.hp = params.hpmax;
+      params.str = _csv.getInt(1, "str");
+      params.vit = _csv.getInt(1, "vit");
+    }
+    super.init(X, Y, dir, params, bCreate);
+  }
 
+  // アニメーション名を取得する
   private function getAnimName(bStop:Bool, dir:Dir):String {
     var pre = bStop ? "stop" : "walk";
     var suf = DirUtil.toString(dir);
@@ -110,8 +123,9 @@ class Player extends Actor {
    **/
   private function _levelup():Void {
     // 最大HPを更新
-    // TODO: とりあえずHPのみ
     params.hpmax += _csv.getInt(params.lv, "hp");
+    params.str += _csv.getInt(params.lv, "str");
+    params.vit += _csv.getInt(params.lv, "vit");
   }
 
   /**

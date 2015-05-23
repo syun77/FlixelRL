@@ -245,7 +245,6 @@ class Actor extends FlxSprite {
   /**
 	 * 初期化
 	 **/
-
   public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
     _xprev = X;
     _yprev = Y;
@@ -266,7 +265,6 @@ class Actor extends FlxSprite {
   }
 
   // 行動開始する
-
   public function beginAction():Void {
     switch(_state) {
       case State.ActBegin:

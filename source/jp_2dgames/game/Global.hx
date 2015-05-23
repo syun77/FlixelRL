@@ -49,7 +49,6 @@ class Global {
   /**
 	 * アイテムデータを設定する
 	 **/
-
   public static function setItemList(items:Array<ItemData>=null):Void {
     if(items == null) {
       // グローバルデータにあるアイテムデータを使う
@@ -62,9 +61,10 @@ class Global {
     Inventory.setItemList(items);
   }
 
+  // プレイヤーのデータを初期化するかどうか
+  private static var _bInitPlayer = true;
   // プレイヤーステータス
   private static var _params:Params = new Params();
-
   public static function initPlayer(player:Player, x:Int, y:Int, dir:Dir, params:Params = null):Void {
     if(params == null) {
       // グローバルデータにあるパラメータを使う
@@ -75,6 +75,10 @@ class Global {
       _params = params;
     }
 
-    player.init(x, y, dir, params);
+    // 初期化
+    player.init(x, y, dir, params, _bInitPlayer);
+
+    // 初回の初期化終わり
+    _bInitPlayer = false;
   }
 }
