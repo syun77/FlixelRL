@@ -20,6 +20,9 @@ import flixel.FlxSprite;
  */
 class Player extends Actor {
 
+  // 1ターンの自動回復HP割合
+  private static inline var AUTOHEAL_RATIO:Int = 3;
+
   private var _target:Enemy = null;
   private var _csv:CsvLoader = null;
 
@@ -77,7 +80,6 @@ class Player extends Actor {
   }
 
   // アニメーションを再生
-
   private function changeAnim():Void {
     var name = getAnimName(_bStop, _dir);
     animation.play(name);
@@ -108,6 +110,7 @@ class Player extends Actor {
    **/
   private function _levelup():Void {
     // 最大HPを更新
+    // TODO: とりあえずHPのみ
     params.hpmax += _csv.getInt(params.lv, "hp");
   }
 
@@ -158,6 +161,11 @@ class Player extends Actor {
       // 空腹ダメージ
       subHp(1);
     }
+    if(food > 0) {
+      // 空腹でなければHP回復
+      addHp2(AUTOHEAL_RATIO);
+    }
+
     super.turnEnd();
   }
 
