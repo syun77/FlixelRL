@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import flash.display.BlendMode;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.Particle.PType;
@@ -31,7 +32,6 @@ class Player extends Actor {
   // 階段の上に乗っているかどうか
   private var _bOnStairs:Bool;
   public var isOnStairs(get, null):Bool;
-
   private function get_isOnStairs() {
     return _bOnStairs;
   }
@@ -63,6 +63,13 @@ class Player extends Actor {
     return def;
   }
 
+  // 攻撃カーソル
+  private var _cursor:FlxSprite;
+  public var cursor(get, null):FlxSprite;
+  private function get_cursor() {
+    return _cursor;
+  }
+
   /**
 	 * 生成
 	 */
@@ -91,6 +98,13 @@ class Player extends Actor {
 
     // 階段の上にいるフラグ
     _bOnStairs = false;
+
+    // 攻撃カーソル生成
+    _cursor = new FlxSprite().loadGraphic("assets/images/cursor.png", true);
+    _cursor.animation.add("play", [0, 1], 6);
+    _cursor.animation.play("play");
+    _cursor.visible = false;
+    _cursor.offset.set(_cursor.width/2, _cursor.height/2);
   }
 
   // 初期化
@@ -196,7 +210,6 @@ class Player extends Actor {
   }
 
   // ターン終了
-
   override public function turnEnd():Void {
     // 満腹度を減らす
     // 10ターンで1%減る
@@ -212,9 +225,14 @@ class Player extends Actor {
     super.turnEnd();
   }
 
-  // 更新
-
+  /**
+   * 更新
+   **/
   override public function proc():Void {
+
+    // カーソル表示チェック
+    _checkCursor();
+
     switch(_state) {
       case Actor.State.KeyInput:
         _updateKeyInput();
@@ -263,7 +281,6 @@ class Player extends Actor {
   /**
 	 * キー入力チェック
 	 **/
-
   private function _isKeyInput():Bool {
     if(Key.on.A) {
       // 攻撃 or 待機
@@ -285,7 +302,6 @@ class Player extends Actor {
   /**
 	 * 更新・キー入力待ち
 	 **/
-
   private function _updateKeyInput():Void {
     _bStop = true;
 
@@ -369,9 +385,28 @@ class Player extends Actor {
   }
 
   /**
+   * プレイヤーの目の前に敵がいるかどうかをチェック
+   **/
+  private function _checkCursor():Void {
+    var pt = FlxPoint.get(_xprev, _yprev);
+    DirUtil.move(_dir, pt);
+    var i = Std.int(pt.x);
+    var j = Std.int(pt.y);
+    var bVisible = false;
+    Enemy.parent.forEachAlive(function(e:Enemy) {
+      if(e.checkPosition(i, j)) {
+        bVisible = true;
+      }
+    });
+
+    _cursor.visible = bVisible;
+    _cursor.x = Field.toWorldX(pt.x);
+    _cursor.y = Field.toWorldY(pt.y);
+  }
+
+  /**
 	 * アニメーションの登録
 	 **/
-
   private function _registAnim():Void {
     // アニメーションとして読み込む
     loadGraphic("assets/images/player.png", true);
