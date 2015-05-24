@@ -3,8 +3,9 @@
 
 import sys
 import xlrd
+import yaml
 
-def main(inFile, outFile):
+def main(inFile, outFile, const):
 	book = xlrd.open_workbook(inFile, outFile)
 	sheet = book.sheet_by_index(0);
 	nrows = sheet.nrows
@@ -21,6 +22,8 @@ def main(inFile, outFile):
 				ret += str(int(v))
 				print v,
 			except:
+				if v in const:
+					v = const[v]
 				ret += str(v.encode("utf-8"));
 				print v.encode("utf-8"),
 			col += 1
@@ -35,12 +38,19 @@ def main(inFile, outFile):
 	print "Done."
 
 def usage():
-	print "Usage: xls2csv [input.xlsx] [output.csv]"
+	print "Usage: xls2csv [input.xlsx] [output.csv] [header.txt]"
 
 if __name__ == '__main__':
 	argc = len(sys.argv)
+	const = {}
 	if argc < 3:
 		usage()
 		quit()
-	main(sys.argv[1], sys.argv[2])
+	if argc >= 4:
+		# 定数ファイル読み込み
+		fHeader = sys.argv[3]
+		f = open(fHeader)
+		const = yaml.load(f)
+		f.close
+	main(sys.argv[1], sys.argv[2], const)
 	# main("enemy.xlsx", "/Users/syun/Desktop/FlixelRL/assets/levels/enemy.csv")
