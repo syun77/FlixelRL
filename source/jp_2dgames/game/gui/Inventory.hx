@@ -35,20 +35,31 @@ class Inventory extends FlxGroup {
   private static inline var MENU_THROW = "投げる";
   private static inline var MENU_PUT = "捨てる";
 
-  // 最大
-  private static inline var MAX:Int = 16;
+  // ページ数の最大
+  private static inline var PAGE_MAX:Int = 3;
+  // 1ページあたりの最大表示数
+  private static inline var PAGE_DISP:Int = 8;
+
+  // アイテム所持の最大
+  private static inline var MAX:Int = (PAGE_DISP * PAGE_MAX);
+
   // ウィンドウ座標
   private static inline var POS_X = 640 + 8;
-  private static inline var POS_Y = 80 + 8;
+  private static inline var POS_Y = 106;
   // ウィンドウサイズ
   private static inline var WIDTH = 212 - 8 * 2;
   private static inline var HEIGHT = 480 - 64 - 8 * 2;
+
+  // ページ数テキストの座標
+  private static inline var PAGE_X = POS_X + 8;
+  private static inline var PAGE_Y = POS_Y + 4;
+
   // メッセージ座標オフセット
   private static inline var MSG_POS_X = 24;
-  private static inline var MSG_POS_Y = 8;
+  private static inline var MSG_POS_Y = 32;
   // 'E'の座標オフセット
   private static inline var EQUIP_POS_X = 4;
-  private static inline var EQUIP_POS_Y = 14;
+  private static inline var EQUIP_POS_Y = 6;
   // メッセージ表示間隔
   private static inline var DY = 26;
 
@@ -58,6 +69,11 @@ class Inventory extends FlxGroup {
   // 基準座標
   private var x:Float = POS_X; // X座標
   private var y:Float = POS_Y; // Y座標
+
+  // ページ数テキスト
+  private var _txtPage:FlxText;
+  // ページ数
+  private var _nPage:Int = 0;
 
   // カーソル
   private var _cursor:FlxSprite;
@@ -77,7 +93,6 @@ class Inventory extends FlxGroup {
   // 武器
   private var _weapon:Int = ItemUtil.NONE;
   public var weapon(get_weapon, null):Int;
-
   private function get_weapon() {
     return _weapon;
   }
@@ -154,7 +169,6 @@ class Inventory extends FlxGroup {
     _bShowDetail = false;
   }
 
-
   public static function getItemList():Array<ItemData> {
     return instance.itemList;
   }
@@ -164,20 +178,28 @@ class Inventory extends FlxGroup {
   // アイテムリスト
   private var _itemList:Array<ItemData>;
   public var itemList(get_itemList, null):Array<ItemData>;
-
   private function get_itemList() {
     return _itemList;
   }
 
+  /**
+   * コンストラクタ
+   **/
   public function new() {
     super();
+
     // 背景枠
     var spr = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
     spr.alpha = 0.2;
     this.add(spr);
 
+    // ページ数
+    _txtPage = new FlxText(PAGE_X, PAGE_Y, 0, 128);
+    _txtPage.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    this.add(_txtPage);
+
     // カーソル
-    _cursor = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, DY + MSG_POS_Y, FlxColor.AZURE);
+    _cursor = new FlxSprite(POS_X, y + MSG_POS_Y).makeGraphic(WIDTH, DY, FlxColor.AZURE);
     _cursor.alpha = 0.5;
     this.add(_cursor);
     // カーソルは初期状態非表示
@@ -185,7 +207,7 @@ class Inventory extends FlxGroup {
 
     // テキストを登録
     _txtList = new List<FlxText>();
-    for(i in 0...MAX) {
+    for(i in 0...PAGE_DISP) {
       var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i * DY, 0, 160);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
       _txtList.add(txt);
@@ -206,6 +228,8 @@ class Inventory extends FlxGroup {
       this.add(spr);
       _fonts.push(spr);
     }
+
+    FlxG.watch.add(this, "_nCursor");
 
     // 初期化
     //		init(new Array<ItemData>());
@@ -301,20 +325,70 @@ class Inventory extends FlxGroup {
   }
 
   private function _procCursor():Void {
+    // 番号の最小値と最大値を取得する
+    var min = _nPage * PAGE_DISP;
+    var max = min + PAGE_DISP;
+    if(max > _itemList.length) {
+      max = _itemList.length;
+    }
+    var maxPage = Std.int(Math.ceil(_itemList.length/PAGE_DISP));
+    var nCursor = _nCursor % PAGE_DISP;
+
     if(Key.press.UP) {
+      // 上に移動
       _nCursor--;
-      if(_nCursor < 0) {
+      if(_nCursor < min) {
+        _nCursor = max - 1;
+      }
+    }
+    else if(Key.press.DOWN) {
+      // 下に移動
+      _nCursor++;
+      if(_nCursor >= max) {
+        _nCursor = min;
+      }
+    }
+    else if(Key.press.LEFT) {
+      // 前のページ
+      _nPage--;
+      if(_nPage < 0) {
+        _nPage = maxPage - 1;
+      }
+      _nCursor = nCursor + _nPage * PAGE_DISP;
+      if(_nCursor >= _itemList.length) {
         _nCursor = _itemList.length - 1;
       }
+      _updateText();
+      _changePage();
     }
-    if(Key.press.DOWN) {
-      _nCursor++;
-      if(_nCursor >= _itemList.length) {
-        _nCursor = 0;
+    else if(Key.press.RIGHT) {
+      // 次のページ
+      _nPage++;
+      if(_nPage >= maxPage) {
+        _nPage = 0;
       }
+      _nCursor = nCursor + _nPage * PAGE_DISP;
+      if(_nCursor >= _itemList.length) {
+        _nCursor = _itemList.length - 1;
+      }
+      _updateText();
+      _changePage();
     }
+
     // カーソルの座標を更新
-    _cursor.y = POS_Y + (_nCursor * DY);
+    {
+      var idx = (_nCursor % PAGE_DISP);
+      _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
+    }
+  }
+
+  // ページ切り替え
+  private function _changePage():Void {
+    // ページ数の更新
+    _txtPage.text = 'Page (${_nPage+1}/${PAGE_MAX})';
+
+    // Eマークの更新
+    _updateTextEquip();
   }
 
   /**
@@ -430,9 +504,8 @@ class Inventory extends FlxGroup {
   /**
 	 * テキストを更新
 	 **/
-
   private function _updateText():Void {
-    var i:Int = 0;
+    var i:Int = _nPage * PAGE_DISP;
     for(txt in _txtList) {
       if(i < _itemList.length) {
         var itemid = _itemList[i].id;
@@ -443,6 +516,46 @@ class Inventory extends FlxGroup {
         txt.text = "";
       }
       i++;
+    }
+
+    // ページ数の更新
+    _changePage();
+  }
+
+  /**
+   * 'E'の表示の更新
+   **/
+  private function _updateTextEquip():Void {
+
+    // いったんすべて消す
+    for(spr in _fonts) {
+      spr.visible = false;
+    }
+
+    var min = _nPage * PAGE_DISP;
+    var max = min + PAGE_DISP;
+    if(max >= _itemList.length) {
+      max = _itemList.length;
+    }
+    for(i in min...max) {
+      var itemdata = _itemList[i];
+      if(itemdata.isEquip) {
+        // 装備しているのでEマークを表示
+        var spr:FlxSprite = null;
+        switch(itemdata.type) {
+          case IType.Weapon:
+            spr = _fonts[EQUIP_WEAPON];
+          case IType.Armor:
+            spr = _fonts[EQUIP_ARMOR];
+          case IType.Ring:
+            spr = _fonts[EQUIP_RING];
+          default:
+            throw 'Error: Invalid Equip ${itemdata.type}';
+        }
+        spr.visible = true;
+        var idx = i % PAGE_DISP;
+        spr.y = y + EQUIP_POS_Y + (idx * DY) + MSG_POS_Y;
+      }
     }
   }
 
@@ -478,8 +591,7 @@ class Inventory extends FlxGroup {
     }
 
     // 'E'の表示
-    spr.visible = true;
-    spr.y = y + EQUIP_POS_Y + (idx * DY);
+    _updateTextEquip();
 
     if(bMsg) {
       // 装備メッセージの表示
@@ -510,22 +622,8 @@ class Inventory extends FlxGroup {
       Message.push2(Msg.ITEM_UNEQUIP, [name]);
     }
 
-    // 'E'を非表示にする
-    var spr = _fonts[0];
-    switch(type) {
-      case IType.Weapon:
-        _weapon = ItemUtil.NONE;
-        spr = _fonts[EQUIP_WEAPON];
-      case IType.Armor:
-        _armor = ItemUtil.NONE;
-        spr = _fonts[EQUIP_ARMOR];
-      case IType.Ring:
-        _ring = ItemUtil.NONE;
-        spr = _fonts[EQUIP_RING];
-      default:
-        trace('warning: invalid type = ${type}');
-    }
-    spr.visible = false;
+    // 'E'の表示
+    _updateTextEquip();
   }
 
   /**

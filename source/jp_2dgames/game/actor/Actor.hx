@@ -13,7 +13,7 @@ import flixel.FlxSprite;
  **/
 enum State {
   KeyInput; // キー入力待ち
-  Inventory; // イベントリ
+  InventoryOpen; // イベントリを開く
   Standby; // 待機中
   // 行動
   ActBegin; // 行動開始
@@ -34,7 +34,7 @@ enum State {
 enum Action {
   None; // なし
   Standby; // 待機中
-  Inventory; // インベントリを開く
+  InventoryOpen; // インベントリを開く
   Act; // 攻撃
   ActExec; // 攻撃実行中
   Move; // 移動
@@ -123,8 +123,8 @@ class Actor extends FlxSprite {
         return Action.Standby; // 待機中
       case State.KeyInput:
         return Action.Standby; // 待機中
-      case State.Inventory:
-        return Action.Inventory; // イベントリを開く
+      case State.InventoryOpen:
+        return Action.InventoryOpen; // イベントリを開く
       case State.ActBegin:
         return Action.Act; // 攻撃開始
       case State.Act:

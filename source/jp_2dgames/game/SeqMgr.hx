@@ -43,7 +43,7 @@ class SeqMgr {
   public function new(state:PlayState) {
     _player = state.player;
     _enemies = Enemy.parent;
-    _inventory = jp_2dgames.game.gui.Inventory.instance;
+    _inventory = Inventory.instance;
 
     _state = State.KeyInput;
     _stateprev = _state;
@@ -103,7 +103,7 @@ class SeqMgr {
             // 移動した
             _change(State.EnemyRequestAI);
             ret = true;
-          case Action.Inventory:
+          case Action.InventoryOpen:
             // インベントリを開く
             _inventory.setActive(true);
             _change(State.InventoryInput);

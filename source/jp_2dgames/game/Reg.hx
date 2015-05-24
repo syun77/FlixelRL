@@ -14,6 +14,7 @@ class Reg {
 
   // フォントサイズ
   public static inline var FONT_SIZE = 20;
+  public static inline var FONT_SIZE_S = 16;
 
   // UI領域
   public static inline var UI_WIDTH = 212;

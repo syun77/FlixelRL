@@ -85,7 +85,7 @@ class Enemy extends Actor {
         // 攻撃開始
         if(Calc.checkHitAttackForEnemy()) {
           // 攻撃が当たった
-          var val = Calc.damage(this, target, ItemUtil.NONE, jp_2dgames.game.gui.Inventory.getArmor());
+          var val = Calc.damage(this, target, ItemUtil.NONE, Inventory.getArmor());
           target.damage(val);
           if(target.existsEnemyInFront() == false) {
             // プレイヤーの正面に敵がいなければ攻撃した敵の方を振り向く
@@ -180,7 +180,7 @@ class Enemy extends Actor {
       case Actor.State.KeyInput:
         // 何もしない
 
-      case Actor.State.Inventory:
+      case Actor.State.InventoryOpen:
         // 何もしない
 
       case Actor.State.Standby:

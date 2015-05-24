@@ -43,7 +43,7 @@ class Player extends Actor {
   // 攻撃力
   public var atk(get, null):Int;
   private function get_atk() {
-    var weapon = jp_2dgames.game.gui.Inventory.getWeapon();
+    var weapon = Inventory.getWeapon();
     if(weapon == ItemUtil.NONE) {
       // 何も装備していない
       return 0;
@@ -54,7 +54,7 @@ class Player extends Actor {
   // 守備力
   public var def(get, null):Int;
   private function get_def() {
-    var armor = jp_2dgames.game.gui.Inventory.getArmor();
+    var armor = Inventory.getArmor();
     if(armor == ItemUtil.NONE) {
       // 何も装備していない
       return 0;
@@ -185,7 +185,7 @@ class Player extends Actor {
         // 攻撃開始
         if(Calc.checkHitAttack()) {
           // 攻撃が当たった
-          var val = Calc.damage(this, _target, jp_2dgames.game.gui.Inventory.getWeapon(), ItemUtil.NONE);
+          var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
           if(_target.damage(val)) {
             // 敵を倒した
             Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
@@ -237,7 +237,7 @@ class Player extends Actor {
       case Actor.State.KeyInput:
         _updateKeyInput();
 
-      case Actor.State.Inventory:
+      case Actor.State.InventoryOpen:
         // 何もしない
 
       case Actor.State.Standby:
@@ -307,7 +307,7 @@ class Player extends Actor {
 
     if(Key.press.B) {
       // メニューを開く
-      _change(Actor.State.Inventory);
+      _change(Actor.State.InventoryOpen);
       return;
     }
 

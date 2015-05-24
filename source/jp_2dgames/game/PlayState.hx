@@ -220,6 +220,14 @@ class PlayState extends FlxState {
     // シーケンス管理
     _seq = new SeqMgr(this);
 
+    // TODO: デバッグ用のアイテムを追加
+    for(i in 1001...1007) {
+      Inventory.push(i);
+    }
+    for(i in 1021...1027) {
+      Inventory.push(i);
+    }
+
     // デバッグ情報設定
     FlxG.watch.add(player, "_state");
     FlxG.watch.add(player, "_stateprev");
