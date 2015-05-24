@@ -137,4 +137,28 @@ class DirUtil {
       default: return Dir.None;
     }
   }
+
+  /**
+   * 2点からなる線分の方向を取得する
+   **/
+  public static function look(x1:Float, y1:Float, x2:Float, y2:Float):Dir {
+    var dx = x2 - x1;
+    var dy = y2 - y1;
+    if(Math.abs(dx) > Math.abs(dy)) {
+      if(dx > 0) {
+        return Dir.Right;
+      }
+      else {
+        return Dir.Left;
+      }
+    }
+    else {
+      if(dy > 0) {
+        return Dir.Down;
+      }
+      else {
+        return Dir.Up;
+      }
+    }
+  }
 }

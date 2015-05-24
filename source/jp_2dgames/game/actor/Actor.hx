@@ -81,43 +81,41 @@ class Actor extends FlxSprite {
 
   // プロパティ
   // チップ座標(X)
-  public var xchip(get_xchip, null):Int;
-
+  public var xchip(get_xchip, never):Int;
   private function get_xchip() {
     return Std.int(_xnext);
   }
   // チップ座標(Y)
-  public var ychip(get_ychip, null):Int;
+  public var ychip(get_ychip, never):Int;
 
   private function get_ychip() {
     return Std.int(_ynext);
   }
   // 方向
-  public var dir(get_dir, null):Dir;
-
+  public var dir(get_dir, never):Dir;
   private function get_dir() {
     return _dir;
   }
   // ID
-  public var id(get_id, null):Int;
+  public var id(get_id, never):Int;
 
   private function get_id() {
     return _id;
   }
   // パラメータ
-  public var params(get_params, null):Params;
+  public var params(get_params, never):Params;
 
   private function get_params() {
     return _params;
   }
   // 名前
-  public var name(get_name, null):String;
+  public var name(get_name, never):String;
 
   private function get_name() {
     return _name;
   }
   // 行動タイプ
-  public var action(get_action, null):Action;
+  public var action(get_action, never):Action;
 
   private function get_action() {
     switch(_state) {
@@ -234,10 +232,14 @@ class Actor extends FlxSprite {
     _params.exp += exp;
   }
 
+  // 指定した方向を向く
+  public function look(i:Int, j:Int):Void {
+    _dir = DirUtil.look(_xprev, _yprev, i, j);
+  }
+
   /**
 	 * コンストラクタ
 	 **/
-
   public function new() {
     super();
   }

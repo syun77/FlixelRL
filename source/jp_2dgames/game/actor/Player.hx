@@ -385,23 +385,43 @@ class Player extends Actor {
   }
 
   /**
+   * 正面に敵がいるかどうか
+   **/
+  public function existsEnemyInFront():Bool {
+
+    var bFront = false;
+    var pt = FlxPoint.get(_xprev, _yprev);
+    {
+      DirUtil.move(_dir, pt);
+      var i = Std.int(pt.x);
+      var j = Std.int(pt.y);
+      Enemy.parent.forEachAlive(function(e:Enemy) {
+        if(e.checkPosition(i, j)) {
+          bFront = true;
+        }
+      });
+    }
+    pt.put();
+
+    return bFront;
+  }
+
+  /**
    * プレイヤーの目の前に敵がいるかどうかをチェック
    **/
   private function _checkCursor():Void {
-    var pt = FlxPoint.get(_xprev, _yprev);
-    DirUtil.move(_dir, pt);
-    var i = Std.int(pt.x);
-    var j = Std.int(pt.y);
-    var bVisible = false;
-    Enemy.parent.forEachAlive(function(e:Enemy) {
-      if(e.checkPosition(i, j)) {
-        bVisible = true;
-      }
-    });
 
-    _cursor.visible = bVisible;
-    _cursor.x = Field.toWorldX(pt.x);
-    _cursor.y = Field.toWorldY(pt.y);
+    _cursor.visible = existsEnemyInFront();
+    if(_cursor.visible) {
+      // カーソルを移動
+      var pt = FlxPoint.get(_xprev, _yprev);
+      {
+        DirUtil.move(_dir, pt);
+        _cursor.x = Field.toWorldX(pt.x);
+        _cursor.y = Field.toWorldY(pt.y);
+      }
+      pt.put();
+    }
   }
 
   /**

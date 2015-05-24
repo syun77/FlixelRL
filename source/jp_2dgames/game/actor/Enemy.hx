@@ -87,6 +87,17 @@ class Enemy extends Actor {
           // 攻撃が当たった
           var val = Calc.damage(this, target, ItemUtil.NONE, jp_2dgames.game.gui.Inventory.getArmor());
           target.damage(val);
+          if(target.existsEnemyInFront() == false) {
+            // プレイヤーの正面に敵がいなければ攻撃した敵の方を振り向く
+            var pt = FlxPoint.get(_xprev, _yprev);
+            DirUtil.move(_dir, pt);
+            var i = Std.int(pt.x);
+            var j = Std.int(pt.y);
+            pt.put();
+            if(target.checkPosition(i, j)) {
+              target.look(i, j);
+            }
+          }
         }
         else {
           // 攻撃が外れた
