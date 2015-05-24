@@ -65,7 +65,6 @@ class PlayState extends FlxState {
   /**
 	 * 生成
 	 */
-
   override public function create():Void {
     super.create();
 

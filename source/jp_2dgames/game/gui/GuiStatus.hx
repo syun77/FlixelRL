@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.ui.FlxBar;
@@ -9,6 +10,15 @@ import flixel.group.FlxGroup;
  * ステータス表示
  **/
 class GuiStatus extends FlxGroup {
+
+  /**
+   * ヘルプモード
+   **/
+  public static inline var HELP_NONE:Int = 0; // 非表示
+  public static inline var HELP_KEYINPUT:Int = 1; // 通常移動
+  public static inline var HELP_INVENTORY:Int = 2; // インベントリ
+  public static inline var HELP_DIALOG_YN:Int = 3; // Yes/Noダイアログ
+
   // ステータス表示座標
   private static inline var POS_X = 640 + 8;
   private static inline var POS_Y = 4;
@@ -35,6 +45,9 @@ class GuiStatus extends FlxGroup {
   // 満腹度
   private static inline var FULLTEXT_X = POS_X;
   private static inline var FULLTEXT_Y = HPBAR_Y + 8;
+  // ヘルプテキスト
+  private static inline var HELP_X = 32;
+  private static inline var HELP_Y = 480 - 24;
 
   private var _txtLv:FlxText;
   private var _txtFloor:FlxText;
@@ -42,6 +55,13 @@ class GuiStatus extends FlxGroup {
   private var _hpBar:FlxBar;
   private var _txtFull:FlxText;
   private var _txtMoney:FlxText;
+  private var _bgHelp:FlxSprite;
+  private var _txtHelp:FlxText;
+  private var _helpMode:Int = HELP_NONE;
+  public var helpmode(get, never):Int;
+  private function get_helpmode() {
+    return _helpMode;
+  }
 
   /**
 	 * コンストラクタ
@@ -79,6 +99,18 @@ class GuiStatus extends FlxGroup {
     _txtMoney.alignment = "right"; // 右寄せ
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     this.add(_txtMoney);
+
+    // ヘルプの背景
+    _bgHelp = new FlxSprite(0, HELP_Y).makeGraphic(FlxG.width, 24, FlxColor.BLACK);
+    _bgHelp.alpha = 0.7;
+    this.add(_bgHelp);
+    // ヘルプテキスト
+    _txtHelp = new FlxText(HELP_X, HELP_Y, 600);
+    _txtHelp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    this.add(_txtHelp);
+
+    // ヘルプテキスト設定
+    changeHelp(HELP_KEYINPUT);
   }
 
   /**
@@ -110,5 +142,27 @@ class GuiStatus extends FlxGroup {
     // 所持金
     var money = 123456;
     _txtMoney.text = '${money}円';
+  }
+
+  public function changeHelp(mode:Int) {
+    if(_helpMode == mode) {
+      // 変更不要
+      return;
+    }
+
+    _helpMode = mode;
+    var text = "";
+    switch(_helpMode) {
+      case HELP_NONE:
+        // 非表示
+      case HELP_KEYINPUT:
+        text = "カーソルキー:移動 / Z:攻撃 / X:メニュー / C+カーソルキー:振り向く";
+      case HELP_INVENTORY:
+        text = "カーソルキー:項目の移動 / Z:選択 / X:キャンセル";
+      case HELP_DIALOG_YN:
+        text = "カーソルキー:項目の移動 / Z:決定";
+    }
+
+    _txtHelp.text = text;
   }
 }
