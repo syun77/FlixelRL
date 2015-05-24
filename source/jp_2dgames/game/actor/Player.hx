@@ -135,6 +135,10 @@ class Player extends Actor {
 
   private function _addExp(v:Int):Void {
     addExp(v);
+    if(params.lv >= 99) {
+      // レベル99で打ち止め
+      return;
+    }
 
     var bLevelUp = false;
     var nextExp = _csv.getInt(params.lv+1, "exp");
@@ -144,6 +148,10 @@ class Player extends Actor {
       // パラメータ上昇
       _levelup();
       bLevelUp = true;
+      if(params.lv >= 99) {
+        // レベル99で打ち止め
+        break;
+      }
       nextExp = _csv.getInt(params.lv+1, "exp");
     }
 

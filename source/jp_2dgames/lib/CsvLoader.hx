@@ -167,7 +167,11 @@ class CsvLoader {
    * @return 値
    **/
   public function getInt(id:Int, key:String):Int {
-    return Std.parseInt(getString(id, key));
+    var str = getString(id, key);
+    if(str == "") {
+      str = "0";
+    }
+    return Std.parseInt(str);
   }
   /**
    * 値を小数値として取得する
@@ -176,7 +180,11 @@ class CsvLoader {
    * @return 値
    **/
   public function getFloat(id:Int, key:String):Float {
-    return Std.parseFloat(getString(id, key));
+    var str = getString(id, key);
+    if(str == "") {
+      str = "0";
+    }
+    return Std.parseFloat(str);
   }
 
   public function dump():Void {

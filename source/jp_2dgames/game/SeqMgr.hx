@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.GuiStatus;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Enemy;
@@ -32,6 +33,7 @@ class SeqMgr {
   private var _player:Player;
   private var _enemies:FlxTypedGroup<Enemy>;
   private var _inventory:Inventory;
+  private var _guistatus:GuiStatus;
 
   // 状態
   private var _state:State;
@@ -44,6 +46,7 @@ class SeqMgr {
     _player = state.player;
     _enemies = Enemy.parent;
     _inventory = Inventory.instance;
+    _guistatus = state.guistatus;
 
     _state = State.KeyInput;
     _stateprev = _state;
@@ -55,6 +58,24 @@ class SeqMgr {
   private function _change(s:State):Void {
     _stateprev = _state;
     _state = s;
+
+    var help:Int = _guistatus.helpmode;
+    switch(_state) {
+      case State.KeyInput:
+        help = GuiStatus.HELP_KEYINPUT;
+      case State.InventoryInput:
+        help = GuiStatus.HELP_INVENTORY;
+      case State.PlayerAct:
+      case State.EnemyRequestAI:
+      case State.Move:
+      case State.EnemyActBegin:
+      case State.EnemyAct:
+      case State.TurnEnd:
+      case State.NextFloor:
+        help = GuiStatus.HELP_DIALOG_YN;
+    }
+
+    _guistatus.changeHelp(help);
   }
 
   /**
