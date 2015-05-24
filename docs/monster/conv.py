@@ -145,7 +145,7 @@ tbl = [
 	"wolf",
 	"snow_wolf",
 	"pig",
-	"doer",
+	"boar",
 	"bear",
 	"polar_bear",
 	"grizzy_bear",
