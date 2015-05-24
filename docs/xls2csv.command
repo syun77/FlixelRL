@@ -7,7 +7,7 @@ cd `dirname $0`
 # 敵データ
 python xls2csv.py enemy.xlsx ../assets/levels/enemy.csv
 # 敵出現テーブル
-python xls2csv.py enemy_appear.xlsx ../assets/levels/enemy_appear.csv
+python xls2csv.py enemy_appear.xlsx ../assets/levels/enemy_appear.csv header.txt
 # プレイヤーデータ
 python xls2csv.py player.xlsx ../assets/levels/player.csv
 # メッセージデータ

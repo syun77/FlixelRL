@@ -19,13 +19,17 @@ def main(inFile, outFile, const):
 				ret += ","
 			v = sheet.cell(row, col).value
 			try:
+				# 数値
 				ret += str(int(v))
 				print v,
 			except:
-				if v in const:
-					v = const[v]
-				ret += str(v.encode("utf-8"));
-				print v.encode("utf-8"),
+				# 文字列
+				val = str(v.encode("utf-8"))
+				if val in const:
+					# 定数に置き換え
+					val = str(const[val])
+				ret += val
+				print val
 			col += 1
 		row += 1
 		print
