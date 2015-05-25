@@ -366,7 +366,7 @@ class Player extends Actor {
       }
       else {
         // 足踏み待機する
-        _change(Actor.State.TurnEnd);
+        standby();
       }
       return;
     }

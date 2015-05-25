@@ -138,12 +138,19 @@ class SeqMgr {
 
       case State.InventoryInput:
         // ■イベントリ操作中
-        if(_inventory.proc() == false) {
-          // キー入力に戻る
-          _player.changeprev();
-          // 非表示
-          _inventory.setActive(false);
-          _change(State.KeyInput);
+        switch(_inventory.proc()) {
+          case Inventory.RET_CONTINUE:
+            // 処理を続ける
+          case Inventory.RET_CANCEL:
+            // キー入力に戻る
+            _player.changeprev();
+            // 非表示
+            _inventory.setActive(false);
+            _change(State.KeyInput);
+          case Inventory.RET_DECIDE:
+            // TODO: ターン終了
+            _player.standby();
+            _change(State.EnemyRequestAI);
         }
 
       case State.PlayerAct:

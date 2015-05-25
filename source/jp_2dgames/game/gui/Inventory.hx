@@ -24,6 +24,11 @@ private enum State {
  **/
 class Inventory extends FlxGroup {
 
+  // ■戻り値
+  public static inline var RET_CONTINUE:Int = 0; // 処理続行中
+  public static inline var RET_CANCEL:Int   = 1; // インベントリをキャンセルして閉じた
+  public static inline var RET_DECIDE:Int   = 2; // 項目を決定した
+
   private static inline var EQUIP_WEAPON:Int = 0;
   private static inline var EQUIP_ARMOR:Int = 1;
   private static inline var EQUIP_RING:Int = 2;
@@ -251,7 +256,7 @@ class Inventory extends FlxGroup {
 	 * 更新
 	 **/
 
-  public function proc():Bool {
+  public function proc():Int {
 
     switch(_state) {
       case State.Main:
@@ -260,7 +265,7 @@ class Inventory extends FlxGroup {
 
         if(Key.press.B) {
           // メニューを閉じる
-          return false;
+          return RET_CANCEL;
         }
 
         if(Key.press.A) {
@@ -310,6 +315,9 @@ class Inventory extends FlxGroup {
           this.remove(_sub);
           _sub = null;
           _state = State.Main;
+
+          // 項目を決定した
+          return RET_DECIDE;
         }
         else if(Key.press.B) {
           // メインに戻る
@@ -321,7 +329,7 @@ class Inventory extends FlxGroup {
 
 
     // 更新を続ける
-    return true;
+    return RET_CONTINUE;
   }
 
   private function _procCursor():Void {

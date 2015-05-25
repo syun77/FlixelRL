@@ -278,7 +278,6 @@ class Actor extends FlxSprite {
     }
   }
   // 移動開始する
-
   public function beginMove():Void {
     switch(_state) {
       case State.MoveBegin:
@@ -290,18 +289,20 @@ class Actor extends FlxSprite {
     }
   }
 
-  // ターン終了しているかどうか
+  // 何もせずターンを終了する
+  public function standby():Void {
+    _change(Actor.State.TurnEnd);
+  }
 
+  // ターン終了しているかどうか
   public function isTurnEnd():Bool {
     return _state == State.TurnEnd;
   }
   // ターン終了
-
   public function turnEnd():Void {
     _change(State.KeyInput);
   }
   // 指定の座標に存在するかどうかをチェックする
-
   public function checkPosition(xc:Int, yc:Int):Bool {
     if(xc == xchip && yc == ychip) {
       // 座標が一致
@@ -311,13 +312,11 @@ class Actor extends FlxSprite {
     return false;
   }
   // 状態遷移
-
   private function _change(next:State):Void {
     _stateprev = _state;
     _state = next;
   }
   // 状態を1つ前に戻す
-
   public function changeprev():Void {
     var prev = _state;
     _state = _stateprev;
@@ -327,7 +326,6 @@ class Actor extends FlxSprite {
   /**
 	 * 更新
 	 **/
-
   override public function update():Void {
     super.update();
     if(_tShake > 0) {
@@ -345,7 +343,6 @@ class Actor extends FlxSprite {
   /**
 	 * 更新・歩く
 	 **/
-
   private function _updateWalk():Bool {
     // 経過フレームの割合を求める
     var t = _tMove / TIMER_WALK;
@@ -371,7 +368,6 @@ class Actor extends FlxSprite {
   /**
 	 * ダメージを与える
 	 **/
-
   public function damage(val:Int):Bool {
     _tShake = TIMER_DAMAGE;
     if(id == 0) {

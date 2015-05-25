@@ -250,6 +250,9 @@ class PlayState extends FlxState {
     _seq = new SeqMgr(this);
 
     // TODO: デバッグ用のアイテムを追加
+    for(i in 1...2) {
+      Inventory.push(i);
+    }
     for(i in 1001...1007) {
       Inventory.push(i);
     }
