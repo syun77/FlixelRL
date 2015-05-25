@@ -29,14 +29,14 @@ class Msg {
 class Message extends FlxGroup {
 
   // メッセージログの最大
-  private static inline var MESSAGE_MAX = 5;
+  private static inline var MESSAGE_MAX = 3;//5;
   // ウィンドウ座標
   private static inline var POS_X = 8;
   private static inline var POS_Y = 320 + 8;
   private static inline var POS_Y2 = 8;
   // ウィンドウサイズ
   private static inline var WIDTH = 640 - 8 * 2;
-  private static inline var HEIGHT = 160 - 8 * 2;
+  private static inline var HEIGHT = (MESSAGE_MAX*DY)+14;//160 - 8 * 2;
   private static inline var MSG_POS_X = 8;
   private static inline var MSG_POS_Y = 8;
   // メッセージ表示間隔
