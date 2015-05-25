@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -47,7 +48,7 @@ class GuiStatus extends FlxGroup {
   private static inline var FULLTEXT_Y = HPBAR_Y + 8;
   // ヘルプテキスト
   private static inline var HELP_X = 32;
-  private static inline var HELP_Y = 480 - 24;
+  private static inline var HELP_DY = 24;
 
   private var _txtLv:FlxText;
   private var _txtFloor:FlxText;
@@ -57,6 +58,8 @@ class GuiStatus extends FlxGroup {
   private var _txtMoney:FlxText;
   private var _bgHelp:FlxSprite;
   private var _txtHelp:FlxText;
+  private var _helpY:Float;
+  private var _txtHelpOfsY:Float = 0;
   private var _helpMode:Int = HELP_NONE;
   public var helpmode(get, never):Int;
   private function get_helpmode() {
@@ -100,12 +103,14 @@ class GuiStatus extends FlxGroup {
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     this.add(_txtMoney);
 
+    // ヘルプ座標(Y)
+    _helpY = FlxG.height - HELP_DY;
     // ヘルプの背景
-    _bgHelp = new FlxSprite(0, HELP_Y).makeGraphic(FlxG.width, 24, FlxColor.BLACK);
+    _bgHelp = new FlxSprite(0, _helpY).makeGraphic(FlxG.width, HELP_DY, FlxColor.BLACK);
     _bgHelp.alpha = 0.7;
     this.add(_bgHelp);
     // ヘルプテキスト
-    _txtHelp = new FlxText(HELP_X, HELP_Y, 600);
+    _txtHelp = new FlxText(HELP_X, FlxG.height, 600);
     _txtHelp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtHelp);
 
@@ -142,6 +147,10 @@ class GuiStatus extends FlxGroup {
     // 所持金
     var money = 123456;
     _txtMoney.text = '${money}円';
+
+    // ヘルプテキストのアニメーション
+    _txtHelpOfsY *= 0.8;
+    _txtHelp.y = _helpY + _txtHelpOfsY;
   }
 
   public function changeHelp(mode:Int) {
@@ -164,5 +173,9 @@ class GuiStatus extends FlxGroup {
     }
 
     _txtHelp.text = text;
+    _txtHelp.y = FlxG.height;
+
+    // アニメーション開始
+    _txtHelpOfsY = HELP_DY;
   }
 }
