@@ -143,6 +143,15 @@ class CsvLoader {
   }
 
   /**
+   * すべてのデータを処理する
+   **/
+  public function foreach(func:Map<String, String> -> Void):Void {
+    for(data in _datas) {
+      func(data);
+    }
+  }
+
+  /**
    * 関数指定でIDを検索する
    * @param データをチェックする関数
    * @return 見つからなかったら-1

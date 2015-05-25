@@ -23,19 +23,24 @@ class Csv {
   private function get_enemy_appear() {
     return _enemy_appear;
   }
+
   // 消費アイテム
   private var _itemConsumable:CsvLoader = null;
   public var itemConsumable(get, null):CsvLoader;
-
   private function get_itemConsumable() {
     return _itemConsumable;
   }
   // 装備アイテム
   private var _itemEquipment:CsvLoader = null;
   public var itemEquipment(get, null):CsvLoader;
-
   private function get_itemEquipment() {
     return _itemEquipment;
+  }
+  // アイテム出現テーブル
+  private var _item_appear:CsvLoader = null;
+  public var item_appear(get, null):CsvLoader;
+  private function get_item_appear() {
+    return _item_appear;
   }
   // メッセージ
   private var _message:CsvLoader = null;
@@ -51,6 +56,7 @@ class Csv {
     _enemy_appear = new CsvLoader("assets/levels/enemy_appear.csv");
     _itemConsumable = new CsvLoader("assets/levels/item_consumable.csv");
     _itemEquipment = new CsvLoader("assets/levels/item_equipment.csv");
+    _item_appear = new CsvLoader("assets/levels/item_appear.csv");
     _message = new CsvLoader("assets/data/message.csv");
   }
 

@@ -169,6 +169,24 @@ class PlayState extends FlxState {
       }
       trace(eIds, eRatios, sum);
     }
+    // アイテム出現情報を計算
+    var itemIds = [];
+    var itemRatios = [];
+    var itemSum:Int = 0;
+    {
+      var floor = Global.getFloor();
+      _csv.item_appear.foreach(function(v:Map<String,String>) {
+        var start = Std.parseInt(v.get("start"));
+        var end = Std.parseInt(v.get("end"));
+        var id = Std.parseInt(v.get("itemid"));
+        var ratio = Std.parseInt(v.get("ratio"));
+        if(start <= floor && floor < end) {
+          itemIds.push(id);
+          itemRatios.push(ratio);
+          itemSum += ratio;
+        }
+      });
+    }
 
     // 各種オブジェクトを配置
     layer.forEach(function(i, j, v) {
@@ -177,7 +195,7 @@ class PlayState extends FlxState {
           // 敵を生成
           var func = function() {
             var rnd = FlxRandom.intRanged(0, sum-1);
-            var idx = 0;
+            var idx:Int = 0;
             for(ratio in eRatios) {
               if(rnd < ratio) {
                 return eIds[idx];
@@ -196,10 +214,22 @@ class PlayState extends FlxState {
           }
         case Field.ITEM:
           // アイテムを生成
+          var func = function() {
+            var rnd = FlxRandom.intRanged(0, itemSum-1);
+            var idx:Int = 0;
+            for(ratio in itemRatios) {
+              if(rnd < ratio) {
+                return itemIds[idx];
+              }
+              rnd -= ratio;
+              idx++;
+            }
+            return 0;
+          }
+          var itemid = func();
+          var type = ItemUtil.getType(itemid);
           var item:DropItem = items.recycle();
-          var type = ItemUtil.randomType();
-          var id = ItemUtil.random(type);
-          item.init(i, j, type, id);
+          item.init(i, j, type, itemid);
       }
     });
 
