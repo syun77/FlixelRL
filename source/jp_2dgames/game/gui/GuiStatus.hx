@@ -145,7 +145,7 @@ class GuiStatus extends FlxGroup {
     _txtFull.text = '満腹度: ${full}/${fullmax}';
 
     // 所持金
-    var money = 123456;
+    var money = Global.getMoney();
     _txtMoney.text = '${money}円';
 
     // ヘルプテキストのアニメーション

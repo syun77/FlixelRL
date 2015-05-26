@@ -43,9 +43,28 @@ class Global {
     }
   }
 
+  // 所持金
+  private static var _money:Int = 0;
+  public static function getMoney():Int {
+    return _money;
+  }
+  public static function setMoney(v:Int):Void {
+    _money = v;
+  }
+  public static function addMoney(v:Int):Int {
+    _money += v;
+    return _money;
+  }
+  public static function useMoney(v:Int):Int {
+    _money -= v;
+    if(_money < 0) {
+      _money = 0;
+    }
+    return _money;
+  }
+
   // アイテムデータ
   private static var _items:Array<ItemData> = new Array<ItemData>();
-
   /**
 	 * アイテムデータを設定する
 	 **/

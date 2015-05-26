@@ -36,6 +36,8 @@ class DropItem extends FlxSprite {
         bFind = true;
         if(item.type == IType.Money) {
           // お金はインベントリに入れない
+          // お金はIDが金額
+          Global.addMoney(item.id);
         }
         else {
           Inventory.push(item.id);
@@ -86,7 +88,7 @@ class DropItem extends FlxSprite {
 
     // 名前
     if(type == IType.Money) {
-      name = "${itemid}円";
+      name = '${itemid}円';
     }
     else {
       name = ItemUtil.getName(id);
