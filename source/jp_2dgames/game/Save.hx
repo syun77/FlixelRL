@@ -15,6 +15,25 @@ import flixel.FlxG;
 import haxe.Json;
 
 /**
+ * グローバルデータ
+ **/
+private class _Global {
+  public var floor:Int = 0;
+  public var money:Int = 0;
+  public function new() {}
+  // セーブ
+  public function save() {
+    floor = Global.getFloor();
+    money = Global.getMoney();
+  }
+  // ロード
+  public function load(data:Dynamic) {
+    Global.setFloor(data.floor);
+    Global.setMoney(data.money);
+  }
+}
+
+/**
  * プレイヤーデータ
  **/
 private class _Player {
@@ -26,7 +45,6 @@ private class _Player {
   public function new() {
   }
   // セーブ
-
   public function save() {
     var p = cast(FlxG.state, PlayState).player;
     x = p.xchip;
@@ -35,7 +53,6 @@ private class _Player {
     params = p.params;
   }
   // ロード
-
   public function load(data:Dynamic) {
     var p = cast(FlxG.state, PlayState).player;
     var dir = DirUtil.fromString(data.dir);
@@ -52,12 +69,10 @@ private class _Inventory {
   public function new() {
   }
   // セーブ
-
   public function save() {
     array = Inventory.getItemList();
   }
   // ロード
-
   public function load(data:Dynamic) {
     var array = new Array<ItemData>();
     for(idx in 0...data.array.length) {
@@ -89,7 +104,6 @@ private class _Enemies {
     array = new Array<_Enemy>();
   }
   // セーブ
-
   public function save() {
     // いったん初期化
     array = new Array<_Enemy>();
@@ -106,7 +120,6 @@ private class _Enemies {
     Enemy.parent.forEachAlive(func);
   }
   // ロード
-
   public function load(data:Dynamic) {
     var enemies = Enemy.parent;
     // 敵を全部消す
@@ -141,7 +154,6 @@ private class _Items {
     array = new Array<_Item>();
   }
   // セーブ
-
   public function save() {
     // いったん初期化
     array = new Array<_Item>();
@@ -159,7 +171,6 @@ private class _Items {
     DropItem.parent.forEachAlive(func);
   }
   // ロード
-
   public function load(data:Dynamic) {
     var items = DropItem.parent;
     // アイテムを全部消す
@@ -187,7 +198,6 @@ private class _Map {
   public function new() {
   }
   // セーブ
-
   public function save() {
     var state = cast(FlxG.state, PlayState);
     var layer = state.lField;
@@ -196,7 +206,6 @@ private class _Map {
     data = layer.getCsv();
   }
   // ロード
-
   public function load(data:Dynamic) {
     var state = cast(FlxG.state, PlayState);
     var w = data.width;
@@ -211,6 +220,7 @@ private class _Map {
  * セーブデータ
  **/
 private class SaveData {
+  public var global:_Global;
   public var player:_Player;
   public var inventory:_Inventory;
   public var enemies:_Enemies;
@@ -218,6 +228,7 @@ private class SaveData {
   public var map:_Map;
 
   public function new() {
+    global = new _Global();
     player = new _Player();
     inventory = new _Inventory();
     enemies = new _Enemies();
@@ -226,8 +237,8 @@ private class SaveData {
   }
 
   // セーブ
-
   public function save():Void {
+    global.save();
     player.save();
     inventory.save();
     enemies.save();
@@ -236,8 +247,8 @@ private class SaveData {
   }
 
   // ロード
-
   public function load(data:Dynamic):Void {
+    global.load(data.global);
     player.load(data.player);
     inventory.load(data.inventory);
     enemies.load(data.enemies);
@@ -275,7 +286,6 @@ class Save {
   /**
 	 * ロードする
 	 **/
-
   public static function load():Void {
     var str = "";
     #if neko

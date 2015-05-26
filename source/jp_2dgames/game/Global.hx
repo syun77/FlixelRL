@@ -17,15 +17,16 @@ class Global {
   /**
 	 * フロア数の取得
 	 **/
-
   public static function getFloor():Int {
     return _floor;
+  }
+  public static function setFloor(v:Int):Void {
+    _floor = v;
   }
 
   /**
 	 * 現在のフロアのマップデータのパスを取得する
 	 **/
-
   public static function getFloorMap():String {
     var map = TextUtil.fillZero(_floor, 3);
     return 'assets/levels/${map}.tmx';
@@ -34,7 +35,6 @@ class Global {
   /**
 	 * 次のフロアに進む
 	 **/
-
   public static function nextFloor():Void {
     _floor++;
     // TODO: 最後まで進んだら最初に戻る
