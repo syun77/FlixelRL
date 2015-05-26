@@ -136,7 +136,7 @@ class Message extends FlxGroup {
 	 * メッセージを末尾に追加
 	 **/
   public function pushMsg(msg:String) {
-    var text = new FlxText(POS_X + MSG_POS_X, 0, 480);
+    var text = new FlxText(POS_X + MSG_POS_X, 0, WIDTH);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     text.text = msg;
     if(_msgList.length >= MESSAGE_MAX) {

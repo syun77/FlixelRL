@@ -33,7 +33,7 @@ class DropItem extends FlxSprite {
       if(xchip == item.xchip && ychip == item.ychip) {
         // 拾える
         if(Inventory.isFull()) {
-          Message.push('アイテムが一杯で${item.name}を拾えなかった');
+          Message.push('アイテムが一杯なので${item.name}を拾えなかった');
         }
         else {
           // アイテム所持数をチェック

@@ -53,7 +53,7 @@ class Inventory extends FlxGroup {
   private static inline var POS_Y = 106;
   // ウィンドウサイズ
   private static inline var WIDTH = 212 - 8 * 2;
-  private static inline var HEIGHT = 480 - 64 - 8 * 2;
+  private static inline var HEIGHT = (DY * PAGE_DISP) + MSG_POS_Y + 8;//480 - 64 - 8 * 2;
 
   // ページ数テキストの座標
   private static inline var PAGE_X = POS_X + 8;
