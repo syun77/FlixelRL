@@ -34,7 +34,12 @@ class DropItem extends FlxSprite {
         // 拾える
         Message.push2(Msg.ITEM_PICKUP, [item.name]);
         bFind = true;
-        Inventory.push(item.id);
+        if(item.type == IType.Money) {
+          // お金はインベントリに入れない
+        }
+        else {
+          Inventory.push(item.id);
+        }
         item.kill();
       }
     });
@@ -80,7 +85,12 @@ class DropItem extends FlxSprite {
     y = Field.toWorldY(Y);
 
     // 名前
-    name = ItemUtil.getName(id);
+    if(type == IType.Money) {
+      name = "${itemid}円";
+    }
+    else {
+      name = ItemUtil.getName(id);
+    }
 
     // アニメーション再生
     animation.play(ItemUtil.toString(type));
@@ -97,6 +107,7 @@ class DropItem extends FlxSprite {
     animation.add(ItemUtil.toString(ItemUtil.IType.Wand), [3], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Portion), [4], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Ring), [5], 1);
+    animation.add(ItemUtil.toString(ItemUtil.IType.Money), [6], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Food), [7], 1);
   }
 }

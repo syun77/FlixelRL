@@ -14,6 +14,7 @@ enum IType {
   Wand;    // 杖
   Portion; // ポーション
   Ring;    // 指輪
+  Money;   // お金
   Food;    // 食べ物
 }
 
@@ -93,6 +94,9 @@ class ItemUtil {
     else if(str == '${IType.Ring}') {
       return IType.Ring;
     }
+    else if(str == '${IType.Money}') {
+      return IType.Money;
+    }
     else if(str == '${IType.Food}') {
       return IType.Food;
     }
@@ -127,6 +131,8 @@ class ItemUtil {
         return FlxRandom.intRanged(1021, 1027);
       case IType.Ring:
         return FlxRandom.intRanged(0, 1);
+      case IType.Money:
+        return 100;
       case IType.Food:
         return FlxRandom.intRanged(1, 2);
       case IType.Portion:
@@ -146,6 +152,7 @@ class ItemUtil {
 //      IType.Wand,
       IType.Portion,
 //      IType.Ring,
+//      IType.Money,
       IType.Food,
     ];
     return tbl[FlxRandom.intRanged(0, tbl.length-1)];
