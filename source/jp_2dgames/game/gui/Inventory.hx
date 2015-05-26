@@ -97,21 +97,19 @@ class Inventory extends FlxGroup {
   // ■装備アイテム
   // 武器
   private var _weapon:Int = ItemUtil.NONE;
-  public var weapon(get_weapon, null):Int;
+  private var weapon(get_weapon, never):Int;
   private function get_weapon() {
     return _weapon;
   }
   // 防具
   private var _armor:Int = ItemUtil.NONE;
-  public var armor(get_armor, null):Int;
-
+  private var armor(get_armor, never):Int;
   private function get_armor() {
     return _armor;
   }
   // 指輪
   private var _ring:Int = ItemUtil.NONE;
-  public var ring(get_ring, null):Int;
-
+  private var ring(get_ring, never):Int;
   private function get_ring() {
     return _ring;
   }
@@ -140,51 +138,27 @@ class Inventory extends FlxGroup {
     instance.init(items);
   }
 
-  public function init(items:Array<ItemData>):Void {
-    // カーソルは初期状態非表示
-    _cursor.visible = false;
-    _nCursor = 0;
-
-    _player = cast(FlxG.state, PlayState).player;
-
-    // 装備を外す
-    _weapon = ItemUtil.NONE;
-    _armor = ItemUtil.NONE;
-    _ring = ItemUtil.NONE;
-    for(spr in _fonts) {
-      spr.visible = false;
-    }
-
-    // アイテムを登録
-    _itemList = items;
-    var i = 0;
-    for(item in items) {
-      if(item.isEquip) {
-        equip(i);
-      }
-      i++;
-    }
-
-    // テキスト更新
-    _updateText();
-
-    // 詳細ステータス
-    _detail = new GuiStatusDetail();
-    // 初期状態は非表示
-    _bShowDetail = false;
-  }
-
   public static function getItemList():Array<ItemData> {
     return instance.itemList;
+  }
+
+  // アイテム枠がいっぱいかどうか
+  public static function isFull():Bool {
+    return instance.itemcount >= MAX;
   }
 
   // アイテムテキスト
   private var _txtList:List<FlxText>;
   // アイテムリスト
   private var _itemList:Array<ItemData>;
-  public var itemList(get_itemList, null):Array<ItemData>;
+  private var itemList(get_itemList, null):Array<ItemData>;
   private function get_itemList() {
     return _itemList;
+  }
+  // アイテム所持数
+  public var itemcount(get, never):Int;
+  private function get_itemcount() {
+    return _itemList.length;
   }
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
@@ -195,16 +169,19 @@ class Inventory extends FlxGroup {
   private var _pageMaxId(get, never):Int;
   private function get__pageMaxId() {
     var max = _pageMinId + PAGE_DISP;
-    if(max > _itemList.length) {
-      max = _itemList.length;
+    if(max > itemcount) {
+      max = itemcount;
     }
     return max;
   }
   // 最大ページ数
   private var _pageMax(get, never):Int;
   private function get__pageMax() {
-    return Std.int(Math.ceil(_itemList.length/PAGE_DISP));
+    return Std.int(Math.ceil(itemcount / PAGE_DISP));
   }
+
+  // サブメニュー
+  private var _sub:InventoryAction = null;
 
   /**
    * コンストラクタ
@@ -254,9 +231,43 @@ class Inventory extends FlxGroup {
     }
 
     FlxG.watch.add(this, "_nCursor");
+  }
 
-    // 初期化
-    //		init(new Array<ItemData>());
+  /**
+   * 初期化
+   **/
+  private function init(items:Array<ItemData>):Void {
+    // カーソルは初期状態非表示
+    _cursor.visible = false;
+    _nCursor = 0;
+
+    _player = cast(FlxG.state, PlayState).player;
+
+    // 装備を外す
+    _weapon = ItemUtil.NONE;
+    _armor = ItemUtil.NONE;
+    _ring = ItemUtil.NONE;
+    for(spr in _fonts) {
+      spr.visible = false;
+    }
+
+    // アイテムを登録
+    _itemList = items;
+    var i = 0;
+    for(item in items) {
+      if(item.isEquip) {
+        equip(i);
+      }
+      i++;
+    }
+
+    // テキスト更新
+    _updateText();
+
+    // 詳細ステータス
+    _detail = new GuiStatusDetail();
+    // 初期状態は非表示
+    _bShowDetail = false;
   }
 
   /**
@@ -269,12 +280,9 @@ class Inventory extends FlxGroup {
     showDetail(b);
   }
 
-  private var _sub:InventoryAction = null;
-
   /**
 	 * 更新
 	 **/
-
   public function proc():Int {
 
     switch(_state) {
@@ -377,8 +385,8 @@ class Inventory extends FlxGroup {
         _nPage = _pageMax - 1;
       }
       _nCursor = nCursor + _nPage * PAGE_DISP;
-      if(_nCursor >= _itemList.length) {
-        _nCursor = _itemList.length - 1;
+      if(_nCursor >= itemcount) {
+        _nCursor = itemcount - 1;
       }
       _updateText();
       _changePage();
@@ -390,8 +398,8 @@ class Inventory extends FlxGroup {
         _nPage = 0;
       }
       _nCursor = nCursor + _nPage * PAGE_DISP;
-      if(_nCursor >= _itemList.length) {
-        _nCursor = _itemList.length - 1;
+      if(_nCursor >= itemcount) {
+        _nCursor = itemcount - 1;
       }
       _updateText();
       _changePage();
@@ -416,7 +424,6 @@ class Inventory extends FlxGroup {
   /**
 	 * アイテムの追加
 	 **/
-
   public function addItem(itemid:Int):Void {
     _itemList.push(new ItemData(itemid));
     _updateText();
@@ -427,7 +434,6 @@ class Inventory extends FlxGroup {
 	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
 	 * @return アイテムがすべてなくなったらtrue
 	 **/
-
   public function delItem(idx:Int, bMsg:Bool = false):Bool {
     if(idx == -1) {
       // 現在のカーソルを使う
@@ -439,9 +445,9 @@ class Inventory extends FlxGroup {
     // アイテムを削除する
     _itemList.splice(idx, 1);
 
-    if(_nCursor >= _itemList.length) {
+    if(_nCursor >= itemcount) {
       // 範囲外のカーソルの位置をずらす
-      _nCursor = _itemList.length - 1;
+      _nCursor = itemcount - 1;
       if(_nCursor < 0) {
         _nCursor = 0;
       }
@@ -456,14 +462,13 @@ class Inventory extends FlxGroup {
       Message.push2(Msg.ITEM_DISCARD, [name]);
     }
 
-    return _itemList.length == 0;
+    return itemcount == 0;
   }
 
   /**
 	 * アイテムを使う
 	 * @param idx カーソル位置。-1の場合は現在のカーソルの位置
 	 **/
-
   public function useItem(idx:Int):Void {
     if(idx == -1) {
       idx = _nCursor;
@@ -499,9 +504,8 @@ class Inventory extends FlxGroup {
 	 * 選択中のアイテムを取得する
 	 * @return 選択中のアイテム番号。アイテムがない場合は-1
 	 **/
-
   public function getSelectedItem():Int {
-    if(_itemList.length == 0) {
+    if(itemcount == 0) {
       // アイテムを持っていない
       return ItemUtil.NONE;
     }
@@ -513,9 +517,8 @@ class Inventory extends FlxGroup {
 	 * 選択中のアイテムを装備中かどうか
 	 * @return 装備していればtrue
 	 **/
-
   private function _isEquipSelectedItem():Bool {
-    if(_itemList.length == 0) {
+    if(itemcount == 0) {
       // アイテムを持っていない
       return false;
     }
@@ -529,7 +532,7 @@ class Inventory extends FlxGroup {
   private function _updateText():Void {
     var i:Int = _nPage * PAGE_DISP;
     for(txt in _txtList) {
-      if(i < _itemList.length) {
+      if(i < itemcount) {
         var itemid = _itemList[i].id;
         var name = ItemUtil.getName(itemid);
         txt.text = name;
@@ -582,7 +585,6 @@ class Inventory extends FlxGroup {
 	 * 装備する
 	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
 	 **/
-
   public function equip(idx:Int, bMsg:Bool = false):Void {
     if(idx == -1) {
       idx = _nCursor;
@@ -623,7 +625,6 @@ class Inventory extends FlxGroup {
 	 * 装備を外す
 	 * @param type 装備の種類
 	 **/
-
   public function unequip(type:IType, bMsg:Bool = false):Void {
     // 同じ種類の装備を外す
     var itemid:Int = -1;
@@ -648,7 +649,6 @@ class Inventory extends FlxGroup {
   /**
 	 * ItemListを連続操作する
 	 **/
-
   private function forEachItemList(func:ItemData -> Void):Void {
     for(item in _itemList) {
       func(item);

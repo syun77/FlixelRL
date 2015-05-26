@@ -229,8 +229,8 @@ class PlayState extends FlxState {
           var itemid = func();
           var type = ItemUtil.getType(itemid);
           var item:DropItem = items.recycle();
-//          item.init(i, j, type, itemid);
-          item.init(i, j, IType.Money, 100);
+          item.init(i, j, type, itemid);
+//          item.init(i, j, IType.Money, 100);
       }
     });
 
@@ -251,7 +251,12 @@ class PlayState extends FlxState {
     _seq = new SeqMgr(this);
 
     // TODO: デバッグ用のアイテムを追加
-    for(i in 1...2) {
+    for(i in 1...3) {
+      Inventory.push(i);
+      Inventory.push(i);
+      Inventory.push(i);
+      Inventory.push(i);
+      Inventory.push(i);
       Inventory.push(i);
     }
     for(i in 1001...1007) {
