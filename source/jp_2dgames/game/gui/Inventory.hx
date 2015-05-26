@@ -186,6 +186,25 @@ class Inventory extends FlxGroup {
   private function get_itemList() {
     return _itemList;
   }
+  // ページ内の最小番号
+  private var _pageMinId(get, never):Int;
+  private function get__pageMinId() {
+    return _nPage * PAGE_DISP;
+  }
+  // ページ内の最大番号
+  private var _pageMaxId(get, never):Int;
+  private function get__pageMaxId() {
+    var max = _pageMinId + PAGE_DISP;
+    if(max > _itemList.length) {
+      max = _itemList.length;
+    }
+    return max;
+  }
+  // 最大ページ数
+  private var _pageMax(get, never):Int;
+  private function get__pageMax() {
+    return Std.int(Math.ceil(_itemList.length/PAGE_DISP));
+  }
 
   /**
    * コンストラクタ
@@ -334,12 +353,8 @@ class Inventory extends FlxGroup {
 
   private function _procCursor():Void {
     // 番号の最小値と最大値を取得する
-    var min = _nPage * PAGE_DISP;
-    var max = min + PAGE_DISP;
-    if(max > _itemList.length) {
-      max = _itemList.length;
-    }
-    var maxPage = Std.int(Math.ceil(_itemList.length/PAGE_DISP));
+    var min = _pageMinId;
+    var max = _pageMaxId;
     var nCursor = _nCursor % PAGE_DISP;
 
     if(Key.press.UP) {
@@ -360,7 +375,7 @@ class Inventory extends FlxGroup {
       // 前のページ
       _nPage--;
       if(_nPage < 0) {
-        _nPage = maxPage - 1;
+        _nPage = _pageMax - 1;
       }
       _nCursor = nCursor + _nPage * PAGE_DISP;
       if(_nCursor >= _itemList.length) {
@@ -372,7 +387,7 @@ class Inventory extends FlxGroup {
     else if(Key.press.RIGHT) {
       // 次のページ
       _nPage++;
-      if(_nPage >= maxPage) {
+      if(_nPage >= _pageMax) {
         _nPage = 0;
       }
       _nCursor = nCursor + _nPage * PAGE_DISP;
@@ -393,7 +408,7 @@ class Inventory extends FlxGroup {
   // ページ切り替え
   private function _changePage():Void {
     // ページ数の更新
-    _txtPage.text = 'Page (${_nPage+1}/${PAGE_MAX})';
+    _txtPage.text = 'Page (${_nPage+1}/${_pageMax})';
 
     // Eマークの更新
     _updateTextEquip();
@@ -540,11 +555,8 @@ class Inventory extends FlxGroup {
       spr.visible = false;
     }
 
-    var min = _nPage * PAGE_DISP;
-    var max = min + PAGE_DISP;
-    if(max >= _itemList.length) {
-      max = _itemList.length;
-    }
+    var min = _pageMinId;
+    var max = _pageMaxId;
     for(i in min...max) {
       var itemdata = _itemList[i];
       if(itemdata.isEquip) {
