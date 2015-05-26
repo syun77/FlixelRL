@@ -150,6 +150,8 @@ class SeqMgr {
           case Inventory.RET_DECIDE:
             // TODO: ターン終了
             _player.standby();
+            // 非表示
+            _inventory.setActive(false);
             _change(State.EnemyRequestAI);
         }
 

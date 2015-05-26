@@ -346,7 +346,6 @@ class Inventory extends FlxGroup {
         }
     }
 
-
     // 更新を続ける
     return RET_CONTINUE;
   }
