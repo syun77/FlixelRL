@@ -419,43 +419,7 @@ class Inventory extends FlxGroup {
 
     if(bChangeItem) {
       // 選択アイテムが変わった
-      _changeSelectItem();
-    }
-  }
-
-  /**
-   * 選択しているアイテムが替わった
-   **/
-  private function _changeSelectItem():Void {
-    // 差分テキスト非表示
-    _detail.clearAtkDiff();
-    _detail.clearDefDiff();
-    var itemid = getSelectedItem();
-    var type = ItemUtil.getType(itemid);
-    if(type == IType.None) {
-      // 無効なアイテムなので何もしない
-      return;
-    }
-    if(ItemUtil.isEquip(itemid) == false) {
-      // 装備できないアイテムなので何もしない
-      return;
-    }
-    switch(type) {
-      case IType.Weapon:
-        var now = ItemUtil.getParam(weapon, "atk");
-        var next = ItemUtil.getParam(itemid, "atk");
-        _detail.setAtkDiff(next - now);
-      case IType.Armor:
-        var now = ItemUtil.getParam(armor, "def");
-        var next = ItemUtil.getParam(itemid, "def");
-        _detail.setDefDiff(next - now);
-      case IType.Ring:
-      case IType.Food:
-      case IType.Money:
-      case IType.None:
-      case IType.Portion:
-      case IType.Scroll:
-      case IType.Wand:
+      _detail.setSelectedItem(getSelectedItem());
     }
   }
 
@@ -711,6 +675,7 @@ class Inventory extends FlxGroup {
       if(_bShowDetail == false) {
         // 非表示なら表示する
         this.add(_detail);
+        _detail.show(getSelectedItem());
         _bShowDetail = true;
       }
     }
@@ -722,7 +687,5 @@ class Inventory extends FlxGroup {
         _bShowDetail = false;
       }
     }
-
-    _changeSelectItem();
   }
 }

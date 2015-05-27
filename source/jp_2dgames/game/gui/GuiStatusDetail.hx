@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
@@ -34,52 +35,24 @@ class GuiStatusDetail extends FlxGroup {
   private static inline var DEF_X = MSG_X;
   private static inline var DEF_Y = ATK_Y + 24;
 
-  // 攻撃力(差分)
-  private static inline var ATKDIFF_X = MSG_X + 120;
-  // 守備力(差分)
-  private static inline var DEFDIFF_X = MSG_X + 120;
-
   // パラメータテキスト
   private var _txtStr:FlxText; // Str
   private var _txtVit:FlxText; // Vit
   private var _txtAtk:FlxText; // Atk
   private var _txtDef:FlxText; // Def
-
-  // 差分パラメータテキスト
-  private var _txtAtkDiff:FlxText; // Atk
-  private var _txtDefDiff:FlxText; // Def
-
   /**
-   * 差分攻撃力を設定
+   * 差分文字の作成
    **/
-  public function setAtkDiff(v:Int):Void {
-    var str = '(${v})';
-    if(v >= 0) {
-      str = '(+${v})';
+  private function _getDiffString(v:Int):String {
+    if(v == 0) {
+      return "";
     }
-    _txtAtkDiff.text = str;
-    _txtAtkDiff.visible = true;
-  }
-  // 消去
-  public function clearAtkDiff():Void {
-    _txtAtkDiff.visible = false;
-  }
-  /**
-   * 差分守備力を設定
-   **/
-  public function setDefDiff(v:Int):Void {
-    var str = '(${v})';
-    if(v >= 0) {
-      str = '(+${v})';
+    var str = ' (${v})';
+    if(v > 0) {
+      str = ' (+${v})';
     }
-    _txtDefDiff.text = str;
-    _txtDefDiff.visible = true;
+    return str;
   }
-  // 消去
-  public function clearDefDiff():Void {
-    _txtDefDiff.visible = false;
-  }
-
   /**
    * コンストラクタ
    **/
@@ -110,16 +83,63 @@ class GuiStatusDetail extends FlxGroup {
     _txtDef = new FlxText(DEF_X, DEF_Y, TXT_WIDTH);
     _txtDef.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     this.add(_txtDef);
+  }
 
-    // 攻撃力テキスト
-    _txtAtkDiff = new FlxText(ATKDIFF_X, ATK_Y, TXT_WIDTH);
-    _txtAtkDiff.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-    this.add(_txtAtkDiff);
+  private function _updateText(itemid:Int):Void {
 
-    // 守備力テキスト
-    _txtDefDiff = new FlxText(DEFDIFF_X, DEF_Y, TXT_WIDTH);
-    _txtDefDiff.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-    this.add(_txtDefDiff);
+    var player = cast(FlxG.state, PlayState).player;
+    // 力
+    _txtStr.text = '力: ${player.params.str}';
+    // 体力
+    _txtVit.text = '体力: ${player.params.vit}';
+    // 攻撃力
+    _txtAtk.text = '攻撃力: ${player.atk}';
+    _txtAtk.color = FlxColor.WHITE;
+    // 守備力
+    _txtDef.text = '守備力: ${player.def}';
+    _txtDef.color = FlxColor.WHITE;
+
+    var type = ItemUtil.getType(itemid);
+    if(type == IType.None) {
+      // 無効なアイテムなので何もしない
+      return;
+    }
+    if(ItemUtil.isEquip(itemid) == false) {
+      // 装備できないアイテムなので何もしない
+      return;
+    }
+    switch(type) {
+      case IType.Weapon:
+        var now = player.atk;
+        var next = ItemUtil.getParam(itemid, "atk");
+        _setDiffText(_txtAtk, next - now);
+      case IType.Armor:
+        var now = player.def;
+        var next = ItemUtil.getParam(itemid, "def");
+        _setDiffText(_txtDef, next - now);
+      case IType.Ring:
+      case IType.Food:
+      case IType.Money:
+      case IType.None:
+      case IType.Portion:
+      case IType.Scroll:
+      case IType.Wand:
+    }
+  }
+
+  /**
+   * 差分テキストの更新
+   **/
+  private function _setDiffText(txt:FlxText, v:Int):Void {
+    txt.text += _getDiffString(v);
+    if(v > 0) {
+      // パラメータ増加
+      txt.color = FlxColor.MAUVE;
+    }
+    else if(v < 0) {
+      // パラメータ減少
+      txt.color = FlxColor.AQUAMARINE;
+    }
   }
 
   /**
@@ -127,16 +147,19 @@ class GuiStatusDetail extends FlxGroup {
    **/
   override public function update() {
     super.update();
+  }
 
-    var player = cast(FlxG.state, PlayState).player;
+  /**
+   * 表示する
+   **/
+  public function show(itemid:Int) {
+    _updateText(itemid);
+  }
 
-    // 力
-    _txtStr.text = '力: ${player.params.str}';
-    // 体力
-    _txtVit.text = '体力: ${player.params.vit}';
-    // 攻撃力
-    _txtAtk.text = '攻撃力: ${player.atk}';
-    // 守備力
-    _txtDef.text = '守備力: ${player.def}';
+  /**
+   * 選択中のアイテムを設定する
+   **/
+  public function setSelectedItem(itemid:Int) {
+    _updateText(itemid);
   }
 }
