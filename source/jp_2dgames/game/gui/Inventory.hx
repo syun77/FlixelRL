@@ -274,6 +274,7 @@ class Inventory extends FlxGroup {
    * アクティブフラグの設定
    **/
   public function setActive(b:Bool) {
+    // カーソル表示を切り替え
     _cursor.visible = b;
 
     // 詳細表示切り替え
@@ -721,5 +722,7 @@ class Inventory extends FlxGroup {
         _bShowDetail = false;
       }
     }
+
+    _changeSelectItem();
   }
 }
