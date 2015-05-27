@@ -12,6 +12,10 @@ python xls2csv.py enemy_appear.xlsx ../assets/levels/enemy_appear.csv header_ene
 python xls2csv.py player.xlsx ../assets/levels/player.csv
 # メッセージデータ
 python xls2csv.py message.xlsx ../assets/data/message.csv
+# 消費アイテム
+python xls2csv.py item_consumable.xlsx ../assets/levels/item_consumable.csv
+# 装備アイテム
+python xls2csv.py item_equipment.xlsx ../assets/levels/item_equipment.csv
 # アイテム出現テーブル
 python xls2csv.py item_appear.xlsx ../assets/levels/item_appear.csv
 
