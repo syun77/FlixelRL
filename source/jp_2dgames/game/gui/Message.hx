@@ -23,6 +23,9 @@ class Msg {
   public static inline var LEVELUP2:Int = 11; // レベル数値を表示
   public static inline var ITEM_FULL:Int = 12; // アイテムがいっぱい
   public static inline var ITEM_STEPON:Int = 13; // アイテムの上に乗る
+  public static inline var HELP_KEYINPUT:Int = 14; // ヘルプ: 通常
+  public static inline var HELP_INVENCTORY:Int = 15; // ヘルプ: インベントリ
+  public static inline var HELP_DIALOG:Int = 16; // ヘルプ: ダイアログ
 }
 
 /**
@@ -52,11 +55,16 @@ class Message extends FlxGroup {
 
   // メッセージの追加
   public static function push(msg:String) {
-    Message.instance.pushMsg(msg);
+    Message.instance._push(msg);
   }
 
   public static function push2(msgId:Int, args:Array<Dynamic>=null) {
-    Message.instance.pushMsg2(msgId, args);
+    Message.instance._push2(msgId, args);
+  }
+
+  // メッセージの取得
+  public static function getText(msgId:Int):String {
+    return Message.instance._getText(msgId);
   }
 
   // メッセージウィンドウを消す
@@ -137,7 +145,7 @@ class Message extends FlxGroup {
   /**
 	 * メッセージを末尾に追加
 	 **/
-  public function pushMsg(msg:String) {
+  private function _push(msg:String) {
     var text = new FlxText(POS_X + MSG_POS_X, 0, WIDTH);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     text.text = msg;
@@ -160,7 +168,7 @@ class Message extends FlxGroup {
     _timer = TIMER_DISAPPEAR;
   }
 
-  public function pushMsg2(msgId:Int, args:Array<Dynamic>):Void {
+  private function _push2(msgId:Int, args:Array<Dynamic>):Void {
     var msg = _csv.searchItem("id", '${msgId}', "msg");
     if(args != null) {
       var idx:Int = 1;
@@ -169,7 +177,16 @@ class Message extends FlxGroup {
         idx++;
       }
     }
-    pushMsg(msg);
+    _push(msg);
+  }
+
+  /**
+   * メッセージを取得する
+   * @param msgId メッセージID
+   * @return メッセージ
+   **/
+  private function _getText(msgId:Int):String {
+    return _csv.searchItem("id", '${msgId}', "msg");
   }
 
   /**

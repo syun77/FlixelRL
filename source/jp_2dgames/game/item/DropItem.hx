@@ -32,10 +32,10 @@ class DropItem extends FlxSprite {
     parent.forEachAlive(function(item:DropItem) {
       if(xchip == item.xchip && ychip == item.ychip) {
         // 拾える
-        Message.push2(Msg.ITEM_PICKUP, [item.name]);
         bFind = true;
         if(item.type == IType.Money) {
           // お金はインベントリに入れない
+          Message.push2(Msg.ITEM_PICKUP, [item.name]);
           // お金はIDが金額
           Global.addMoney(item.id);
           item.kill();
@@ -43,11 +43,13 @@ class DropItem extends FlxSprite {
         else {
           // アイテム所持数をチェック
           if(Inventory.isFull()) {
+            // 拾えない
             Message.push2(Msg.ITEM_FULL);
             Message.push2(Msg.ITEM_STEPON, [item.name]);
           }
           else {
             // アイテムを拾えた
+            Message.push2(Msg.ITEM_PICKUP, [item.name]);
             Inventory.push(item.id);
             item.kill();
           }

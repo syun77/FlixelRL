@@ -128,6 +128,10 @@ class PlayState extends FlxState {
       this.add(e.hpBar);
     });
 
+    // メッセージ生成
+    var message = new Message(_csv.message);
+    Message.instance = message;
+
     // ステータス表示
     _guistatus = new GuiStatus();
     this.add(_guistatus);
@@ -234,11 +238,8 @@ class PlayState extends FlxState {
       }
     });
 
-
-    // メッセージ生成
-    var message = new Message(_csv.message);
+    // メッセージを描画に登録
     this.add(message);
-    Message.instance = message;
 
     // インベントリ
     var inventory = new Inventory();

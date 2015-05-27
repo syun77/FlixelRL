@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.Message.Msg;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
@@ -169,11 +170,11 @@ class GuiStatus extends FlxGroup {
       case HELP_NONE:
         // 非表示
       case HELP_KEYINPUT:
-        text = "カーソルキー:移動 / Z:攻撃 / X:メニュー / C+カーソルキー:振り向く";
+        text = Message.getText(Msg.HELP_KEYINPUT);
       case HELP_INVENTORY:
-        text = "カーソルキー:項目の移動 / Z:選択 / X:キャンセル";
+        text = Message.getText(Msg.HELP_INVENCTORY);
       case HELP_DIALOG_YN:
-        text = "カーソルキー:項目の移動 / Z:決定";
+        text = Message.getText(Msg.HELP_DIALOG);
     }
 
     _txtHelp.text = text;
