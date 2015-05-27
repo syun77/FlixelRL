@@ -21,6 +21,8 @@ class Msg {
   public static inline var MISS:Int = 9; // 攻撃を外した
   public static inline var LEVELUP:Int = 10; // レベルアップした
   public static inline var LEVELUP2:Int = 11; // レベル数値を表示
+  public static inline var ITEM_FULL:Int = 12; // アイテムがいっぱい
+  public static inline var ITEM_STEPON:Int = 13; // アイテムの上に乗る
 }
 
 /**
@@ -53,7 +55,7 @@ class Message extends FlxGroup {
     Message.instance.pushMsg(msg);
   }
 
-  public static function push2(msgId:Int, args:Array<Dynamic>) {
+  public static function push2(msgId:Int, args:Array<Dynamic>=null) {
     Message.instance.pushMsg2(msgId, args);
   }
 
@@ -160,10 +162,12 @@ class Message extends FlxGroup {
 
   public function pushMsg2(msgId:Int, args:Array<Dynamic>):Void {
     var msg = _csv.searchItem("id", '${msgId}', "msg");
-    var idx:Int = 1;
-    for(val in args) {
-      msg = StringTools.replace(msg, '<val${idx}>', '${val}');
-      idx++;
+    if(args != null) {
+      var idx:Int = 1;
+      for(val in args) {
+        msg = StringTools.replace(msg, '<val${idx}>', '${val}');
+        idx++;
+      }
     }
     pushMsg(msg);
   }

@@ -43,7 +43,8 @@ class DropItem extends FlxSprite {
         else {
           // アイテム所持数をチェック
           if(Inventory.isFull()) {
-            Message.push('アイテムが一杯なので${item.name}を拾えなかった');
+            Message.push2(Msg.ITEM_FULL);
+            Message.push2(Msg.ITEM_STEPON, [item.name]);
           }
           else {
             // アイテムを拾えた
