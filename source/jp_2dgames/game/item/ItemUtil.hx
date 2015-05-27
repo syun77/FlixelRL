@@ -48,7 +48,11 @@ class ItemUtil {
 	 **/
   public static function getType(id:Int):IType {
     var csv = getCsv(id);
-    var str = csv.searchItem("id", '${id}', "type");
+    var str = csv.searchItem("id", '${id}', "type", false);
+    if(str == "") {
+      // 無効なアイテム
+      return IType.None;
+    }
     return fromString(str);
   }
 
@@ -57,7 +61,7 @@ class ItemUtil {
 	 **/
   public static function getParam(id:Int, key:String):Int {
     var csv = getCsv(id);
-    return csv.searchItemInt("id", '${id}', key);
+    return csv.searchItemInt("id", '${id}', key, false);
   }
 
   public static function toString(type:IType):String {

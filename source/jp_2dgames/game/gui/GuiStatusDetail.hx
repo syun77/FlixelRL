@@ -34,10 +34,51 @@ class GuiStatusDetail extends FlxGroup {
   private static inline var DEF_X = MSG_X;
   private static inline var DEF_Y = ATK_Y + 24;
 
-  private var _txtStr:FlxText;
-  private var _txtVit:FlxText;
-  private var _txtAtk:FlxText;
-  private var _txtDef:FlxText;
+  // 攻撃力(差分)
+  private static inline var ATKDIFF_X = MSG_X + 120;
+  // 守備力(差分)
+  private static inline var DEFDIFF_X = MSG_X + 120;
+
+  // パラメータテキスト
+  private var _txtStr:FlxText; // Str
+  private var _txtVit:FlxText; // Vit
+  private var _txtAtk:FlxText; // Atk
+  private var _txtDef:FlxText; // Def
+
+  // 差分パラメータテキスト
+  private var _txtAtkDiff:FlxText; // Atk
+  private var _txtDefDiff:FlxText; // Def
+
+  /**
+   * 差分攻撃力を設定
+   **/
+  public function setAtkDiff(v:Int):Void {
+    var str = '(${v})';
+    if(v >= 0) {
+      str = '(+${v})';
+    }
+    _txtAtkDiff.text = str;
+    _txtAtkDiff.visible = true;
+  }
+  // 消去
+  public function clearAtkDiff():Void {
+    _txtAtkDiff.visible = false;
+  }
+  /**
+   * 差分守備力を設定
+   **/
+  public function setDefDiff(v:Int):Void {
+    var str = '(${v})';
+    if(v >= 0) {
+      str = '(+${v})';
+    }
+    _txtDefDiff.text = str;
+    _txtDefDiff.visible = true;
+  }
+  // 消去
+  public function clearDefDiff():Void {
+    _txtDefDiff.visible = false;
+  }
 
   /**
    * コンストラクタ
@@ -69,6 +110,16 @@ class GuiStatusDetail extends FlxGroup {
     _txtDef = new FlxText(DEF_X, DEF_Y, TXT_WIDTH);
     _txtDef.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     this.add(_txtDef);
+
+    // 攻撃力テキスト
+    _txtAtkDiff = new FlxText(ATKDIFF_X, ATK_Y, TXT_WIDTH);
+    _txtAtkDiff.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    this.add(_txtAtkDiff);
+
+    // 守備力テキスト
+    _txtDefDiff = new FlxText(DEFDIFF_X, DEF_Y, TXT_WIDTH);
+    _txtDefDiff.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    this.add(_txtDefDiff);
   }
 
   /**

@@ -363,6 +363,7 @@ class Inventory extends FlxGroup {
     var min = _pageMinId;
     var max = _pageMaxId;
     var nCursor = _nCursor % PAGE_DISP;
+    var bChangeItem = false;
 
     if(Key.press.UP) {
       // 上に移動
@@ -370,6 +371,7 @@ class Inventory extends FlxGroup {
       if(_nCursor < min) {
         _nCursor = max - 1;
       }
+      bChangeItem = true;
     }
     else if(Key.press.DOWN) {
       // 下に移動
@@ -377,6 +379,7 @@ class Inventory extends FlxGroup {
       if(_nCursor >= max) {
         _nCursor = min;
       }
+      bChangeItem = true;
     }
     else if(Key.press.LEFT) {
       // 前のページ
@@ -390,6 +393,7 @@ class Inventory extends FlxGroup {
       }
       _updateText();
       _changePage();
+      bChangeItem = true;
     }
     else if(Key.press.RIGHT) {
       // 次のページ
@@ -403,12 +407,54 @@ class Inventory extends FlxGroup {
       }
       _updateText();
       _changePage();
+      bChangeItem = true;
     }
 
     // カーソルの座標を更新
     {
       var idx = (_nCursor % PAGE_DISP);
       _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
+    }
+
+    if(bChangeItem) {
+      // 選択アイテムが変わった
+      _changeSelectItem();
+    }
+  }
+
+  /**
+   * 選択しているアイテムが替わった
+   **/
+  private function _changeSelectItem():Void {
+    // 差分テキスト非表示
+    _detail.clearAtkDiff();
+    _detail.clearDefDiff();
+    var itemid = getSelectedItem();
+    var type = ItemUtil.getType(itemid);
+    if(type == IType.None) {
+      // 無効なアイテムなので何もしない
+      return;
+    }
+    if(ItemUtil.isEquip(itemid) == false) {
+      // 装備できないアイテムなので何もしない
+      return;
+    }
+    switch(type) {
+      case IType.Weapon:
+        var now = ItemUtil.getParam(weapon, "atk");
+        var next = ItemUtil.getParam(itemid, "atk");
+        _detail.setAtkDiff(next - now);
+      case IType.Armor:
+        var now = ItemUtil.getParam(armor, "def");
+        var next = ItemUtil.getParam(itemid, "def");
+        _detail.setDefDiff(next - now);
+      case IType.Ring:
+      case IType.Food:
+      case IType.Money:
+      case IType.None:
+      case IType.Portion:
+      case IType.Scroll:
+      case IType.Wand:
     }
   }
 

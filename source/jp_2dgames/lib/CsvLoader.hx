@@ -124,18 +124,32 @@ class CsvLoader {
      * @return 見つからなかったらエラー
      **/
 
-  public function searchItem(key:String, name:String, item:String):String {
+  public function searchItem(key:String, name:String, item:String, bExcept=true):String {
     for(data in _datas) {
       if(data[key] == name) {
         return data[item];
       }
     }
 
-    throw 'Error: Not found key="${key}" name="${name}" item="${item}"';
+    if(bExcept) {
+      throw 'Error: Not found key="${key}" name="${name}" item="${item}"';
+    }
+    else {
+      // 例外を返さない
+      return "";
+    }
   }
 
-  public function searchItemInt(key:String, name:String, item:String):Int {
-    return Std.parseInt(searchItem(key, name, item));
+  public function searchItemInt(key:String, name:String, item:String, bExcept=true):Int {
+    var str = searchItem(key, name, item, bExcept);
+    var ret = Std.parseInt(str);
+    if(ret == null) {
+      if(bExcept == false) {
+        return 0;
+      }
+      throw 'Error Invalid data key=${key} name=${name} item=${item}';
+    }
+    return ret;
   }
 
   public function searchItemFloat(key:String, name:String, item:String):Float {
