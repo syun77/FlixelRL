@@ -106,7 +106,7 @@ class GuiStatus extends FlxGroup {
     // ヘルプ座標(Y)
     _helpY = FlxG.height - HELP_DY;
     // ヘルプの背景
-    _bgHelp = new FlxSprite(0, _helpY).makeGraphic(FlxG.width, HELP_DY, FlxColor.BLACK);
+    _bgHelp = new FlxSprite(0, FlxG.height).makeGraphic(FlxG.width, HELP_DY, FlxColor.BLACK);
     _bgHelp.alpha = 0.7;
     this.add(_bgHelp);
     // ヘルプテキスト
@@ -149,8 +149,12 @@ class GuiStatus extends FlxGroup {
     _txtMoney.text = '${money}円';
 
     // ヘルプテキストのアニメーション
-    _txtHelpOfsY *= 0.8;
-    _txtHelp.y = _helpY + _txtHelpOfsY;
+    {
+      _txtHelpOfsY *= 0.8;
+      var py = _helpY + _txtHelpOfsY;
+      _txtHelp.y = py;
+      _bgHelp.y = py;
+    }
   }
 
   public function changeHelp(mode:Int) {
@@ -174,6 +178,7 @@ class GuiStatus extends FlxGroup {
 
     _txtHelp.text = text;
     _txtHelp.y = FlxG.height;
+    _bgHelp.y = FlxG.height;
 
     // アニメーション開始
     _txtHelpOfsY = HELP_DY;
