@@ -408,6 +408,7 @@ class Inventory extends FlxGroup {
     switch(type) {
       case MENU_CONSUME:
         // 使う
+        // 落ちているアイテムを使うこともあるのでモードを戻しておく
         _menumode = mode;
         useItem(-1);
         if(mode == MenuMode.Feet) {
@@ -426,10 +427,30 @@ class Inventory extends FlxGroup {
           var item = getSelectedItem();
           DropItem.add(_player.xchip, _player.ychip, item);
           delItem(-1, false);
+          // TODO: メッセージを差し替える
           Message.push('床にアイテムを置いた');
         }
       case MENU_CHANGE:
-        // TODO: 交換
+        // 交換
+        // アイテムリストから取り出す
+        var item = getSelectedItem();
+        delItem(-1, false);
+        // 床のアイテムをアイテムリストに追加
+        {
+          var feet = _feetItem[0];
+          addItem(feet.id);
+          var name = ItemUtil.getName(feet.id);
+          // TODO: メッセージを正式なものに差し替える
+          Message.push2(Msg.ITEM_PICKUP, [name]);
+          // 足下アイテムを消す
+          DropItem.killFromPosition(_player.xchip, _player.ychip);
+        }
+
+        // 床に置く
+        DropItem.add(_player.xchip, _player.ychip, item);
+        // TODO: メッセージを正式なものに差し替える
+        Message.push('アイテムを床に置いた');
+
       case MENU_PICKUP:
         // 拾う
         DropItem.pickup(_player.xchip, _player.ychip);
