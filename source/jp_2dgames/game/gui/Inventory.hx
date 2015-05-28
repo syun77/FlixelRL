@@ -41,6 +41,8 @@ class Inventory extends FlxGroup {
   private static inline var EQUIP_WEAPON:Int = 0;
   private static inline var EQUIP_ARMOR:Int = 1;
   private static inline var EQUIP_RING:Int = 2;
+  // 装備の最大数
+  private static inline var EQUIP_MAX:Int = 3;
 
   // 消費アイテムメニュー
   private static inline var MENU_CONSUME:Int = Msg.MENU_USE; // 使う
@@ -180,6 +182,10 @@ class Inventory extends FlxGroup {
   }
   // 足下のアイテム
   private var _feetItem:Array<ItemData> = null;
+  // 足下にアイテムがあるかどうか
+  private function _isItemOnFeet():Bool {
+    return _feetItem != null;
+  }
 
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
@@ -242,7 +248,7 @@ class Inventory extends FlxGroup {
 
     // フォント読み込み
     _fonts = new Array<FlxSprite>();
-    for(i in 0...3) {
+    for(i in 0...EQUIP_MAX) {
       // var str_map = "0123456789";
       // str_map    += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       // str_map    += ".()[]#$%&'" + '"' + "!?^+-*/=;:_<>";
@@ -302,6 +308,7 @@ class Inventory extends FlxGroup {
     // カーソル表示を切り替え
     _cursor.visible = b;
 
+    // 足下アイテムの処理
     if(b) {
       // 所持アイテムから表示する
       _menumode = MenuMode.Carry;
@@ -313,11 +320,12 @@ class Inventory extends FlxGroup {
         _feetItem = [feet];
       }
       else {
+        // アイテムはない
         _feetItem = null;
       }
     }
     else {
-      // 所持アイテムから表示に戻す
+      // 通常表示に戻しておく
       _menumode = MenuMode.Carry;
       trace("page", _nPage);
       _updateText();
@@ -327,21 +335,67 @@ class Inventory extends FlxGroup {
     showDetail(b);
   }
 
+  /**
+   * コマンドメニューのパラメータを取得する
+   **/
   private function _getMenuParam():Array<Int> {
     var itemid = getSelectedItem();
-    if(ItemUtil.isEquip(itemid)) {
-      // 装備アイテム
-      if(_isEquipSelectedItem()) {
-        // 装備中
-        return [MENU_UNEQUIP, MENU_PUT];
-      }
-      return [MENU_EQUIP, MENU_PUT];
-    }
+    // 床にアイテムがあるかどうか
+    var bFeet = _isItemOnFeet();
+    // アイテムの所持数が最大かどうか
+    var bFull = isFull();
 
-    // 消費アイテム
-    return [MENU_CONSUME, MENU_PUT];
+    var p = new Array<Int>();
+
+    if(_menumode == MenuMode.Carry) {
+      // 通常モード
+      if(ItemUtil.isEquip(itemid)) {
+        // 装備アイテム
+        if(_isEquipSelectedItem()) {
+          // 装備中
+          p.push(MENU_UNEQUIP);
+        }
+        else {
+          // 装備していない
+          p.push(MENU_EQUIP);
+        }
+      }
+      else {
+        // 消費アイテム
+        p.push(MENU_CONSUME);
+      }
+
+      if(bFeet) {
+        // 床にあるアイテムと交換
+        p.push(MENU_CHANGE);
+      }
+      else {
+        // 置く
+        p.push(MENU_PUT);
+      }
+    }
+    else {
+      // 足下メニュー
+      if(bFull == false) {
+        // 拾える
+        p.push(MENU_PICKUP);
+      }
+      if(ItemUtil.isConsumable(itemid)) {
+        // 消費アイテムなので使える
+        p.push(MENU_CONSUME);
+      }
+    }
+    // 投げる
+    p.push(MENU_THROW);
+
+    return p;
   }
 
+  /**
+   * コマンド実行時のコールバック関数
+   * @param 選んだ項目
+   * @return 項目に対応する処理ID
+   **/
   private function _cbAction(type:Int):Int {
     var itemid = getSelectedItem();
     switch(type) {
@@ -360,7 +414,8 @@ class Inventory extends FlxGroup {
       case MENU_CHANGE:
         // TODO: 交換
       case MENU_PICKUP:
-        // TODO: 拾う
+        // 拾う
+        DropItem.pickup(_player.xchip, _player.ychip);
     }
 
     return 1;
