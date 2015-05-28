@@ -143,6 +143,7 @@ private class _Item {
   public var y:Int = 0;
   public var id:Int = 0;
   public var type:String = "";
+  public var value:Int = 0;
 
   public function new() {
   }
@@ -181,7 +182,7 @@ private class _Items {
     for(i in arr) {
       var item:DropItem = items.recycle();
       var type = ItemUtil.fromString(i.type);
-      item.init(i.x, i.y, type, i.id);
+      item.init(i.x, i.y, type, i.id, i.value);
     }
   }
 }

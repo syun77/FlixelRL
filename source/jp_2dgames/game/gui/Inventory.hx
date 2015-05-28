@@ -159,7 +159,7 @@ class Inventory extends FlxGroup {
 
   // アイテム枠がいっぱいかどうか
   public static function isFull():Bool {
-    return instance.itemcount >= MAX;
+    return instance.getItemCountFromCarry() >= MAX;
   }
 
   // アイテムテキスト
@@ -179,6 +179,10 @@ class Inventory extends FlxGroup {
   public var itemcount(get, never):Int;
   private function get_itemcount() {
     return itemList.length;
+  }
+  // アイテム所持数をCarryから取得する
+  public function getItemCountFromCarry():Int {
+    return _itemList.length;
   }
   // 足下のアイテム
   private var _feetItem:Array<ItemData> = null;
@@ -327,7 +331,6 @@ class Inventory extends FlxGroup {
     else {
       // 通常表示に戻しておく
       _menumode = MenuMode.Carry;
-      trace("page", _nPage);
       _updateText();
     }
 
@@ -397,6 +400,10 @@ class Inventory extends FlxGroup {
    * @return 項目に対応する処理ID
    **/
   private function _cbAction(type:Int):Int {
+    // 現在の状態を格納
+    var mode = _menumode;
+    _menumode = MenuMode.Carry;
+
     var itemid = getSelectedItem();
     switch(type) {
       case MENU_CONSUME:
@@ -417,8 +424,22 @@ class Inventory extends FlxGroup {
         // 拾う
         DropItem.pickup(_player.xchip, _player.ychip);
     }
+    // 元に戻す
+    _menumode = mode;
 
     return 1;
+  }
+
+  /**
+   * 床にアイテムを置く
+   **/
+  private function _putItem(item:ItemData):Void {
+    if(_isItemOnFeet()) {
+      // 床にアイテムがあるので置けない
+      return;
+    }
+
+
   }
 
   /**

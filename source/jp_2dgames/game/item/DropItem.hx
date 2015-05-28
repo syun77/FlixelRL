@@ -1,4 +1,5 @@
 package jp_2dgames.game.item;
+import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.item.ItemUtil.IType;
@@ -21,6 +22,34 @@ class DropItem extends FlxSprite {
   public var type(default, null):IType;
   // 名前
   public var name(default, null):String;
+  // 拡張パラメータ
+  public var value(default, null):Int;
+
+  /**
+   * アイテムを配置する
+   **/
+  public static function add(i:Int, j:Int, itemid:Int, value:Int=0):DropItem {
+    var item:DropItem = parent.recycle();
+    if(item == null) {
+      return null;
+    }
+    var type = ItemUtil.getType(itemid);
+    item.init(i, j, type, itemid, value);
+
+    return item;
+  }
+
+  /**
+   * お金を配置する
+   **/
+  public static function addMoney(i:Int, j:Int, value:Int):DropItem {
+    var item:DropItem = parent.recycle();
+    if(item == null) {
+      return null;
+    }
+    item.init(i, j, IType.Money, 0, value);
+    return item;
+  }
 
   /**
    * 指定の座標にあるアイテム情報を取得する
@@ -51,7 +80,7 @@ class DropItem extends FlxSprite {
           // お金はインベントリに入れない
           Message.push2(Msg.ITEM_PICKUP, [item.name]);
           // お金はIDが金額
-          Global.addMoney(item.id);
+          Global.addMoney(item.value);
           item.kill();
         }
         else {
@@ -103,9 +132,10 @@ class DropItem extends FlxSprite {
 	 * 初期化
 	 **/
 
-  public function init(X:Int, Y:Int, type:IType, itemid:Int) {
+  public function init(X:Int, Y:Int, type:IType, itemid:Int, value:Int) {
     id = itemid;
     this.type = type;
+    this.value = value;
     xchip = X;
     ychip = Y;
     x = Field.toWorldX(X);

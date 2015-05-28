@@ -231,9 +231,7 @@ class PlayState extends FlxState {
             return 0;
           }
           var itemid = func();
-          var type = ItemUtil.getType(itemid);
-          var item:DropItem = items.recycle();
-          item.init(i, j, type, itemid);
+          DropItem.add(i, j, itemid);
 //          item.init(i, j, IType.Money, 100);
       }
     });
