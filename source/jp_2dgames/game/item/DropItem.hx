@@ -1,4 +1,5 @@
 package jp_2dgames.game.item;
+import jp_2dgames.game.item.ItemData.ItemExtraParam;
 import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.Inventory;
@@ -23,18 +24,18 @@ class DropItem extends FlxSprite {
   // 名前
   public var name(default, null):String;
   // 拡張パラメータ
-  public var value(default, null):Int;
+  public var param:ItemExtraParam;
 
   /**
    * アイテムを配置する
    **/
-  public static function add(i:Int, j:Int, itemid:Int, value:Int=0):DropItem {
+  public static function add(i:Int, j:Int, itemid:Int, param:ItemExtraParam):DropItem {
     var item:DropItem = parent.recycle();
     if(item == null) {
       return null;
     }
     var type = ItemUtil.getType(itemid);
-    item.init(i, j, type, itemid, value);
+    item.init(i, j, type, itemid, param);
 
     return item;
   }
@@ -47,7 +48,9 @@ class DropItem extends FlxSprite {
     if(item == null) {
       return null;
     }
-    item.init(i, j, IType.Money, 0, value);
+    var param = new ItemExtraParam();
+    param.value = value;
+    item.init(i, j, IType.Money, 0, param);
     return item;
   }
 
@@ -59,7 +62,7 @@ class DropItem extends FlxSprite {
     var data:ItemData = null;
     parent.forEachAlive(function(item:DropItem) {
       if(xchip == item.xchip && ychip == item.ychip) {
-        data = new ItemData(item.id);
+        data = new ItemData(item.id, item.param);
       }
     });
 
@@ -94,8 +97,7 @@ class DropItem extends FlxSprite {
         if(item.type == IType.Money) {
           // お金はインベントリに入れない
           Message.push2(Msg.ITEM_PICKUP, [item.name]);
-          // お金はIDが金額
-          Global.addMoney(item.value);
+          Global.addMoney(item.param.value);
           item.kill();
         }
         else {
@@ -108,7 +110,7 @@ class DropItem extends FlxSprite {
           else {
             // アイテムを拾えた
             Message.push2(Msg.ITEM_PICKUP, [item.name]);
-            Inventory.push(item.id);
+            Inventory.push(item.id, item.param);
             item.kill();
           }
         }
@@ -130,6 +132,9 @@ class DropItem extends FlxSprite {
   public function new() {
     super();
 
+    // 拡張パラメータ
+    param = new ItemExtraParam();
+
     // 画像読み込み
     loadGraphic("assets/images/item.png", true);
 
@@ -147,21 +152,25 @@ class DropItem extends FlxSprite {
 	 * 初期化
 	 **/
 
-  public function init(X:Int, Y:Int, type:IType, itemid:Int, value:Int) {
+  public function init(X:Int, Y:Int, type:IType, itemid:Int, param:ItemExtraParam) {
     id = itemid;
     this.type = type;
-    this.value = value;
     xchip = X;
     ychip = Y;
     x = Field.toWorldX(X);
     y = Field.toWorldY(Y);
 
+    // 拡張パラメータをコピー
+    ItemExtraParam.copy(this.param, param);
+
+    var itemdata = new ItemData(itemid, param);
     // 名前
     if(type == IType.Money) {
-      name = '${itemid}円';
+      // お金は特殊
+      name = '${param.value}円';
     }
     else {
-      name = ItemUtil.getName(id);
+      name = ItemUtil.getName(itemdata);
     }
 
     // アニメーション再生

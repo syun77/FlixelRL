@@ -12,6 +12,7 @@ import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.item.ItemUtil.IType;
+import jp_2dgames.game.item.ItemData.ItemExtraParam;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.DirUtil.Dir;
 import flixel.group.FlxTypedGroup;
@@ -231,8 +232,9 @@ class PlayState extends FlxState {
             return 0;
           }
           var itemid = func();
-          DropItem.add(i, j, itemid);
-//          item.init(i, j, IType.Money, 100);
+          var param = new ItemExtraParam();
+          DropItem.add(i, j, itemid, param);
+//          DropItem.addMoney(i, j, 100);
       }
     });
 
@@ -250,19 +252,21 @@ class PlayState extends FlxState {
     _seq = new SeqMgr(this);
 
     // TODO: デバッグ用のアイテムを追加
+    var param = new ItemExtraParam();
     for(i in 1...3) {
-      Inventory.push(i);
-      Inventory.push(i);
-      Inventory.push(i);
-      Inventory.push(i);
-      Inventory.push(i);
-      Inventory.push(i);
+      Inventory.push(i, param);
+      Inventory.push(i, param);
+      Inventory.push(i, param);
+//      Inventory.push(i, param);
+//      Inventory.push(i, param);
+//      Inventory.push(i, param);
     }
     for(i in 1001...1007) {
-      Inventory.push(i);
+      Inventory.push(i, param);
     }
-    for(i in 1021...1027) {
-      Inventory.push(i);
+//    for(i in 1021...1027) {
+      for(i in 1021...1026) {
+      Inventory.push(i, param);
     }
 
     // デバッグ情報設定

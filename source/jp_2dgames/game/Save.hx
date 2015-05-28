@@ -77,7 +77,7 @@ private class _Inventory {
     var array = new Array<ItemData>();
     for(idx in 0...data.array.length) {
       var item = data.array[idx];
-      var i = new ItemData(item.id);
+      var i = new ItemData(item.id, item.param);
       i.isEquip = item.isEquip;
       array.push(i);
     }
@@ -143,9 +143,10 @@ private class _Item {
   public var y:Int = 0;
   public var id:Int = 0;
   public var type:String = "";
-  public var value:Int = 0;
+  public var param:ItemExtraParam;
 
   public function new() {
+    param = new ItemExtraParam();
   }
 }
 private class _Items {
@@ -161,11 +162,11 @@ private class _Items {
 
     var func = function(item:DropItem) {
       var i = new _Item();
-      trace(item.type);
       i.x = item.xchip;
       i.y = item.ychip;
       i.id = item.id;
       i.type = ItemUtil.toString(item.type);
+      ItemExtraParam.copy(i.param, item.param);
       array.push(i);
     }
 
@@ -182,7 +183,7 @@ private class _Items {
     for(i in arr) {
       var item:DropItem = items.recycle();
       var type = ItemUtil.fromString(i.type);
-      item.init(i.x, i.y, type, i.id, i.value);
+      item.init(i.x, i.y, type, i.id, i.param);
     }
   }
 }

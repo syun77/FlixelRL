@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.Item;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
@@ -133,8 +134,8 @@ class Inventory extends FlxGroup {
   private var _fonts:Array<FlxSprite>;
 
   // アイテムの追加
-  public static function push(itemid:Int) {
-    instance.addItem(itemid);
+  public static function push(itemid:Int, param:ItemExtraParam) {
+    instance.addItem(itemid, param);
   }
   // 装備品の取得
   public static function getWeapon():Int {
@@ -190,6 +191,8 @@ class Inventory extends FlxGroup {
   private function _isItemOnFeet():Bool {
     return _feetItem != null;
   }
+  // NULLアイテム
+  private var _itemnull = null;
 
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
@@ -265,7 +268,8 @@ class Inventory extends FlxGroup {
       _fonts.push(spr);
     }
 
-    FlxG.watch.add(this, "_nCursor");
+    // NULLアイテム
+    _itemnull = new ItemData(ItemUtil.NONE, new ItemExtraParam());
   }
 
   /**
@@ -342,7 +346,8 @@ class Inventory extends FlxGroup {
    * コマンドメニューのパラメータを取得する
    **/
   private function _getMenuParam():Array<Int> {
-    var itemid = getSelectedItem();
+    var item = getSelectedItem();
+    var itemid = item.id;
     // 床にアイテムがあるかどうか
     var bFeet = _isItemOnFeet();
     // アイテムの所持数が最大かどうか
@@ -400,11 +405,16 @@ class Inventory extends FlxGroup {
    * @return 項目に対応する処理ID
    **/
   private function _cbAction(type:Int):Int {
+
+    // 項目決定したらカーソルは消す
+    _cursor.visible = false;
+
     // 現在の状態を格納
     var mode = _menumode;
     _menumode = MenuMode.Carry;
 
-    var itemid = getSelectedItem();
+    var item = getSelectedItem();
+    var itemid = item.id;
     switch(type) {
       case MENU_CONSUME:
         // 使う
@@ -424,8 +434,7 @@ class Inventory extends FlxGroup {
       case MENU_PUT:
         // 床に置く
         if(_isItemOnFeet() == false) {
-          var item = getSelectedItem();
-          DropItem.add(_player.xchip, _player.ychip, item);
+          DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
           delItem(-1, false);
           // メッセージ表示
           var name = ItemUtil.getName(item);
@@ -435,20 +444,22 @@ class Inventory extends FlxGroup {
         // 交換
         // アイテムリストから取り出す
         var item = getSelectedItem();
-        delItem(-1, false);
+        delItem(-1, false, false);
         // 床のアイテムをアイテムリストに追加
         {
           var feet = _feetItem[0];
-          addItem(feet.id);
-          var name = ItemUtil.getName(feet.id);
+          addItem(feet.id, feet.param);
+          var name = ItemUtil.getName(feet);
           // メッセージ表示
           Message.push2(Msg.ITEM_PICKUP, [name]);
           // 足下アイテムを消す
           DropItem.killFromPosition(_player.xchip, _player.ychip);
         }
+        // カーソル位置の調整
+        _adjustCursor();
 
         // 床に置く
-        DropItem.add(_player.xchip, _player.ychip, item);
+        DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
         // メッセージ表示
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_PUT, [name]);
@@ -638,11 +649,13 @@ class Inventory extends FlxGroup {
     }
 
     // カーソルの座標を更新
-    {
-      var idx = (_nCursor % PAGE_DISP);
-      _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
-    }
+    _updateCursorPosition();
+  }
 
+  // カーソルの座標を更新
+  private function _updateCursorPosition():Void {
+    var idx = (_nCursor % PAGE_DISP);
+    _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
   }
 
   // ページ切り替え
@@ -663,17 +676,39 @@ class Inventory extends FlxGroup {
   /**
 	 * アイテムの追加
 	 **/
-  public function addItem(itemid:Int):Void {
-    itemList.push(new ItemData(itemid));
+  public function addItem(itemid:Int, param:ItemExtraParam):Void {
+    itemList.push(new ItemData(itemid, param));
     _updateText();
   }
 
   /**
+   * カーソル位置の調整
+   **/
+  private function _adjustCursor():Void {
+    if(_nCursor >= itemcount) {
+      // 範囲外のカーソルの位置をずらす
+      _nCursor = itemcount - 1;
+      if(_nCursor < 0) {
+        _nCursor = 0;
+      }
+      trace(_nPage, "/", _pageMax);
+      if(_nPage >= _pageMax) {
+        _nPage = _pageMax - 1;
+      }
+      trace(_nPage, "/", _pageMax);
+      // カーソルの位置を調整
+      _updateCursorPosition();
+    }
+  }
+
+  /**
 	 * アイテムの削除
-	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
+	 * @param idx カーソル番号 (-1指定で _nCursor を使う)
+	 * @param bMsg 削除メッセージを表示するかどうか
+	 * @param bCursorAdjust カーソル位置の調整を行うかどうか
 	 * @return アイテムがすべてなくなったらtrue
 	 **/
-  public function delItem(idx:Int, bMsg:Bool = false):Bool {
+  public function delItem(idx:Int, bMsg:Bool = false, bAdjustCursor=true):Bool {
     if(idx == -1) {
       // 現在のカーソルを使う
       idx = _nCursor;
@@ -689,12 +724,9 @@ class Inventory extends FlxGroup {
     // アイテムリストから削除する
     itemList.splice(idx, 1);
 
-    if(_nCursor >= itemcount) {
-      // 範囲外のカーソルの位置をずらす
-      _nCursor = itemcount - 1;
-      if(_nCursor < 0) {
-        _nCursor = 0;
-      }
+    if(bAdjustCursor) {
+      // カーソル位置の調整
+      _adjustCursor();
     }
 
     // テキストを更新
@@ -702,7 +734,7 @@ class Inventory extends FlxGroup {
 
     if(bMsg) {
       // アイテムを捨てたメッセージ
-      var name = ItemUtil.getName(itemid);
+      var name = ItemUtil.getName(item);
       Message.push2(Msg.ITEM_DISCARD, [name]);
     }
 
@@ -723,7 +755,7 @@ class Inventory extends FlxGroup {
     ItemUtil.use(_player, item);
 
     // メッセージ表示
-    var name = ItemUtil.getName(item.id);
+    var name = ItemUtil.getName(item);
     Message.push2(Msg.ITEM_EAT, [name]);
 
     // 使ったアイテムを削除
@@ -732,15 +764,15 @@ class Inventory extends FlxGroup {
 
   /**
 	 * 選択中のアイテムを取得する
-	 * @return 選択中のアイテム番号。アイテムがない場合は-1
+	 * @return 選択中のアイテム情報。アイテムがない場合はNULLアイテムを返す
 	 **/
-  public function getSelectedItem():Int {
+  public function getSelectedItem():ItemData {
     if(itemcount == 0) {
       // アイテムを持っていない
-      return ItemUtil.NONE;
+      return _itemnull;
     }
 
-    return itemList[_nCursor].id;
+    return itemList[_nCursor];
   }
 
   /**
@@ -763,8 +795,8 @@ class Inventory extends FlxGroup {
     var i:Int = _nPage * PAGE_DISP;
     for(txt in _txtList) {
       if(i < itemcount) {
-        var itemid = itemList[i].id;
-        var name = ItemUtil.getName(itemid);
+        var item = itemList[i];
+        var name = ItemUtil.getName(item);
         txt.text = name;
       }
       else {
@@ -846,7 +878,7 @@ class Inventory extends FlxGroup {
 
     if(bMsg) {
       // 装備メッセージの表示
-      var name = ItemUtil.getName(itemdata.id);
+      var name = ItemUtil.getName(itemdata);
       Message.push2(Msg.ITEM_EQUIP, [name]);
     }
   }
@@ -857,11 +889,11 @@ class Inventory extends FlxGroup {
 	 **/
   public function unequip(type:IType, bMsg:Bool = false):Void {
     // 同じ種類の装備を外す
-    var itemid:Int = -1;
-    forEachItemList(function(item:ItemData) {
-      if(type == item.type) {
-        item.isEquip = false;
-        itemid = item.id;
+    var item:ItemData = _itemnull;
+    forEachItemList(function(item2:ItemData) {
+      if(type == item2.type) {
+        item2.isEquip = false;
+        item = item2;
       }
     });
     switch(type) {
@@ -875,9 +907,9 @@ class Inventory extends FlxGroup {
         trace('warning: invalid type = ${type}');
     }
 
-    if(bMsg && itemid >= 0) {
+    if(bMsg && item.id >= 0) {
       // 装備を外したメッセージの表示
-      var name = ItemUtil.getName(itemid);
+      var name = ItemUtil.getName(item);
       Message.push2(Msg.ITEM_UNEQUIP, [name]);
     }
 
