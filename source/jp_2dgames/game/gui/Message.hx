@@ -23,18 +23,19 @@ class Msg {
   public static inline var LEVELUP2:Int = 11; // レベル数値を表示
   public static inline var ITEM_FULL:Int = 12; // アイテムがいっぱい
   public static inline var ITEM_STEPON:Int = 13; // アイテムの上に乗る
-  // ヘルプ
-  public static inline var HELP_KEYINPUT:Int = 14; // ヘルプ: 通常
-  public static inline var HELP_INVENCTORY:Int = 15; // ヘルプ: インベントリ
-  public static inline var HELP_DIALOG:Int = 16; // ヘルプ: ダイアログ
+  public static inline var ITEM_PUT:Int = 14; // アイテムを床に置いた
   // メニュー
-  public static inline var MENU_USE:Int = 17; // メニュー: 使う
-  public static inline var MENU_EQUIP:Int = 18; // メニュー: 装備
-  public static inline var MENU_UNEQUIP:Int = 19; // メニュー: 外す
-  public static inline var MENU_THROW:Int = 20; // メニュー: 投げる
-  public static inline var MENU_PUT:Int = 21; // メニュー: 置く
-  public static inline var MENU_CHANGE:Int = 22; // メニュー: 交換
-  public static inline var MENU_PICKUP:Int = 23; // メニュー: 拾う
+  public static inline var MENU_USE:Int = 24; // メニュー: 使う
+  public static inline var MENU_EQUIP:Int = 25; // メニュー: 装備
+  public static inline var MENU_UNEQUIP:Int = 26; // メニュー: 外す
+  public static inline var MENU_THROW:Int = 27; // メニュー: 投げる
+  public static inline var MENU_PUT:Int = 28; // メニュー: 置く
+  public static inline var MENU_CHANGE:Int = 29; // メニュー: 交換
+  public static inline var MENU_PICKUP:Int = 30; // メニュー: 拾う
+// ヘルプ
+  public static inline var HELP_KEYINPUT:Int = 40; // ヘルプ: 通常
+  public static inline var HELP_INVENCTORY:Int = 41; // ヘルプ: インベントリ
+  public static inline var HELP_DIALOG:Int = 42; // ヘルプ: ダイアログ
 }
 
 /**

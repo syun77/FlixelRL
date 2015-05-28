@@ -427,8 +427,9 @@ class Inventory extends FlxGroup {
           var item = getSelectedItem();
           DropItem.add(_player.xchip, _player.ychip, item);
           delItem(-1, false);
-          // TODO: メッセージを差し替える
-          Message.push('床にアイテムを置いた');
+          // メッセージ表示
+          var name = ItemUtil.getName(item);
+          Message.push2(Msg.ITEM_PUT, [name]);
         }
       case MENU_CHANGE:
         // 交換
