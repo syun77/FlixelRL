@@ -55,7 +55,7 @@ class DropItem extends FlxSprite {
    * 指定の座標にあるアイテム情報を取得する
    * @return 何もなかったらnull
    **/
-  public static function getFromChipPosition(xchip:Int, ychip:Int):ItemData {
+  public static function getFromPosition(xchip:Int, ychip:Int):ItemData {
     var data:ItemData = null;
     parent.forEachAlive(function(item:DropItem) {
       if(xchip == item.xchip && ychip == item.ychip) {
@@ -64,6 +64,21 @@ class DropItem extends FlxSprite {
     });
 
     return data;
+  }
+
+  /**
+   * 指定座標にあるアイテムを破壊する
+   **/
+  public static function killFromPosition(xchip:Int, ychip:Int):Bool {
+    var ret = false;
+    parent.forEachAlive(function(item:DropItem) {
+      if(xchip == item.xchip && ychip == item.ychip) {
+        item.kill();
+        ret = true;
+      }
+    });
+
+    return true;
   }
 
   /**

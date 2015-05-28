@@ -318,7 +318,7 @@ class Inventory extends FlxGroup {
       _menumode = MenuMode.Carry;
 
       // 足下にあるアイテムを取得する
-      var feet = DropItem.getFromChipPosition(_player.xchip, _player.ychip);
+      var feet = DropItem.getFromPosition(_player.xchip, _player.ychip);
       if(feet != null) {
         // 足下にアイテムがある
         _feetItem = [feet];
@@ -408,7 +408,12 @@ class Inventory extends FlxGroup {
     switch(type) {
       case MENU_CONSUME:
         // 使う
+        _menumode = mode;
         useItem(-1);
+        if(mode == MenuMode.Feet) {
+          // 足下メニューの場合は足下アイテムを消す
+          DropItem.killFromPosition(_player.xchip, _player.ychip);
+        }
       case MENU_EQUIP:
         // 装備する
         equip(-1, true);
