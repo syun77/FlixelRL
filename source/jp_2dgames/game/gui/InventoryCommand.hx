@@ -1,5 +1,4 @@
 package jp_2dgames.game.gui;
-import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
@@ -17,7 +16,7 @@ private enum State {
 /**
  * インベントリのサブメニュー
  **/
-class InventoryAction extends FlxGroup {
+class InventoryCommand extends FlxGroup {
 
   // ウィンドウサイズ
   private static inline var WIDTH = 64;
@@ -40,12 +39,21 @@ class InventoryAction extends FlxGroup {
     return _nCursor;
   }
 
+  // 項目決定時のコールバック関数
   private var _cbFunc:Int->Int;
+  // 項目パラメータ
   private var _items:Array<Int>;
 
   // 状態
   private var _state:State = State.Main;
 
+  /**
+   * コンストラクタ
+   * @param X 基準座標(X)
+   * @param Y 基準座標(Y)
+   * @param cbFunc 項目決定時のコールバック関数
+   * @param items 項目パラメータ
+   **/
   public function new(X:Float, Y:Float, cbFunc:Int->Int, items:Array<Int>) {
     super();
 
@@ -60,6 +68,7 @@ class InventoryAction extends FlxGroup {
     _cursor.alpha = 0.5;
     this.add(_cursor);
 
+    // メニューテキスト設定
     var i:Int = 0;
     _txtList = new List<FlxText>();
     for(item in items) {
@@ -92,6 +101,7 @@ class InventoryAction extends FlxGroup {
         // カーソル更新
         _procCursor();
         if(Key.press.A) {
+          // 項目を決定
           _cbFunc(_items[_nCursor]);
           _state = State.End;
         }
@@ -107,7 +117,6 @@ class InventoryAction extends FlxGroup {
   /**
 	 * カーソル更新
 	 **/
-
   private function _procCursor():Void {
     if(Key.press.UP) {
       _nCursor--;

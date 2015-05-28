@@ -23,10 +23,24 @@ class DropItem extends FlxSprite {
   public var name(default, null):String;
 
   /**
+   * 指定の座標にあるアイテム情報を取得する
+   * @return 何もなかったらnull
+   **/
+  public static function getFromChipPosition(xchip:Int, ychip:Int):ItemData {
+    var data:ItemData = null;
+    parent.forEachAlive(function(item:DropItem) {
+      if(xchip == item.xchip && ychip == item.ychip) {
+        data = new ItemData(item.id);
+      }
+    });
+
+    return data;
+  }
+
+  /**
 	 * 指定座標にあるアイテムを拾う
 	 * @return アイテムを拾えたらtrue
 	 **/
-
   public static function pickup(xchip:Int, ychip:Int):Bool {
     var bFind = false;
     parent.forEachAlive(function(item:DropItem) {

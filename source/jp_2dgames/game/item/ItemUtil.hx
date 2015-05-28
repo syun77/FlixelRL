@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.actor.Player;
 import flixel.util.FlxRandom;
 import jp_2dgames.lib.CsvLoader;
 
@@ -160,5 +161,30 @@ class ItemUtil {
       IType.Food,
     ];
     return tbl[FlxRandom.intRanged(0, tbl.length-1)];
+  }
+
+  /**
+   * 消費アイテムを使用する
+   **/
+  public static function use(player:Player, item:ItemData):Void {
+    switch(item.type) {
+      case IType.Portion:
+        // 薬
+        var val = ItemUtil.getParam(item.id, "hp");
+        if(val > 0) {
+          player.addHp(val);
+        }
+        else {
+          val = ItemUtil.getParam(item.id, "hp2");
+          player.addHp2(val);
+        }
+      case IType.Food:
+        // 食糧
+        var val = ItemUtil.getParam(item.id, "food");
+        player.addFood(val);
+      default:
+        // ここにくることはない
+        trace('Error: Invalid item ${item.id}');
+    }
   }
 }

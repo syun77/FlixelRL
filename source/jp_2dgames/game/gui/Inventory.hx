@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
@@ -14,9 +15,8 @@ import flixel.group.FlxGroup;
  * 状態
  **/
 private enum State {
-  Main; // 選択中
-  Sub;
-  // サブニュー操作中
+  Main; // 項目選択中
+  Command; // サブニュー操作中
 }
 
 /**
@@ -29,26 +29,19 @@ class Inventory extends FlxGroup {
   public static inline var RET_CANCEL:Int   = 1; // インベントリをキャンセルして閉じた
   public static inline var RET_DECIDE:Int   = 2; // 項目を決定した
 
+  // 装備アイテム
   private static inline var EQUIP_WEAPON:Int = 0;
   private static inline var EQUIP_ARMOR:Int = 1;
   private static inline var EQUIP_RING:Int = 2;
 
   // 消費アイテムメニュー
-  /*
-  private static inline var MENU_CONSUME = "使う";
-  private static inline var MENU_EQUIP = "装備";
-  private static inline var MENU_UNEQUIP = "外す";
-  private static inline var MENU_THROW = "投げる";
-  private static inline var MENU_PUT = "捨てる";
-  */
-
-  private static inline var MENU_CONSUME:Int = Msg.MENU_USE;
-  private static inline var MENU_EQUIP:Int = Msg.MENU_EQUIP;
-  private static inline var MENU_UNEQUIP:Int = Msg.MENU_UNEQUIP;
-  private static inline var MENU_THROW:Int = Msg.MENU_THROW;
-  private static inline var MENU_PUT:Int = Msg.MENU_PUT;
-  private static inline var MENU_CHANGE:Int = Msg.MENU_CHANGE;
-  private static inline var MENU_PICKUP:Int = Msg.MENU_PICKUP;
+  private static inline var MENU_CONSUME:Int = Msg.MENU_USE; // 使う
+  private static inline var MENU_EQUIP:Int = Msg.MENU_EQUIP; // 装備
+  private static inline var MENU_UNEQUIP:Int = Msg.MENU_UNEQUIP; // 外す
+  private static inline var MENU_THROW:Int = Msg.MENU_THROW; // 投げる
+  private static inline var MENU_PUT:Int = Msg.MENU_PUT; // 置く
+  private static inline var MENU_CHANGE:Int = Msg.MENU_CHANGE; // 交換
+  private static inline var MENU_PICKUP:Int = Msg.MENU_PICKUP; // 拾う
 
   // ページ数の最大
   private static inline var PAGE_MAX:Int = 3;
@@ -170,6 +163,9 @@ class Inventory extends FlxGroup {
   private function get_itemcount() {
     return _itemList.length;
   }
+  // 足下のアイテム
+  private var _tmpItem:ItemData;
+
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
   private function get__pageMinId() {
@@ -191,7 +187,7 @@ class Inventory extends FlxGroup {
   }
 
   // サブメニュー
-  private var _sub:InventoryAction = null;
+  private var _cmd:InventoryCommand = null;
 
   /**
    * コンストラクタ
@@ -287,27 +283,16 @@ class Inventory extends FlxGroup {
     // カーソル表示を切り替え
     _cursor.visible = b;
 
+    if(b) {
+      // 足下にあるアイテムを取得する
+      _tmpItem = DropItem.getFromChipPosition(_player.xchip, _player.ychip);
+    }
+
     // 詳細表示切り替え
     showDetail(b);
   }
 
   private function _getMenuParam():Array<Int> {
-  /*
-    var itemid = getSelectedItem();
-    var act = MENU_CONSUME;
-    if(ItemUtil.isEquip(itemid)) {
-      // 装備アイテム
-      act = MENU_EQUIP;
-      if(_isEquipSelectedItem()) {
-        // 装備中なので外す
-        act = MENU_UNEQUIP;
-      }
-    }
-    _sub = new InventoryAction(x, y, [act, MENU_PUT]);
-    this.add(_sub);
-    _state = State.Sub;
-  */
-
     var itemid = getSelectedItem();
     if(ItemUtil.isEquip(itemid)) {
       // 装備アイテム
@@ -362,45 +347,21 @@ class Inventory extends FlxGroup {
         }
 
         if(Key.press.A) {
-          // サブメニューを開く
+          // コマンドメニューを開く
           var param = _getMenuParam();
           var itemid = getSelectedItem();
-          _sub = new InventoryAction(x, y, _cbAction, param);
-          this.add(_sub);
-          _state = State.Sub;
+          _cmd = new InventoryCommand(x, y, _cbAction, param);
+          this.add(_cmd);
+          _state = State.Command;
         }
 
-      case State.Sub:
-        if(_sub.proc() == false) {
+      case State.Command:
+        // コマンドメニュー
+        if(_cmd.proc() == false) {
           // 項目決定
-          /*
-          switch(_sub.cursor) {
-            case 0:
-              // アイテムを使う・装備する・外す
-              var itemid = getSelectedItem();
-              if(ItemUtil.isEquip(itemid)) {
-                // 装備する
-                if(_isEquipSelectedItem()) {
-                  // 装備していたら外す
-                  unequip(ItemUtil.getType(itemid), true);
-                }
-                else {
-                  // 装備する
-                  equip(-1, true);
-                }
-              }
-              else {
-                // アイテムを使う
-                useItem(-1);
-              }
-            case 1:
-              // アイテムを捨てる
-              delItem(-1, true);
-          }
-          */
           // メインに戻る
-          this.remove(_sub);
-          _sub = null;
+          this.remove(_cmd);
+          _cmd = null;
           _state = State.Main;
 
           // 項目を決定した
@@ -408,8 +369,8 @@ class Inventory extends FlxGroup {
         }
         else if(Key.press.B) {
           // メインに戻る
-          this.remove(_sub);
-          _sub = null;
+          this.remove(_cmd);
+          _cmd = null;
           _state = State.Main;
         }
     }
@@ -477,7 +438,7 @@ class Inventory extends FlxGroup {
     }
 
     if(bChangeItem) {
-      // 選択アイテムが変わった
+      // 選択アイテムが変わったので詳細情報を更新
       _detail.setSelectedItem(getSelectedItem());
     }
   }
@@ -543,30 +504,16 @@ class Inventory extends FlxGroup {
     if(idx == -1) {
       idx = _nCursor;
     }
+
+    // アイテムを使う
     var item = _itemList[idx];
+    ItemUtil.use(_player, item);
 
-    switch(item.type) {
-      case IType.Portion:
-        // 薬
-        var val = ItemUtil.getParam(item.id, "hp");
-        if(val > 0) {
-          _player.addHp(val);
-        }
-        else {
-          val = ItemUtil.getParam(item.id, "hp2");
-          _player.addHp2(val);
-        }
-      case IType.Food:
-        // 食糧
-        var val = ItemUtil.getParam(item.id, "food");
-        _player.addFood(val);
-      default:
-        // ここにくることはない
-        trace('Error: Invalid item ${item.id}');
-    }
-
+    // メッセージ表示
     var name = ItemUtil.getName(item.id);
     Message.push2(Msg.ITEM_EAT, [name]);
+
+    // 使ったアイテムを削除
     delItem(idx);
   }
 
