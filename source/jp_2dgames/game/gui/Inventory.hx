@@ -417,7 +417,12 @@ class Inventory extends FlxGroup {
         unequip(ItemUtil.getType(itemid), true);
       case MENU_PUT:
         // 床に置く
-        delItem(-1, true);
+        if(_isItemOnFeet() == false) {
+          var item = getSelectedItem();
+          DropItem.add(_player.xchip, _player.ychip, item);
+          delItem(-1, false);
+          Message.push('床にアイテムを置いた');
+        }
       case MENU_CHANGE:
         // TODO: 交換
       case MENU_PICKUP:
