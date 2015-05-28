@@ -405,6 +405,10 @@ class Inventory extends FlxGroup {
    * @return 項目に対応する処理ID
    **/
   private function _cbAction(type:Int):Int {
+
+    // 項目決定したらカーソルは消す
+    _cursor.visible = false;
+
     // 現在の状態を格納
     var mode = _menumode;
     _menumode = MenuMode.Carry;
