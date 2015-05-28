@@ -257,14 +257,15 @@ class PlayState extends FlxState {
       Inventory.push(i, param);
       Inventory.push(i, param);
       Inventory.push(i, param);
-      Inventory.push(i, param);
-      Inventory.push(i, param);
-      Inventory.push(i, param);
+//      Inventory.push(i, param);
+//      Inventory.push(i, param);
+//      Inventory.push(i, param);
     }
     for(i in 1001...1007) {
       Inventory.push(i, param);
     }
-    for(i in 1021...1027) {
+//    for(i in 1021...1027) {
+      for(i in 1021...1026) {
       Inventory.push(i, param);
     }
 

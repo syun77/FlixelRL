@@ -440,7 +440,7 @@ class Inventory extends FlxGroup {
         // 交換
         // アイテムリストから取り出す
         var item = getSelectedItem();
-        delItem(-1, false);
+        delItem(-1, false, false);
         // 床のアイテムをアイテムリストに追加
         {
           var feet = _feetItem[0];
@@ -451,6 +451,8 @@ class Inventory extends FlxGroup {
           // 足下アイテムを消す
           DropItem.killFromPosition(_player.xchip, _player.ychip);
         }
+        // カーソル位置の調整
+        _adjustCursor();
 
         // 床に置く
         DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
@@ -643,11 +645,13 @@ class Inventory extends FlxGroup {
     }
 
     // カーソルの座標を更新
-    {
-      var idx = (_nCursor % PAGE_DISP);
-      _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
-    }
+    _updateCursorPosition();
+  }
 
+  // カーソルの座標を更新
+  private function _updateCursorPosition():Void {
+    var idx = (_nCursor % PAGE_DISP);
+    _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
   }
 
   // ページ切り替え
@@ -674,11 +678,33 @@ class Inventory extends FlxGroup {
   }
 
   /**
+   * カーソル位置の調整
+   **/
+  private function _adjustCursor():Void {
+    if(_nCursor >= itemcount) {
+      // 範囲外のカーソルの位置をずらす
+      _nCursor = itemcount - 1;
+      if(_nCursor < 0) {
+        _nCursor = 0;
+      }
+      trace(_nPage, "/", _pageMax);
+      if(_nPage >= _pageMax) {
+        _nPage = _pageMax - 1;
+      }
+      trace(_nPage, "/", _pageMax);
+      // カーソルの位置を調整
+      _updateCursorPosition();
+    }
+  }
+
+  /**
 	 * アイテムの削除
-	 * @param idx: カーソル番号 (-1指定で _nCursor を使う)
+	 * @param idx カーソル番号 (-1指定で _nCursor を使う)
+	 * @param bMsg 削除メッセージを表示するかどうか
+	 * @param bCursorAdjust カーソル位置の調整を行うかどうか
 	 * @return アイテムがすべてなくなったらtrue
 	 **/
-  public function delItem(idx:Int, bMsg:Bool = false):Bool {
+  public function delItem(idx:Int, bMsg:Bool = false, bAdjustCursor=true):Bool {
     if(idx == -1) {
       // 現在のカーソルを使う
       idx = _nCursor;
@@ -694,12 +720,9 @@ class Inventory extends FlxGroup {
     // アイテムリストから削除する
     itemList.splice(idx, 1);
 
-    if(_nCursor >= itemcount) {
-      // 範囲外のカーソルの位置をずらす
-      _nCursor = itemcount - 1;
-      if(_nCursor < 0) {
-        _nCursor = 0;
-      }
+    if(bAdjustCursor) {
+      // カーソル位置の調整
+      _adjustCursor();
     }
 
     // テキストを更新
