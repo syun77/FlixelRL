@@ -20,6 +20,14 @@ private enum State {
 }
 
 /**
+ * メニューモード
+ **/
+private enum MenuMode {
+  Carry; // メインのアイテムリスト
+  Feet; // 足下のアイテムリスト
+}
+
+/**
  * インベントリ
  **/
 class Inventory extends FlxGroup {
@@ -93,6 +101,8 @@ class Inventory extends FlxGroup {
 
   // 状態
   private var _state:State = State.Main;
+  // メニュー表示モード
+  private var _menumode:MenuMode = MenuMode.Carry;
 
   // プレイヤー
   private var _player:Player;
@@ -156,15 +166,20 @@ class Inventory extends FlxGroup {
   private var _itemList:Array<ItemData>;
   private var itemList(get_itemList, null):Array<ItemData>;
   private function get_itemList() {
-    return _itemList;
+    switch(_menumode) {
+      case MenuMode.Carry:
+        return _itemList;
+      case MenuMode.Feet:
+        return _feetItem;
+    }
   }
   // アイテム所持数
   public var itemcount(get, never):Int;
   private function get_itemcount() {
-    return _itemList.length;
+    return itemList.length;
   }
   // 足下のアイテム
-  private var _tmpItem:ItemData;
+  private var _feetItem:Array<ItemData> = null;
 
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
@@ -184,6 +199,10 @@ class Inventory extends FlxGroup {
   private var _pageMax(get, never):Int;
   private function get__pageMax() {
     return Std.int(Math.ceil(itemcount / PAGE_DISP));
+  }
+  // 最大ページ数 (通常アイテムリストから取得する)
+  private function _getCarryPageMax():Int {
+    return Std.int(Math.ceil(_itemList.length / PAGE_DISP));
   }
 
   // サブメニュー
@@ -284,8 +303,24 @@ class Inventory extends FlxGroup {
     _cursor.visible = b;
 
     if(b) {
+      // 所持アイテムから表示する
+      _menumode = MenuMode.Carry;
+
       // 足下にあるアイテムを取得する
-      _tmpItem = DropItem.getFromChipPosition(_player.xchip, _player.ychip);
+      var feet = DropItem.getFromChipPosition(_player.xchip, _player.ychip);
+      if(feet != null) {
+        // 足下にアイテムがある
+        _feetItem = [feet];
+      }
+      else {
+        _feetItem = null;
+      }
+    }
+    else {
+      // 所持アイテムから表示に戻す
+      _menumode = MenuMode.Carry;
+      trace("page", _nPage);
+      _updateText();
     }
 
     // 詳細表示切り替え
@@ -339,7 +374,12 @@ class Inventory extends FlxGroup {
     switch(_state) {
       case State.Main:
         // カーソル更新
-        _procCursor();
+        switch(_menumode) {
+          case MenuMode.Carry:
+            _procCursor();
+          case MenuMode.Feet:
+            _procCursorFeet();
+        }
 
         if(Key.press.B) {
           // メニューを閉じる
@@ -379,12 +419,48 @@ class Inventory extends FlxGroup {
     return RET_CONTINUE;
   }
 
+  /**
+   * カーソルの更新（足下メニュー）
+   **/
+  private function _procCursorFeet():Void {
+
+    // ページを切り替えたかどうか
+    var bChangePage = false;
+
+    if(Key.press.LEFT) {
+      // 通常アイテムのページ数を取得
+      _nPage = _getCarryPageMax() - 1;
+      bChangePage = true;
+    }
+    else if(Key.press.RIGHT) {
+      _nPage = 0;
+      bChangePage = true;
+    }
+
+    if(bChangePage) {
+      _nCursor = _pageMinId;
+      // 通常メニューに戻る
+      _menumode = MenuMode.Carry;
+
+      // テキスト更新
+      _updateText();
+      _changePage();
+    }
+  }
+
+  /**
+   * カーソルの更新
+   **/
   private function _procCursor():Void {
     // 番号の最小値と最大値を取得する
     var min = _pageMinId;
     var max = _pageMaxId;
     var nCursor = _nCursor % PAGE_DISP;
+
+    // 項目リストを変化するかどうか
     var bChangeItem = false;
+    // 足下メニューを表示するかどうか
+    var bDispFeetMenu = false;
 
     if(Key.press.UP) {
       // 上に移動
@@ -407,6 +483,7 @@ class Inventory extends FlxGroup {
       _nPage--;
       if(_nPage < 0) {
         _nPage = _pageMax - 1;
+        bDispFeetMenu = true;
       }
       _nCursor = nCursor + _nPage * PAGE_DISP;
       if(_nCursor >= itemcount) {
@@ -421,6 +498,7 @@ class Inventory extends FlxGroup {
       _nPage++;
       if(_nPage >= _pageMax) {
         _nPage = 0;
+        bDispFeetMenu = true;
       }
       _nCursor = nCursor + _nPage * PAGE_DISP;
       if(_nCursor >= itemcount) {
@@ -431,22 +509,43 @@ class Inventory extends FlxGroup {
       bChangeItem = true;
     }
 
+    if(bChangeItem) {
+      if(bDispFeetMenu) {
+        if(_feetItem != null) {
+          // 足下にアイテムがある
+          _nCursor = 0;
+          _nPage = 0;
+          // 足下メニューに切り替え
+          _menumode = MenuMode.Feet;
+          // テキスト更新
+          _updateText();
+          _changePage();
+        }
+      }
+
+      // 選択アイテムが変わったので詳細情報を更新
+      _detail.setSelectedItem(getSelectedItem());
+
+    }
+
     // カーソルの座標を更新
     {
       var idx = (_nCursor % PAGE_DISP);
       _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
     }
 
-    if(bChangeItem) {
-      // 選択アイテムが変わったので詳細情報を更新
-      _detail.setSelectedItem(getSelectedItem());
-    }
   }
 
   // ページ切り替え
   private function _changePage():Void {
-    // ページ数の更新
-    _txtPage.text = 'Page (${_nPage+1}/${_pageMax})';
+    switch(_menumode) {
+      case MenuMode.Carry:
+        // ページ数の更新
+        _txtPage.text = 'Page (${_nPage+1}/${_pageMax})';
+      case MenuMode.Feet:
+        // 足下
+        _txtPage.text = '足下';
+    }
 
     // Eマークの更新
     _updateTextEquip();
@@ -456,7 +555,7 @@ class Inventory extends FlxGroup {
 	 * アイテムの追加
 	 **/
   public function addItem(itemid:Int):Void {
-    _itemList.push(new ItemData(itemid));
+    itemList.push(new ItemData(itemid));
     _updateText();
   }
 
@@ -471,10 +570,10 @@ class Inventory extends FlxGroup {
       idx = _nCursor;
     }
     // 削除アイテムの番号を保持しておく
-    var itemid = _itemList[idx].id;
+    var itemid = itemList[idx].id;
 
     // アイテムを削除する
-    _itemList.splice(idx, 1);
+    itemList.splice(idx, 1);
 
     if(_nCursor >= itemcount) {
       // 範囲外のカーソルの位置をずらす
@@ -506,7 +605,7 @@ class Inventory extends FlxGroup {
     }
 
     // アイテムを使う
-    var item = _itemList[idx];
+    var item = itemList[idx];
     ItemUtil.use(_player, item);
 
     // メッセージ表示
@@ -527,7 +626,7 @@ class Inventory extends FlxGroup {
       return ItemUtil.NONE;
     }
 
-    return _itemList[_nCursor].id;
+    return itemList[_nCursor].id;
   }
 
   /**
@@ -540,7 +639,7 @@ class Inventory extends FlxGroup {
       return false;
     }
 
-    return _itemList[_nCursor].isEquip;
+    return itemList[_nCursor].isEquip;
   }
 
   /**
@@ -550,7 +649,7 @@ class Inventory extends FlxGroup {
     var i:Int = _nPage * PAGE_DISP;
     for(txt in _txtList) {
       if(i < itemcount) {
-        var itemid = _itemList[i].id;
+        var itemid = itemList[i].id;
         var name = ItemUtil.getName(itemid);
         txt.text = name;
       }
@@ -577,7 +676,7 @@ class Inventory extends FlxGroup {
     var min = _pageMinId;
     var max = _pageMaxId;
     for(i in min...max) {
-      var itemdata = _itemList[i];
+      var itemdata = itemList[i];
       if(itemdata.isEquip) {
         // 装備しているのでEマークを表示
         var spr:FlxSprite = null;
@@ -606,7 +705,7 @@ class Inventory extends FlxGroup {
     if(idx == -1) {
       idx = _nCursor;
     }
-    var itemdata = _itemList[idx];
+    var itemdata = itemList[idx];
     // 同じ種類の装備を外す
     unequip(itemdata.type);
 
@@ -666,7 +765,7 @@ class Inventory extends FlxGroup {
 	 * ItemListを連続操作する
 	 **/
   private function forEachItemList(func:ItemData -> Void):Void {
-    for(item in _itemList) {
+    for(item in itemList) {
       func(item);
     }
   }
