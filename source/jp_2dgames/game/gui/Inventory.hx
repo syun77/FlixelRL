@@ -34,11 +34,21 @@ class Inventory extends FlxGroup {
   private static inline var EQUIP_RING:Int = 2;
 
   // 消費アイテムメニュー
+  /*
   private static inline var MENU_CONSUME = "使う";
   private static inline var MENU_EQUIP = "装備";
   private static inline var MENU_UNEQUIP = "外す";
   private static inline var MENU_THROW = "投げる";
   private static inline var MENU_PUT = "捨てる";
+  */
+
+  private static inline var MENU_CONSUME:Int = Msg.MENU_USE;
+  private static inline var MENU_EQUIP:Int = Msg.MENU_EQUIP;
+  private static inline var MENU_UNEQUIP:Int = Msg.MENU_UNEQUIP;
+  private static inline var MENU_THROW:Int = Msg.MENU_THROW;
+  private static inline var MENU_PUT:Int = Msg.MENU_PUT;
+  private static inline var MENU_CHANGE:Int = Msg.MENU_CHANGE;
+  private static inline var MENU_PICKUP:Int = Msg.MENU_PICKUP;
 
   // ページ数の最大
   private static inline var PAGE_MAX:Int = 3;
@@ -281,6 +291,61 @@ class Inventory extends FlxGroup {
     showDetail(b);
   }
 
+  private function _getMenuParam():Array<Int> {
+  /*
+    var itemid = getSelectedItem();
+    var act = MENU_CONSUME;
+    if(ItemUtil.isEquip(itemid)) {
+      // 装備アイテム
+      act = MENU_EQUIP;
+      if(_isEquipSelectedItem()) {
+        // 装備中なので外す
+        act = MENU_UNEQUIP;
+      }
+    }
+    _sub = new InventoryAction(x, y, [act, MENU_PUT]);
+    this.add(_sub);
+    _state = State.Sub;
+  */
+
+    var itemid = getSelectedItem();
+    if(ItemUtil.isEquip(itemid)) {
+      // 装備アイテム
+      if(_isEquipSelectedItem()) {
+        // 装備中
+        return [MENU_UNEQUIP, MENU_PUT];
+      }
+      return [MENU_EQUIP, MENU_PUT];
+    }
+
+    // 消費アイテム
+    return [MENU_CONSUME, MENU_PUT];
+  }
+
+  private function _cbAction(type:Int):Int {
+    var itemid = getSelectedItem();
+    switch(type) {
+      case MENU_CONSUME:
+        // 使う
+        useItem(-1);
+      case MENU_EQUIP:
+        // 装備する
+        equip(-1, true);
+      case MENU_UNEQUIP:
+        // 装備から外す
+        unequip(ItemUtil.getType(itemid), true);
+      case MENU_PUT:
+        // 床に置く
+        delItem(-1, true);
+      case MENU_CHANGE:
+        // TODO: 交換
+      case MENU_PICKUP:
+        // TODO: 拾う
+    }
+
+    return 1;
+  }
+
   /**
 	 * 更新
 	 **/
@@ -298,17 +363,9 @@ class Inventory extends FlxGroup {
 
         if(Key.press.A) {
           // サブメニューを開く
+          var param = _getMenuParam();
           var itemid = getSelectedItem();
-          var act = MENU_CONSUME;
-          if(ItemUtil.isEquip(itemid)) {
-            // 装備アイテム
-            act = MENU_EQUIP;
-            if(_isEquipSelectedItem()) {
-              // 装備中なので外す
-              act = MENU_UNEQUIP;
-            }
-          }
-          _sub = new InventoryAction(x, y, [act, MENU_PUT]);
+          _sub = new InventoryAction(x, y, _cbAction, param);
           this.add(_sub);
           _state = State.Sub;
         }
@@ -316,6 +373,7 @@ class Inventory extends FlxGroup {
       case State.Sub:
         if(_sub.proc() == false) {
           // 項目決定
+          /*
           switch(_sub.cursor) {
             case 0:
               // アイテムを使う・装備する・外す
@@ -323,7 +381,7 @@ class Inventory extends FlxGroup {
               if(ItemUtil.isEquip(itemid)) {
                 // 装備する
                 if(_isEquipSelectedItem()) {
-                  // 外す
+                  // 装備していたら外す
                   unequip(ItemUtil.getType(itemid), true);
                 }
                 else {
@@ -339,6 +397,7 @@ class Inventory extends FlxGroup {
               // アイテムを捨てる
               delItem(-1, true);
           }
+          */
           // メインに戻る
           this.remove(_sub);
           _sub = null;
@@ -639,13 +698,12 @@ class Inventory extends FlxGroup {
   public function unequip(type:IType, bMsg:Bool = false):Void {
     // 同じ種類の装備を外す
     var itemid:Int = -1;
-    var func = function(item:ItemData) {
+    forEachItemList(function(item:ItemData) {
       if(type == item.type) {
         item.isEquip = false;
         itemid = item.id;
       }
-    }
-    forEachItemList(func);
+    });
 
     if(bMsg && itemid >= 0) {
       // 装備を外したメッセージの表示

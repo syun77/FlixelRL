@@ -40,10 +40,13 @@ class InventoryAction extends FlxGroup {
     return _nCursor;
   }
 
+  private var _cbFunc:Int->Int;
+  private var _items:Array<Int>;
+
   // 状態
   private var _state:State = State.Main;
 
-  public function new(X:Float, Y:Float, items:Array<String>) {
+  public function new(X:Float, Y:Float, cbFunc:Int->Int, items:Array<Int>) {
     super();
 
     x = X;
@@ -64,11 +67,13 @@ class InventoryAction extends FlxGroup {
       var py = y + (i * DY);
       var txt = new FlxText(px, py, 0, WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-      txt.text = item;
+      txt.text = Message.getText(item);
       _txtList.add(txt);
       this.add(txt);
       i++;
     }
+    _items = items;
+    _cbFunc = cbFunc;
 
     // 背景枠作成
     sprBack.makeGraphic(WIDTH, i * DY, FlxColor.BLACK);
@@ -80,7 +85,6 @@ class InventoryAction extends FlxGroup {
 	 * 更新
 	 * @return 項目決定したらfalseを返す
 	 **/
-
   public function proc():Bool {
 
     switch(_state) {
@@ -88,6 +92,7 @@ class InventoryAction extends FlxGroup {
         // カーソル更新
         _procCursor();
         if(Key.press.A) {
+          _cbFunc(_items[_nCursor]);
           _state = State.End;
         }
 
