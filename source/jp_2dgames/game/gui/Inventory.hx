@@ -441,7 +441,7 @@ class Inventory extends FlxGroup {
           var feet = _feetItem[0];
           addItem(feet.id);
           var name = ItemUtil.getName(feet.id);
-          // TODO: メッセージを正式なものに差し替える
+          // メッセージ表示
           Message.push2(Msg.ITEM_PICKUP, [name]);
           // 足下アイテムを消す
           DropItem.killFromPosition(_player.xchip, _player.ychip);
@@ -449,8 +449,9 @@ class Inventory extends FlxGroup {
 
         // 床に置く
         DropItem.add(_player.xchip, _player.ychip, item);
-        // TODO: メッセージを正式なものに差し替える
-        Message.push('アイテムを床に置いた');
+        // メッセージ表示
+        var name = ItemUtil.getName(item);
+        Message.push2(Msg.ITEM_PUT, [name]);
 
       case MENU_PICKUP:
         // 拾う
