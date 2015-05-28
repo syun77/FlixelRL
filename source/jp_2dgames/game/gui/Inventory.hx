@@ -679,9 +679,14 @@ class Inventory extends FlxGroup {
       idx = _nCursor;
     }
     // 削除アイテムの番号を保持しておく
-    var itemid = itemList[idx].id;
+    var item = itemList[idx];
+    var itemid = item.id;
+    if(item.isEquip) {
+      // 装備していたら外す
+      unequip(item.type, false);
+    }
 
-    // アイテムを削除する
+    // アイテムリストから削除する
     itemList.splice(idx, 1);
 
     if(_nCursor >= itemcount) {
@@ -859,6 +864,16 @@ class Inventory extends FlxGroup {
         itemid = item.id;
       }
     });
+    switch(type) {
+      case IType.Weapon:
+        _weapon = ItemUtil.NONE;
+      case IType.Armor:
+        _armor = ItemUtil.NONE;
+      case IType.Ring:
+        _ring = ItemUtil.NONE;
+      default:
+        trace('warning: invalid type = ${type}');
+    }
 
     if(bMsg && itemid >= 0) {
       // 装備を外したメッセージの表示
