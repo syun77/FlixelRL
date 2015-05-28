@@ -39,9 +39,10 @@ class ItemUtil {
     }
   }
 
-  public static function getName(id:Int):String {
-    var csv = getCsv(id);
-    return csv.searchItem("id", '${id}', "name");
+  public static function getName(item:ItemData):String {
+    var csv = getCsv(item.id);
+    var name = csv.searchItem("id", '${item.id}', "name");
+    return name;
   }
 
   /**

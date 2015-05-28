@@ -163,13 +163,14 @@ class DropItem extends FlxSprite {
     // 拡張パラメータをコピー
     ItemExtraParam.copy(this.param, param);
 
+    var itemdata = new ItemData(itemid, param);
     // 名前
     if(type == IType.Money) {
       // お金は特殊
       name = '${param.value}円';
     }
     else {
-      name = ItemUtil.getName(id);
+      name = ItemUtil.getName(itemdata);
     }
 
     // アニメーション再生

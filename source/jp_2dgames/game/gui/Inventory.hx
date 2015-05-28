@@ -433,7 +433,7 @@ class Inventory extends FlxGroup {
           DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
           delItem(-1, false);
           // メッセージ表示
-          var name = ItemUtil.getName(itemid);
+          var name = ItemUtil.getName(item);
           Message.push2(Msg.ITEM_PUT, [name]);
         }
       case MENU_CHANGE:
@@ -445,7 +445,7 @@ class Inventory extends FlxGroup {
         {
           var feet = _feetItem[0];
           addItem(feet.id, feet.param);
-          var name = ItemUtil.getName(feet.id);
+          var name = ItemUtil.getName(feet);
           // メッセージ表示
           Message.push2(Msg.ITEM_PICKUP, [name]);
           // 足下アイテムを消す
@@ -455,7 +455,7 @@ class Inventory extends FlxGroup {
         // 床に置く
         DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
         // メッセージ表示
-        var name = ItemUtil.getName(item.id);
+        var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_PUT, [name]);
 
       case MENU_PICKUP:
@@ -707,7 +707,7 @@ class Inventory extends FlxGroup {
 
     if(bMsg) {
       // アイテムを捨てたメッセージ
-      var name = ItemUtil.getName(itemid);
+      var name = ItemUtil.getName(item);
       Message.push2(Msg.ITEM_DISCARD, [name]);
     }
 
@@ -728,7 +728,7 @@ class Inventory extends FlxGroup {
     ItemUtil.use(_player, item);
 
     // メッセージ表示
-    var name = ItemUtil.getName(item.id);
+    var name = ItemUtil.getName(item);
     Message.push2(Msg.ITEM_EAT, [name]);
 
     // 使ったアイテムを削除
@@ -768,8 +768,8 @@ class Inventory extends FlxGroup {
     var i:Int = _nPage * PAGE_DISP;
     for(txt in _txtList) {
       if(i < itemcount) {
-        var itemid = itemList[i].id;
-        var name = ItemUtil.getName(itemid);
+        var item = itemList[i];
+        var name = ItemUtil.getName(item);
         txt.text = name;
       }
       else {
@@ -851,7 +851,7 @@ class Inventory extends FlxGroup {
 
     if(bMsg) {
       // 装備メッセージの表示
-      var name = ItemUtil.getName(itemdata.id);
+      var name = ItemUtil.getName(itemdata);
       Message.push2(Msg.ITEM_EQUIP, [name]);
     }
   }
@@ -862,11 +862,11 @@ class Inventory extends FlxGroup {
 	 **/
   public function unequip(type:IType, bMsg:Bool = false):Void {
     // 同じ種類の装備を外す
-    var itemid:Int = -1;
-    forEachItemList(function(item:ItemData) {
-      if(type == item.type) {
-        item.isEquip = false;
-        itemid = item.id;
+    var item:ItemData = _itemnull;
+    forEachItemList(function(item2:ItemData) {
+      if(type == item2.type) {
+        item2.isEquip = false;
+        item = item2;
       }
     });
     switch(type) {
@@ -880,9 +880,9 @@ class Inventory extends FlxGroup {
         trace('warning: invalid type = ${type}');
     }
 
-    if(bMsg && itemid >= 0) {
+    if(bMsg && item.id >= 0) {
       // 装備を外したメッセージの表示
-      var name = ItemUtil.getName(itemid);
+      var name = ItemUtil.getName(item);
       Message.push2(Msg.ITEM_UNEQUIP, [name]);
     }
 
