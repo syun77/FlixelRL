@@ -6,3 +6,4 @@ assets/levels/.DS_Store
 save.txt
 docs/monster/out/*.png
 docs/monster/tmp/*.png
+upload.command
