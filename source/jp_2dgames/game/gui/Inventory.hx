@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.Item;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
@@ -133,8 +134,8 @@ class Inventory extends FlxGroup {
   private var _fonts:Array<FlxSprite>;
 
   // アイテムの追加
-  public static function push(itemid:Int) {
-    instance.addItem(itemid);
+  public static function push(itemid:Int, param:ItemExtraParam) {
+    instance.addItem(itemid, param);
   }
   // 装備品の取得
   public static function getWeapon():Int {
@@ -190,6 +191,8 @@ class Inventory extends FlxGroup {
   private function _isItemOnFeet():Bool {
     return _feetItem != null;
   }
+  // NULLアイテム
+  private var _itemnull = null;
 
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
@@ -265,7 +268,8 @@ class Inventory extends FlxGroup {
       _fonts.push(spr);
     }
 
-    FlxG.watch.add(this, "_nCursor");
+    // NULLアイテム
+    _itemnull = new ItemData(ItemUtil.NONE, new ItemExtraParam());
   }
 
   /**
@@ -342,7 +346,8 @@ class Inventory extends FlxGroup {
    * コマンドメニューのパラメータを取得する
    **/
   private function _getMenuParam():Array<Int> {
-    var itemid = getSelectedItem();
+    var item = getSelectedItem();
+    var itemid = item.id;
     // 床にアイテムがあるかどうか
     var bFeet = _isItemOnFeet();
     // アイテムの所持数が最大かどうか
@@ -404,7 +409,8 @@ class Inventory extends FlxGroup {
     var mode = _menumode;
     _menumode = MenuMode.Carry;
 
-    var itemid = getSelectedItem();
+    var item = getSelectedItem();
+    var itemid = item.id;
     switch(type) {
       case MENU_CONSUME:
         // 使う
@@ -424,11 +430,10 @@ class Inventory extends FlxGroup {
       case MENU_PUT:
         // 床に置く
         if(_isItemOnFeet() == false) {
-          var item = getSelectedItem();
-          DropItem.add(_player.xchip, _player.ychip, item);
+          DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
           delItem(-1, false);
           // メッセージ表示
-          var name = ItemUtil.getName(item);
+          var name = ItemUtil.getName(itemid);
           Message.push2(Msg.ITEM_PUT, [name]);
         }
       case MENU_CHANGE:
@@ -439,7 +444,7 @@ class Inventory extends FlxGroup {
         // 床のアイテムをアイテムリストに追加
         {
           var feet = _feetItem[0];
-          addItem(feet.id);
+          addItem(feet.id, feet.param);
           var name = ItemUtil.getName(feet.id);
           // メッセージ表示
           Message.push2(Msg.ITEM_PICKUP, [name]);
@@ -448,9 +453,9 @@ class Inventory extends FlxGroup {
         }
 
         // 床に置く
-        DropItem.add(_player.xchip, _player.ychip, item);
+        DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
         // メッセージ表示
-        var name = ItemUtil.getName(item);
+        var name = ItemUtil.getName(item.id);
         Message.push2(Msg.ITEM_PUT, [name]);
 
       case MENU_PICKUP:
@@ -663,8 +668,8 @@ class Inventory extends FlxGroup {
   /**
 	 * アイテムの追加
 	 **/
-  public function addItem(itemid:Int):Void {
-    itemList.push(new ItemData(itemid));
+  public function addItem(itemid:Int, param:ItemExtraParam):Void {
+    itemList.push(new ItemData(itemid, param));
     _updateText();
   }
 
@@ -732,15 +737,15 @@ class Inventory extends FlxGroup {
 
   /**
 	 * 選択中のアイテムを取得する
-	 * @return 選択中のアイテム番号。アイテムがない場合は-1
+	 * @return 選択中のアイテム情報。アイテムがない場合はNULLアイテムを返す
 	 **/
-  public function getSelectedItem():Int {
+  public function getSelectedItem():ItemData {
     if(itemcount == 0) {
       // アイテムを持っていない
-      return ItemUtil.NONE;
+      return _itemnull;
     }
 
-    return itemList[_nCursor].id;
+    return itemList[_nCursor];
   }
 
   /**

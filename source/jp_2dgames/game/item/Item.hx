@@ -1,7 +1,6 @@
 package jp_2dgames.game.item;
 
-import ItemUtil.IType;
-
+import jp_2dgames.game.item.ItemUtil.IType;
 /**
  * アイテムデータ
  **/

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import flixel.util.FlxColor;
@@ -85,7 +86,7 @@ class GuiStatusDetail extends FlxGroup {
     this.add(_txtDef);
   }
 
-  private function _updateText(itemid:Int):Void {
+  private function _updateText(item:ItemData):Void {
 
     var player = cast(FlxG.state, PlayState).player;
     // 力
@@ -99,7 +100,8 @@ class GuiStatusDetail extends FlxGroup {
     _txtDef.text = '守備力: ${player.def}';
     _txtDef.color = FlxColor.WHITE;
 
-    var type = ItemUtil.getType(itemid);
+    var itemid = item.id;
+    var type = item.type;
     if(type == IType.None) {
       // 無効なアイテムなので何もしない
       return;
@@ -152,14 +154,14 @@ class GuiStatusDetail extends FlxGroup {
   /**
    * 表示する
    **/
-  public function show(itemid:Int) {
-    _updateText(itemid);
+  public function show(item:ItemData) {
+    _updateText(item);
   }
 
   /**
    * 選択中のアイテムを設定する
    **/
-  public function setSelectedItem(itemid:Int) {
-    _updateText(itemid);
+  public function setSelectedItem(item:ItemData) {
+    _updateText(item);
   }
 }
