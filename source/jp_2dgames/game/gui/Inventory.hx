@@ -759,11 +759,13 @@ class Inventory extends FlxGroup {
       if(_nCursor < 0) {
         _nCursor = 0;
       }
-      trace(_nPage, "/", _pageMax);
       if(_nPage >= _pageMax) {
         _nPage = _pageMax - 1;
+        if(_nPage < 0) {
+          // マイナスのページにならないようにする
+          _nPage = 0;
+        }
       }
-      trace(_nPage, "/", _pageMax);
       // カーソルの位置を調整
       _updateCursorPosition();
     }
@@ -863,7 +865,10 @@ class Inventory extends FlxGroup {
     var i:Int = _nPage * PAGE_DISP;
     for(txt in _txtList) {
       if(i < itemcount) {
+        trace('i: ${i}');
+        trace('itemcount: ${itemcount}');
         var item = itemList[i];
+        trace('item: ${item}');
         var name = ItemUtil.getName(item);
         txt.text = name;
       }

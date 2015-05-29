@@ -251,21 +251,22 @@ class PlayState extends FlxState {
     _seq = new SeqMgr(this);
 
     // TODO: デバッグ用のアイテムを追加
-    var param = new ItemExtraParam();
-    for(i in 1...3) {
-      Inventory.push(i, param);
-      Inventory.push(i, param);
-      Inventory.push(i, param);
-//      Inventory.push(i, param);
-//      Inventory.push(i, param);
-//      Inventory.push(i, param);
-    }
-    for(i in 1001...1007) {
-      Inventory.push(i, param);
-    }
-//    for(i in 1021...1027) {
-      for(i in 1021...1026) {
-      Inventory.push(i, param);
+    if(false) {
+      var param = new ItemExtraParam();
+      for(i in 1...3) {
+        Inventory.push(i, param);
+        Inventory.push(i, param);
+        Inventory.push(i, param);
+        Inventory.push(i, param);
+        Inventory.push(i, param);
+        Inventory.push(i, param);
+      }
+      for(i in 1001...1007) {
+        Inventory.push(i, param);
+      }
+      for(i in 1021...1027) {
+        Inventory.push(i, param);
+      }
     }
 
     // デバッグ情報設定
