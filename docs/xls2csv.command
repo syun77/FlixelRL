@@ -5,9 +5,7 @@ cd `dirname $0`
 
 # コンバート実行
 # 敵データ
-python xls2csv.py enemy.xlsx ../assets/levels
-# 敵出現テーブル
-python xls2csv.py enemy_appear.xlsx ../assets/levels header_enemy.txt
+python xls2csv.py enemy.xlsx ../assets/levels  header_enemy.txt
 # プレイヤーデータ
 python xls2csv.py player.xlsx ../assets/levels
 # メッセージデータ
