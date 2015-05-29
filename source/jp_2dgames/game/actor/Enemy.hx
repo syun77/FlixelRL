@@ -95,7 +95,7 @@ class Enemy extends Actor {
             var j = Std.int(pt.y);
             pt.put();
             if(target.checkPosition(i, j)) {
-              target.look(i, j);
+              target.look(xchip, ychip);
             }
           }
         }
