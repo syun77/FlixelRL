@@ -1,4 +1,7 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxRandom;
+import jp_2dgames.game.DirUtil.Dir;
+import flixel.util.FlxPoint;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
@@ -466,6 +469,72 @@ class Inventory extends FlxGroup {
       case MENU_PICKUP:
         // 拾う
         DropItem.pickup(_player.xchip, _player.ychip);
+
+      case MENU_THROW:
+        // 投げる
+        // 落ちているアイテムを投げることもあるのでモードを戻しておく
+        _menumode = mode;
+
+        var fallItem = function(pt:FlxPoint) {
+          // アイテム落下した
+          var px = pt.x;
+          var py = pt.y;
+          var dirs = [Dir.Left, Dir.Up, Dir.Right, Dir.Down];
+          FlxRandom.shuffleArray(dirs, 1);
+          dirs.insert(0, Dir.None);
+          for(dir in dirs) {
+            pt.set(px, py);
+            pt = DirUtil.move(dir, pt);
+            var xpos = Std.int(pt.x);
+            var ypos = Std.int(pt.y);
+            // 配置できるかチェック
+            var bPut = true;
+            DropItem.parent.forEachAlive(function(drop:DropItem) {
+              if(Field.isCollision(xpos, ypos)) {
+                // 配置できない
+                bPut = false;
+              }
+              if(drop.xchip == xpos && drop.ychip == ypos) {
+                // 配置できない
+                bPut = false;
+              }
+            });
+            if(bPut) {
+              return pt;
+            }
+          }
+          return null;
+        }
+
+        var item = getSelectedItem();
+        var pt = FlxPoint.get(_player.xchip, _player.ychip);
+        var xprev = pt.x;
+        var yprev = pt.y;
+        var moveItem = function() {
+          // 壁に当たるまで進む
+          while(true) {
+            xprev = pt.x;
+            yprev = pt.y;
+            DirUtil.move(_player.dir, pt);
+            if(Field.isCollision(Std.int(pt.x), Std.int(pt.y))) {
+              // 壁に当たった
+              pt.set(xprev, yprev);
+              var pt2 = fallItem(pt);
+              if(pt2 != null) {
+                // 床に置ける
+                // 壁に当たったので落ちる
+                DropItem.add(Std.int(pt2.x), Std.int(pt2.y), item.id, item.param);
+              }
+              break;
+            }
+          }
+        }
+        moveItem();
+
+        pt.put();
+
+        // 選択しているアイテムを消す
+        delItem(-1);
     }
     // 元に戻す
     _menumode = mode;
