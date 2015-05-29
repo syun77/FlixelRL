@@ -5,10 +5,9 @@ import sys
 import xlrd
 import yaml
 
-# コンバート実行
-def conv(sheet, outFile, const):
-	print " [sheet] %s ... "%(sheet.name)
-	
+def main(inFile, outFile, const):
+	book = xlrd.open_workbook(inFile, outFile)
+	sheet = book.sheet_by_index(0);
 	nrows = sheet.nrows
 	ncols = sheet.ncols
 	row = 0
@@ -22,7 +21,7 @@ def conv(sheet, outFile, const):
 			try:
 				# 数値
 				ret += str(int(v))
-				#print v,
+				print v,
 			except:
 				# 文字列
 				val = str(v.encode("utf-8"))
@@ -30,28 +29,20 @@ def conv(sheet, outFile, const):
 					# 定数に置き換え
 					val = str(const[val])
 				ret += val
-				#print val
+				print val
 			col += 1
 		row += 1
-		#print
+		print
 		ret += "\n"
 
 	f = open(outFile, "w")
 	f.write(ret)
 	f.close
-	print "   -> %s"%outFile
-	
-
-# メイン処理
-def main(inFile, out, const):
-	print "target: %s"%(inFile)
-	book = xlrd.open_workbook(inFile)
-	for sheet in book.sheets():
-		conv(sheet, "%s/%s.csv"%(out, sheet.name), const)
-	print "done."
+	print "---------------"
+	print "Done."
 
 def usage():
-	print "Usage: xls2csv.py [input.xlsx] [output] [header.txt]"
+	print "Usage: xls2csv [input.xlsx] [output.csv] [header.txt]"
 
 if __name__ == '__main__':
 	argc = len(sys.argv)
