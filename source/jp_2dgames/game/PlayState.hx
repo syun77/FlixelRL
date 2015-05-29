@@ -172,7 +172,6 @@ class PlayState extends FlxState {
         eRatios.push(ratio);
         sum += ratio;
       }
-      trace(eIds, eRatios, sum);
     }
     // アイテム出現情報を計算
     var itemIds = [];

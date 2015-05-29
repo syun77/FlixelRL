@@ -46,7 +46,7 @@ class Calc {
     // 威力係数 (装備アイテムの差)
     var power_rate = Math.pow(1.15, atk - def);
 
-    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
+//    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 
     // ダメージ量を計算
     var val = (power * str_rate * power_rate);

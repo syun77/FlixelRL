@@ -28,6 +28,9 @@ class GuiStatus extends FlxGroup {
   private static inline var BG_W = 640;
   private static inline var BG_H = 24;
 
+  // Y調整
+  private static inline var MERGIN_Y = 2;
+
   // バーのサイズ
   private static inline var BAR_W = 180;
   private static inline var BAR_H = 4;
@@ -113,10 +116,12 @@ class GuiStatus extends FlxGroup {
     // 満腹度テキスト
     _txtFull = new FlxText(FULLTEXT_X, FULLTEXT_Y, 160);
     _txtFull.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    // Y調整
     _group.add(_txtFull);
 
     // 所持金テキスト
     _txtMoney = new FlxText(MONEYTEXT_X, MONEYTEXT_Y, 128);
+    // Y調整
     _txtMoney.alignment = "right"; // 右寄せ
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _group.add(_txtMoney);
@@ -170,7 +175,8 @@ class GuiStatus extends FlxGroup {
 
     // 表示アニメーション
     _groupOfsY *= 0.8;
-    _group.map(function(o) {o.y = _groupOfsY;});
+    _group.map(function(o) {o.y = _groupOfsY+MERGIN_Y;});
+    _txtHp.y -= MERGIN_Y;
     _hpBar.y += HPBAR_Y;
 
     // ヘルプテキストのアニメーション
