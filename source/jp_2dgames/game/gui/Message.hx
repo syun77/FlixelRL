@@ -47,7 +47,7 @@ class Message extends FlxGroup {
   private static inline var MESSAGE_MAX = 3;//5;
   // ウィンドウ座標
   private static inline var POS_X = 8;
-  private static inline var POS_Y = 320 + 8;
+  private static inline var POS_Y = 480 - HEIGHT - 24 - 8;
   private static inline var POS_Y2 = 24 + 8;
   // ウィンドウサイズ
   private static inline var WIDTH = 640 - 8 * 2;
