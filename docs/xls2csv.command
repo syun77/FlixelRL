@@ -15,5 +15,7 @@ python xls2csv.py message.xlsx ../assets/data
 # アイテム
 python xls2csv.py item.xlsx ../assets/levels
 
+read Wait
+
 # ターミナルを閉じる
 killall Terminal
