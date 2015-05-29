@@ -1,5 +1,4 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.item.Item;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
@@ -64,7 +63,7 @@ class Inventory extends FlxGroup {
 
   // ウィンドウ座標
   private static inline var POS_X = 640 + 8;
-  private static inline var POS_Y = 106;
+  private static inline var POS_Y = 8;
   // ウィンドウサイズ
   private static inline var WIDTH = 212 - 8 * 2;
   private static inline var HEIGHT = (DY * PAGE_DISP) + MSG_POS_Y + 8;//480 - 64 - 8 * 2;
