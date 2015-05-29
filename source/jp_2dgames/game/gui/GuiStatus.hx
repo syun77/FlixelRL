@@ -55,6 +55,8 @@ class GuiStatus extends FlxGroup {
   private static inline var HELP_DY = 24;
 
   // ステータスGUI
+  private var _group:List<FlxSprite>;
+  private var _groupOfsY:Float = 0;
   private var _bgStatus:FlxSprite;
   private var _txtLv:FlxText;
   private var _txtFloor:FlxText;
@@ -80,41 +82,46 @@ class GuiStatus extends FlxGroup {
   public function new() {
     super();
 
+    _groupOfsY = -BG_H;
+    _group = new List<FlxSprite>();
+
     // 背景
     _bgStatus = new FlxSprite(0, 0).makeGraphic(BG_W, BG_H, FlxColor.BLACK);
     _bgStatus.alpha = 0.7;
-    this.add(_bgStatus);
+    _group.add(_bgStatus);
 
     // フロアテキスト
     _txtFloor = new FlxText(FLOORTEXT_X, FLOORTEXT_Y, 128);
     _txtFloor.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    this.add(_txtFloor);
+    _group.add(_txtFloor);
 
     // レベルテキスト
     _txtLv = new FlxText(LVTEXT_X, LVTEXT_Y, 128);
     _txtLv.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    this.add(_txtLv);
+    _group.add(_txtLv);
 
     // HPテキスト
     _txtHp = new FlxText(HPTEXT_X, HPTEXT_Y, 180);
     _txtHp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    this.add(_txtHp);
+    _group.add(_txtHp);
 
     // HPバー
     _hpBar = new FlxBar(HPBAR_X, HPBAR_Y, FlxBar.FILL_LEFT_TO_RIGHT, BAR_W, BAR_H);
     _hpBar.createFilledBar(FlxColor.CRIMSON, FlxColor.CHARTREUSE);
-    this.add(_hpBar);
+    _group.add(_hpBar);
 
     // 満腹度テキスト
     _txtFull = new FlxText(FULLTEXT_X, FULLTEXT_Y, 160);
     _txtFull.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    this.add(_txtFull);
+    _group.add(_txtFull);
 
     // 所持金テキスト
     _txtMoney = new FlxText(MONEYTEXT_X, MONEYTEXT_Y, 128);
     _txtMoney.alignment = "right"; // 右寄せ
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    this.add(_txtMoney);
+    _group.add(_txtMoney);
+
+    _group.map(function(o) { this.add(o); });
 
     // ヘルプ座標(Y)
     _helpY = FlxG.height - HELP_DY;
@@ -160,6 +167,11 @@ class GuiStatus extends FlxGroup {
     // 所持金
     var money = Global.getMoney();
     _txtMoney.text = '${money}円';
+
+    // 表示アニメーション
+    _groupOfsY *= 0.8;
+    _group.map(function(o) {o.y = _groupOfsY;});
+    _hpBar.y += HPBAR_Y;
 
     // ヘルプテキストのアニメーション
     {
