@@ -248,6 +248,7 @@ class PlayState extends FlxState {
     var inventory = new Inventory();
     this.add(inventory);
     Inventory.instance = inventory;
+    inventory.setGuiStatus(_guistatus);
     // アイテムデータ設定
     Global.setItemList();
 

@@ -23,6 +23,7 @@ class GuiStatus extends FlxGroup {
   public static inline var HELP_KEYINPUT:Int = 1; // 通常移動
   public static inline var HELP_INVENTORY:Int = 2; // インベントリ
   public static inline var HELP_DIALOG_YN:Int = 3; // Yes/Noダイアログ
+  public static inline var HELP_INVENTORYCOMMAND:Int = 4; // インベントリ・コマンド
 
   // ステータス表示座標
   private static inline var POS_X = 640 + 8;
@@ -243,6 +244,8 @@ class GuiStatus extends FlxGroup {
         text = Message.getText(Msg.HELP_INVENCTORY);
       case HELP_DIALOG_YN:
         text = Message.getText(Msg.HELP_DIALOG);
+      case HELP_INVENTORYCOMMAND:
+        text = Message.getText(Msg.HELP_INVENCTORYCOMMAND);
     }
 
     _txtHelp.text = text;

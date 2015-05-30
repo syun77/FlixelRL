@@ -148,6 +148,12 @@ class Inventory extends FlxGroup {
   // フォント
   private var _fonts:Array<FlxSprite>;
 
+  // GUIステータス
+  private var _guistatus:GuiStatus;
+  public function setGuiStatus(gui:GuiStatus) {
+    _guistatus = gui;
+  }
+
   // アイテムの追加
   public static function push(itemid:Int, param:ItemExtraParam) {
     instance.addItem(itemid, param);
@@ -600,6 +606,9 @@ class Inventory extends FlxGroup {
           _cmd = new InventoryCommand(CMD_X, CMD_Y, _cbAction, param);
           this.add(_cmd);
           _state = State.Command;
+
+          // ヘルプ変更
+          _guistatus.changeHelp(GuiStatus.HELP_INVENTORYCOMMAND);
         }
 
       case State.Command:
@@ -625,6 +634,9 @@ class Inventory extends FlxGroup {
           this.remove(_cmd);
           _cmd = null;
           _state = State.Main;
+
+          // ヘルプ変更
+          _guistatus.changeHelp(GuiStatus.HELP_INVENTORY);
         }
     }
 

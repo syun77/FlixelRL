@@ -46,6 +46,7 @@ class Msg {
   public static inline var HELP_KEYINPUT:Int = 56; // ヘルプ: 通常
   public static inline var HELP_INVENCTORY:Int = 57; // ヘルプ: インベントリ
   public static inline var HELP_DIALOG:Int = 58; // ヘルプ: ダイアログ
+  public static inline var HELP_INVENCTORYCOMMAND:Int = 59; // ヘルプ: インベントリ・コマンド
 }
 
 /**
