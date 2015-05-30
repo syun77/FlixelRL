@@ -11,7 +11,7 @@ python xls2csv.py player.xlsx ../assets/levels
 # メッセージデータ
 python xls2csv.py message.xlsx ../assets/data
 # アイテム
-python xls2csv.py item.xlsx ../assets/levels
+python xls2csv.py item.xlsx ../assets/levels header_item.txt
 
 #read Wait
 
