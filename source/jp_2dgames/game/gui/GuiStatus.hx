@@ -74,7 +74,7 @@ class GuiStatus extends FlxGroup {
   private var _bgHelp:FlxSprite;
   private var _txtHelp:FlxText;
   private var _helpY:Float;
-  private var _txtHelpOfsY:Float = 0;
+  private var _helpOfsY:Float = 0;
   private var _helpMode:Int = HELP_NONE;
   public var helpmode(get, never):Int;
   private function get_helpmode() {
@@ -183,8 +183,10 @@ class GuiStatus extends FlxGroup {
 
     // ヘルプテキストのアニメーション
     {
-      _txtHelpOfsY *= 0.8;
-      _help.y = _helpY + _txtHelpOfsY;
+      if(_helpOfsY > 0) {
+        _helpOfsY -= 1;
+      }
+      _help.y = _helpY + _helpOfsY;
     }
   }
 
@@ -211,6 +213,6 @@ class GuiStatus extends FlxGroup {
     _help.y = FlxG.height;
 
     // アニメーション開始
-    _txtHelpOfsY = HELP_DY;
+    _helpOfsY = HELP_DY*1.5;
   }
 }
