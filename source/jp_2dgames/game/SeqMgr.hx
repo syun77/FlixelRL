@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.item.ThrowItem;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.GuiStatus;
 import jp_2dgames.game.gui.Dialog;
@@ -15,16 +17,16 @@ import flixel.group.FlxTypedGroup;
  * 状態
  **/
 private enum State {
-  KeyInput; // キー入力待ち
+  KeyInput;       // キー入力待ち
   InventoryInput; // インベントリの操作中
-  PlayerAct; // プレイヤーの行動
+  PlayerAct;      // プレイヤーの行動
+  Firearm;        // 飛び道具
   EnemyRequestAI; // 敵のAI
-  Move; // 移動
-  EnemyActBegin; // 敵の行動開始
-  EnemyAct; // 敵の行動
-  TurnEnd; // ターン終了
-  NextFloor;
-  // 次のフロアに進むかどうか
+  Move;           // 移動
+  EnemyActBegin;  // 敵の行動開始
+  EnemyAct;       // 敵の行動
+  TurnEnd;        // ターン終了
+  NextFloor;      // 次のフロアに進むかどうか
 }
 
 /**
@@ -35,6 +37,7 @@ class SeqMgr {
   private var _enemies:FlxTypedGroup<Enemy>;
   private var _inventory:Inventory;
   private var _guistatus:GuiStatus;
+  private var _throwItem:ThrowItem;
 
   // 状態
   private var _state:State;
@@ -49,6 +52,8 @@ class SeqMgr {
     _inventory = Inventory.instance;
     _guistatus = state.guistatus;
 
+    _throwItem = new ThrowItem();
+
     _state = State.KeyInput;
     _stateprev = _state;
   }
@@ -60,6 +65,7 @@ class SeqMgr {
     _stateprev = _state;
     _state = s;
 
+    // ヘルプ情報の更新
     var help:Int = _guistatus.helpmode;
     switch(_state) {
       case State.KeyInput:
@@ -67,6 +73,7 @@ class SeqMgr {
       case State.InventoryInput:
         help = GuiStatus.HELP_INVENTORY;
       case State.PlayerAct:
+      case State.Firearm:
       case State.EnemyRequestAI:
       case State.Move:
       case State.EnemyActBegin:
@@ -157,11 +164,19 @@ class SeqMgr {
             _inventory.setActive(false);
             _change(State.KeyInput);
           case Inventory.RET_DECIDE:
-            // TODO: ターン終了
+            // ターン終了
             _player.standby();
             // 非表示
             _inventory.setActive(false);
             _change(State.EnemyRequestAI);
+          case Inventory.RET_THROW:
+            // アイテムを投げた
+            _player.standby();
+            // 非表示
+            _inventory.setActive(false);
+            _throwItem.start(_player, _inventory.getThrowItem());
+            _inventory.clearThrowItem();
+            _change(State.Firearm);
         }
 
       case State.PlayerAct:
@@ -171,6 +186,13 @@ class SeqMgr {
           _change(State.EnemyRequestAI);
           ret = true;
         }
+
+      case State.Firearm:
+        // ■飛び道具の移動
+        if(_throwItem.isEnd()) {
+          _change(State.EnemyRequestAI);
+        }
+
       case State.EnemyRequestAI:
         // 敵に行動を要求する
         _enemies.forEachAlive(function(e:Enemy) e.requestMove());

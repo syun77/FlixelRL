@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.Item;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.DirUtil.Dir;
 import flixel.util.FlxPoint;
@@ -39,6 +40,7 @@ class Inventory extends FlxGroup {
   public static inline var RET_CONTINUE:Int = 0; // 処理続行中
   public static inline var RET_CANCEL:Int   = 1; // インベントリをキャンセルして閉じた
   public static inline var RET_DECIDE:Int   = 2; // 項目を決定した
+  public static inline var RET_THROW:Int    = 3; // アイテムを投げた
 
   // 装備アイテム
   private static inline var EQUIP_WEAPON:Int = 0;
@@ -199,6 +201,16 @@ class Inventory extends FlxGroup {
   }
   // NULLアイテム
   private var _itemnull = null;
+  // 投げたアイテム
+  private var _throwItem:ItemData = null;
+  // 投げたアイテムを取得
+  public function getThrowItem():ItemData {
+    return _throwItem;
+  }
+  // 投げたアイテムの情報を消去
+  public function clearThrowItem():Void {
+    _throwItem = null;
+  }
 
   // ページ内の最小番号
   private var _pageMinId(get, never):Int;
@@ -504,56 +516,7 @@ class Inventory extends FlxGroup {
         // 落ちているアイテムを投げることもあるのでモードを戻しておく
         _menumode = mode;
         var item = getSelectedItem();
-        var itemname = ItemUtil.getName(item);
-        Message.push2(Msg.ITEM_THROW, [_player.name, itemname]);
-
-        var pt = FlxPoint.get(_player.xchip, _player.ychip);
-        var moveItem = function() {
-          // 敵や壁に当たるまで進む
-          while(true) {
-            var xprev = Std.int(pt.x);
-            var yprev = Std.int(pt.y);
-            DirUtil.move(_player.dir, pt);
-            var xpos = Std.int(pt.x);
-            var ypos = Std.int(pt.y);
-            if(Field.isCollision(xpos, ypos)) {
-              // 壁に当たった
-              Message.push2(Msg.ITEM_HIT_WALL, [itemname]);
-
-              if(DropItem.checkDrop(pt, xprev, yprev)) {
-                // 床に置ける
-                DropItem.add(Std.int(pt.x), Std.int(pt.y), item.id, item.param);
-              }
-              else {
-                // 床に置けないので壊れる
-                Message.push2(Msg.ITEM_DESTORY, [itemname]);
-              }
-              break;
-            }
-            var e:Enemy = Enemy.getFromPositino(xpos, ypos);
-            if(e != null) {
-              // 敵に当たった
-              if(e.hitItem(_player, item) == false) {
-                // 敵がかわした
-                Message.push2(Msg.MISS, [e.name]);
-                pt.set(xpos, ypos);
-                if(DropItem.checkDrop(pt, xpos, ypos)) {
-                  // 床に置ける
-                  DropItem.add(Std.int(pt.x), Std.int(pt.y), item.id, item.param);
-                }
-                else {
-                  // 床に置けないので壊れる
-                  Message.push2(Msg.ITEM_DESTORY, [itemname]);
-                }
-              }
-              break;
-            }
-          }
-        }
-        moveItem();
-
-        pt.put();
-
+        _throwItem = new ItemData(item.id, item.param);
         // 選択しているアイテムを消す
         delItem(-1);
     }
@@ -614,7 +577,13 @@ class Inventory extends FlxGroup {
           _state = State.Main;
 
           // 項目を決定した
-          return RET_DECIDE;
+          if(_throwItem != null) {
+            // アイテムを投げた
+            return RET_THROW;
+          }
+          else {
+            return RET_DECIDE;
+          }
         }
         else if(Key.press.B) {
           // メインに戻る
