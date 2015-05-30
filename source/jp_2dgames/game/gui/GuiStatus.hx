@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.gui.Message.Msg;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -58,7 +59,7 @@ class GuiStatus extends FlxGroup {
   private static inline var HELP_DY = 24;
 
   // ステータスGUI
-  private var _group:List<FlxSprite>;
+  private var _group:FlxSpriteGroup;
   private var _groupOfsY:Float = 0;
   private var _bgStatus:FlxSprite;
   private var _txtLv:FlxText;
@@ -69,6 +70,7 @@ class GuiStatus extends FlxGroup {
   private var _txtMoney:FlxText;
 
   // ヘルプ
+  private var _help:FlxSpriteGroup;
   private var _bgHelp:FlxSprite;
   private var _txtHelp:FlxText;
   private var _helpY:Float;
@@ -86,7 +88,7 @@ class GuiStatus extends FlxGroup {
     super();
 
     _groupOfsY = -BG_H;
-    _group = new List<FlxSprite>();
+    _group = new FlxSpriteGroup();
 
     // 背景
     _bgStatus = new FlxSprite(0, 0).makeGraphic(BG_W, BG_H, FlxColor.BLACK);
@@ -125,19 +127,21 @@ class GuiStatus extends FlxGroup {
     _txtMoney.alignment = "right"; // 右寄せ
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _group.add(_txtMoney);
+    this.add(_group);
 
-    _group.map(function(o) { this.add(o); });
-
+    // ■ヘルプ
+    _help = new FlxSpriteGroup();
     // ヘルプ座標(Y)
     _helpY = FlxG.height - HELP_DY;
     // ヘルプの背景
-    _bgHelp = new FlxSprite(0, FlxG.height).makeGraphic(FlxG.width, HELP_DY, FlxColor.BLACK);
+    _bgHelp = new FlxSprite(0, 0).makeGraphic(FlxG.width, HELP_DY, FlxColor.BLACK);
     _bgHelp.alpha = 0.7;
-    this.add(_bgHelp);
+    _help.add(_bgHelp);
     // ヘルプテキスト
-    _txtHelp = new FlxText(HELP_X, FlxG.height, 600);
+    _txtHelp = new FlxText(HELP_X, 0, 600);
     _txtHelp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    this.add(_txtHelp);
+    _help.add(_txtHelp);
+    this.add(_help);
 
     // ヘルプテキスト設定
     changeHelp(HELP_KEYINPUT);
@@ -175,16 +179,12 @@ class GuiStatus extends FlxGroup {
 
     // 表示アニメーション
     _groupOfsY *= 0.8;
-    _group.map(function(o) {o.y = _groupOfsY+MERGIN_Y;});
-    _txtHp.y -= MERGIN_Y;
-    _hpBar.y += HPBAR_Y;
+    _group.y = _groupOfsY + MERGIN_Y;
 
     // ヘルプテキストのアニメーション
     {
       _txtHelpOfsY *= 0.8;
-      var py = _helpY + _txtHelpOfsY;
-      _txtHelp.y = py;
-      _bgHelp.y = py;
+      _help.y = _helpY + _txtHelpOfsY;
     }
   }
 
@@ -208,8 +208,7 @@ class GuiStatus extends FlxGroup {
     }
 
     _txtHelp.text = text;
-    _txtHelp.y = FlxG.height;
-    _bgHelp.y = FlxG.height;
+    _help.y = FlxG.height;
 
     // アニメーション開始
     _txtHelpOfsY = HELP_DY;
