@@ -1,20 +1,16 @@
 package jp_2dgames.game.gui;
+import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import flixel.group.FlxGroup;
 
 /**
  * ステータス表示・詳細
  **/
-class GuiStatusDetail extends FlxGroup {
-  // 基準座標
-  private static inline var POS_X = 200;
-  private static inline var POS_Y = 200;
-
+class GuiStatusDetail extends FlxSpriteGroup {
   // 背景の枠
   private static inline var BG_WIDTH = 200;
   private static inline var BG_HEIGHT = 100;
@@ -22,10 +18,10 @@ class GuiStatusDetail extends FlxGroup {
   // テキストの幅
   private static inline var TXT_WIDTH = BG_WIDTH;
 
-  private static inline var MSG_X = POS_X + 16;
+  private static inline var MSG_X = 16;
   // 力
   private static inline var STR_X = MSG_X;
-  private static inline var STR_Y = POS_Y + 8;
+  private static inline var STR_Y = 8;
   // 体力
   private static inline var VIT_X = MSG_X;
   private static inline var VIT_Y = STR_Y + 16;
@@ -41,6 +37,10 @@ class GuiStatusDetail extends FlxGroup {
   private var _txtVit:FlxText; // Vit
   private var _txtAtk:FlxText; // Atk
   private var _txtDef:FlxText; // Def
+
+  private var _orgY:Float = 0;
+  private var _ofsY:Float = 0;
+
   /**
    * 差分文字の作成
    **/
@@ -57,11 +57,12 @@ class GuiStatusDetail extends FlxGroup {
   /**
    * コンストラクタ
    **/
-  public function new() {
-    super();
+  public function new(X:Float, Y:Float) {
+    _orgY = Y;
+    super(X, Y);
 
     // 背景
-    var back = new FlxSprite(POS_X, POS_Y).makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
+    var back = new FlxSprite(0, 0).makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
     back.alpha = 0.5;
     this.add(back);
 
@@ -149,12 +150,17 @@ class GuiStatusDetail extends FlxGroup {
    **/
   override public function update() {
     super.update();
+
+    _ofsY *= 0.7;
+    y = _orgY + _ofsY;
   }
 
   /**
    * 表示する
    **/
   public function show(item:ItemData) {
+    _ofsY = -128;
+    y = _orgY + _ofsY;
     _updateText(item);
   }
 

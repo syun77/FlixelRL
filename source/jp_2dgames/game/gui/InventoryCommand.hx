@@ -56,7 +56,7 @@ class InventoryCommand extends FlxSpriteGroup {
    * @param items 項目パラメータ
    **/
   public function new(X:Float, Y:Float, cbFunc:Int->Int, items:Array<Int>) {
-    var ofsY = -96;
+    var ofsY = -Y*2;
     super(X, Y+ofsY);
     FlxTween.tween(this, {y:Y}, 0.3, {ease:FlxEase.expoOut});
 

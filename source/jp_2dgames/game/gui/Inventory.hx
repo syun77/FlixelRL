@@ -73,9 +73,13 @@ class Inventory extends FlxGroup {
   private static inline var WIDTH = 212 - 8 * 2;
   private static inline var HEIGHT = (DY * PAGE_DISP) + MSG_POS_Y + 8;//480 - 64 - 8 * 2;
 
+  // 詳細の座標
+  private static inline var DETAIL_X = POS_X - 216;
+  private static inline var DETAIL_Y = 32;
+
   // コマンドの座標
   private static inline var CMD_X = POS_X - 80;
-  private static inline var CMD_Y = POS_Y + MSG_POS_Y;
+  private static inline var CMD_Y = DETAIL_Y + 112;
 
   // ページ数テキストの座標
   private static inline var PAGE_X = POS_X + 8;
@@ -326,7 +330,7 @@ class Inventory extends FlxGroup {
     _updateText();
 
     // 詳細ステータス
-    _detail = new GuiStatusDetail();
+    _detail = new GuiStatusDetail(DETAIL_X, DETAIL_Y);
     // 初期状態は非表示
     _bShowDetail = false;
   }
