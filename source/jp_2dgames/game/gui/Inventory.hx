@@ -1,8 +1,6 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.item.Item;
-import jp_2dgames.game.actor.Enemy;
-import jp_2dgames.game.DirUtil.Dir;
-import flixel.util.FlxPoint;
+import flixel.util.FlxAngle;
+import flixel.util.FlxColor;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
@@ -101,6 +99,9 @@ class Inventory extends FlxGroup {
   private var x:Float = POS_X; // X座標
   private var y:Float = POS_Y; // Y座標
 
+  // 背景
+  private var _bg:FlxSprite;
+
   // ページ数テキスト
   private var _txtPage:FlxText;
   // ページ数
@@ -109,6 +110,8 @@ class Inventory extends FlxGroup {
   // カーソル
   private var _cursor:FlxSprite;
   private var _nCursor:Int = 0;
+  // カーソルアニメタイマー
+  private var _tCursor:Int = 0;
 
   // 詳細ステータス
   private var _detail:GuiStatusDetail;
@@ -254,9 +257,10 @@ class Inventory extends FlxGroup {
     super();
 
     // 背景枠
-    var spr = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
-    spr.alpha = 0.2;
-    this.add(spr);
+    _bg = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+    _bg.color = FlxColor.GRAY;
+    _bg.alpha = 0.4;
+    this.add(_bg);
 
     // ページ数
     _txtPage = new FlxText(PAGE_X, PAGE_Y, 0, 128);
@@ -264,8 +268,8 @@ class Inventory extends FlxGroup {
     this.add(_txtPage);
 
     // カーソル
-    _cursor = new FlxSprite(POS_X, y + MSG_POS_Y).makeGraphic(WIDTH, DY, FlxColor.AZURE);
-    _cursor.alpha = 0.5;
+    _cursor = new FlxSprite(POS_X, y + MSG_POS_Y).makeGraphic(WIDTH, DY, FlxColor.YELLOW);
+    _cursor.alpha = 0.4;
     this.add(_cursor);
     // カーソルは初期状態非表示
     _cursor.visible = false;
@@ -382,11 +386,19 @@ class Inventory extends FlxGroup {
         // テキスト更新
         _updateText();
       }
+
+      // 背景色変更
+      _bg.color = FlxColor.TEAL;
+      // カーソルタイマー初期化
+      _tCursor = 90;
     }
     else {
       // 通常表示に戻しておく
       _menumode = MenuMode.Carry;
       _updateText();
+
+      // 背景色を元に戻す
+      _bg.color = FlxColor.GRAY;
     }
 
     // 詳細表示切り替え
@@ -542,8 +554,23 @@ class Inventory extends FlxGroup {
       // 床にアイテムがあるので置けない
       return;
     }
+  }
 
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
 
+    if(_state == State.Main) {
+      // 通常
+      _tCursor += 4;
+      _cursor.alpha = 0.3 + 0.1 * Math.sin(_tCursor * FlxAngle.TO_RAD);
+    }
+    else {
+      // サブコマンド
+    _cursor.alpha = 0.4;
+    }
   }
 
   /**
