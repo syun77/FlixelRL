@@ -1,4 +1,7 @@
 package jp_2dgames.game.item;
+import flixel.util.FlxRandom;
+import jp_2dgames.game.DirUtil.Dir;
+import flixel.util.FlxPoint;
 import jp_2dgames.game.item.ItemData.ItemExtraParam;
 import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.gui.Message;
@@ -82,6 +85,48 @@ class DropItem extends FlxSprite {
     });
 
     return true;
+  }
+
+  /**
+   * 指定の位置にアイテムを落とせるかどうかチェックする
+   * @param outPt 落とせる場合の座標
+   * @param xchip チェックする座標(X)
+   * @param ychip チェックする座標(Y)
+   * @return 落とせる場合はtrue
+   **/
+  public static function checkDrop(outPt:FlxPoint, xchip:Int, ychip:Int):Bool {
+    // 上下左右4方向のみを調べる
+    var dirs = [Dir.Left, Dir.Up, Dir.Right, Dir.Down];
+    FlxRandom.shuffleArray(dirs, 1);
+    // 最初は開始地点を調べる
+    dirs.insert(0, Dir.None);
+    for(dir in dirs) {
+      outPt.set(xchip, ychip);
+      // 指定の方向に動かしてみる
+      outPt = DirUtil.move(dir, outPt);
+      var xpos = Std.int(outPt.x);
+      var ypos = Std.int(outPt.y);
+      // 配置できるかチェック
+      var bPut = true;
+      parent.forEachAlive(function(drop:DropItem) {
+        if(Field.isCollision(xpos, ypos)) {
+          // 配置できない
+          bPut = false;
+        }
+        if(drop.xchip == xpos && drop.ychip == ypos) {
+          // 配置できない
+          bPut = false;
+        }
+      });
+
+      if(bPut) {
+        // 配置できる
+        return true;
+      }
+    }
+
+    // 配置できない
+    return false;
   }
 
   /**
