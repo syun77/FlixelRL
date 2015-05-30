@@ -26,6 +26,8 @@ class Msg {
   public static inline var ITEM_PUT:Int = 14; // アイテムを床に置いた
   public static inline var INVENTORY_CANT_OPEN:Int = 15; // インベントリを開けない
   public static inline var ITEM_DESTORY:Int = 16; // アイテムが壊れた
+  public static inline var ITEM_HIT_WALL:Int = 17; // アイテムが壁に当たった
+
   // メニュー
   public static inline var MENU_USE:Int = 24; // メニュー: 使う
   public static inline var MENU_EQUIP:Int = 25; // メニュー: 装備
@@ -34,7 +36,8 @@ class Msg {
   public static inline var MENU_PUT:Int = 28; // メニュー: 置く
   public static inline var MENU_CHANGE:Int = 29; // メニュー: 交換
   public static inline var MENU_PICKUP:Int = 30; // メニュー: 拾う
-// ヘルプ
+
+  // ヘルプ
   public static inline var HELP_KEYINPUT:Int = 40; // ヘルプ: 通常
   public static inline var HELP_INVENCTORY:Int = 41; // ヘルプ: インベントリ
   public static inline var HELP_DIALOG:Int = 42; // ヘルプ: ダイアログ

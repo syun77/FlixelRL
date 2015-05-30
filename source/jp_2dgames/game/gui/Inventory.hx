@@ -509,6 +509,8 @@ class Inventory extends FlxGroup {
             DirUtil.move(_player.dir, pt);
             if(Field.isCollision(Std.int(pt.x), Std.int(pt.y))) {
               // 壁に当たった
+              Message.push2(Msg.ITEM_HIT_WALL, [ItemUtil.getName(item)]);
+
               if(DropItem.checkDrop(pt, xprev, yprev)) {
                 // 床に置ける
                 DropItem.add(Std.int(pt.x), Std.int(pt.y), item.id, item.param);
