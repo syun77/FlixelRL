@@ -153,6 +153,9 @@ class SeqMgr {
           // 何もしていない
         }
 
+        // 敵の情報を表示するかどうかチェックする
+        _guistatus.checkEnemyInfo();
+
       case State.InventoryInput:
         // ■イベントリ操作中
         switch(_inventory.proc()) {

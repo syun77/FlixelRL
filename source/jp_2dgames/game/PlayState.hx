@@ -29,13 +29,13 @@ import jp_2dgames.game.Save;
 class PlayState extends FlxState {
   // プレイヤー情報
   private var _player:Player;
-  public var player(get, null):Player;
+  public var player(get, never):Player;
   private function get_player() {
     return _player;
   }
   // マップ情報
   private var _lField:Layer2D;
-  public var lField(get, null):Layer2D;
+  public var lField(get, never):Layer2D;
   private function get_lField() {
     return _lField;
   }
@@ -51,14 +51,14 @@ class PlayState extends FlxState {
 
   // フロア数
   private var _floor:Int;
-  public var floor(get, null):Int;
+  public var floor(get, never):Int;
   public function get_floor() {
     return _floor;
   }
 
   // ステータス
   private var _guistatus:GuiStatus;
-  public var guistatus(get, null):GuiStatus;
+  public var guistatus(get, never):GuiStatus;
   public function get_guistatus() {
     return _guistatus;
   }

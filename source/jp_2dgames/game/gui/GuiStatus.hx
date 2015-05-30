@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.Enemy;
+import flixel.util.FlxPoint;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.gui.Message.Msg;
 import flixel.FlxG;
@@ -69,6 +71,9 @@ class GuiStatus extends FlxGroup {
   private var _txtFull:FlxText;
   private var _txtMoney:FlxText;
 
+  // 敵情報
+  private var _enemyInfo:GuiEnemy;
+
   // ヘルプ
   private var _help:FlxSpriteGroup;
   private var _bgHelp:FlxSprite;
@@ -128,6 +133,10 @@ class GuiStatus extends FlxGroup {
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _group.add(_txtMoney);
     this.add(_group);
+
+    // ■敵情報
+    _enemyInfo = new GuiEnemy();
+    this.add(_enemyInfo);
 
     // ■ヘルプ
     _help = new FlxSpriteGroup();
@@ -190,6 +199,33 @@ class GuiStatus extends FlxGroup {
     }
   }
 
+  /**
+   * 敵の情報を表示するかどうかチェックする
+   **/
+  public function checkEnemyInfo() {
+    var player = cast(FlxG.state, PlayState).player;
+    if(player.existsEnemyInFront()) {
+      // 表示する
+      var enemy:Enemy = null;
+      var pt = FlxPoint.get(player.xchip, player.ychip);
+      pt = DirUtil.move(player.dir, pt);
+      Enemy.parent.forEachAlive(function(e:Enemy) {
+        if(e.checkPosition(Std.int(pt.x), Std.int(pt.y))) {
+          enemy = e;
+        }
+      });
+      pt.put();
+      _enemyInfo.setEnemy(enemy);
+    }
+    else {
+      // 表示しない
+      _enemyInfo.setEnemy(null);
+    }
+  }
+
+  /**
+   * ヘルプの表示を変更する
+   **/
   public function changeHelp(mode:Int) {
     if(_helpMode == mode) {
       // 変更不要

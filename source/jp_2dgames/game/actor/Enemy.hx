@@ -366,10 +366,10 @@ class Enemy extends Actor {
 
     // アニメーションを登録
     var speed = 6;
-    animation.add(DirUtil.toString(Dir.Left),  [0, 1, 2, 1], speed); // スライム
-    animation.add(DirUtil.toString(Dir.Up),    [3, 4, 5, 4], speed); // スライム
-    animation.add(DirUtil.toString(Dir.Right), [6, 7, 8, 7], speed); // スライム
-    animation.add(DirUtil.toString(Dir.Down),  [9, 10, 11, 10], speed); // スライム
+    animation.add(DirUtil.toString(Dir.Left),  [0, 1, 2, 1], speed); // 左
+    animation.add(DirUtil.toString(Dir.Up),    [3, 4, 5, 4], speed); // 上
+    animation.add(DirUtil.toString(Dir.Right), [6, 7, 8, 7], speed); // 右
+    animation.add(DirUtil.toString(Dir.Down),  [9, 10, 11, 10], speed); // 下
   }
 
   /**
