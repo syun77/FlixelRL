@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.Particle.PType;
 import jp_2dgames.game.particle.ParticleDamage;
@@ -172,7 +173,6 @@ class Actor extends FlxSprite {
     return false;
   }
   // 最大HP
-
   public function addHpMax(val:Int):Void {
     _params.hpmax += val;
   }
@@ -389,5 +389,27 @@ class Actor extends FlxSprite {
 
     // 生きている
     return false;
+  }
+
+  /**
+   * アイテムをぶつける
+   * @param actor アイテムを投げた人
+   * @param item ぶつけるアイテム
+   * @return 当たったら true / 外れたら false
+   **/
+  public function hitItem(actor:Actor, item:ItemData):Bool {
+
+    if(damage(100)) {
+      // 倒した
+      Message.push2(Msg.ENEMY_DEFEAT, [name]);
+      // 経験値獲得
+      actor.addExp(params.xp);
+      // エフェクト再生
+      Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
+
+      kill();
+    }
+
+    return true;
   }
 }

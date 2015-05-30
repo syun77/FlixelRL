@@ -31,6 +31,23 @@ class Enemy extends Actor {
   // 敵パラメータ
   public static var csv:CsvLoader = null;
 
+  /**
+   * 指定の座標に存在する敵を返す
+   * @param xchip チップ座標(X)
+   * @param ychip チップ座標(Y)
+   * @return 存在しない場合は null
+   **/
+  public static function getFromPositino(xchip:Int, ychip:Int):Enemy {
+    var ret:Enemy = null;
+    parent.forEachAlive(function(e:Enemy) {
+      if(e.checkPosition(xchip, ychip)) {
+        ret = e;
+      }
+    });
+
+    return ret;
+  }
+
   // HPバー
   private var _hpBar:FlxBar;
   public var hpBar(get, null):FlxBar;
@@ -59,6 +76,9 @@ class Enemy extends Actor {
     //		FlxG.watch.add(this, "_stateprev");
   }
 
+  /**
+   * 消滅処理
+   **/
   override public function kill():Void {
     _hpBar.visible = false;
     super.kill();

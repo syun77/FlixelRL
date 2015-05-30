@@ -133,8 +133,8 @@ class Player extends Actor {
     animation.play(name);
   }
 
-  private function _addExp(v:Int):Void {
-    addExp(v);
+  override public function addExp(v:Int):Void {
+    super.addExp(v);
     if(params.lv >= 99) {
       // レベル99で打ち止め
       return;
@@ -199,7 +199,7 @@ class Player extends Actor {
             Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
             _target.kill();
             // 経験値獲得
-            _addExp(_target.params.xp);
+            addExp(_target.params.xp);
             // エフェクト再生
             Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
           }

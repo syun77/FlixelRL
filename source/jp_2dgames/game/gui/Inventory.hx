@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.DirUtil.Dir;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.item.DropItem;
@@ -505,12 +506,14 @@ class Inventory extends FlxGroup {
         var item = getSelectedItem();
         var pt = FlxPoint.get(_player.xchip, _player.ychip);
         var moveItem = function() {
-          // 壁に当たるまで進む
+          // 敵や壁に当たるまで進む
           while(true) {
             var xprev = Std.int(pt.x);
             var yprev = Std.int(pt.y);
             DirUtil.move(_player.dir, pt);
-            if(Field.isCollision(Std.int(pt.x), Std.int(pt.y))) {
+            var xpos = Std.int(pt.x);
+            var ypos = Std.int(pt.y);
+            if(Field.isCollision(xpos, ypos)) {
               // 壁に当たった
               Message.push2(Msg.ITEM_HIT_WALL, [ItemUtil.getName(item)]);
 
@@ -521,6 +524,24 @@ class Inventory extends FlxGroup {
               else {
                 // 床に置けないので壊れる
                 Message.push2(Msg.ITEM_DESTORY, [ItemUtil.getName(item)]);
+              }
+              break;
+            }
+            var e:Enemy = Enemy.getFromPositino(xpos, ypos);
+            if(e != null) {
+              // 敵に当たった
+              if(e.hitItem(_player, item) == false) {
+                // 敵がかわした
+                Message.push("敵はかわした");
+                pt.set(xpos, ypos);
+                if(DropItem.checkDrop(pt, xprev, yprev)) {
+                  // 床に置ける
+                  DropItem.add(Std.int(pt.x), Std.int(pt.y), item.id, item.param);
+                }
+                else {
+                  // 床に置けないので壊れる
+                  Message.push2(Msg.ITEM_DESTORY, [ItemUtil.getName(item)]);
+                }
               }
               break;
             }
