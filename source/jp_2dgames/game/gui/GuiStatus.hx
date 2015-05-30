@@ -47,7 +47,7 @@ class GuiStatus extends FlxGroup {
   private static inline var MONEYTEXT_Y = 0;
   // HPテキスト
   private static inline var HPTEXT_X = LVTEXT_X + 64;
-  private static inline var HPTEXT_Y = 0;
+  private static inline var HPTEXT_Y = 0 - MERGIN_Y;
   // HPバー
   private static inline var HPBAR_X = HPTEXT_X;
   private static inline var HPBAR_Y = 16;
@@ -105,15 +105,15 @@ class GuiStatus extends FlxGroup {
     _txtLv.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _group.add(_txtLv);
 
-    // HPテキスト
-    _txtHp = new FlxText(HPTEXT_X, HPTEXT_Y, 180);
-    _txtHp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    _group.add(_txtHp);
-
     // HPバー
     _hpBar = new FlxBar(HPBAR_X, HPBAR_Y, FlxBar.FILL_LEFT_TO_RIGHT, BAR_W, BAR_H);
     _hpBar.createFilledBar(FlxColor.CRIMSON, FlxColor.CHARTREUSE);
     _group.add(_hpBar);
+
+    // HPテキスト
+    _txtHp = new FlxText(HPTEXT_X, HPTEXT_Y, 180);
+    _txtHp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    _group.add(_txtHp);
 
     // 満腹度テキスト
     _txtFull = new FlxText(FULLTEXT_X, FULLTEXT_Y, 160);
