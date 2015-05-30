@@ -290,7 +290,7 @@ class Player extends Actor {
 	 * キー入力チェック
 	 **/
   private function _isKeyInput():Bool {
-    if(Key.on.A) {
+    if(Key.press.A) {
       // 攻撃 or 待機
       return true;
     }
@@ -327,7 +327,7 @@ class Player extends Actor {
     var bAttack = false;
     var dir = DirUtil.getInputDirection();
 
-    if(Key.on.A) {
+    if(Key.press.A) {
       // 攻撃 or 待機
       bAttack = true;
     }
