@@ -88,4 +88,12 @@ class Calc {
     // 87%の確率で当たる
     return FlxRandom.chanceRoll(87);
   }
+
+  /**
+   * アイテム投げが当たるかどうかチェック
+   **/
+  public static function checkHitThrow():Bool {
+    // 87%の確率で当たる
+    return FlxRandom.chanceRoll(87);
+  }
 }
