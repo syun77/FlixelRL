@@ -184,7 +184,7 @@ class PlayState extends FlxState {
         var end = Std.parseInt(v.get("end"));
         var id = Std.parseInt(v.get("itemid"));
         var ratio = Std.parseInt(v.get("ratio"));
-        if(start <= floor && floor < end) {
+        if(start <= floor && floor <= end) {
           itemIds.push(id);
           itemRatios.push(ratio);
           itemSum += ratio;
@@ -231,6 +231,10 @@ class PlayState extends FlxState {
             return 0;
           }
           var itemid = func();
+          if(itemid == 0) {
+            trace("Warning: Invalid item_appear.csv");
+            itemid = 1;
+          }
           var param = new ItemExtraParam();
           DropItem.add(i, j, itemid, param);
 //          DropItem.addMoney(i, j, 100);
