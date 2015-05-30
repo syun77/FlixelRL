@@ -1,5 +1,4 @@
 package jp_2dgames.game.gui;
-import flixel.util.FlxRandom;
 import jp_2dgames.game.DirUtil.Dir;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.item.DropItem;
@@ -163,6 +162,10 @@ class Inventory extends FlxGroup {
   // アイテム枠がいっぱいかどうか
   public static function isFull():Bool {
     return instance.getItemCountFromCarry() >= MAX;
+  }
+  // アイテムを所持していないかどうか
+  public static function isEmpty():Bool {
+    return instance.getItemCountFromCarry() <= 0;
   }
 
   // アイテムテキスト
@@ -352,7 +355,7 @@ class Inventory extends FlxGroup {
         _feetItem = null;
       }
 
-      if(itemcount <= 0) {
+      if(isEmpty()) {
         // アイテムを所持していないので足下メニューを表示する
         _menumode = MenuMode.Feet;
         // テキスト更新
@@ -606,7 +609,7 @@ class Inventory extends FlxGroup {
    **/
   private function _procCursorFeet():Void {
 
-    if(getItemCountFromCarry() <= 0) {
+    if(isEmpty()) {
       // 所持アイテムがない場合はページ切り替えできない
       return;
     }
@@ -730,10 +733,16 @@ class Inventory extends FlxGroup {
     switch(_menumode) {
       case MenuMode.Carry:
         // ページ数の更新
-        _txtPage.text = 'Page (${_nPage+1}/${_pageMax})';
+        if(isEmpty()) {
+          // アイテムを持っていない
+          _txtPage.text = Message.getText(Msg.PAGE_NOITEM);
+        }
+        else {
+          _txtPage.text = 'Page (${_nPage+1}/${_pageMax})';
+        }
       case MenuMode.Feet:
         // 足下
-        _txtPage.text = '足下';
+        _txtPage.text = Message.getText(Msg.PAGE_FEET);
     }
 
     // Eマークの更新

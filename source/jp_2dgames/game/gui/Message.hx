@@ -29,18 +29,22 @@ class Msg {
   public static inline var ITEM_HIT_WALL:Int = 17; // アイテムが壁に当たった
 
   // メニュー
-  public static inline var MENU_USE:Int = 24; // メニュー: 使う
-  public static inline var MENU_EQUIP:Int = 25; // メニュー: 装備
-  public static inline var MENU_UNEQUIP:Int = 26; // メニュー: 外す
-  public static inline var MENU_THROW:Int = 27; // メニュー: 投げる
-  public static inline var MENU_PUT:Int = 28; // メニュー: 置く
-  public static inline var MENU_CHANGE:Int = 29; // メニュー: 交換
-  public static inline var MENU_PICKUP:Int = 30; // メニュー: 拾う
+  public static inline var MENU_USE:Int = 32; // メニュー: 使う
+  public static inline var MENU_EQUIP:Int = 33; // メニュー: 装備
+  public static inline var MENU_UNEQUIP:Int = 34; // メニュー: 外す
+  public static inline var MENU_THROW:Int = 35; // メニュー: 投げる
+  public static inline var MENU_PUT:Int = 36; // メニュー: 置く
+  public static inline var MENU_CHANGE:Int = 37; // メニュー: 交換
+  public static inline var MENU_PICKUP:Int = 38; // メニュー: 拾う
+
+  // ページ
+  public static inline var PAGE_FEET:Int = 48; // 足下
+  public static inline var PAGE_NOITEM:Int = 49; // 何も持っていない
 
   // ヘルプ
-  public static inline var HELP_KEYINPUT:Int = 40; // ヘルプ: 通常
-  public static inline var HELP_INVENCTORY:Int = 41; // ヘルプ: インベントリ
-  public static inline var HELP_DIALOG:Int = 42; // ヘルプ: ダイアログ
+  public static inline var HELP_KEYINPUT:Int = 56; // ヘルプ: 通常
+  public static inline var HELP_INVENCTORY:Int = 57; // ヘルプ: インベントリ
+  public static inline var HELP_DIALOG:Int = 58; // ヘルプ: ダイアログ
 }
 
 /**
