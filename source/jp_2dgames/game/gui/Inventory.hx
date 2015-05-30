@@ -550,6 +550,10 @@ class Inventory extends FlxGroup {
                 // 壁に当たったので落ちる
                 DropItem.add(Std.int(pt2.x), Std.int(pt2.y), item.id, item.param);
               }
+              else {
+                // 床に置けないので壊れる
+                Message.push2(Msg.ITEM_DESTORY, [ItemUtil.getName(item)]);
+              }
               break;
             }
           }
