@@ -532,7 +532,7 @@ class Inventory extends FlxGroup {
               // 敵に当たった
               if(e.hitItem(_player, item) == false) {
                 // 敵がかわした
-                Message.push("敵はかわした");
+                Message.push2(Msg.MISS, [e.name]);
                 pt.set(xpos, ypos);
                 if(DropItem.checkDrop(pt, xpos, ypos)) {
                   // 床に置ける
