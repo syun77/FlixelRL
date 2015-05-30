@@ -73,6 +73,10 @@ class Inventory extends FlxGroup {
   private static inline var WIDTH = 212 - 8 * 2;
   private static inline var HEIGHT = (DY * PAGE_DISP) + MSG_POS_Y + 8;//480 - 64 - 8 * 2;
 
+  // コマンドの座標
+  private static inline var CMD_X = POS_X - 80;
+  private static inline var CMD_Y = POS_Y + MSG_POS_Y;
+
   // ページ数テキストの座標
   private static inline var PAGE_X = POS_X + 8;
   private static inline var PAGE_Y = POS_Y + 4;
@@ -562,7 +566,7 @@ class Inventory extends FlxGroup {
           // コマンドメニューを開く
           var param = _getMenuParam();
           var itemid = getSelectedItem();
-          _cmd = new InventoryCommand(x, y, _cbAction, param);
+          _cmd = new InventoryCommand(CMD_X, CMD_Y, _cbAction, param);
           this.add(_cmd);
           _state = State.Command;
         }

@@ -1,8 +1,10 @@
 package jp_2dgames.game.gui;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import flixel.group.FlxGroup;
 
 /**
  * 状態
@@ -16,16 +18,15 @@ private enum State {
 /**
  * インベントリのサブメニュー
  **/
-class InventoryCommand extends FlxGroup {
+class InventoryCommand extends FlxSpriteGroup {
 
   // ウィンドウサイズ
   private static inline var WIDTH = 64;
   private static inline var DY = 26;
   private static inline var CURSOR_HEIGHT = DY;
 
-  // 基準座標
-  private var x:Float;
-  private var y:Float;
+  // 背景
+  private var _sprBack:FlxSprite;
 
   // テキスト
   private var _txtList:List<FlxText>;
@@ -55,16 +56,16 @@ class InventoryCommand extends FlxGroup {
    * @param items 項目パラメータ
    **/
   public function new(X:Float, Y:Float, cbFunc:Int->Int, items:Array<Int>) {
-    super();
+    var ofsY = -96;
+    super(X, Y+ofsY);
+    FlxTween.tween(this, {y:Y}, 0.3, {ease:FlxEase.expoOut});
 
-    x = X;
-    y = Y;
     // 背景枠
-    var sprBack = new FlxSprite(x, y);
-    this.add(sprBack);
+    _sprBack = new FlxSprite(0, 0);
+    this.add(_sprBack);
 
     // カーソル
-    _cursor = new FlxSprite(x, y).makeGraphic(WIDTH, CURSOR_HEIGHT, FlxColor.AZURE);
+    _cursor = new FlxSprite(0, 0).makeGraphic(WIDTH, CURSOR_HEIGHT, FlxColor.AZURE);
     _cursor.alpha = 0.5;
     this.add(_cursor);
 
@@ -72,8 +73,8 @@ class InventoryCommand extends FlxGroup {
     var i:Int = 0;
     _txtList = new List<FlxText>();
     for(item in items) {
-      var px = x;
-      var py = y + (i * DY);
+      var px = 0;
+      var py = 0 + (i * DY);
       var txt = new FlxText(px, py, 0, WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
       txt.text = Message.getText(item);
@@ -85,9 +86,8 @@ class InventoryCommand extends FlxGroup {
     _cbFunc = cbFunc;
 
     // 背景枠作成
-    sprBack.makeGraphic(WIDTH, i * DY, FlxColor.BLACK);
-    //		sprBack.alpha = 0.5;
-
+    _sprBack.makeGraphic(WIDTH, i * DY, FlxColor.BLACK);
+    _sprBack.alpha = 0.7;
   }
 
   /**
