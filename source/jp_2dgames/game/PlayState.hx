@@ -97,7 +97,7 @@ class PlayState extends FlxState {
     setFieldLayer(layer);
 
     // アイテム管理生成
-    var items = new FlxTypedGroup<DropItem>(32);
+    var items = new FlxTypedGroup<DropItem>(128);
     for(i in 0...items.maxSize) {
       items.add(new DropItem());
     }

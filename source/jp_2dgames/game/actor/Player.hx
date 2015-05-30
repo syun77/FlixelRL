@@ -31,7 +31,7 @@ class Player extends Actor {
 
   // 階段の上に乗っているかどうか
   private var _bOnStairs:Bool;
-  public var isOnStairs(get, null):Bool;
+  public var isOnStairs(get, never):Bool;
   private function get_isOnStairs() {
     return _bOnStairs;
   }
@@ -41,7 +41,7 @@ class Player extends Actor {
   }
 
   // 攻撃力
-  public var atk(get, null):Int;
+  public var atk(get, never):Int;
   private function get_atk() {
     var weapon = Inventory.getWeapon();
     if(weapon == ItemUtil.NONE) {
@@ -52,7 +52,7 @@ class Player extends Actor {
     return atk;
   }
   // 守備力
-  public var def(get, null):Int;
+  public var def(get, never):Int;
   private function get_def() {
     var armor = Inventory.getArmor();
     if(armor == ItemUtil.NONE) {
@@ -65,7 +65,7 @@ class Player extends Actor {
 
   // 攻撃カーソル
   private var _cursor:FlxSprite;
-  public var cursor(get, null):FlxSprite;
+  public var cursor(get, never):FlxSprite;
   private function get_cursor() {
     return _cursor;
   }
@@ -133,8 +133,8 @@ class Player extends Actor {
     animation.play(name);
   }
 
-  private function _addExp(v:Int):Void {
-    addExp(v);
+  override public function addExp(v:Int):Void {
+    super.addExp(v);
     if(params.lv >= 99) {
       // レベル99で打ち止め
       return;
@@ -199,7 +199,7 @@ class Player extends Actor {
             Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
             _target.kill();
             // 経験値獲得
-            _addExp(_target.params.xp);
+            addExp(_target.params.xp);
             // エフェクト再生
             Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
           }
@@ -290,7 +290,7 @@ class Player extends Actor {
 	 * キー入力チェック
 	 **/
   private function _isKeyInput():Bool {
-    if(Key.on.A) {
+    if(Key.press.A) {
       // 攻撃 or 待機
       return true;
     }
@@ -327,7 +327,7 @@ class Player extends Actor {
     var bAttack = false;
     var dir = DirUtil.getInputDirection();
 
-    if(Key.on.A) {
+    if(Key.press.A) {
       // 攻撃 or 待機
       bAttack = true;
     }
