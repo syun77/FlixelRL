@@ -24,6 +24,7 @@ class Msg {
   public static inline var ITEM_FULL:Int = 12; // アイテムがいっぱい
   public static inline var ITEM_STEPON:Int = 13; // アイテムの上に乗る
   public static inline var ITEM_PUT:Int = 14; // アイテムを床に置いた
+  public static inline var INVENTORY_CANT_OPEN:Int = 15; // インベントリを開けないメッセージ
   // メニュー
   public static inline var MENU_USE:Int = 24; // メニュー: 使う
   public static inline var MENU_EQUIP:Int = 25; // メニュー: 装備

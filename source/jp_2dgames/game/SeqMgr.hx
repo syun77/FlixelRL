@@ -135,7 +135,7 @@ class SeqMgr {
             else {
               // 開けないのでキー入力に戻る
               _player.changeprev();
-              Message.push("アイテムを持っていない");
+              Message.push2(Msg.INVENTORY_CANT_OPEN, null);
             }
           case Action.TurnEnd:
             // 足踏み待機
