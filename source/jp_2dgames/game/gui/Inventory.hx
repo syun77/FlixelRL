@@ -320,6 +320,10 @@ class Inventory extends FlxGroup {
       // アイテムを所持しているので開ける
       return true;
     }
+    if(DropItem.getFromPosition(_player.xchip, _player.ychip) != null) {
+      // 足下にアイテムがある
+      return true;
+    }
 
     // 開けない
     return false;
@@ -346,6 +350,13 @@ class Inventory extends FlxGroup {
       else {
         // アイテムはない
         _feetItem = null;
+      }
+
+      if(itemcount <= 0) {
+        // アイテムを所持していないので足下メニューを表示する
+        _menumode = MenuMode.Feet;
+        // テキスト更新
+        _updateText();
       }
     }
     else {
@@ -625,6 +636,11 @@ class Inventory extends FlxGroup {
    * カーソルの更新（足下メニュー）
    **/
   private function _procCursorFeet():Void {
+
+    if(getItemCountFromCarry() <= 0) {
+      // 所持アイテムがない場合はページ切り替えできない
+      return;
+    }
 
     // ページを切り替えたかどうか
     var bChangePage = false;
