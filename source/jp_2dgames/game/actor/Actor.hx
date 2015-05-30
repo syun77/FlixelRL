@@ -399,6 +399,11 @@ class Actor extends FlxSprite {
    **/
   public function hitItem(actor:Actor, item:ItemData):Bool {
 
+    if(Calc.checkHitThrow() == false) {
+      // 外した
+      return false;
+    }
+
     if(damage(100)) {
       // 倒した
       Message.push2(Msg.ENEMY_DEFEAT, [name]);

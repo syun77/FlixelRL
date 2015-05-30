@@ -534,7 +534,7 @@ class Inventory extends FlxGroup {
                 // 敵がかわした
                 Message.push("敵はかわした");
                 pt.set(xpos, ypos);
-                if(DropItem.checkDrop(pt, xprev, yprev)) {
+                if(DropItem.checkDrop(pt, xpos, ypos)) {
                   // 床に置ける
                   DropItem.add(Std.int(pt.x), Std.int(pt.y), item.id, item.param);
                 }
