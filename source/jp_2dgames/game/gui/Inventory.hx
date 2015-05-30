@@ -504,6 +504,9 @@ class Inventory extends FlxGroup {
         // 落ちているアイテムを投げることもあるのでモードを戻しておく
         _menumode = mode;
         var item = getSelectedItem();
+        var itemname = ItemUtil.getName(item);
+        Message.push2(Msg.ITEM_THROW, [_player.name, itemname]);
+
         var pt = FlxPoint.get(_player.xchip, _player.ychip);
         var moveItem = function() {
           // 敵や壁に当たるまで進む
@@ -515,7 +518,7 @@ class Inventory extends FlxGroup {
             var ypos = Std.int(pt.y);
             if(Field.isCollision(xpos, ypos)) {
               // 壁に当たった
-              Message.push2(Msg.ITEM_HIT_WALL, [ItemUtil.getName(item)]);
+              Message.push2(Msg.ITEM_HIT_WALL, [itemname]);
 
               if(DropItem.checkDrop(pt, xprev, yprev)) {
                 // 床に置ける
@@ -523,7 +526,7 @@ class Inventory extends FlxGroup {
               }
               else {
                 // 床に置けないので壊れる
-                Message.push2(Msg.ITEM_DESTORY, [ItemUtil.getName(item)]);
+                Message.push2(Msg.ITEM_DESTORY, [itemname]);
               }
               break;
             }
@@ -540,7 +543,7 @@ class Inventory extends FlxGroup {
                 }
                 else {
                   // 床に置けないので壊れる
-                  Message.push2(Msg.ITEM_DESTORY, [ItemUtil.getName(item)]);
+                  Message.push2(Msg.ITEM_DESTORY, [itemname]);
                 }
               }
               break;

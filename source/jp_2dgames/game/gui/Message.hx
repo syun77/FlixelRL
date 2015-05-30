@@ -27,6 +27,7 @@ class Msg {
   public static inline var INVENTORY_CANT_OPEN:Int = 15; // インベントリを開けない
   public static inline var ITEM_DESTORY:Int = 16; // アイテムが壊れた
   public static inline var ITEM_HIT_WALL:Int = 17; // アイテムが壁に当たった
+  public static inline var ITEM_THROW:Int = 18; // アイテムを投げた
 
   // メニュー
   public static inline var MENU_USE:Int = 32; // メニュー: 使う
@@ -66,8 +67,8 @@ class Message extends FlxGroup {
   // メッセージ表示間隔
   private static inline var DY = 26;
 
-  // ウィンドウが消えるまでの時間 (3sec)
-  private static inline var TIMER_DISAPPEAR:Float = 3;
+  // ウィンドウが消えるまでの時間 (5sec)
+  private static inline var TIMER_DISAPPEAR:Float = 5;
 
   // インスタンス
   public static var instance:Message = null;
