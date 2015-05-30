@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.GuiStatus;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.game.gui.Inventory;
@@ -126,8 +127,16 @@ class SeqMgr {
             ret = true;
           case Action.InventoryOpen:
             // インベントリを開く
-            _inventory.setActive(true);
-            _change(State.InventoryInput);
+            if(_inventory.checkOpen()) {
+              // 開ける
+              _inventory.setActive(true);
+              _change(State.InventoryInput);
+            }
+            else {
+              // 開けないのでキー入力に戻る
+              _player.changeprev();
+              Message.push("アイテムを持っていない");
+            }
           case Action.TurnEnd:
             // 足踏み待機
             _change(State.EnemyRequestAI);

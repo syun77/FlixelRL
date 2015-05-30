@@ -31,7 +31,7 @@ class Player extends Actor {
 
   // 階段の上に乗っているかどうか
   private var _bOnStairs:Bool;
-  public var isOnStairs(get, null):Bool;
+  public var isOnStairs(get, never):Bool;
   private function get_isOnStairs() {
     return _bOnStairs;
   }
@@ -41,7 +41,7 @@ class Player extends Actor {
   }
 
   // 攻撃力
-  public var atk(get, null):Int;
+  public var atk(get, never):Int;
   private function get_atk() {
     var weapon = Inventory.getWeapon();
     if(weapon == ItemUtil.NONE) {
@@ -52,7 +52,7 @@ class Player extends Actor {
     return atk;
   }
   // 守備力
-  public var def(get, null):Int;
+  public var def(get, never):Int;
   private function get_def() {
     var armor = Inventory.getArmor();
     if(armor == ItemUtil.NONE) {
@@ -65,7 +65,7 @@ class Player extends Actor {
 
   // 攻撃カーソル
   private var _cursor:FlxSprite;
-  public var cursor(get, null):FlxSprite;
+  public var cursor(get, never):FlxSprite;
   private function get_cursor() {
     return _cursor;
   }

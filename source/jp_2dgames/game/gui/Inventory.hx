@@ -312,6 +312,20 @@ class Inventory extends FlxGroup {
   }
 
   /**
+   * インベントリを開けるかどうか
+   * @return 開ければtrue
+   **/
+  public function checkOpen():Bool {
+    if(itemcount > 0) {
+      // アイテムを所持しているので開ける
+      return true;
+    }
+
+    // 開けない
+    return false;
+  }
+
+  /**
    * アクティブフラグの設定
    **/
   public function setActive(b:Bool) {
