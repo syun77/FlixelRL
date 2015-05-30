@@ -147,7 +147,8 @@ class SeqMgr {
           case Action.TurnEnd:
             // 足踏み待機
             _change(State.EnemyRequestAI);
-            ret = true;
+            // 制御を返して連続で回復しないようにする
+            ret = false;
           default:
           // 何もしていない
         }
