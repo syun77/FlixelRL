@@ -868,13 +868,21 @@ class Inventory extends FlxGroup {
       idx = _nCursor;
     }
 
-    // アイテムを使う
     var item = itemList[idx];
-    ItemUtil.use(_player, item);
 
     // メッセージ表示
     var name = ItemUtil.getName(item);
-    Message.push2(Msg.ITEM_EAT, [name]);
+    switch(item.type) {
+      case IType.Food:
+        Message.push2(Msg.ITEM_EAT, [name]);
+      case IType.Portion:
+        Message.push2(Msg.ITEM_DRINK, [name]);
+      default:
+        throw 'Error: Invalid item. id=${item.id}';
+    }
+
+    // アイテムを使う
+    ItemUtil.use(_player, item);
 
     // 使ったアイテムを削除
     delItem(idx);

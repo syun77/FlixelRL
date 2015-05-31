@@ -28,6 +28,10 @@ class Msg {
   public static inline var ITEM_DESTORY:Int = 16; // アイテムが壊れた
   public static inline var ITEM_HIT_WALL:Int = 17; // アイテムが壁に当たった
   public static inline var ITEM_THROW:Int = 18; // アイテムを投げた
+  public static inline var RECOVER_HP:Int = 19; // HP回復
+  public static inline var ITEM_DRINK:Int = 20; // アイテムを飲んだ
+  public static inline var RECOVER_FOOD_MAX:Int = 21; // 満腹度が最大まで回復した
+  public static inline var RECOVER_FOOD:Int = 22; // 満腹度が最大まで回復した
 
   // メニュー
   public static inline var MENU_USE:Int = 32; // メニュー: 使う

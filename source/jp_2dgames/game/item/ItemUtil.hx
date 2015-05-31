@@ -1,5 +1,7 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.gui.Message;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.Player;
 import flixel.util.FlxRandom;
 import jp_2dgames.lib.CsvLoader;
@@ -167,22 +169,31 @@ class ItemUtil {
   /**
    * 消費アイテムを使用する
    **/
-  public static function use(player:Player, item:ItemData):Void {
+  public static function use(actor:Actor, item:ItemData, bMsg=true):Void {
     switch(item.type) {
       case IType.Portion:
         // 薬
         var val = ItemUtil.getParam(item.id, "hp");
         if(val > 0) {
-          player.addHp(val);
+          actor.addHp(val);
+          Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
         else {
           val = ItemUtil.getParam(item.id, "hp2");
-          player.addHp2(val);
+          actor.addHp2(val);
+          Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
       case IType.Food:
         // 食糧
         var val = ItemUtil.getParam(item.id, "food");
-        player.addFood(val);
+        actor.addFood(val);
+        if(actor.isFoodMax()) {
+          // 満腹になった
+          Message.push2(Msg.RECOVER_FOOD_MAX);
+        }
+        else {
+          Message.push2(Msg.RECOVER_FOOD);
+        }
       default:
         // ここにくることはない
         trace('Error: Invalid item ${item.id}');

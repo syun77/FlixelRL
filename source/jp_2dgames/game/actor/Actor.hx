@@ -225,6 +225,11 @@ class Actor extends FlxSprite {
     return Std.int(_params.foodmax / 100);
   }
 
+  // 満腹かどうか
+  public function isFoodMax():Bool {
+    return _params.food == _params.foodmax;
+  }
+
   public function addFoodMax(ratio:Float):Void {
     _params.foodmax += Std.int(ratio * 100);
   }
