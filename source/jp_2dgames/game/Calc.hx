@@ -12,6 +12,9 @@ class Calc {
   // 最大ダメージ
   private static inline var MAX_DAMAGE:Int = 9999;
 
+  // 基本攻撃力
+  private static inline var BASE_ATK:Int = 2;
+
   /**
 	 * ダメージ計算
 	 * @param act1 攻撃する人
@@ -38,7 +41,7 @@ class Calc {
     }
 
     // 威力
-    var power = str + atk + 5;
+    var power = str + atk + BASE_ATK;
 
     // 力係数 (基礎体力の差)
     var str_rate = Math.pow(1.02, str - vit);
