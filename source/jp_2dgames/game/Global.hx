@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import openfl.Assets;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Params;
@@ -50,7 +51,8 @@ class Global {
   public static function nextFloor():Void {
     _floor++;
     // TODO: 最後まで進んだら最初に戻る
-    if(_floor > 3) {
+    var path = getFloorMap();
+    if(Assets.exists(path, TEXT) == false) {
       _floor = 1;
     }
   }
