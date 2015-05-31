@@ -20,6 +20,7 @@ class Global {
     _money = 0;
     _items = new Array<ItemData>();
     _bInitPlayer = true;
+    _params = new Params();
   }
 
   // フロア数
