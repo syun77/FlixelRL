@@ -1,4 +1,6 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.particle.Particle;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.item.ItemUtil;
@@ -234,7 +236,6 @@ class Enemy extends Actor {
   /**
 	 * 移動方向を決める
 	 **/
-
   private function _aiMoveDir():Dir {
     // 移動方向判定
     var player = cast(FlxG.state, PlayState).player;
@@ -323,7 +324,6 @@ class Enemy extends Actor {
   /**
 	 * 移動要求をする
 	 **/
-
   public function requestMove():Void {
     var pt = FlxPoint.get(_xnext, _ynext);
     _dir = _aiMoveDir();
@@ -354,6 +354,59 @@ class Enemy extends Actor {
       // 移動できないのでターン終了
       _change(Actor.State.TurnEnd);
     }
+  }
+
+  /**
+   * アイテムをぶつける
+   * @param actor アイテムを投げた人
+   * @param item ぶつけるアイテム
+   * @return 当たったら true / 外れたら false
+   **/
+  override public function hitItem(actor:Actor, item:ItemData):Bool {
+
+    if(Calc.checkHitThrow() == false) {
+      // 外した
+      return false;
+    }
+
+    var func = function() {
+      switch(item.type) {
+        case IType.Portion:
+          var val = ItemUtil.getParam(item.id, "hp");
+          if(val > 0) {
+            // HP回復
+            addHp(val);
+            Message.push2(Msg.RECOVER_HP, [name, val]);
+            return false;
+          }
+          else if(val < 0) {
+            // ダメージ
+            return damage(-val);
+          }
+          return false;
+        case IType.Weapon:
+          // 武器はダメージ量が少しだけ多い
+          var v = FlxRandom.intRanged(8, 12);
+          return damage(v);
+        default:
+          // ポーション以外は微量のダメージ
+          var v = FlxRandom.intRanged(5, 7);
+          return damage(v);
+      }
+    }
+
+    if(func()) {
+      // 倒した
+      Message.push2(Msg.ENEMY_DEFEAT, [name]);
+      // 経験値獲得
+      actor.addExp(params.xp);
+      // エフェクト再生
+      Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
+
+      kill();
+    }
+
+    return true;
   }
 
   /**
