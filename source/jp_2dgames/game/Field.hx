@@ -78,13 +78,13 @@ class Field {
     FlxRandom.globalSeed = flash.Lib.getTimer();
 
     // プレイヤーを配置
-    {
+    if(layer.exists(PLAYER) == false) {
       var p = layer.searchRandom(NONE);
       layer.setFromFlxPoint(p, PLAYER);
       p.put();
     }
     // 階段を配置
-    {
+    if(layer.exists(GOAL) == false) {
       var p = layer.searchRandom(NONE);
       layer.setFromFlxPoint(p, GOAL);
       p.put();

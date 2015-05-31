@@ -153,6 +153,10 @@ class Layer2D {
     set(x, y, val);
   }
 
+  public function exists(v:Int):Bool {
+    return count(v) > 0;
+  }
+
   /**
    * 指定の値が存在する座標を返す
    * @param v 検索する値
