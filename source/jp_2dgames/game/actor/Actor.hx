@@ -148,7 +148,7 @@ class Actor extends FlxSprite {
     return params.hp <= 0;
   }
 
-  // HP
+  // HP(0〜100%で返す)
   public var hpratio(get, null):Float;
 
   private function get_hpratio() {

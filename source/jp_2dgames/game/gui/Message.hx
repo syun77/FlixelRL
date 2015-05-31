@@ -97,6 +97,11 @@ class Message extends FlxGroup {
     Message.instance.visible = false;
   }
 
+  // ウィンドウの色を変える
+  public static function setWindowColor(color:Int):Void {
+    Message.instance._window.color = color;
+  }
+
   private var _window:FlxSprite;
   private var _msgList:List<FlxText>;
 
@@ -113,7 +118,8 @@ class Message extends FlxGroup {
   public function new(csv:CsvLoader) {
     super();
     // 背景枠
-    _window = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.BLACK);
+    _window = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+    _window.color = FlxColor.BLACK;
     _window.alpha = 0.5;
     this.add(_window);
     _msgList = new List<FlxText>();

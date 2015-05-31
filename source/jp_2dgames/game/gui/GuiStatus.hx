@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxAngle;
+import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Enemy;
 import flixel.util.FlxPoint;
 import flixel.group.FlxSpriteGroup;
@@ -24,6 +26,9 @@ class GuiStatus extends FlxGroup {
   public static inline var HELP_INVENTORY:Int = 2; // インベントリ
   public static inline var HELP_DIALOG_YN:Int = 3; // Yes/Noダイアログ
   public static inline var HELP_INVENTORYCOMMAND:Int = 4; // インベントリ・コマンド
+
+  // 危険状態と判定するHPの割合
+  private static inline var DANGER_HP_RATIO:Float = 50;
 
   // ステータス表示座標
   private static inline var POS_X = 640 + 8;
@@ -61,6 +66,10 @@ class GuiStatus extends FlxGroup {
   private static inline var HELP_X = 32;
   private static inline var HELP_DY = 24;
 
+  // タイマー
+  // 危険タイマー
+  private var _tDanger:Int = 0;
+
   // ステータスGUI
   private var _group:FlxSpriteGroup;
   private var _groupOfsY:Float = 0;
@@ -97,7 +106,8 @@ class GuiStatus extends FlxGroup {
     _group = new FlxSpriteGroup();
 
     // 背景
-    _bgStatus = new FlxSprite(0, 0).makeGraphic(BG_W, BG_H, FlxColor.BLACK);
+    _bgStatus = new FlxSprite(0, 0).makeGraphic(BG_W, BG_H, FlxColor.WHITE);
+    _bgStatus.color = FlxColor.BLACK;
     _bgStatus.alpha = 0.7;
     _group.add(_bgStatus);
 
@@ -144,7 +154,8 @@ class GuiStatus extends FlxGroup {
     // ヘルプ座標(Y)
     _helpY = FlxG.height - HELP_DY;
     // ヘルプの背景
-    _bgHelp = new FlxSprite(0, 0).makeGraphic(FlxG.width, HELP_DY, FlxColor.BLACK);
+    _bgHelp = new FlxSprite(0, 0).makeGraphic(BG_W, HELP_DY, FlxColor.WHITE);
+    _bgHelp.color = FlxColor.BLACK;
     _bgHelp.alpha = 0.7;
     _help.add(_bgHelp);
     // ヘルプテキスト
@@ -197,6 +208,27 @@ class GuiStatus extends FlxGroup {
         _helpOfsY -= 1;
       }
       _help.y = _helpY + _helpOfsY;
+    }
+
+    // 危険判定
+    {
+      // HP
+      var ratio = player.hpratio;
+      if(ratio <= DANGER_HP_RATIO) {
+        _txtHp.color = FlxColor.PINK;
+        _tDanger++;
+        var step = Std.int(Math.sin(FlxAngle.TO_RAD * (_tDanger%180)) * 100);
+        var color = FlxColorUtil.interpolateColor(FlxColor.BLACK, FlxColor.MAROON, 100, step, 178);
+        _bgStatus.color = color;
+        _bgHelp.color = color;
+        Message.setWindowColor(color);
+      }
+      else {
+        _txtHp.color = FlxColor.WHITE;
+        _bgStatus.color = FlxColor.BLACK;
+        _bgHelp.color = FlxColor.BLACK;
+        Message.setWindowColor(FlxColor.BLACK);
+      }
     }
   }
 
