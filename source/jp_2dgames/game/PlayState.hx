@@ -119,7 +119,10 @@ class PlayState extends FlxState {
     // 敵管理生成
     var enemies = new FlxTypedGroup<Enemy>(32);
     for(i in 0...enemies.maxSize) {
-      enemies.add(new Enemy());
+      var e = new Enemy();
+      // IDに配列要素を設定
+      e.ID = i;
+      enemies.add(e);
     }
     this.add(enemies);
     Enemy.parent = enemies;
@@ -394,6 +397,14 @@ class PlayState extends FlxState {
     if(FlxG.keys.justPressed.D) {
       // 自爆
       _player.damage(9999);
+    }
+    if(FlxG.keys.justPressed.TWO) {
+      // 次のフロアに進む
+      Global.nextFloor();
+    }
+    if(FlxG.keys.justPressed.ONE) {
+      // 1つ前のフロアに進む
+      Global.backFloor();
     }
   }
 }

@@ -35,7 +35,7 @@ class GuiEnemy extends FlxSpriteGroup {
 
   // 対象となる敵
   private var _enemy:Enemy = null;
-  private var _enemyUID:Int = 0;
+  private var _enemyUID:Int = -1;
 
   /**
    * コンストラクタ
@@ -91,7 +91,7 @@ class GuiEnemy extends FlxSpriteGroup {
     _enemy = e;
     if(_enemy == null) {
       visible = false;
-      _enemyUID = 0;
+      _enemyUID = -1;
       return;
     }
     else {

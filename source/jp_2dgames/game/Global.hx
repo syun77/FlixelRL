@@ -57,6 +57,22 @@ class Global {
     }
   }
 
+  /**
+   * 1つ前のフロアに戻る
+   **/
+  public static function backFloor():Void {
+    _floor--;
+    if(_floor < 1) {
+      for(i in 0...100) {
+        _floor = 100 - i;
+        var path = getFloorMap();
+        if(Assets.exists(path, TEXT)) {
+          break;
+        }
+      }
+    }
+  }
+
   // 所持金
   private static var _money:Int = 0;
   public static function getMoney():Int {
