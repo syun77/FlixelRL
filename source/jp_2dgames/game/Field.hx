@@ -18,13 +18,13 @@ class Field {
   public static inline var GRID_SIZE:Int = 32;
 
   // チップの種類
-  public static inline var NONE:Int    = 0; // 何もない
-  public static inline var PLAYER:Int  = 1; // プレイヤー
-  public static inline var GOAL:Int    = 2; // ゴール
-  public static inline var WALL:Int    = 3; // 壁
-  public static inline var PASSAGE:Int = 4; // 通路
-  public static inline var ENEMY:Int   = 16; // 敵
-  public static inline var ITEM:Int    = 17; // アイテム
+  public static inline var NONE:Int    = 0;  // 何もない
+  public static inline var PLAYER:Int  = 1;  // プレイヤー
+  public static inline var GOAL:Int    = 2;  // ゴール
+  public static inline var WALL:Int    = 3;  // 壁
+  public static inline var PASSAGE:Int = 4;  // 通路
+  public static inline var ENEMY:Int   = 9;  // ランダム敵
+  public static inline var ITEM:Int    = 10; // ランダムアイテム
 
   // 座標変換
   public static function toWorldX(i:Float):Float {
@@ -105,10 +105,14 @@ class Field {
     }
 
     // アイテムを配置
-    for(i in 0...4) {
-      var p = layer.searchRandom(NONE);
-      layer.setFromFlxPoint(p, ITEM);
-      p.put();
+    {
+      var id = csv.getEnemyAppearId(floor);
+      var cnt = csv.enemy_appear.getInt(id, "item");
+      for(i in 0...cnt) {
+        var p = layer.searchRandom(NONE);
+        layer.setFromFlxPoint(p, ITEM);
+        p.put();
+      }
     }
   }
 
