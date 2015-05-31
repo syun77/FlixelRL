@@ -11,6 +11,17 @@ import jp_2dgames.lib.TextUtil;
  * グローバルデータ
  **/
 class Global {
+
+  /**
+   * 初期化
+   **/
+  public static function init():Void {
+    _floor = 1;
+    _money = 0;
+    _items = new Array<ItemData>();
+    _bInitPlayer = true;
+  }
+
   // フロア数
   private static var _floor:Int = 1;
 

@@ -89,7 +89,7 @@ class SeqMgr {
   /**
 	 * 更新
 	 **/
-  public function update():Void {
+  public function update():Bool {
     var cnt:Int = 0;
     var bLoop:Bool = true;
     while(bLoop) {
@@ -99,6 +99,13 @@ class SeqMgr {
         break;
       }
     }
+
+    if(_player.isDead()) {
+      _player.kill();
+      return false;
+    }
+
+    return true;
   }
 
   /**

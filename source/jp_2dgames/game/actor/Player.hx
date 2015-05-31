@@ -1,6 +1,6 @@
 package jp_2dgames.game.actor;
 
-import flash.display.BlendMode;
+import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.Particle.PType;
@@ -454,5 +454,21 @@ class Player extends Actor {
     animation.add(getAnimName(false, Dir.Up), [6, 7], speed);
     animation.add(getAnimName(false, Dir.Right), [10, 11], speed);
     animation.add(getAnimName(false, Dir.Down), [14, 15], speed);
+  }
+
+  /**
+   * 死亡
+   **/
+  override public function kill():Void {
+    Message.push("プレイヤーは力尽きた...");
+
+    // エフェクト再生
+    Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
+
+    // 画面を2%の揺れ幅で0.35秒間、揺らします
+    FlxG.camera.shake(0.02, 0.35);
+    // 画面を0.5秒間、白フラッシュします
+    FlxG.camera.flash(0xffFFFFFF, 0.5);
+    super.kill();
   }
 }

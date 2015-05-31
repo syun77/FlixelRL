@@ -142,6 +142,12 @@ class Actor extends FlxSprite {
         return Action.None;
     }
   }
+
+  // 死亡チェック
+  public function isDead():Bool {
+    return params.hp <= 0;
+  }
+
   // HP
   public var hpratio(get, null):Float;
 

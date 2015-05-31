@@ -1,5 +1,8 @@
 package jp_2dgames.game;
 
+import flixel.group.FlxSpriteGroup;
+import flixel.util.FlxColor;
+import flixel.text.FlxText;
 import jp_2dgames.game.gui.GuiStatusDetail;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.ParticleDamage;
@@ -24,6 +27,14 @@ import flixel.FlxState;
 import jp_2dgames.game.Save;
 
 /**
+ * 状態
+ **/
+private enum State {
+  Main; // メイン処理
+  Gameover; // ゲームオーバー
+}
+
+/**
  * メインゲーム
  */
 class PlayState extends FlxState {
@@ -42,6 +53,9 @@ class PlayState extends FlxState {
 
   // シーケンス管理
   private var _seq:SeqMgr;
+
+  // 状態
+  private var _state:State;
 
   // 背景
   private var _back:FlxSprite;
@@ -88,10 +102,8 @@ class PlayState extends FlxState {
     _back = new FlxSprite();
     this.add(_back);
 
-    if(true) {
-      // 階段の位置をランダムに配置する
-      Field.randomize(layer, Global.getFloor(), _csv);
-    }
+    // 階段の位置をランダムに配置する
+    Field.randomize(layer, Global.getFloor(), _csv);
 
     // フィールドを登録
     setFieldLayer(layer);
@@ -255,6 +267,9 @@ class PlayState extends FlxState {
     // シーケンス管理
     _seq = new SeqMgr(this);
 
+    // 状態を設定
+    _state = State.Main;
+
     // TODO: デバッグ用のアイテムを追加
     if(false) {
       var param = new ItemExtraParam();
@@ -323,15 +338,37 @@ class PlayState extends FlxState {
   override public function update():Void {
     super.update();
 
-    // シーケンス更新
-    _seq.update();
+    switch(_state) {
+      case State.Main:
+        // シーケンス更新
+        if(_seq.update() == false) {
+          // ゲームオーバー
+          _state = State.Gameover;
+          var spr = new FlxSprite(0, 240-32).makeGraphic(640, 64, FlxColor.BLACK);
+          spr.alpha = 0.5;
+          this.add(spr);
+          var txt = new FlxText(216+2, 212+2, 0, 640);
+          txt.setFormat(Reg.PATH_FONT, 48);
+          txt.color = FlxColor.BLACK;
+          txt.text = "GAME OVER";
+          this.add(txt);
+          var txt2 = new FlxText(txt.x-2, txt.y-2, 0, 640);
+          txt2.setFormat(Reg.PATH_FONT, 48);
+          txt2.color = FlxColor.WHITE;
+          txt2.text = "GAME OVER";
+          this.add(txt2);
+        }
+
+      case State.Gameover:
+        if(Key.press.A) {
+          // ゲームデータを初期化
+          Global.init();
+          FlxG.switchState(new PlayState());
+        }
+    }
 
     // デバッグ処理
     updateDebug();
-
-    if(FlxG.keys.justPressed.A) {
-      ParticleDamage.start(320, 240, 100);
-    }
   }
 
   private function updateDebug():Void {
@@ -353,6 +390,10 @@ class PlayState extends FlxState {
     if(FlxG.keys.justPressed.R) {
       // リスタート
       FlxG.switchState(new PlayState());
+    }
+    if(FlxG.keys.justPressed.D) {
+      // 自爆
+      _player.damage(9999);
     }
   }
 }
