@@ -220,10 +220,15 @@ class Player extends Actor {
   // ターン終了
   override public function turnEnd():Void {
     // 満腹度を減らす
-    // 10ターンで1%減る
-    if(subFood(0.1)) {
+    // 2ターンで1%減る
+    if(subFood(0.5)) {
       // 空腹ダメージ
-      subHp(1);
+      // HPが5%減る
+      var v = Std.int(params.hpmax * 0.05);
+      if(v <= 0) {
+        v = 1;
+      }
+      damage(v);
     }
     if(food > 0) {
       // 空腹でなければHP回復

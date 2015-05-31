@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxMath;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Enemy;
@@ -51,7 +52,7 @@ class GuiStatus extends FlxGroup {
   private static inline var LVTEXT_X = FLOORTEXT_X + 32;
   private static inline var LVTEXT_Y = 0;
   // 所持金
-  private static inline var MONEYTEXT_X = FULLTEXT_X + 160;
+  private static inline var MONEYTEXT_X = FOODTEXT_X + 160;
   private static inline var MONEYTEXT_Y = 0;
   // HPテキスト
   private static inline var HPTEXT_X = LVTEXT_X + 64;
@@ -60,8 +61,8 @@ class GuiStatus extends FlxGroup {
   private static inline var HPBAR_X = HPTEXT_X;
   private static inline var HPBAR_Y = 16;
   // 満腹度
-  private static inline var FULLTEXT_X = HPBAR_X + 192;
-  private static inline var FULLTEXT_Y = 0;
+  private static inline var FOODTEXT_X = HPBAR_X + 192;
+  private static inline var FOODTEXT_Y = 0;
   // ヘルプテキスト
   private static inline var HELP_X = 32;
   private static inline var HELP_DY = 24;
@@ -69,6 +70,7 @@ class GuiStatus extends FlxGroup {
   // タイマー
   // 危険タイマー
   private var _tDanger:Int = 0;
+  private var _tDangerFood:Int = 0;
 
   // ステータスGUI
   private var _group:FlxSpriteGroup;
@@ -78,7 +80,7 @@ class GuiStatus extends FlxGroup {
   private var _txtFloor:FlxText;
   private var _txtHp:FlxText;
   private var _hpBar:FlxBar;
-  private var _txtFull:FlxText;
+  private var _txtFood:FlxText;
   private var _txtMoney:FlxText;
 
   // 敵情報
@@ -132,15 +134,14 @@ class GuiStatus extends FlxGroup {
     _group.add(_txtHp);
 
     // 満腹度テキスト
-    _txtFull = new FlxText(FULLTEXT_X, FULLTEXT_Y, 160);
-    _txtFull.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    _txtFood = new FlxText(FOODTEXT_X, FOODTEXT_Y, 160);
+    _txtFood.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     // Y調整
-    _group.add(_txtFull);
+    _group.add(_txtFood);
 
     // 所持金テキスト
     _txtMoney = new FlxText(MONEYTEXT_X, MONEYTEXT_Y, 128);
     // Y調整
-    _txtMoney.alignment = "right"; // 右寄せ
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _group.add(_txtMoney);
     this.add(_group);
@@ -192,7 +193,7 @@ class GuiStatus extends FlxGroup {
     // 満腹度
     var full = player.food;
     var fullmax = player.foodmax;
-    _txtFull.text = '満腹度: ${full}/${fullmax}';
+    _txtFood.text = '満腹度: ${full}/${fullmax}';
 
     // 所持金
     var money = Global.getMoney();
@@ -228,6 +229,21 @@ class GuiStatus extends FlxGroup {
         _bgStatus.color = FlxColor.BLACK;
         _bgHelp.color = FlxColor.BLACK;
         Message.setWindowColor(FlxColor.BLACK);
+      }
+    }
+    {
+      // 満腹度
+      var ratio = player.food;
+      if(ratio <= 0) {
+        _tDangerFood++;
+        var color = FlxColor.WHITE;
+        if(_tDangerFood%64 < 32) {
+          color = FlxColor.RED;
+        }
+        _txtFood.color = color;
+      }
+      else {
+        _txtFood.color = FlxColor.WHITE;
       }
     }
   }
