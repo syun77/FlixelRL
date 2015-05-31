@@ -105,6 +105,9 @@ class Message extends FlxGroup {
   private var _window:FlxSprite;
   private var _msgList:List<FlxText>;
 
+  // ウィンドウを下に表示しているかどうか
+  private var _bDispBottom:Bool = true;
+
   // ウィンドウが消えるまでの時間
   private var _timer:Float;
 
@@ -131,18 +134,29 @@ class Message extends FlxGroup {
     visible = false;
   }
 
-  private var ofsY(get_ofsY, null):Float;
+  private var ofsY(get_ofsY, never):Float;
 
   private function get_ofsY() {
     var player = cast(FlxG.state, PlayState).player;
-    var y = (player.ychip + 2) * Field.GRID_SIZE;
-    if(y > POS_Y) {
+    var y = (player.ychip) * Field.GRID_SIZE;
+
+    if(y > POS_Y - 2 * Field.GRID_SIZE) {
       // 上にする
+      _bDispBottom = false;
       return POS_Y2;
     }
-    else {
+
+    if(y < POS_Y2 + 4 * Field.GRID_SIZE) {
       // 下にする
+      _bDispBottom = true;
       return POS_Y;
+    }
+
+    if(_bDispBottom) {
+      return POS_Y;
+    }
+    else {
+      return POS_Y2;
     }
   }
 
