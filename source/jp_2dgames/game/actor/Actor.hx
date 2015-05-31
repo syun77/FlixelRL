@@ -165,6 +165,9 @@ class Actor extends FlxSprite {
   public function addHp2(val:Int):Void {
     // パーセンテージで回復
     var val2 = _params.hpmax * val / 100;
+    if(val2 < 1) {
+      val2 = 1;
+    }
     addHp(Std.int(val2));
   }
 

@@ -24,7 +24,7 @@ class Player extends Actor {
   // プレイヤーの名前
   private static inline var NAME:String = "プレイヤー";
   // 1ターンの自動回復HP割合
-  private static inline var AUTOHEAL_RATIO:Int = 3;
+  private static inline var AUTOHEAL_RATIO:Int = 2;
 
   private var _target:Enemy = null;
   private var _csv:CsvLoader = null;
