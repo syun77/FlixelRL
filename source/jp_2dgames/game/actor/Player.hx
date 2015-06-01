@@ -40,6 +40,9 @@ class Player extends Actor {
     _bOnStairs = false;
   }
 
+  // 自動回復フラグ
+  private var _bAutoRecovery:Bool = true;
+
   // 攻撃力
   public var atk(get, never):Int;
   private function get_atk() {
@@ -230,10 +233,11 @@ class Player extends Actor {
       }
       damage(v);
     }
-    if(food > 0) {
-      // 空腹でなければHP回復
+    if(food > 0 && _bAutoRecovery) {
+      // 空腹でない && 自動回復有効 であればHP回復
       addHp2(AUTOHEAL_RATIO);
     }
+    _bAutoRecovery = true;
 
     super.turnEnd();
   }
@@ -242,6 +246,11 @@ class Player extends Actor {
    * ダメージを受けた
    **/
   override public function damage(v:Int):Bool {
+
+    // 自動回復無効
+    _bAutoRecovery = false;
+
+    // 危険状態のチェック
     var bDanger = isDanger();
     var ret = super.damage(v);
     var check = function() {
