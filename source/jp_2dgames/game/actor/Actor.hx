@@ -201,8 +201,8 @@ class Actor extends FlxSprite {
       // 30%以下は危険状態
       return true;
     }
-    if(params.hp < 10) {
-      // 1桁になっても危険
+    if(params.hp <= 7) {
+      // 7以下になっても危険
       return true;
     }
 
