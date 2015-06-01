@@ -1,5 +1,7 @@
 package jp_2dgames.game.item;
 
+import flixel.FlxG;
+import flixel.util.FlxColor;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.Player;
@@ -143,13 +145,17 @@ class ItemUtil {
       case IType.Armor:
         return FlxRandom.intRanged(1021, 1027);
       case IType.Ring:
-        return FlxRandom.intRanged(0, 1);
+        return FlxRandom.intRanged(1040, 1041);
       case IType.Money:
         return 100;
       case IType.Food:
         return FlxRandom.intRanged(1, 2);
       case IType.Portion:
         return FlxRandom.intRanged(3, 4);
+      case IType.Scroll:
+        return FlxRandom.intRanged(33, 34);
+      case IType.Wand:
+        return FlxRandom.intRanged(49, 50);
       default:
         trace('Warning: invalid type ${type}');
         return 0;
@@ -169,6 +175,37 @@ class ItemUtil {
       IType.Food,
     ];
     return tbl[FlxRandom.intRanged(0, tbl.length-1)];
+  }
+
+  // デバッグ用のアイテム種別を取得する
+  public static function getDebugItemType():IType {
+    if(FlxG.keys.pressed.U) {
+      return IType.Weapon;
+    }
+    if(FlxG.keys.pressed.I) {
+      return IType.Armor;
+    }
+    if(FlxG.keys.pressed.O) {
+      return IType.Ring;
+    }
+    if(FlxG.keys.pressed.J) {
+      return IType.Food;
+    }
+    if(FlxG.keys.pressed.K) {
+      return IType.Portion;
+    }
+    if(FlxG.keys.pressed.L) {
+      return IType.Money;
+    }
+    if(FlxG.keys.pressed.M) {
+      return IType.Scroll;
+    }
+    if(FlxG.keys.pressed.COMMA) {
+      return IType.Wand;
+    }
+
+    // 該当するキーを押していない
+    return IType.None;
   }
 
   /**

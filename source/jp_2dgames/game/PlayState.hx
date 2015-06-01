@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxPoint;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
@@ -76,6 +77,9 @@ class PlayState extends FlxState {
   public function get_guistatus() {
     return _guistatus;
   }
+
+  // デバッグ用アイテム
+  private var _debugItem:DropItem;
 
   /**
 	 * 生成
@@ -297,6 +301,11 @@ class PlayState extends FlxState {
       }
     }
 
+    // デバッグ用アイテム
+    _debugItem = new DropItem();
+    _debugItem.alpha = 0.5;
+    this.add(_debugItem);
+
     // デバッグ情報設定
     FlxG.watch.add(player, "_state");
     FlxG.watch.add(player, "_stateprev");
@@ -311,7 +320,6 @@ class PlayState extends FlxState {
   /**
 	 * フィールド情報を設定する
    **/
-
   public function setFieldLayer(layer:Layer2D) {
     // フィールド情報をコピー
     _lField.copy(layer);
@@ -325,7 +333,6 @@ class PlayState extends FlxState {
   /**
 	 * 破棄
 	 */
-
   override public function destroy():Void {
     Particle.parent = null;
     ParticleDamage.parent = null;
@@ -342,7 +349,6 @@ class PlayState extends FlxState {
   /**
 	 * 更新
 	 */
-
   override public function update():Void {
     super.update();
 
@@ -379,19 +385,22 @@ class PlayState extends FlxState {
     updateDebug();
   }
 
+  /**
+   * デバッグ処理
+   **/
   private function updateDebug():Void {
-    #if neko
+#if neko
 		if(FlxG.keys.justPressed.ESCAPE) {
 			// ESCキーで終了する
 			throw "Terminate.";
 		}
-	#end
+#end
 
     if(FlxG.keys.justPressed.S) {
       // セーブ
       Save.save();
     }
-    if(FlxG.keys.justPressed.L) {
+    if(FlxG.keys.justPressed.A) {
       // ロード
       Save.load();
     }
@@ -410,6 +419,35 @@ class PlayState extends FlxState {
     if(FlxG.keys.justPressed.ONE) {
       // 1つ前のフロアに進む
       Global.backFloor();
+    }
+
+    // アイテム配置デバッグ機能
+    var itemtype = ItemUtil.getDebugItemType();
+    if(itemtype != IType.None) {
+      var i = Std.int(Field.toChipX(FlxG.mouse.x + Field.GRID_SIZE/2));
+      var j = Std.int(Field.toChipY(FlxG.mouse.y + Field.GRID_SIZE/2));
+      var itemid = ItemUtil.random(itemtype);
+      var params = new ItemExtraParam();
+      _debugItem.init(i, j, itemtype, itemid, params);
+      _debugItem.revive();
+      if(FlxG.mouse.justPressed) {
+        var pt = FlxPoint.get(i, j);
+        if(DropItem.checkDrop(pt, i, j)) {
+          // 置ける
+          i = Std.int(pt.x);
+          j = Std.int(pt.y);
+          if(itemtype == IType.Money) {
+            DropItem.addMoney(i, j, itemid);
+          }
+          else {
+            DropItem.add(i, j, itemid, params);
+          }
+        }
+        pt.put();
+      }
+    }
+    else {
+      _debugItem.kill();
     }
   }
 }
