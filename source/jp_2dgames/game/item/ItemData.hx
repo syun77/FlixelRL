@@ -7,6 +7,7 @@ import jp_2dgames.game.item.ItemUtil.IType;
  **/
 class ItemExtraParam {
   public var value:Int = 0;
+  public var condition:Int = 0; // 耐久度(0〜99)
 
   public function new() {
   }
@@ -17,9 +18,11 @@ class ItemExtraParam {
   public static function copy(dst:ItemExtraParam, src:ItemExtraParam):Void {
     if(src == null) {
       dst.value = 0;
+      dst.condition = 0;
       return;
     }
     dst.value = src.value;
+    dst.condition = src.condition;
   }
 }
 

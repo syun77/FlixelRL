@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.Item;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import jp_2dgames.game.item.DropItem;
@@ -143,6 +145,63 @@ class Inventory extends FlxGroup {
   private var ring(get_ring, never):Int;
   private function get_ring() {
     return _ring;
+  }
+
+  /**
+   * 装備アイテムを劣化させる
+   **/
+  public static function degradeEquipment(type:IType):Bool {
+    var itemdata = getEquipment(type);
+    if(itemdata != null) {
+      itemdata.param.condition--;
+      if(itemdata.param.condition <= 0) {
+        itemdata.param.condition = 0;
+        // アイテム破壊
+        destroyEquipment(type);
+        return true;
+      }
+    }
+    instance._updateText();
+
+    // まだ使える
+    return false;
+  }
+
+  /**
+   * 装備アイテムを取得する
+   **/
+  public static function getEquipment(type:IType):ItemData {
+    return instance._getEquipment(type);
+  }
+  public function _getEquipment(type:IType):ItemData {
+    var ret:ItemData = null;
+    forEachItemList(function(item:ItemData) {
+      if(item.type == type) {
+        if(item.isEquip) {
+          ret = item;
+        }
+      }
+    });
+
+    return ret;
+  }
+
+  /**
+   * 装備アイテムを破壊する
+   **/
+  public static function destroyEquipment(type:IType):Void {
+    var idx = 0;
+    for(itemdata in instance._itemList) {
+      if(itemdata.type == type) {
+        if(itemdata.isEquip) {
+          instance.delItem(idx);
+          Message.push2(Msg.ITEM_DESTORY, [ItemUtil.getName(itemdata)]);
+          instance._updateText();
+          break;
+        }
+      }
+      idx++;
+    }
   }
 
   // フォント

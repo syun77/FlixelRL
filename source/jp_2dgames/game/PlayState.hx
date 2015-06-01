@@ -251,6 +251,11 @@ class PlayState extends FlxState {
             itemid = 1;
           }
           var param = new ItemExtraParam();
+          switch(ItemUtil.getType(itemid)) {
+            case IType.Weapon, IType.Armor:
+              param.condition = FlxRandom.intRanged(5, 15);
+            default:
+          }
           DropItem.add(i, j, itemid, param);
 //          DropItem.addMoney(i, j, 100);
       }

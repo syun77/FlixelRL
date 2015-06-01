@@ -44,6 +44,11 @@ class ItemUtil {
   public static function getName(item:ItemData):String {
     var csv = getCsv(item.id);
     var name = csv.searchItem("id", '${item.id}', "name");
+    switch(ItemUtil.getType(item.id)) {
+      case IType.Weapon, IType.Armor:
+        name += '[${item.param.condition}]';
+      default:
+    }
     return name;
   }
 
