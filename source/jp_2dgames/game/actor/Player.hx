@@ -239,6 +239,31 @@ class Player extends Actor {
   }
 
   /**
+   * ダメージを受けた
+   **/
+  override public function damage(v:Int):Bool {
+    var bDanger = isDanger();
+    var ret = super.damage(v);
+    var check = function() {
+      if(bDanger == false && isDanger()) {
+        // 危険状態になった
+        return true;
+      }
+      if(v >= params.hpmax * 0.5) {
+        // 半分以上HPが減るダメージを受けた
+        return true;
+      }
+      return false;
+    }
+    if(check()) {
+      // 危険状態なので赤フラッシュ
+      // 画面を0.2秒間、赤フラッシュします
+      FlxG.camera.flash(FlxColor.RED, 0.2);
+    }
+    return ret;
+  }
+
+  /**
    * 更新
    **/
   override public function proc():Void {

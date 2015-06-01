@@ -28,9 +28,6 @@ class GuiStatus extends FlxGroup {
   public static inline var HELP_DIALOG_YN:Int = 3; // Yes/Noダイアログ
   public static inline var HELP_INVENTORYCOMMAND:Int = 4; // インベントリ・コマンド
 
-  // 危険状態と判定するHPの割合
-  private static inline var DANGER_HP_RATIO:Float = 50;
-
   // ステータス表示座標
   private static inline var POS_X = 640 + 8;
   private static inline var POS_Y = 4;
@@ -214,8 +211,7 @@ class GuiStatus extends FlxGroup {
     // 危険判定
     {
       // HP
-      var ratio = player.hpratio;
-      if(ratio <= DANGER_HP_RATIO) {
+      if(player.isDanger()) {
         _txtHp.color = FlxColor.PINK;
         _tDanger++;
         var step = Std.int(Math.sin(FlxAngle.TO_RAD * (_tDanger%180)) * 100);

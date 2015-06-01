@@ -192,6 +192,23 @@ class Actor extends FlxSprite {
       _params.hp = _params.hpmax;
     }
   }
+
+  /**
+   * 危険状態かどうか
+   **/
+  public function isDanger():Bool {
+    if(hpratio < 30) {
+      // 30%以下は危険状態
+      return true;
+    }
+    if(params.hp < 10) {
+      // 1桁になっても危険
+      return true;
+    }
+
+    return false;
+  }
+
   // 満腹度
   public var food(get, null):Int;
 

@@ -388,6 +388,12 @@ class Enemy extends Actor {
           // 武器はダメージ量が少しだけ多い
           var v = FlxRandom.intRanged(8, 12);
           return damage(v);
+        case IType.Food:
+          // リンゴは飛び道具として使える
+          var v = FlxRandom.intRanged(5, 7);
+          v += ItemUtil.getParam(item.id, "atk");
+          return damage(v);
+
         default:
           // ポーション以外は微量のダメージ
           var v = FlxRandom.intRanged(5, 7);
