@@ -87,6 +87,11 @@ class Message extends FlxGroup {
     Message.instance._push2(msgId, args);
   }
 
+  // ヒントメッセージの追加
+  public static function pushHint() {
+    return Message.instance._pushHint();
+  }
+
   // メッセージの取得
   public static function getText(msgId:Int):String {
     return Message.instance._getText(msgId);
@@ -113,12 +118,14 @@ class Message extends FlxGroup {
 
   // メッセージCSV
   private var _csv:CsvLoader;
+  // ヒントメッセージCSV
+  private var _csvHint:CsvLoader;
 
   /**
 	 * コンストラクタ
 	 **/
 
-  public function new(csv:CsvLoader) {
+  public function new(csv:CsvLoader, csvHint:CsvLoader) {
     super();
     // 背景枠
     _window = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
@@ -129,6 +136,7 @@ class Message extends FlxGroup {
 
     // CSVメッセージ
     _csv = csv;
+    _csvHint = csvHint;
 
     // 非表示
     visible = false;
@@ -232,6 +240,16 @@ class Message extends FlxGroup {
    **/
   private function _getText(msgId:Int):String {
     return _csv.searchItem("id", '${msgId}', "msg");
+  }
+
+  /**
+   * ヒントメッセージを表示する
+   **/
+  private function _pushHint():Void {
+    // フロア番号がメッセージIDとなる
+    var floor = Global.getFloor();
+    var msg = _csvHint.searchItem("id", '${floor}', "msg");
+    push(msg);
   }
 
   /**

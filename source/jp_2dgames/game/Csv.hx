@@ -49,6 +49,12 @@ class Csv {
   private function get_message() {
     return _message;
   }
+  // ヒント
+  private var _hint:CsvLoader = null;
+  public var hint(get, never):CsvLoader;
+  private function get_hint() {
+    return _hint;
+  }
 
   public function new() {
     _player = new CsvLoader("assets/levels/player.csv");
@@ -58,6 +64,7 @@ class Csv {
     _itemEquipment = new CsvLoader("assets/levels/item_equipment.csv");
     _item_appear = new CsvLoader("assets/levels/item_appear.csv");
     _message = new CsvLoader("assets/data/message.csv");
+    _hint = new CsvLoader("assets/data/hint.csv");
   }
 
   /**

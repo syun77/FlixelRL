@@ -301,6 +301,10 @@ class Player extends Actor {
             // 移動先が階段
             _bOnStairs = true;
           }
+          if(Field.getChip(xchip, ychip) == Field.HINT) {
+            // ヒント表示
+            Message.pushHint();
+          }
           // アイテムがあれば拾う
           DropItem.pickup(xchip, ychip);
           _change(Actor.State.TurnEnd);

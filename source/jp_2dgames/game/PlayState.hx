@@ -145,7 +145,7 @@ class PlayState extends FlxState {
     });
 
     // メッセージ生成
-    var message = new Message(_csv.message);
+    var message = new Message(_csv.message, _csv.hint);
     Message.instance = message;
 
     // ステータス表示

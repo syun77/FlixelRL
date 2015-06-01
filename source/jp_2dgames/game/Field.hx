@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flash.geom.Matrix;
 import jp_2dgames.lib.CsvLoader;
 import flash.Lib;
 import flixel.util.FlxRandom;
@@ -23,6 +24,7 @@ class Field {
   public static inline var GOAL:Int    = 2;  // ゴール
   public static inline var WALL:Int    = 3;  // 壁
   public static inline var PASSAGE:Int = 4;  // 通路
+  public static inline var HINT:Int    = 5;  // ヒント
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
 
@@ -125,7 +127,7 @@ class Field {
     // チップ画像読み込み
     var chip = FlxG.bitmap.add("assets/levels/tileset.png");
     // 透明なスプライトを作成
-    //spr.makeGraphic(w, h, FlxColor.TRANSPARENT);
+//    spr.makeGraphic(w, h, FlxColor.TRANSPARENT);
     spr.makeGraphic(w, h, FlxColor.SILVER);
     // 転送先の座標
     var pt = new Point();
@@ -140,6 +142,10 @@ class Field {
           rect.left = (v - 1) * GRID_SIZE;
           rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt);
+        case HINT:
+          rect.left = (v - 1) * GRID_SIZE;
+          rect.right = rect.left + GRID_SIZE;
+          spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
       }
     }
 
