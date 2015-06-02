@@ -145,9 +145,9 @@ class ItemUtil {
       case IType.Armor:
         return FlxRandom.intRanged(1021, 1027);
       case IType.Ring:
-        return FlxRandom.intRanged(1040, 1041);
+        return FlxRandom.intRanged(1041, 1042);
       case IType.Money:
-        return 100;
+        return FlxRandom.intRanged(100, 1000);
       case IType.Food:
         return FlxRandom.intRanged(1, 2);
       case IType.Portion:
