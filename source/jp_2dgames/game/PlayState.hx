@@ -185,9 +185,9 @@ class PlayState extends FlxState {
       ParticleRecovery.parent = part;
     }
 
-    // パーティクル（レベルアップ）
+    // パーティクル（メッセージ）
     {
-      var part = new FlxTypedGroup<ParticleMessage>(4);
+      var part = new FlxTypedGroup<ParticleMessage>(8);
       for(i in 0...part.maxSize) {
         part.add(new ParticleMessage());
       }
