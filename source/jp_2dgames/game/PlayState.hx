@@ -414,6 +414,10 @@ class PlayState extends FlxState {
       // 自爆
       _player.damage(9999);
     }
+    if(FlxG.keys.justPressed.H) {
+      // HP回復
+      _player.addHp(9999);
+    }
     if(FlxG.keys.justPressed.TWO) {
       // 次のフロアに進む
       Global.nextFloor();
