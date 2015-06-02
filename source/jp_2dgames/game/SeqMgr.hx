@@ -43,6 +43,9 @@ class SeqMgr {
   private var _state:State;
   private var _stateprev:State;
 
+  // ターン数
+  private var _turn:Int;
+
   /**
 	 * コンストラクタ
 	 **/
@@ -56,6 +59,12 @@ class SeqMgr {
 
     _state = State.KeyInput;
     _stateprev = _state;
+
+    // ターン数を初期化
+    Global.initTurn();
+    _turn = Global.getTurn();
+
+    FlxG.watch.add(this, "_turn");
   }
 
   /**
@@ -290,6 +299,10 @@ class SeqMgr {
           Dialog.open(Dialog.SELECT2, "階段がある", ["下りる", "そのまま"]);
         }
         else {
+          // ターン数を進める
+          Global.nextTurn();
+          _turn = Global.getTurn();
+
           // キー入力に戻る
           _player.turnEnd();
           _change(State.KeyInput);

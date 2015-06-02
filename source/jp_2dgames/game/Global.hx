@@ -130,4 +130,20 @@ class Global {
     // 初回の初期化終わり
     _bInitPlayer = false;
   }
+
+  // ターン数
+  private static var _turnCount:Int = 0;
+  // ターン数を取得する
+  public static function getTurn():Int {
+    return _turnCount;
+  }
+  // 次のターンに進める
+  public static function nextTurn():Int {
+    _turnCount++;
+    return _turnCount;
+  }
+  // ターンを初期化する
+  public static function initTurn():Void {
+    _turnCount = 0;
+  }
 }
