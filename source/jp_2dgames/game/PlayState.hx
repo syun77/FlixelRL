@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.ParticleEnemy;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.particle.ParticleMessage;
 import jp_2dgames.game.particle.ParticleRecovery;
@@ -195,6 +196,16 @@ class PlayState extends FlxState {
       ParticleMessage.parent = part;
     }
 
+    // パーティクル（敵の出現）
+    {
+      var part = new FlxTypedGroup<ParticleEnemy>(Enemy.parent.maxSize);
+      for(i in 0...part.maxSize) {
+        part.add(new ParticleEnemy());
+      }
+      this.add(part);
+      ParticleEnemy.parent = part;
+    }
+
     // 敵やアイテムを自動配置
     Generator.exec(_csv, layer);
 
@@ -270,6 +281,7 @@ class PlayState extends FlxState {
     Particle.parent = null;
     ParticleDamage.parent = null;
     ParticleRecovery.parent = null;
+    ParticleEnemy.parent = null;
     DropItem.parent = null;
     Enemy.parent = null;
     Enemy.csv = null;

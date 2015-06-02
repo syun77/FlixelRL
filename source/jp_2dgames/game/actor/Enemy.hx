@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.particle.ParticleEnemy;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
@@ -173,6 +174,9 @@ class Enemy extends Actor {
 
     // アニメーション変更
     _changeAnime();
+
+    // 出現演出
+    ParticleEnemy.start(x, y+height/4);
   }
 
   /**
