@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.particle.ParticleEnemy;
 import jp_2dgames.game.particle.ParticleRecovery;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.particle.Particle;
