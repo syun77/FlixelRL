@@ -13,7 +13,6 @@ class ParticleEnemy extends FlxSprite {
   public static var parent:FlxTypedGroup<ParticleEnemy>;
 
   public static function start(X:Float, Y:Float):Void {
-    trace(parent);
     var p:ParticleEnemy = parent.recycle();
     p.init(X, Y, 90, 50);
   }
