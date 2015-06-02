@@ -221,7 +221,7 @@ class PlayState extends FlxState {
     Global.setItemList();
 
     // シーケンス管理
-    _seq = new SeqMgr(this);
+    _seq = new SeqMgr(this, _csv);
 
     // 状態を設定
     _state = State.Main;

@@ -35,6 +35,19 @@ class Enemy extends Actor {
   public static var csv:CsvLoader = null;
 
   /**
+   * 敵を生成する
+   **/
+  public static function add(eid:Int, xchip:Int, ychip:Int):Enemy {
+    var e:Enemy = parent.recycle();
+
+    var params = new Params();
+    params.id = eid;
+    e.init(xchip, ychip, DirUtil.random(), params, true);
+
+    return e;
+  }
+
+  /**
    * 指定の座標に存在する敵を返す
    * @param xchip チップ座標(X)
    * @param ychip チップ座標(Y)

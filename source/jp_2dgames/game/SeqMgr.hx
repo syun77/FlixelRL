@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.Generator.GenerateInfo;
 import jp_2dgames.game.item.ThrowItem;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
@@ -38,6 +39,7 @@ class SeqMgr {
   private var _inventory:Inventory;
   private var _guistatus:GuiStatus;
   private var _throwItem:ThrowItem;
+  private var _csv:Csv;
 
   // 状態
   private var _state:State;
@@ -49,11 +51,12 @@ class SeqMgr {
   /**
 	 * コンストラクタ
 	 **/
-  public function new(state:PlayState) {
+  public function new(state:PlayState, csv:Csv) {
     _player = state.player;
     _enemies = Enemy.parent;
     _inventory = Inventory.instance;
     _guistatus = state.guistatus;
+    _csv = csv;
 
     _throwItem = new ThrowItem();
 
@@ -302,6 +305,11 @@ class SeqMgr {
           // ターン数を進める
           Global.nextTurn();
           _turn = Global.getTurn();
+          if(_turn%30 == 0) {
+            // TODO: 30ターン経過で敵出現
+            var layer = cast(FlxG.state, PlayState).lField;
+            Generator.addRandomEnemy(_csv, layer, 1);
+          }
 
           // キー入力に戻る
           _player.turnEnd();
