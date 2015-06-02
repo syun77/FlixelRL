@@ -521,4 +521,11 @@ class Player extends Actor {
     FlxG.camera.flash(0xffFFFFFF, 0.5);
     super.kill();
   }
+
+  /**
+   * デバッグ用座標設定
+   **/
+  public function setDebugPosition(i:Int, j:Int):Void {
+    super.init(i, j, dir, params, false);
+  }
 }

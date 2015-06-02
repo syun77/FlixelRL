@@ -156,4 +156,18 @@ class Field {
 
     return spr;
   }
+
+  /**
+   * マウス座標をチップ座標(X)で取得する
+   **/
+  public static function getMouseChipX():Int {
+    return Std.int(Field.toChipX(FlxG.mouse.x + Field.GRID_SIZE/2));
+  }
+
+  /**
+   * マウス座標をチップ座標(Y)で取得する
+   **/
+  public static function getMouseChipY():Int {
+    return Std.int(Field.toChipY(FlxG.mouse.y + Field.GRID_SIZE/2));
+  }
 }

@@ -424,8 +424,8 @@ class PlayState extends FlxState {
     // アイテム配置デバッグ機能
     var itemtype = ItemUtil.getDebugItemType();
     if(itemtype != IType.None) {
-      var i = Std.int(Field.toChipX(FlxG.mouse.x + Field.GRID_SIZE/2));
-      var j = Std.int(Field.toChipY(FlxG.mouse.y + Field.GRID_SIZE/2));
+      var i = Field.getMouseChipX();
+      var j = Field.getMouseChipY();
       var itemid = ItemUtil.random(itemtype);
       var params = new ItemExtraParam();
       _debugItem.init(i, j, itemtype, itemid, params);
@@ -448,6 +448,15 @@ class PlayState extends FlxState {
     }
     else {
       _debugItem.kill();
+    }
+
+    // プレイヤー移動デバッグ機能
+    if(FlxG.keys.pressed.NINE) {
+      if(FlxG.mouse.justPressed) {
+        var i = Field.getMouseChipX();
+        var j = Field.getMouseChipY();
+        _player.setDebugPosition(i, j);
+      }
     }
   }
 }
