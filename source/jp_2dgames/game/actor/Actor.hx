@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.particle.ParticleRecovery;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.Particle.PType;
@@ -155,20 +156,25 @@ class Actor extends FlxSprite {
     return 100 * _params.hp / _params.hpmax;
   }
 
-  public function addHp(val:Int):Void {
+  public function addHp(val:Int, bEffect=true):Void {
     _params.hp += val;
     if(_params.hp > _params.hpmax) {
       _params.hp = _params.hpmax;
     }
+
+    if(bEffect) {
+      // エフェクト再生開始
+      ParticleRecovery.start(x, y-height/2, val);
+    }
   }
 
-  public function addHp2(val:Int):Void {
+  public function addHp2(val:Int, bEffect=true):Void {
     // パーセンテージで回復
     var val2 = _params.hpmax * val / 100;
     if(val2 < 1) {
       val2 = 1;
     }
-    addHp(Std.int(val2));
+    addHp(Std.int(val2), bEffect);
   }
 
   public function subHp(val:Int):Bool {

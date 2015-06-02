@@ -238,7 +238,7 @@ class Player extends Actor {
     }
     if(food > 0 && _bAutoRecovery) {
       // 空腹でない && 自動回復有効 であればHP回復
-      addHp2(AUTOHEAL_RATIO);
+      addHp2(AUTOHEAL_RATIO, false);
     }
     _bAutoRecovery = true;
 

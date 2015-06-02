@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.ParticleRecovery;
 import flixel.util.FlxPoint;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
@@ -174,6 +175,14 @@ class PlayState extends FlxState {
     this.add(partDamage);
     ParticleDamage.parent = partDamage;
 
+    // パーティクル（HP回復数値）
+    var partRecovery = new FlxTypedGroup<ParticleRecovery>(4);
+    for(i in 0...partRecovery.maxSize) {
+      partRecovery.add(new ParticleRecovery());
+    }
+    this.add(partRecovery);
+    ParticleRecovery.parent = partRecovery;
+
     // 敵やアイテムを自動配置
     Generator.exec(_csv, layer);
 
@@ -248,6 +257,7 @@ class PlayState extends FlxState {
   override public function destroy():Void {
     Particle.parent = null;
     ParticleDamage.parent = null;
+    ParticleRecovery.parent = null;
     DropItem.parent = null;
     Enemy.parent = null;
     Enemy.csv = null;
