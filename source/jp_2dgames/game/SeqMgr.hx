@@ -45,9 +45,6 @@ class SeqMgr {
   private var _state:State;
   private var _stateprev:State;
 
-  // ターン数
-  private var _turn:Int;
-
   /**
 	 * コンストラクタ
 	 **/
@@ -65,9 +62,6 @@ class SeqMgr {
 
     // ターン数を初期化
     Global.initTurn();
-    _turn = Global.getTurn();
-
-    FlxG.watch.add(this, "_turn");
   }
 
   /**
@@ -304,8 +298,7 @@ class SeqMgr {
         else {
           // ターン数を進める
           Global.nextTurn();
-          _turn = Global.getTurn();
-          if(_turn%30 == 0) {
+          if(Global.getTurn()%30 == 0) {
             // TODO: 30ターン経過で敵出現
             var layer = cast(FlxG.state, PlayState).lField;
             Generator.addRandomEnemy(_csv, layer, 1);

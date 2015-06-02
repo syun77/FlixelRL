@@ -77,6 +77,9 @@ class PlayState extends FlxState {
     return _guistatus;
   }
 
+  // ターン数
+  private var _turn:Int = 0;
+
   // デバッグ用アイテム
   private var _debugItem:DropItem;
   // デバッグ用敵
@@ -255,6 +258,7 @@ class PlayState extends FlxState {
     FlxG.watch.add(player, "_stateprev");
     FlxG.watch.add(_seq, "_state");
     FlxG.watch.add(_seq, "_stateprev");
+    FlxG.watch.add(this, "_trun");
 
     //		FlxG.debugger.visible = true;
     FlxG.debugger.toggleKeys = ["ALT"];
@@ -341,6 +345,9 @@ class PlayState extends FlxState {
 			throw "Terminate.";
 		}
 #end
+
+    // ターン数を保持
+    _turn = Global.getTurn();
 
     if(FlxG.keys.justPressed.S) {
       // セーブ
