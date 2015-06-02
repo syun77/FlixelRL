@@ -61,7 +61,7 @@ class ParticleEnemy extends FlxSprite {
   override public function update():Void {
     super.update();
 
-    alpha -= 0.02;
+    alpha -= 0.04;
     if(alpha < 0) {
       alpha = 0;
     }
