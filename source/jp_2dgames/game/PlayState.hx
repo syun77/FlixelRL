@@ -80,6 +80,8 @@ class PlayState extends FlxState {
 
   // デバッグ用アイテム
   private var _debugItem:DropItem;
+  // デバッグ用敵
+  private var _debugEnemy:Enemy;
 
   /**
 	 * 生成
@@ -456,6 +458,35 @@ class PlayState extends FlxState {
         var i = Field.getMouseChipX();
         var j = Field.getMouseChipY();
         _player.setDebugPosition(i, j);
+      }
+    }
+
+    // 敵操作デバッグ機能
+    if(FlxG.keys.pressed.EIGHT) {
+      if(FlxG.mouse.justPressed) {
+        var i = Field.getMouseChipX();
+        var j = Field.getMouseChipY();
+        var e = Enemy.getFromPositino(i, j);
+        if(e != null) {
+          // つかみ開始
+          _debugEnemy = e;
+        }
+      }
+    }
+    if(_debugEnemy != null) {
+      if(_debugEnemy.exists == false) {
+        // 死亡したのでつかみ終了
+        _debugEnemy = null;
+      }
+      else {
+        // 敵を移動
+        var i = Field.getMouseChipX();
+        var j = Field.getMouseChipY();
+        _debugEnemy.setDebugPosition(i, j);
+        if(FlxG.mouse.justReleased) {
+          // つかみ終了
+          _debugEnemy = null;
+        }
       }
     }
   }

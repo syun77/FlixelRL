@@ -438,4 +438,11 @@ class Enemy extends Actor {
     var name = DirUtil.toString(_dir);
     animation.play(name);
   }
+
+  /**
+   * デバッグ用の座標移動
+   **/
+  public function setDebugPosition(i:Int, j:Int):Void {
+    super.init(i, j, dir, params, false);
+  }
 }
