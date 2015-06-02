@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.particle.ParticleMessage;
 import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.particle.Particle;
@@ -148,6 +149,10 @@ class Player extends Actor {
     while(params.exp >= nextExp) {
       // レベルアップ
       params.lv++;
+      // 演出開始
+      {
+        ParticleMessage.start(x, y, "LEVEL UP");
+      }
       // パラメータ上昇
       _levelup();
       bLevelUp = true;
@@ -208,7 +213,10 @@ class Player extends Actor {
           }
 
           // 武器の使用回数減少
-          Inventory.degradeEquipment(IType.Weapon);
+          if(Inventory.degradeEquipment(IType.Weapon)) {
+            // 武器破壊
+            ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
+          }
         }
         else {
           // 攻撃を外した
@@ -274,7 +282,10 @@ class Player extends Actor {
     }
 
     // 防具の使用回数減少
-    Inventory.degradeEquipment(IType.Armor);
+    if(Inventory.degradeEquipment(IType.Armor)) {
+      // 防具破壊
+      ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
+    }
 
     return ret;
   }

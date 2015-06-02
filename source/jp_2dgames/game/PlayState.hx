@@ -1,11 +1,11 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxRandom;
+import jp_2dgames.game.particle.ParticleMessage;
 import jp_2dgames.game.particle.ParticleRecovery;
 import flixel.util.FlxPoint;
-import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
-import jp_2dgames.game.gui.GuiStatusDetail;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.item.ItemUtil;
@@ -13,13 +13,10 @@ import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.gui.GuiStatus;
-import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.item.ItemData.ItemExtraParam;
-import flixel.util.FlxRandom;
-import jp_2dgames.game.DirUtil.Dir;
 import flixel.group.FlxTypedGroup;
 import jp_2dgames.lib.Layer2D;
 import flixel.FlxSprite;
@@ -168,20 +165,35 @@ class PlayState extends FlxState {
     Particle.parent = particles;
 
     // パーティクル（ダメージ数値）
-    var partDamage = new FlxTypedGroup<ParticleDamage>(16);
-    for(i in 0...partDamage.maxSize) {
-      partDamage.add(new ParticleDamage());
+    {
+      var part = new FlxTypedGroup<ParticleDamage>(16);
+      for(i in 0...part.maxSize) {
+        part.add(new ParticleDamage());
+      }
+      this.add(part);
+      ParticleDamage.parent = part;
+
     }
-    this.add(partDamage);
-    ParticleDamage.parent = partDamage;
 
     // パーティクル（HP回復数値）
-    var partRecovery = new FlxTypedGroup<ParticleRecovery>(4);
-    for(i in 0...partRecovery.maxSize) {
-      partRecovery.add(new ParticleRecovery());
+    {
+      var part = new FlxTypedGroup<ParticleRecovery>(4);
+      for(i in 0...part.maxSize) {
+        part.add(new ParticleRecovery());
+      }
+      this.add(part);
+      ParticleRecovery.parent = part;
     }
-    this.add(partRecovery);
-    ParticleRecovery.parent = partRecovery;
+
+    // パーティクル（レベルアップ）
+    {
+      var part = new FlxTypedGroup<ParticleMessage>(4);
+      for(i in 0...part.maxSize) {
+        part.add(new ParticleMessage());
+      }
+      this.add(part);
+      ParticleMessage.parent = part;
+    }
 
     // 敵やアイテムを自動配置
     Generator.exec(_csv, layer);
@@ -366,6 +378,7 @@ class PlayState extends FlxState {
             DropItem.addMoney(i, j, itemid);
           }
           else {
+            params.condition = FlxRandom.intRanged(5, 15);
             DropItem.add(i, j, itemid, params);
           }
         }
