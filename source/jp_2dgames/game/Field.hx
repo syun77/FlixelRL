@@ -127,8 +127,9 @@ class Field {
     // チップ画像読み込み
     var chip = FlxG.bitmap.add("assets/levels/tileset.png");
     // 透明なスプライトを作成
-//    spr.makeGraphic(w, h, FlxColor.TRANSPARENT);
-    spr.makeGraphic(w, h, FlxColor.SILVER);
+    var col = FlxColor.SILVER;// FlxColor.TRANSPARENT;
+    spr.makeGraphic(w, h, col);
+    spr.pixels.fillRect(new Rectangle(0, 0, w, h), col);
     // 転送先の座標
     var pt = new Point();
     // 転送領域の作成

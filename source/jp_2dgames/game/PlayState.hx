@@ -258,7 +258,7 @@ class PlayState extends FlxState {
     FlxG.watch.add(player, "_stateprev");
     FlxG.watch.add(_seq, "_state");
     FlxG.watch.add(_seq, "_stateprev");
-    FlxG.watch.add(this, "_trun");
+    FlxG.watch.add(this, "_turn");
 
     //		FlxG.debugger.visible = true;
     FlxG.debugger.toggleKeys = ["ALT"];

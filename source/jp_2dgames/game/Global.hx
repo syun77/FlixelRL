@@ -137,6 +137,10 @@ class Global {
   public static function getTurn():Int {
     return _turnCount;
   }
+  // ターン数を設定する
+  public static function setTurn(v:Int):Void {
+    _turnCount = v;
+  }
   // 次のターンに進める
   public static function nextTurn():Int {
     _turnCount++;
