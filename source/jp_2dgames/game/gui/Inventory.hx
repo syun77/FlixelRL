@@ -77,6 +77,10 @@ class Inventory extends FlxGroup {
   private static inline var DETAIL_X = POS_X - 216;
   private static inline var DETAIL_Y = 32;
 
+  // 説明文の座標
+  private static inline var DETAIL2_X = DETAIL_X - 224;
+  private static inline var DETAIL2_Y = DETAIL_Y;
+
   // コマンドの座標
   private static inline var CMD_X = POS_X - 80;
   private static inline var CMD_Y = DETAIL_Y + 112;
@@ -118,6 +122,10 @@ class Inventory extends FlxGroup {
   // 詳細ステータス
   private var _detail:GuiStatusDetail;
   private var _bShowDetail:Bool = false;
+
+  // アイテム詳細
+  private var _itemDetail:GuiItemDetail;
+  private var _bShowItemDetail:Bool = false;
 
   // 状態
   private var _state:State = State.Main;
@@ -402,6 +410,11 @@ class Inventory extends FlxGroup {
     _detail = new GuiStatusDetail(DETAIL_X, DETAIL_Y);
     // 初期状態は非表示
     _bShowDetail = false;
+
+    // アイテム詳細
+    _itemDetail = new GuiItemDetail(DETAIL2_X, DETAIL2_Y);
+    // 初期状態は非表示
+    _bShowItemDetail = false;
   }
 
   /**
@@ -815,6 +828,8 @@ class Inventory extends FlxGroup {
       // 選択アイテムが変わったので詳細情報を更新
       _detail.setSelectedItem(getSelectedItem());
 
+      // 説明文も更新
+      _itemDetail.setSelectedItem(getSelectedItem());
     }
 
     // カーソルの座標を更新
@@ -1122,6 +1137,9 @@ class Inventory extends FlxGroup {
         this.add(_detail);
         _detail.show(getSelectedItem());
         _bShowDetail = true;
+        // 説明文も表示
+        this.add(_itemDetail);
+        _itemDetail.show(getSelectedItem());
       }
     }
     else {
@@ -1130,6 +1148,7 @@ class Inventory extends FlxGroup {
         // 表示していたら消す
         this.remove(_detail);
         _bShowDetail = false;
+        this.remove(_itemDetail);
       }
     }
   }

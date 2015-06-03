@@ -44,6 +44,9 @@ class ItemUtil {
     }
   }
 
+  /**
+   * アイテム名を取得する
+   **/
   public static function getName(item:ItemData):String {
     var csv = getCsv(item.id);
     var name = csv.searchItem("id", '${item.id}', "name");
@@ -53,6 +56,15 @@ class ItemUtil {
       default:
     }
     return name;
+  }
+
+  /**
+   * アイテムの詳細説明文を取得する
+   **/
+  public static function getDetail(item:ItemData):String {
+    var csv = getCsv(item.id);
+    var detail = csv.searchItem("id", '${item.id}', "detail");
+    return detail;
   }
 
   /**
