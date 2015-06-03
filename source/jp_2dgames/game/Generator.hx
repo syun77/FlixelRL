@@ -137,11 +137,25 @@ class Generator {
    * 敵を出現させる
    * @param csv Csv管理
    * @param layer フィールドLayer
-   * @param cnt 敵の生成数
-   * @return 実際に生成できた数
    **/
-  public static function addRandomEnemy(csv:Csv, layer:Layer2D, cnt:Int):Int {
-    var ret:Int = 0;
+  public static function checkRandomEnemy(csv:Csv, layer:Layer2D):Void {
+    var id = csv.getEnemyAppearId(Global.getFloor());
+    var turn = csv.enemy_appear.getInt(id, "turn");
+    if(turn == 0) {
+      // 敵は出現しない
+      return;
+    }
+    if(Global.getTurn()%turn != 0) {
+      // 出現しないターン
+      return;
+    }
+    var cnt = csv.enemy_appear.getInt(id, "max");
+    cnt -= Enemy.parent.countLiving();
+    if(cnt < 1) {
+      // 敵の出現最大数を超えている
+      return;
+    }
+
     var info = new GenerateInfo(csv, GenerateInfo.TYPE_ENEMY);
 
     for(i in 0...cnt) {
@@ -169,7 +183,5 @@ class Generator {
         break;
       }
     }
-
-    return ret;
   }
 }

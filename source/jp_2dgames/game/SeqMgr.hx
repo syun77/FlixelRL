@@ -298,10 +298,10 @@ class SeqMgr {
         else {
           // ターン数を進める
           Global.nextTurn();
-          if(Global.getTurn()%30 == 0) {
-            // TODO: 30ターン経過で敵出現
+          {
+            // ランダム敵の出現
             var layer = cast(FlxG.state, PlayState).lField;
-            Generator.addRandomEnemy(_csv, layer, 1);
+            Generator.checkRandomEnemy(_csv, layer);
           }
 
           // キー入力に戻る
