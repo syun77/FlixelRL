@@ -238,6 +238,10 @@ class ItemUtil {
           actor.addHp2(val);
           Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
+        // 満腹度も少し回復
+        var val2 = ItemUtil.getParam(item.id, "food");
+        actor.addFood(val2);
+
       case IType.Food:
         // 食糧
         var val = ItemUtil.getParam(item.id, "food");
