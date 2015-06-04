@@ -39,7 +39,6 @@ class GuiStatusDetail extends FlxSpriteGroup {
   private var _txtDef:FlxText; // Def
 
   private var _orgY:Float = 0;
-  private var _ofsY:Float = 0;
 
   /**
    * 差分文字の作成
@@ -150,17 +149,12 @@ class GuiStatusDetail extends FlxSpriteGroup {
    **/
   override public function update() {
     super.update();
-
-    _ofsY *= 0.7;
-    y = _orgY + _ofsY;
   }
 
   /**
    * 表示する
    **/
   public function show(item:ItemData) {
-    _ofsY = -128;
-    y = _orgY + _ofsY;
     _updateText(item);
   }
 

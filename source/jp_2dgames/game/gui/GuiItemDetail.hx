@@ -24,7 +24,6 @@ class GuiItemDetail extends FlxSpriteGroup {
   private var _txt:FlxText; // Str
 
   private var _orgY:Float = 0;
-  private var _ofsY:Float = 0;
 
   /**
    * コンストラクタ
@@ -54,17 +53,12 @@ class GuiItemDetail extends FlxSpriteGroup {
    **/
   override public function update() {
     super.update();
-
-    _ofsY *= 0.7;
-    y = _orgY + _ofsY;
   }
 
   /**
    * 表示する
    **/
   public function show(item:ItemData) {
-    _ofsY = -128;
-    y = _orgY + _ofsY;
     _updateText(item);
   }
 

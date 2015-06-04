@@ -1,6 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.item.Item;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import jp_2dgames.game.item.DropItem;
@@ -73,17 +73,24 @@ class Inventory extends FlxGroup {
   private static inline var WIDTH = 212 - 8 * 2;
   private static inline var HEIGHT = (DY * PAGE_DISP) + MSG_POS_Y + 8;//480 - 64 - 8 * 2;
 
-  // 詳細の座標
-  private static inline var DETAIL_X = POS_X - 216;
+  // 詳細
+  private static inline var DETAIL_X = 200;
   private static inline var DETAIL_Y = 32;
+  private static inline var DETAIL_OFSY = -128;
+  private static inline var DETAIL_Y2 = 320;
+  private static inline var DETAIL_OFSY2 = 128;
+
+  // 詳細の座標
+  private static inline var DETAIL_EQUIP_X = 208;
+  private static inline var DETAIL_EQUIP_Y = 0;
 
   // 説明文の座標
-  private static inline var DETAIL2_X = DETAIL_X - 224;
-  private static inline var DETAIL2_Y = DETAIL_Y;
+  private static inline var DETAIL_ITEM_X = 0;
+  private static inline var DETAIL_ITEM_Y = 0;
 
   // コマンドの座標
   private static inline var CMD_X = POS_X - 80;
-  private static inline var CMD_Y = DETAIL_Y + 112;
+  private static inline var CMD_Y = DETAIL_EQUIP_Y + 112;
 
   // ページ数テキストの座標
   private static inline var PAGE_X = POS_X + 8;
@@ -119,13 +126,15 @@ class Inventory extends FlxGroup {
   // カーソルアニメタイマー
   private var _tCursor:Int = 0;
 
-  // 詳細ステータス
-  private var _detail:GuiStatusDetail;
+  // 詳細
+  private var _detail:FlxSpriteGroup;
+
+  // 装備品ステータス
+  private var _detailEquip:GuiStatusDetail;
   private var _bShowDetail:Bool = false;
 
   // アイテム詳細
-  private var _itemDetail:GuiItemDetail;
-  private var _bShowItemDetail:Bool = false;
+  private var _detailItem:GuiItemDetail;
 
   // 状態
   private var _state:State = State.Main;
@@ -407,14 +416,15 @@ class Inventory extends FlxGroup {
     _updateText();
 
     // 詳細ステータス
-    _detail = new GuiStatusDetail(DETAIL_X, DETAIL_Y);
+    _detailEquip = new GuiStatusDetail(DETAIL_EQUIP_X, DETAIL_EQUIP_Y);
+    // アイテム詳細
+    _detailItem = new GuiItemDetail(DETAIL_ITEM_X, DETAIL_ITEM_Y);
+    // 詳細
+    _detail = new FlxSpriteGroup(DETAIL_X, DETAIL_Y);
+    _detail.add(_detailEquip);
+    _detail.add(_detailItem);
     // 初期状態は非表示
     _bShowDetail = false;
-
-    // アイテム詳細
-    _itemDetail = new GuiItemDetail(DETAIL2_X, DETAIL2_Y);
-    // 初期状態は非表示
-    _bShowItemDetail = false;
   }
 
   /**
@@ -826,10 +836,10 @@ class Inventory extends FlxGroup {
       }
 
       // 選択アイテムが変わったので詳細情報を更新
-      _detail.setSelectedItem(getSelectedItem());
+      _detailEquip.setSelectedItem(getSelectedItem());
 
       // 説明文も更新
-      _itemDetail.setSelectedItem(getSelectedItem());
+      _detailItem.setSelectedItem(getSelectedItem());
     }
 
     // カーソルの座標を更新
@@ -1135,11 +1145,10 @@ class Inventory extends FlxGroup {
       if(_bShowDetail == false) {
         // 非表示なら表示する
         this.add(_detail);
-        _detail.show(getSelectedItem());
+        _detailEquip.show(getSelectedItem());
         _bShowDetail = true;
         // 説明文も表示
-        this.add(_itemDetail);
-        _itemDetail.show(getSelectedItem());
+        _detailItem.show(getSelectedItem());
       }
     }
     else {
@@ -1148,7 +1157,6 @@ class Inventory extends FlxGroup {
         // 表示していたら消す
         this.remove(_detail);
         _bShowDetail = false;
-        this.remove(_itemDetail);
       }
     }
   }

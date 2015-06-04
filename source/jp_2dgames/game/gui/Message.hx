@@ -112,6 +112,9 @@ class Message extends FlxGroup {
 
   // ウィンドウを下に表示しているかどうか
   private var _bDispBottom:Bool = true;
+  public static function isDispBottom():Bool {
+    return instance._bDispBottom;
+  }
 
   // ウィンドウが消えるまでの時間
   private var _timer:Float;
