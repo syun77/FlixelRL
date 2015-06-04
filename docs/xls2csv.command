@@ -16,4 +16,4 @@ python xls2csv.py item.xlsx ../assets/levels header_item.txt
 #read Wait
 
 # ターミナルを閉じる
-killall Terminal
+#killall Terminal
