@@ -102,6 +102,12 @@ class Global {
     if(items == null) {
       // グローバルデータにあるアイテムデータを使う
       items = _items;
+      {
+        // りんごを持たせる
+        var param = new ItemExtraParam();
+        var d = new ItemData(1, param);
+        items.push(d);
+      }
     }
     else {
       // 外部のデータを使う

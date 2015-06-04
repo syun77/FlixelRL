@@ -229,25 +229,6 @@ class PlayState extends FlxState {
     // 状態を設定
     _state = State.Main;
 
-    // TODO: デバッグ用のアイテムを追加
-    if(false) {
-      var param = new ItemExtraParam();
-      for(i in 1...3) {
-        Inventory.push(i, param);
-        Inventory.push(i, param);
-        Inventory.push(i, param);
-        Inventory.push(i, param);
-        Inventory.push(i, param);
-        Inventory.push(i, param);
-      }
-      for(i in 1001...1007) {
-        Inventory.push(i, param);
-      }
-      for(i in 1021...1027) {
-        Inventory.push(i, param);
-      }
-    }
-
     // デバッグ用アイテム
     _debugItem = new DropItem();
     _debugItem.alpha = 0.5;
