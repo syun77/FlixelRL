@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.lib.Snd;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
@@ -119,12 +120,14 @@ class InventoryCommand extends FlxSpriteGroup {
 	 **/
   private function _procCursor():Void {
     if(Key.press.UP) {
+      Snd.playSe("pi");
       _nCursor--;
       if(_nCursor < 0) {
         _nCursor = _txtList.length - 1;
       }
     }
     if(Key.press.DOWN) {
+      Snd.playSe("pi");
       _nCursor++;
       if(_nCursor >= _txtList.length) {
         _nCursor = 0;

@@ -315,6 +315,7 @@ class SeqMgr {
         if(Dialog.isClosed()) {
           if(Dialog.getCursor() == 0) {
             // 次のフロアに進む
+            FlxG.sound.play("foot");
             Global.nextFloor();
             FlxG.switchState(new PlayState());
           }

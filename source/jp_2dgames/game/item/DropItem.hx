@@ -1,4 +1,5 @@
 package jp_2dgames.game.item;
+import flixel.FlxG;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.DirUtil.Dir;
 import flixel.util.FlxPoint;
@@ -144,6 +145,7 @@ class DropItem extends FlxSprite {
           Message.push2(Msg.ITEM_PICKUP, [item.name]);
           Global.addMoney(item.param.value);
           item.kill();
+          FlxG.sound.play("pickup");
         }
         else {
           // アイテム所持数をチェック
@@ -157,6 +159,7 @@ class DropItem extends FlxSprite {
             Message.push2(Msg.ITEM_PICKUP, [item.name]);
             Inventory.push(item.id, item.param);
             item.kill();
+            FlxG.sound.play("pickup");
           }
         }
       }

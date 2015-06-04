@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import flixel.FlxG;
 import jp_2dgames.game.particle.ParticleEnemy;
 import jp_2dgames.game.particle.ParticleRecovery;
 import jp_2dgames.game.item.ItemData;
@@ -411,10 +412,12 @@ class Actor extends FlxSprite {
     if(id == 0) {
       // プレイヤーダメージ
       Message.push2(Msg.PLAYER_DAMAGE, [name, val]);
+      FlxG.sound.play("hit");
     }
     else {
       // 敵ダメージ
       Message.push2(Msg.ENEMY_DAMAGE, [name, val]);
+      FlxG.sound.play("hit");
     }
 
     Particle.start(PType.Circle, x, y, FlxColor.RED);

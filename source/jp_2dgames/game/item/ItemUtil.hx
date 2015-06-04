@@ -241,6 +241,7 @@ class ItemUtil {
         // 満腹度も少し回復
         var val2 = ItemUtil.getParam(item.id, "food");
         actor.addFood(val2);
+        FlxG.sound.play("recover");
 
       case IType.Food:
         // 食糧
@@ -253,6 +254,8 @@ class ItemUtil {
         else {
           Message.push2(Msg.RECOVER_FOOD);
         }
+        FlxG.sound.play("eat");
+
       default:
         // ここにくることはない
         trace('Error: Invalid item ${item.id}');

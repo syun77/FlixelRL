@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleMessage;
 import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
@@ -206,6 +207,7 @@ class Player extends Actor {
             // 敵を倒した
             Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
             _target.kill();
+            FlxG.sound.play("destroy");
             // 経験値獲得
             addExp(_target.params.xp);
             // エフェクト再生
@@ -220,6 +222,7 @@ class Player extends Actor {
         }
         else {
           // 攻撃を外した
+          Snd.playSe("avoid");
           Message.push2(Msg.MISS, [_target.name]);
         }
         FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
@@ -279,6 +282,7 @@ class Player extends Actor {
       // 危険状態なので赤フラッシュ
       // 画面を0.2秒間、赤フラッシュします
       FlxG.camera.flash(FlxColor.RED, 0.2);
+      Snd.playSe("critical");
     }
 
     // 防具の使用回数減少

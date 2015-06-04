@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleEnemy;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.particle.ParticleMessage;
@@ -302,6 +303,8 @@ class PlayState extends FlxState {
           txt2.color = FlxColor.WHITE;
           txt2.text = "GAME OVER";
           this.add(txt2);
+
+          Snd.playSe("gameover");
         }
 
       case State.Gameover:

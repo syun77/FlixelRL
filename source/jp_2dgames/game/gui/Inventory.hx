@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.lib.Snd;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemUtil;
 import flixel.util.FlxAngle;
@@ -479,6 +480,8 @@ class Inventory extends FlxGroup {
       _bg.color = FlxColor.TEAL;
       // カーソルタイマー初期化
       _tCursor = 90;
+
+      Snd.playSe("menu");
     }
     else {
       // 通常表示に戻しておく
@@ -579,9 +582,11 @@ class Inventory extends FlxGroup {
       case MENU_EQUIP:
         // 装備する
         equip(-1, true);
+        Snd.playSe("equip");
       case MENU_UNEQUIP:
         // 装備から外す
         unequip(ItemUtil.getType(itemid), true);
+        Snd.playSe("equip");
       case MENU_PUT:
         // 床に置く
         if(_isItemOnFeet() == false) {
@@ -591,6 +596,7 @@ class Inventory extends FlxGroup {
           var name = ItemUtil.getName(item);
           Message.push2(Msg.ITEM_PUT, [name]);
         }
+        Snd.playSe("put");
       case MENU_CHANGE:
         // 交換
         // アイテムリストから取り出す
@@ -611,6 +617,7 @@ class Inventory extends FlxGroup {
 
         // 床に置く
         DropItem.add(_player.xchip, _player.ychip, itemid, item.param);
+        Snd.playSe("put");
         // メッセージ表示
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_PUT, [name]);
@@ -750,6 +757,8 @@ class Inventory extends FlxGroup {
     }
 
     if(bChangePage) {
+      Snd.playSe("pi");
+
       _nCursor = _pageMinId;
       // 通常メニューに戻る
       _menumode = MenuMode.Carry;
@@ -822,6 +831,7 @@ class Inventory extends FlxGroup {
     }
 
     if(bChangeItem) {
+      Snd.playSe("pi");
       if(bDispFeetMenu) {
         if(_feetItem != null) {
           // 足下にアイテムがある

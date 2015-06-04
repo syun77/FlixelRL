@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleEnemy;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.item.ItemData;
@@ -137,6 +138,7 @@ class Enemy extends Actor {
         }
         else {
           // 攻撃が外れた
+          Snd.playSe("avoid");
           Message.push2(Msg.MISS, [target.name]);
         }
         FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
@@ -190,6 +192,7 @@ class Enemy extends Actor {
 
     // 出現演出
     ParticleEnemy.start(x, y+height/4);
+    Snd.playSe("enemy", true);
   }
 
   /**
@@ -383,6 +386,7 @@ class Enemy extends Actor {
 
     if(Calc.checkHitThrow() == false) {
       // 外した
+      Snd.playSe("avoid");
       return false;
     }
 

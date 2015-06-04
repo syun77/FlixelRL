@@ -32,6 +32,38 @@
     <set name="BUILD_DIR" value="export"/>
     <classpath name="source"/>
     <assets path="assets"/>
+    <assets path="assets/sounds" if="flash" exclude=".ogg">
+        <sound path="pickup2.mp3" id="pickup" />
+        <sound path="foot2.mp3" id="foot" />
+        <sound path="destroy.mp3" id="destroy" />
+        <sound path="hit.mp3" id="hit" />
+        <sound path="hit4.mp3" id="critical" />
+        <sound path="eat.mp3" id="eat" />
+        <sound path="enemy.mp3" id="enemy" />
+        <sound path="equip.mp3" id="equip" />
+        <sound path="put.mp3" id="put" />
+        <sound path="avoid2.mp3" id="avoid" />
+        <sound path="recover.mp3" id="recover" />
+        <sound path="destroy2.mp3" id="gameover" />
+        <sound path="menu.mp3" id="menu" />
+        <sound path="pi.mp3" id="pi" />
+    </assets>
+    <assets path="assets/sounds" unless="flash">
+        <sound path="pickup2.ogg" id="pickup" />
+        <sound path="foot2.ogg" id="foot" />
+        <sound path="destroy.ogg" id="destroy" />
+        <sound path="hit.ogg" id="hit" />
+        <sound path="hit4.ogg" id="critical" />
+        <sound path="eat.ogg" id="eat" />
+        <sound path="enemy.ogg" id="enemy" />
+        <sound path="equip.ogg" id="equip" />
+        <sound path="put.ogg" id="put" />
+        <sound path="avoid2.ogg" id="avoid" />
+        <sound path="recover.ogg" id="recover" />
+        <sound path="destroy2.ogg" id="gameover" />
+        <sound path="menu.ogg" id="menu" />
+        <sound path="pi.ogg" id="pi" />
+    </assets>
 
     <!--------------------------------LIBRARIES------------------------------------->
 
