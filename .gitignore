@@ -7,3 +7,5 @@ save.txt
 docs/monster/out/*.png
 docs/monster/tmp/*.png
 upload.command
+
+/docs/sounds/list.txt

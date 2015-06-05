@@ -1,0 +1,15 @@
+- pickup2: pickup
+- foot2: foot
+- destroy: destroy
+- hit: hit
+- hit4: critical
+- eat: eat
+- enemy: enemy
+- equip: equip
+- put: put
+- avoid2: avoid
+- recover: recover
+- destroy2: gameover
+- menu: menu
+- pi: pi
+
