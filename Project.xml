@@ -31,8 +31,8 @@
 
     <set name="BUILD_DIR" value="export"/>
     <classpath name="source"/>
-    <assets path="assets"/>
-    <assets path="assets/sounds" if="flash" exclude=".ogg">
+    <assets path="assets" include="*.tmx|*.png|*.csv|*.ttf" />
+    <assets path="assets/sounds" if="flash" include="*.mp3">
         <sound path="pickup2.mp3" id="pickup" />
         <sound path="foot2.mp3" id="foot" />
         <sound path="destroy.mp3" id="destroy" />
@@ -48,7 +48,7 @@
         <sound path="menu.mp3" id="menu" />
         <sound path="pi.mp3" id="pi" />
     </assets>
-    <assets path="assets/sounds" unless="flash">
+    <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="pickup2.ogg" id="pickup" />
         <sound path="foot2.ogg" id="foot" />
         <sound path="destroy.ogg" id="destroy" />
