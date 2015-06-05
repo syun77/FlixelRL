@@ -256,9 +256,19 @@ class ItemUtil {
         }
         FlxG.sound.play("eat");
 
+      case IType.Scroll:
+        // 巻物
+
       default:
         // ここにくることはない
         trace('Error: Invalid item ${item.id}');
     }
+  }
+
+  /**
+   * 巻物を使った
+   **/
+  public static function useScroll(actor:Actor, item:ItemData):Void {
+
   }
 }

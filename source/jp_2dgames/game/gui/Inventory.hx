@@ -42,6 +42,7 @@ class Inventory extends FlxGroup {
   public static inline var RET_CANCEL:Int   = 1; // インベントリをキャンセルして閉じた
   public static inline var RET_DECIDE:Int   = 2; // 項目を決定した
   public static inline var RET_THROW:Int    = 3; // アイテムを投げた
+  public static inline var RET_SCROLL:Int   = 4; // 巻物を読んだ
 
   // 装備アイテム
   private static inline var EQUIP_WEAPON:Int = 0;
@@ -295,15 +296,17 @@ class Inventory extends FlxGroup {
   }
   // NULLアイテム
   private var _itemnull = null;
-  // 投げたアイテム
-  private var _throwItem:ItemData = null;
-  // 投げたアイテムを取得
-  public function getThrowItem():ItemData {
-    return _throwItem;
+  // 実行したアクション
+  private var _actionType = MENU_CONSUME;
+  // 使った・投げたアイテム
+  private var _targetItem:ItemData = null;
+  // 使った・投げたアイテムを取得
+  public function getTargetItem():ItemData {
+    return _targetItem;
   }
-  // 投げたアイテムの情報を消去
-  public function clearThrowItem():Void {
-    _throwItem = null;
+  // 使った・投げたアイテムの情報を消去
+  public function clearTargetItem():Void {
+    _targetItem = null;
   }
 
   // ページ内の最小番号
@@ -560,6 +563,9 @@ class Inventory extends FlxGroup {
    **/
   private function _cbAction(type:Int):Int {
 
+    // 実行したアクション
+    _actionType = type;
+
     // 項目決定したらカーソルは消す
     _cursor.visible = false;
 
@@ -574,6 +580,14 @@ class Inventory extends FlxGroup {
         // 使う
         // 落ちているアイテムを使うこともあるのでモードを戻しておく
         _menumode = mode;
+        var item2 = getSelectedItem();
+        switch(ItemUtil.getType(item2.id)) {
+          case IType.Scroll, IType.Wand:
+            // 登録する
+            _targetItem = new ItemData(item2.id, item2.param);
+          default:
+            // 登録しない
+        }
         useItem(-1);
         if(mode == MenuMode.Feet) {
           // 足下メニューの場合は足下アイテムを消す
@@ -631,7 +645,7 @@ class Inventory extends FlxGroup {
         // 落ちているアイテムを投げることもあるのでモードを戻しておく
         _menumode = mode;
         var item = getSelectedItem();
-        _throwItem = new ItemData(item.id, item.param);
+        _targetItem = new ItemData(item.id, item.param);
         // 選択しているアイテムを消す
         delItem(-1);
     }
@@ -710,12 +724,22 @@ class Inventory extends FlxGroup {
           _state = State.Main;
 
           // 項目を決定した
-          if(_throwItem != null) {
-            // アイテムを投げた
-            return RET_THROW;
-          }
-          else {
-            return RET_DECIDE;
+          switch(_actionType) {
+            case MENU_THROW:
+              // アイテムを投げた
+              return RET_THROW;
+            case MENU_CONSUME:
+              if(_targetItem != null) {
+                // 巻物を読んだ
+                return RET_SCROLL;
+              }
+              else {
+                // 通常の決定
+                return RET_DECIDE;
+              }
+            default:
+              // それ以外
+              return RET_DECIDE;
           }
         }
         else if(Key.press.B) {
@@ -964,6 +988,8 @@ class Inventory extends FlxGroup {
 
     var item = itemList[idx];
 
+    // 削除するかどうか
+    var bDelete = true;
     // メッセージ表示
     var name = ItemUtil.getName(item);
     switch(item.type) {
@@ -971,6 +997,8 @@ class Inventory extends FlxGroup {
         Message.push2(Msg.ITEM_EAT, [name]);
       case IType.Portion:
         Message.push2(Msg.ITEM_DRINK, [name]);
+      case IType.Scroll:
+        Message.push("巻物を読んだ");
       default:
         throw 'Error: Invalid item. id=${item.id}';
     }
@@ -978,8 +1006,10 @@ class Inventory extends FlxGroup {
     // アイテムを使う
     ItemUtil.use(_player, item);
 
-    // 使ったアイテムを削除
-    delItem(idx);
+    if(bDelete) {
+      // 使ったアイテムを削除
+      delItem(idx);
+    }
   }
 
   /**

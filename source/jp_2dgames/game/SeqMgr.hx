@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.Generator.GenerateInfo;
 import jp_2dgames.game.item.ThrowItem;
 import jp_2dgames.game.item.ItemData;
@@ -22,6 +23,7 @@ private enum State {
   InventoryInput; // インベントリの操作中
   PlayerAct;      // プレイヤーの行動
   Firearm;        // 飛び道具
+  Magicbullet;    // 魔法弾
   EnemyRequestAI; // 敵のAI
   Move;           // 移動
   EnemyActBegin;  // 敵の行動開始
@@ -80,6 +82,7 @@ class SeqMgr {
         help = GuiStatus.HELP_INVENTORY;
       case State.PlayerAct:
       case State.Firearm:
+      case State.Magicbullet:
       case State.EnemyRequestAI:
       case State.Move:
       case State.EnemyActBegin:
@@ -191,9 +194,17 @@ class SeqMgr {
             _player.standby();
             // 非表示
             _inventory.setActive(false);
-            _throwItem.start(_player, _inventory.getThrowItem());
-            _inventory.clearThrowItem();
+            _throwItem.start(_player, _inventory.getTargetItem());
+            _inventory.clearTargetItem();
             _change(State.Firearm);
+          case Inventory.RET_SCROLL:
+            // 巻物を読んだ
+            _player.standby();
+            // インベントリを非表示
+            _inventory.setActive(false);
+            ItemUtil.useScroll(_player, _inventory.getTargetItem());
+            _inventory.clearTargetItem();
+            _change(State.Magicbullet);
         }
 
       case State.PlayerAct:
@@ -207,6 +218,12 @@ class SeqMgr {
       case State.Firearm:
         // ■飛び道具の移動
         if(_throwItem.isEnd()) {
+          _change(State.EnemyRequestAI);
+        }
+
+      case State.Magicbullet:
+        // ■魔法弾の移動
+        if(true) {
           _change(State.EnemyRequestAI);
         }
 
