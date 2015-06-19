@@ -153,6 +153,13 @@ class PlayState extends FlxState {
       this.add(e.hpBar);
     });
 
+    // 魔法弾作成
+    MagicShot.parent = new MagicShotMgr(enemies.maxSize);
+    for(i in 0...MagicShot.parent.maxSize) {
+      var ms = new MagicShot();
+      MagicShot.parent.add(ms);
+    }
+
     // メッセージ生成
     var message = new Message(_csv.message, _csv.hint);
     Message.instance = message;
@@ -268,6 +275,7 @@ class PlayState extends FlxState {
     ParticleDamage.parent = null;
     ParticleRecovery.parent = null;
     ParticleEnemy.parent = null;
+    MagicShot.parent = null;
     DropItem.parent = null;
     Enemy.parent = null;
     Enemy.csv = null;
