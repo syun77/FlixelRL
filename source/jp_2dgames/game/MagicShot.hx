@@ -1,7 +1,6 @@
 package jp_2dgames.game;
 import flash.display.BlendMode;
 import flixel.util.FlxAngle;
-import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxColor;
@@ -12,10 +11,14 @@ import flixel.FlxSprite;
  **/
 class MagicShot extends FlxSprite {
 
+  // 親
   public static var parent:MagicShotMgr = null;
 
   /**
    * 生成
+   * @param X 開始座標(X)
+   * @param Y 開始座標(Y)
+   * @param target 攻撃対象
    **/
   public static function start(X:Float, Y:Float, target:Actor):MagicShot {
     var ms:MagicShot = parent.recycle();
@@ -25,7 +28,7 @@ class MagicShot extends FlxSprite {
   }
 
   // 最大移動速度
-  public static inline var SPEED_MAX:Float = 1000;
+  public static inline var SPEED_MAX:Float = 1200;
   // 最大旋回速度
   public static inline var ROT_SPEED_MAX:Float = 45;
 
@@ -67,8 +70,9 @@ class MagicShot extends FlxSprite {
     y = Y;
     _target = target;
 
-    // ランダムな角度に移動
-    var speed = FlxRandom.floatRanged(50, 100);
+    // ランダムな速度を設定
+    var speed = FlxRandom.floatRanged(20, 200);
+    // 目標と反対側の角度を設定
     var deg = FlxAngle.angleBetween(this, _target, true);
     deg -= 180;
 
@@ -86,16 +90,27 @@ class MagicShot extends FlxSprite {
     var sc = FlxRandom.floatRanged(0.4, 0.5);
     scale.set(sc, sc);
 
+    // 衝突判定
     {
       var dx = _target.x - x;
       var dy = _target.y - y;
       if(16*16 > dx*dx + dy*dy) {
         // 衝突
+        MagicShotMgr.hitTarget(_target);
         kill();
         return;
       }
     }
 
+    // ホーミング移動する
+    _homing();
+
+  }
+
+  /**
+   * 目標に向かってホーミング移動する
+   **/
+  private function _homing():Void {
     var ax = velocity.x;
     var ay = velocity.y;
     var bx = _target.x - x;
