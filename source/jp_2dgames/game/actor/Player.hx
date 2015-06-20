@@ -209,7 +209,7 @@ class Player extends Actor {
             _target.kill();
             FlxG.sound.play("destroy");
             // 経験値獲得
-            addExp(_target.params.xp);
+            ExpMgr.add(_target.params.xp);
             // エフェクト再生
             Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
           }

@@ -24,6 +24,7 @@ private enum State {
   PlayerAct;      // プレイヤーの行動
   Firearm;        // 飛び道具
   Magicbullet;    // 魔法弾
+  PlayerActEnd;   // プレイヤー行動終了
   EnemyRequestAI; // 敵のAI
   Move;           // 移動
   EnemyActBegin;  // 敵の行動開始
@@ -83,6 +84,7 @@ class SeqMgr {
       case State.PlayerAct:
       case State.Firearm:
       case State.Magicbullet:
+      case State.PlayerActEnd:
       case State.EnemyRequestAI:
       case State.Move:
       case State.EnemyActBegin:
@@ -146,7 +148,7 @@ class SeqMgr {
             ret = true;
           case Action.Move:
             // 移動した
-            _change(State.EnemyRequestAI);
+            _change(State.PlayerActEnd);
             ret = true;
           case Action.InventoryOpen:
             // インベントリを開く
@@ -162,7 +164,7 @@ class SeqMgr {
             }
           case Action.TurnEnd:
             // 足踏み待機
-            _change(State.EnemyRequestAI);
+            _change(State.PlayerActEnd);
             // 制御を返して連続で回復しないようにする
             ret = false;
           default:
@@ -188,7 +190,7 @@ class SeqMgr {
             _player.standby();
             // 非表示
             _inventory.setActive(false);
-            _change(State.EnemyRequestAI);
+            _change(State.PlayerActEnd);
           case Inventory.RET_THROW:
             // アイテムを投げた
             _player.standby();
@@ -216,21 +218,29 @@ class SeqMgr {
         // ■プレイヤーの行動
         if(_player.isTurnEnd()) {
           // 移動完了
-          _change(State.EnemyRequestAI);
+          _change(State.PlayerActEnd);
           ret = true;
         }
 
       case State.Firearm:
         // ■飛び道具の移動
         if(_throwItem.isEnd()) {
-          _change(State.EnemyRequestAI);
+          _change(State.PlayerActEnd);
         }
 
       case State.Magicbullet:
         // ■魔法弾の移動
         if(MagicShotMgr.isEnd()) {
-          _change(State.EnemyRequestAI);
+          _change(State.PlayerActEnd);
         }
+
+      case State.PlayerActEnd:
+        // ■プレイヤー行動終了
+        if(ExpMgr.get() > 0) {
+          // 経験値獲得＆レベルアップ
+          _player.addExp(ExpMgr.get());
+        }
+        _change(State.EnemyRequestAI);
 
       case State.EnemyRequestAI:
         // 敵に行動を要求する
@@ -311,6 +321,8 @@ class SeqMgr {
         }
       case State.TurnEnd:
         // ■ターン終了
+        ExpMgr.turnEnd();
+        // 的の行動終了
         _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
         if(_player.isOnStairs) {
           // 次のフロアに進む

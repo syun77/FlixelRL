@@ -55,7 +55,7 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
       target.kill();
       Snd.playSe("destroy", true);
       // 経験値獲得
-//      addExp(_target.params.xp);
+      ExpMgr.add(target.params.xp);
       // エフェクト再生
       Particle.start(PType.Ring, target.x, target.y, FlxColor.YELLOW);
     }
