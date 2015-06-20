@@ -352,7 +352,7 @@ class SeqMgr {
           if(Dialog.getCursor() == 0) {
             // 次のフロアに進む
             FlxG.sound.play("foot");
-            FlxG.camera.fade(FlxColor.BLACK, 0.3, function() {
+            FlxG.camera.fade(FlxColor.BLACK, 0.3, false, function() {
               // フェードが完了したら次のフロアへ進む
               Global.nextFloor();
               FlxG.switchState(new PlayState());
