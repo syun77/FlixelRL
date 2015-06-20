@@ -258,6 +258,7 @@ class ItemUtil {
 
       case IType.Scroll:
         // 巻物
+        // 何もしない
 
       default:
         // ここにくることはない

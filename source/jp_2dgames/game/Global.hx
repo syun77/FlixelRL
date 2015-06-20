@@ -105,8 +105,11 @@ class Global {
       {
         // りんごを持たせる
         var param = new ItemExtraParam();
-        var d = new ItemData(1, param);
+        // TODO: 巻物を持たせる
+//        var d = new ItemData(1, param);
+        var d = new ItemData(33, param);
         items.push(d);
+
       }
     }
     else {

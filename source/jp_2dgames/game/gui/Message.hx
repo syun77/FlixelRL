@@ -32,6 +32,7 @@ class Msg {
   public static inline var ITEM_DRINK:Int = 20; // アイテムを飲んだ
   public static inline var RECOVER_FOOD_MAX:Int = 21; // 満腹度が最大まで回復した
   public static inline var RECOVER_FOOD:Int = 22; // 満腹度が最大まで回復した
+  public static inline var ITEM_SCROLL:Int = 23; // 巻物を読んだ
 
   // メニュー
   public static inline var MENU_USE:Int = 32; // メニュー: 使う
