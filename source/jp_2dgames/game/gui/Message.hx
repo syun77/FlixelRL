@@ -33,6 +33,8 @@ class Msg {
   public static inline var RECOVER_FOOD_MAX:Int = 21; // 満腹度が最大まで回復した
   public static inline var RECOVER_FOOD:Int = 22; // 満腹度が最大まで回復した
   public static inline var ITEM_SCROLL:Int = 23; // 巻物を読んだ
+  public static inline var GROW_HPMAX:Int = 24; // 最大HP上昇
+  public static inline var GROW_FOOD:Int = 25; // 最大満腹度上昇
 
   // メニュー
   public static inline var MENU_USE:Int = 32; // メニュー: 使う

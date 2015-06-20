@@ -97,6 +97,10 @@ class ItemUtil {
     var csv = getCsv(id);
     return csv.searchItemInt("id", '${id}', key, false);
   }
+  public static function getParamString(id:Int, key:String):String {
+    var csv = getCsv(id);
+    return csv.searchItem("id", '${id}', key);
+  }
 
   public static function toString(type:IType):String {
     return '${type}';
@@ -243,11 +247,16 @@ class ItemUtil {
           actor.addHp(val);
           Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
-        else {
-          val = ItemUtil.getParam(item.id, "hp2");
-          actor.addHp2(val);
-          Message.push2(Msg.RECOVER_HP, [actor.name, val]);
+        // 拡張パラメータ
+        var extra = ItemUtil.getParamString(item.id, "extra");
+        var extval = ItemUtil.getParam(item.id, "extval");
+        switch(extra) {
+          case "hpmax":
+            // 最大HP上昇
+            actor.addHpMax(extval);
+            Message.push2(Msg.GROW_HPMAX, [actor.name, extval]);
         }
+
         // 満腹度も少し回復
         var val2 = ItemUtil.getParam(item.id, "food");
         actor.addFood(val2);
