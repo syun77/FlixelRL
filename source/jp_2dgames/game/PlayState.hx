@@ -32,6 +32,7 @@ import jp_2dgames.game.Save;
  * 状態
  **/
 private enum State {
+  FloorStart; // フロア開始演出
   Main; // メイン処理
   Gameover; // ゲームオーバー
 }

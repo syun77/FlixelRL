@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxColor;
+import flixel.FlxCamera;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.Generator.GenerateInfo;
 import jp_2dgames.game.item.ThrowItem;
@@ -350,8 +352,11 @@ class SeqMgr {
           if(Dialog.getCursor() == 0) {
             // 次のフロアに進む
             FlxG.sound.play("foot");
-            Global.nextFloor();
-            FlxG.switchState(new PlayState());
+            FlxG.camera.fade(FlxColor.BLACK, 0.3, function() {
+              // フェードが完了したら次のフロアへ進む
+              Global.nextFloor();
+              FlxG.switchState(new PlayState());
+            });
           }
           else {
             // 階段を降りない
