@@ -1,5 +1,9 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxColor;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.group.FlxSpriteGroup;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleEnemy;
 import flixel.util.FlxRandom;
@@ -62,6 +66,11 @@ class PlayState extends FlxState {
 
   // 背景
   private var _back:FlxSprite;
+
+  // フロア開始演出用テキスト
+  private var _txtFloor:FlxText;
+  // フロア開始演出用の黒い四角形
+  private var _bgFade:FlxSprite;
 
   // CSVデータ
   private var _csv:Csv;
@@ -238,7 +247,25 @@ class PlayState extends FlxState {
     _seq = new SeqMgr(this, _csv);
 
     // 状態を設定
-    _state = State.Main;
+    _state = State.FloorStart;
+    // フロア開始演出スタート
+    _bgFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    _txtFloor = new FlxText(FlxG.width/3.2, FlxG.height/2.5, 256, "", 48);
+    _txtFloor.text = 'Floor ${Global.getFloor()}';
+    _txtFloor.color = FlxColor.WHITE;
+    this.add(_bgFade);
+    this.add(_txtFloor);
+    FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
+      FlxG.camera.shake(0.0002*Global.getFloor(), 0.5, function() {
+        // 暗転解除
+        this.remove(_bgFade);
+        this.remove(_txtFloor);
+        FlxG.camera.fade(FlxColor.BLACK, 0.3, true, function() {
+          // フェード終了
+          _state = State.Main;
+        });
+      });
+    });
 
     // デバッグ用アイテム
     _debugItem = new DropItem();
@@ -296,6 +323,8 @@ class PlayState extends FlxState {
     super.update();
 
     switch(_state) {
+      case State.FloorStart:
+
       case State.Main:
         // シーケンス更新
         if(_seq.update() == false) {
