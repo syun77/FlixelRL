@@ -3,7 +3,6 @@ package jp_2dgames.game.item;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import jp_2dgames.game.actor.Enemy;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.gui.Message;

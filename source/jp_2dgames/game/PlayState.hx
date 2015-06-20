@@ -19,6 +19,7 @@ import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.item.ItemData.ItemExtraParam;
+import jp_2dgames.game.item.ItemData;
 import flixel.group.FlxTypedGroup;
 import jp_2dgames.lib.Layer2D;
 import flixel.FlxSprite;
@@ -372,7 +373,9 @@ class PlayState extends FlxState {
     }
     if(FlxG.keys.justPressed.T) {
       // 魔法弾発射テスト
-      MagicShotMgr.start(_player.x, _player.y);
+      var param = new ItemExtraParam();
+      var item = new ItemData(33, param);
+      MagicShotMgr.start(_player.x, _player.y, item);
     }
 
     // アイテム配置デバッグ機能

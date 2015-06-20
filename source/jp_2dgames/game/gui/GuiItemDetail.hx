@@ -38,7 +38,7 @@ class GuiItemDetail extends FlxSpriteGroup {
     this.add(back);
 
     // 説明文テキスト
-    _txt = new FlxText(MSG_X, MSG_Y, TXT_WIDTH);
+    _txt = new FlxText(MSG_X, MSG_Y, TXT_WIDTH-16);
     _txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     this.add(_txt);
   }

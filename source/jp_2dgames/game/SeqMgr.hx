@@ -202,9 +202,14 @@ class SeqMgr {
             _player.standby();
             // インベントリを非表示
             _inventory.setActive(false);
-            ItemUtil.useScroll(_player, _inventory.getTargetItem());
+            var item = _inventory.getTargetItem();
+//            ItemUtil.useScroll(_player, _inventory.getTargetItem());
             _inventory.clearTargetItem();
-            _change(State.Magicbullet);
+            if(ItemUtil.getParam(item.id, "atk") > 0) {
+              // 魔法弾発射
+              MagicShotMgr.start(_player.x, _player.y, item);
+              _change(State.Magicbullet);
+            }
         }
 
       case State.PlayerAct:
@@ -223,7 +228,7 @@ class SeqMgr {
 
       case State.Magicbullet:
         // ■魔法弾の移動
-        if(true) {
+        if(MagicShotMgr.isEnd()) {
           _change(State.EnemyRequestAI);
         }
 

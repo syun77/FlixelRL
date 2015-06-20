@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import Math;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxRandom;
@@ -74,6 +76,20 @@ class Calc {
     }
 
     return Std.int(val);
+  }
+
+  /**
+   * アイテムによるダメージ計算
+   **/
+  public static function damageItem(act:Actor, item:ItemData):Int {
+    var atk = ItemUtil.getParam(item.id, "atk");
+    var val = atk;
+    var d = atk * FlxRandom.floatRanged(0, 0.05);
+    if(d < 0) {
+      d = FlxRandom.intRanged(1, 3);
+    }
+    val += Std.int(d);
+    return val;
   }
 
   /**

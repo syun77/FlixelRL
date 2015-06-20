@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import jp_2dgames.game.item.ItemData;
 import flash.display.BlendMode;
 import flixel.util.FlxAngle;
 import flixel.util.FlxRandom;
@@ -19,10 +20,11 @@ class MagicShot extends FlxSprite {
    * @param X 開始座標(X)
    * @param Y 開始座標(Y)
    * @param target 攻撃対象
+   * @param item アイテム情報
    **/
-  public static function start(X:Float, Y:Float, target:Actor):MagicShot {
+  public static function start(X:Float, Y:Float, target:Actor, item:ItemData):MagicShot {
     var ms:MagicShot = parent.recycle();
-    ms.init(X, Y, target);
+    ms.init(X, Y, target, item);
 
     return ms;
   }
@@ -34,6 +36,8 @@ class MagicShot extends FlxSprite {
 
   // ターゲット
   private var _target:Actor;
+  // アイテム情報
+  private var _item:ItemData;
 
   /**
    * コンストラクタ
@@ -65,10 +69,11 @@ class MagicShot extends FlxSprite {
   /**
    * 初期化
    **/
-  public function init(X:Float, Y:Float, target:Actor):Void {
+  public function init(X:Float, Y:Float, target:Actor, item:ItemData):Void {
     x = X;
     y = Y;
     _target = target;
+    _item = item;
 
     // ランダムな速度を設定
     var speed = FlxRandom.floatRanged(20, 200);
@@ -96,7 +101,7 @@ class MagicShot extends FlxSprite {
       var dy = _target.y - y;
       if(16*16 > dx*dx + dy*dy) {
         // 衝突
-        MagicShotMgr.hitTarget(_target);
+        MagicShotMgr.hitTarget(_target, _item);
         kill();
         return;
       }
