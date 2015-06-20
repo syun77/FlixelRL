@@ -105,8 +105,7 @@ class Global {
       if(_items.length == 0) {
         // りんごを持たせる
         var param = new ItemExtraParam();
-//        items.push(new ItemData(1, param));
-        items.push(new ItemData(33, param));
+        items.push(new ItemData(1, param));
       }
     }
     else {

@@ -255,6 +255,10 @@ class ItemUtil {
             // 最大HP上昇
             actor.addHpMax(extval);
             Message.push2(Msg.GROW_HPMAX, [actor.name, extval]);
+          case "food":
+            // 最大満腹度上昇
+            actor.addFoodMax(extval);
+            Message.push2(Msg.GROW_FOOD, [extval]);
         }
 
         // 満腹度も少し回復
