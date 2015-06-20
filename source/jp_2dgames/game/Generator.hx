@@ -124,7 +124,20 @@ class Generator {
           var param = new ItemExtraParam();
           switch(ItemUtil.getType(itemid)) {
             case IType.Weapon, IType.Armor:
+              // 使用回数
               param.condition = FlxRandom.intRanged(5, 15);
+              // 付加威力値
+              var func = function() {
+                var rnd = FlxRandom.intRanged(0, 99);
+                if(rnd < 35) { return 0; } // 35%
+                else if(rnd < 55) { return 1; } // 20%
+                else if(rnd < 70) { return 2; } // 15%
+                else if(rnd < 80) { return 3; } // 10%
+                else if(rnd < 90) { return -1;} // 10%
+                else if(rnd < 96) { return 4; } // 6%
+                else { return 5;} // 4%
+              }
+              param.value = func();
             default:
           }
           DropItem.add(i, j, itemid, param);

@@ -114,10 +114,12 @@ class GuiStatusDetail extends FlxSpriteGroup {
       case IType.Weapon:
         var now = player.atk;
         var next = ItemUtil.getParam(itemid, "atk");
+        next += item.param.value;
         _setDiffText(_txtAtk, next - now);
       case IType.Armor:
         var now = player.def;
         var next = ItemUtil.getParam(itemid, "def");
+        next += item.param.value;
         _setDiffText(_txtDef, next - now);
       case IType.Ring:
       case IType.Food:

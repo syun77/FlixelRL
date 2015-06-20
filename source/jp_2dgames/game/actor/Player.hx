@@ -48,23 +48,25 @@ class Player extends Actor {
   // 攻撃力
   public var atk(get, never):Int;
   private function get_atk() {
-    var weapon = Inventory.getWeapon();
-    if(weapon == ItemUtil.NONE) {
+    var weapon = Inventory.getWeaponData();
+    if(weapon == null) {
       // 何も装備していない
       return 0;
     }
-    var atk = ItemUtil.getParam(weapon, "atk");
+    var atk = ItemUtil.getParam(weapon.id, "atk");
+    atk += weapon.param.value;
     return atk;
   }
   // 守備力
   public var def(get, never):Int;
   private function get_def() {
-    var armor = Inventory.getArmor();
-    if(armor == ItemUtil.NONE) {
+    var armor = Inventory.getArmorData();
+    if(armor == null) {
       // 何も装備していない
       return 0;
     }
-    var def = ItemUtil.getParam(armor, "def");
+    var def = ItemUtil.getParam(armor.id, "def");
+    def += armor.param.value;
     return def;
   }
 
@@ -202,7 +204,7 @@ class Player extends Actor {
         // 攻撃開始
         if(Calc.checkHitAttack()) {
           // 攻撃が当たった
-          var val = Calc.damage(this, _target, Inventory.getWeapon(), ItemUtil.NONE);
+          var val = Calc.damage(this, _target, Inventory.getWeaponData(), null);
           if(_target.damage(val)) {
             // 敵を倒した
             Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);

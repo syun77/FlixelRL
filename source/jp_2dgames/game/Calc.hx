@@ -24,22 +24,24 @@ class Calc {
 	 * @param item1 act1の装備アイテム
 	 * @param item2 act2の装備アイテム
 	 **/
-  public static function damage(act1:Actor, act2:Actor, item1:Int, item2:Int):Int {
+  public static function damage(act1:Actor, act2:Actor, item1:ItemData, item2:ItemData):Int {
     // 力
     var str = act1.params.str;
     // 耐久力
     var vit = act2.params.vit;
     // 攻撃力
     var atk = 0;
-    if(item1 > ItemUtil.NONE) {
+    if(item1 != null) {
       // 攻撃力を取得
-      atk = ItemUtil.getParam(item1, "atk");
+      atk = ItemUtil.getParam(item1.id, "atk");
+      atk += item1.param.value;
     }
     // 防御力
     var def = 0;
-    if(item2 > ItemUtil.NONE) {
+    if(item2 != null) {
       // 防御力を取得
-      def = ItemUtil.getParam(item2, "def");
+      def = ItemUtil.getParam(item2.id, "def");
+      def += item2.param.value;
     }
 
     // 威力

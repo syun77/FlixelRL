@@ -148,22 +148,31 @@ class Inventory extends FlxGroup {
 
   // ■装備アイテム
   // 武器
-  private var _weapon:Int = ItemUtil.NONE;
+  private var _weapon:ItemData = null;
   private var weapon(get_weapon, never):Int;
   private function get_weapon() {
-    return _weapon;
+    if(_weapon == null) {
+      return ItemUtil.NONE;
+    }
+    return _weapon.id;
   }
   // 防具
-  private var _armor:Int = ItemUtil.NONE;
+  private var _armor:ItemData = null;
   private var armor(get_armor, never):Int;
   private function get_armor() {
-    return _armor;
+    if(_armor == null) {
+      return ItemUtil.NONE;
+    }
+    return _armor.id;
   }
   // 指輪
-  private var _ring:Int = ItemUtil.NONE;
+  private var _ring:ItemData= null;
   private var ring(get_ring, never):Int;
   private function get_ring() {
-    return _ring;
+    if(_ring == null) {
+      return ItemUtil.NONE;
+    }
+    return _ring.id;
   }
 
   /**
@@ -240,13 +249,22 @@ class Inventory extends FlxGroup {
   public static function getWeapon():Int {
     return instance.weapon;
   }
+  public static function getWeaponData():ItemData {
+    return instance._weapon;
+  }
 
   public static function getArmor():Int {
     return instance.armor;
   }
+  public static function getArmorData():ItemData {
+    return instance._armor;
+  }
 
   public static function getRing():Int {
     return instance.ring;
+  }
+  public static function getRingData():ItemData {
+    return instance._ring;
   }
 
   public static function setItemList(items:Array<ItemData>):Void {
@@ -399,9 +417,9 @@ class Inventory extends FlxGroup {
     _player = cast(FlxG.state, PlayState).player;
 
     // 装備を外す
-    _weapon = ItemUtil.NONE;
-    _armor = ItemUtil.NONE;
-    _ring = ItemUtil.NONE;
+    _weapon = null;
+    _armor = null;
+    _ring = null;
     for(spr in _fonts) {
       spr.visible = false;
     }
@@ -1111,13 +1129,13 @@ class Inventory extends FlxGroup {
     itemdata.isEquip = true;
     switch(itemdata.type) {
       case IType.Weapon:
-        _weapon = itemdata.id;
+        _weapon = itemdata;
         spr = _fonts[EQUIP_WEAPON];
       case IType.Armor:
-        _armor = itemdata.id;
+        _armor = itemdata;
         spr = _fonts[EQUIP_ARMOR];
       case IType.Ring:
-        _ring = itemdata.id;
+        _ring = itemdata;
         spr = _fonts[EQUIP_RING];
       default:
         trace('warning: invalid itemid = ${itemdata.id}');
@@ -1148,11 +1166,11 @@ class Inventory extends FlxGroup {
     });
     switch(type) {
       case IType.Weapon:
-        _weapon = ItemUtil.NONE;
+        _weapon = null;
       case IType.Armor:
-        _armor = ItemUtil.NONE;
+        _armor = null;
       case IType.Ring:
-        _ring = ItemUtil.NONE;
+        _ring = null;
       default:
         trace('warning: invalid type = ${type}');
     }

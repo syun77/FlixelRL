@@ -122,7 +122,7 @@ class Enemy extends Actor {
         // 攻撃開始
         if(Calc.checkHitAttackForEnemy()) {
           // 攻撃が当たった
-          var val = Calc.damage(this, target, ItemUtil.NONE, Inventory.getArmor());
+          var val = Calc.damage(this, target, null, Inventory.getArmorData());
           target.damage(val);
           if(target.existsEnemyInFront() == false) {
             // プレイヤーの正面に敵がいなければ攻撃した敵の方を振り向く

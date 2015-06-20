@@ -52,7 +52,17 @@ class ItemUtil {
     var name = csv.searchItem("id", '${item.id}', "name");
     switch(ItemUtil.getType(item.id)) {
       case IType.Weapon, IType.Armor:
-        name += '[${item.param.condition}]';
+        if(item.param.value != 0) {
+          // ±がある
+          var val = '${item.param.value}';
+          if(item.param.value > 0) {
+            val = '+${val}';
+          }
+          name = '${name}${val}[${item.param.condition}]';
+        }
+        else {
+          name = '${name}[${item.param.condition}]';
+        }
       default:
     }
     return name;
