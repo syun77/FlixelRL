@@ -42,6 +42,9 @@ class Msg {
   public static inline var MENU_PUT:Int = 36; // メニュー: 置く
   public static inline var MENU_CHANGE:Int = 37; // メニュー: 交換
   public static inline var MENU_PICKUP:Int = 38; // メニュー: 拾う
+  public static inline var MENU_NEXTFLOOR_MSG:Int = 39; // メニュー: 歓談がある
+  public static inline var MENU_NEXTFLOOR:Int = 40; // メニュー: 下りる
+  public static inline var MENU_STAY:Int = 41; // メニュー: そのまま
 
   // ページ
   public static inline var PAGE_FEET:Int = 48; // 足下

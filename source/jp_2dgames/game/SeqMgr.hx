@@ -331,7 +331,10 @@ class SeqMgr {
         if(_player.isOnStairs) {
           // 次のフロアに進む
           _change(State.NextFloor);
-          Dialog.open(Dialog.SELECT2, "階段がある", ["下りる", "そのまま"]);
+          var msg = Message.getText(Msg.MENU_NEXTFLOOR_MSG);
+          var cmd1 = Message.getText(Msg.MENU_NEXTFLOOR);
+          var cmd2 = Message.getText(Msg.MENU_STAY);
+          Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
         }
         else {
           // ターン数を進める
