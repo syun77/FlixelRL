@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import jp_2dgames.game.actor.Enemy;
 import flixel.group.FlxTypedGroup;
 
 /**
@@ -11,5 +12,11 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
    **/
   public function new(size:Int) {
     super(size);
+  }
+
+  public static function start(px:Float, py:Float) {
+    Enemy.parent.forEachAlive(function(e:Enemy) {
+      MagicShot.start(px, py, e);
+    });
   }
 }

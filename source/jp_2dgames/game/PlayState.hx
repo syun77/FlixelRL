@@ -159,6 +159,7 @@ class PlayState extends FlxState {
       var ms = new MagicShot();
       MagicShot.parent.add(ms);
     }
+    this.add(MagicShot.parent);
 
     // メッセージ生成
     var message = new Message(_csv.message, _csv.hint);
@@ -368,6 +369,10 @@ class PlayState extends FlxState {
     if(FlxG.keys.justPressed.ONE) {
       // 1つ前のフロアに進む
       Global.backFloor();
+    }
+    if(FlxG.keys.justPressed.T) {
+      // 魔法弾発射テスト
+      MagicShotMgr.start(_player.x, _player.y);
     }
 
     // アイテム配置デバッグ機能
