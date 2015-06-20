@@ -33,6 +33,7 @@ private enum State {
   EnemyAct;       // 敵の行動
   TurnEnd;        // ターン終了
   NextFloor;      // 次のフロアに進むかどうか
+  NextFloorWait;  // 次のフロアに進む（完了待ち）
 }
 
 /**
@@ -94,6 +95,7 @@ class SeqMgr {
       case State.TurnEnd:
       case State.NextFloor:
         help = GuiStatus.HELP_DIALOG_YN;
+      case State.NextFloorWait:
     }
 
     _guistatus.changeHelp(help);
@@ -352,11 +354,12 @@ class SeqMgr {
           if(Dialog.getCursor() == 0) {
             // 次のフロアに進む
             FlxG.sound.play("foot");
-            FlxG.camera.fade(FlxColor.BLACK, 0.3, false, function() {
+            FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function() {
               // フェードが完了したら次のフロアへ進む
               Global.nextFloor();
               FlxG.switchState(new PlayState());
             });
+            _change(State.NextFloorWait);
           }
           else {
             // 階段を降りない
@@ -366,6 +369,8 @@ class SeqMgr {
             _player.turnEnd();
           }
         }
+      case State.NextFloorWait:
+        // ■次のフロアに進む（完了待ち）
     }
 
     return ret;

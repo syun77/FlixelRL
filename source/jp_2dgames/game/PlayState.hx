@@ -75,13 +75,6 @@ class PlayState extends FlxState {
   // CSVデータ
   private var _csv:Csv;
 
-  // フロア数
-  private var _floor:Int;
-  public var floor(get, never):Int;
-  public function get_floor() {
-    return _floor;
-  }
-
   // ステータス
   private var _guistatus:GuiStatus;
   public var guistatus(get, never):GuiStatus;
@@ -103,9 +96,33 @@ class PlayState extends FlxState {
   override public function create():Void {
     super.create();
 
-    // 変数初期化
-    _floor = 1;
+    // 状態を設定
+    _state = State.FloorStart;
+    // フロア開始演出スタート
+    _bgFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    _txtFloor = new FlxText(FlxG.width/3.2, FlxG.height/2.5, 256, "", 48);
+    _txtFloor.text = 'Floor ${Global.getFloor()}';
+    _txtFloor.color = FlxColor.WHITE;
+    this.add(_bgFade);
+    this.add(_txtFloor);
+    FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
+      FlxG.camera.shake(0.0002*Global.getFloor(), 0.5, function() {
+        // 暗転解除
+        this.remove(_bgFade);
+        this.remove(_txtFloor);
 
+        // インスタンス生成
+        _start();
+        FlxG.camera.fade(FlxColor.BLACK, 0.3, true, function() {
+          // フェード終了
+          _state = State.Main;
+        });
+      });
+    });
+
+  }
+
+  private function _start() {
     // CSV読み込み
     _csv = new Csv();
     Enemy.csv = _csv.enemy;
@@ -246,27 +263,6 @@ class PlayState extends FlxState {
     // シーケンス管理
     _seq = new SeqMgr(this, _csv);
 
-    // 状態を設定
-    _state = State.FloorStart;
-    // フロア開始演出スタート
-    _bgFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-    _txtFloor = new FlxText(FlxG.width/3.2, FlxG.height/2.5, 256, "", 48);
-    _txtFloor.text = 'Floor ${Global.getFloor()}';
-    _txtFloor.color = FlxColor.WHITE;
-    this.add(_bgFade);
-    this.add(_txtFloor);
-    FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
-      FlxG.camera.shake(0.0002*Global.getFloor(), 0.5, function() {
-        // 暗転解除
-        this.remove(_bgFade);
-        this.remove(_txtFloor);
-        FlxG.camera.fade(FlxColor.BLACK, 0.3, true, function() {
-          // フェード終了
-          _state = State.Main;
-        });
-      });
-    });
-
     // デバッグ用アイテム
     _debugItem = new DropItem();
     _debugItem.alpha = 0.5;
@@ -355,8 +351,10 @@ class PlayState extends FlxState {
         }
     }
 
-    // デバッグ処理
-    updateDebug();
+    if(_state == State.Main) {
+      // デバッグ処理
+      updateDebug();
+    }
   }
 
   /**
