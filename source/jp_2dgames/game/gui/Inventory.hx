@@ -364,7 +364,7 @@ class Inventory extends FlxGroup {
     _txtList = new List<FlxText>();
     for(i in 0...PAGE_DISP) {
       var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i * DY, 0, 160);
-      txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+      txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
       _txtList.add(txt);
       this.add(txt);
     }
