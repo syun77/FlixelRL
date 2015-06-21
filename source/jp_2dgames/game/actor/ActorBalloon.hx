@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.FlxSprite;
 
 /**
@@ -10,9 +11,33 @@ class ActorBalloon extends FlxSprite {
 
     loadGraphic("assets/images/balloon.png", true);
 
+    // アニメ登録
+    animation.add(BadStatusUtil.toString(BadStatus.Confusion), [0], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Sleep),     [1], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Paralysis), [2], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Sickness),  [3], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Powerful),  [4], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Anger),     [5], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Poison),    [6], 1);
+
     // 消しておく
     kill();
   }
 
-  public function show()
+  /**
+   * アイコン表示
+   **/
+  public function show(stt:BadStatus) {
+
+    if(stt == BadStatus.None) {
+      // バッドステータスなしの場合は非表示
+      kill();
+      return;
+    }
+    revive();
+
+    // アイコン変更
+    var str = BadStatusUtil.toString(stt);
+    animation.play(str);
+  }
 }

@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.FlxG;
 import jp_2dgames.game.particle.ParticleRecovery;
 import jp_2dgames.game.item.ItemData;
@@ -81,6 +82,8 @@ class Actor extends FlxSprite {
   private var _id:Int = 1;
   // 名前
   private var _name:String = "";
+  // バッドステータス
+  private var _badstatus:BadStatus = BadStatus.None;
 
   // プロパティ
   // チップ座標(X)
@@ -275,6 +278,21 @@ class Actor extends FlxSprite {
     _dir = DirUtil.look(_xprev, _yprev, i, j);
   }
 
+  public var badstatus(get, never):BadStatus;
+  private function get_badstatus() {
+    return _badstatus;
+  }
+  // バッドステータスを設定する
+  public function changeBadStatus(stt:BadStatus):Void {
+    _badstatus = stt;
+  }
+  // バッドステータスを回復する
+  public function cureBadStatus() {
+    changeBadStatus(BadStatus.None);
+  }
+  // バッドステータスアイコン
+  private var _balloon:ActorBalloon;
+
   /**
 	 * コンストラクタ
 	 **/
@@ -302,6 +320,8 @@ class Actor extends FlxSprite {
     _params = params;
     // ID
     _id = params.id;
+    // バッドステータス
+    cureBadStatus();
   }
 
   // 行動開始する

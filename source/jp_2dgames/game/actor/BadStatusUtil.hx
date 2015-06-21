@@ -44,9 +44,11 @@ class BadStatusUtil {
       case "confusion": return BadStatus.Confusion;
       case "sleep": return BadStatus.Sleep;
       case "paralysis": return BadStatus.Paralysis;
+      case "sickness": return BadStatus.Sickness;
       case "powerful": return BadStatus.Powerful;
       case "anger": return BadStatus.Anger;
       case "poison": return BadStatus.Poison;
+      default: return BadStatus.None;
     }
   }
 }
