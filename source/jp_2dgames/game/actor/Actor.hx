@@ -285,6 +285,7 @@ class Actor extends FlxSprite {
   // バッドステータスを設定する
   public function changeBadStatus(stt:BadStatus):Void {
     _badstatus = stt;
+    params.badstatus = BadStatusUtil.toString(stt);
   }
   // バッドステータスを回復する
   public function cureBadStatus() {
@@ -320,8 +321,8 @@ class Actor extends FlxSprite {
     _params = params;
     // ID
     _id = params.id;
-    // バッドステータス
-    cureBadStatus();
+    // バッドステータス設定
+    changeBadStatus(BadStatusUtil.fromString(_params.badstatus));
   }
 
   // 行動開始する

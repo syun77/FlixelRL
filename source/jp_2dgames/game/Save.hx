@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.item.ItemUtil;
@@ -44,6 +45,7 @@ private class _Player {
   public var y:Int = 0;
   public var dir:String = "down";
   public var params:Params;
+  public var badstatus:String = "none";
 
   public function new() {
   }
