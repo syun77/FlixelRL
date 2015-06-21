@@ -56,6 +56,8 @@ class Actor extends FlxSprite {
   private static inline var TIMER_WALK:Int = 16;
   // ダメージアニメーションのフレーム数
   private static inline var TIMER_DAMAGE:Int = 8;
+  // バッドステータスが有効なターン数
+  private static inline var BADSTATUS_TURN:Int = 10;
 
   // 状態
   private var _state:State;
@@ -286,6 +288,10 @@ class Actor extends FlxSprite {
   public function changeBadStatus(stt:BadStatus):Void {
     _badstatus = stt;
     params.badstatus = BadStatusUtil.toString(stt);
+    if(stt != BadStatus.None) {
+      // 有効ターン数設定
+      _params.badstatus_turn = BADSTATUS_TURN;
+    }
     _balloon.show(stt);
   }
   // バッドステータスを回復する
@@ -367,6 +373,14 @@ class Actor extends FlxSprite {
   }
   // ターン終了
   public function turnEnd():Void {
+    // バッドステータスターン数経過
+    if(_badstatus != BadStatus.None) {
+      _params.badstatus_turn--;
+      if(_params.badstatus_turn <= 0) {
+        // バッドステータス治癒
+        cureBadStatus();
+      }
+    }
     _change(State.KeyInput);
   }
   // 指定の座標に存在するかどうかをチェックする

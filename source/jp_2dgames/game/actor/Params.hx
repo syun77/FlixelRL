@@ -15,6 +15,7 @@ class Params {
   public var food:Int = 10000; // 満腹度(x100)
   public var foodmax:Int = 10000; // 最大満腹度(x100)
   public var badstatus:String = "none"; // バッドステータス
+  public var badstatus_turn:Int = 0; // バッドステータスが有効なターン数
 
   public function new() {
   }
