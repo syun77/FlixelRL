@@ -286,6 +286,7 @@ class Actor extends FlxSprite {
   public function changeBadStatus(stt:BadStatus):Void {
     _badstatus = stt;
     params.badstatus = BadStatusUtil.toString(stt);
+    _balloon.show(stt);
   }
   // バッドステータスを回復する
   public function cureBadStatus() {
@@ -293,12 +294,19 @@ class Actor extends FlxSprite {
   }
   // バッドステータスアイコン
   private var _balloon:ActorBalloon;
+  public var balloon(get, never):ActorBalloon;
+  private function get_balloon() {
+    return _balloon;
+  }
 
   /**
 	 * コンストラクタ
 	 **/
   public function new() {
     super();
+
+    // バッドステータスアイコン
+    _balloon = new ActorBalloon();
   }
 
   /**
@@ -392,6 +400,11 @@ class Actor extends FlxSprite {
       var ox = width / 2;
       ox += (_tShake % 4 < 2 ? _tShake : -_tShake) * 2;
       offset.set(ox, height / 2);
+    }
+    // バルーン座標更新
+    if(_balloon.alive) {
+      _balloon.x = x;
+      _balloon.y = y - height + _balloon.height/2;
     }
   }
 

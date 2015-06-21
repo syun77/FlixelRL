@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -176,9 +177,12 @@ class PlayState extends FlxState {
     // 敵からアクセスしやすいようにする
     Enemy.target = _player;
 
-    // 敵のHPバー登録
+    // バステアイコン登録
+    this.add(_player.balloon);
+    // 敵のHPバー・バステアイコン登録
     enemies.forEach(function(e:Enemy) {
       this.add(e.hpBar);
+      this.add(e.balloon);
     });
 
     // 魔法弾作成
