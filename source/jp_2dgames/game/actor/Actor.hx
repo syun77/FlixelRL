@@ -453,6 +453,13 @@ class Actor extends FlxSprite {
       FlxG.sound.play("hit");
     }
 
+    if(_badstatus == BadStatus.Sleep) {
+      // 睡眠状態だったら通常状態に戻る
+      cureBadStatus();
+      // ターン終了にする
+      _change(Actor.State.TurnEnd);
+    }
+
     Particle.start(PType.Circle, x, y, FlxColor.RED);
     ParticleDamage.start(x, y, val);
 

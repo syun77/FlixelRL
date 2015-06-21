@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleEnemy;
 import jp_2dgames.game.particle.Particle;
@@ -193,6 +194,9 @@ class Enemy extends Actor {
     // 出現演出
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
+
+    // TODO: 眠り状態にしておく
+//    changeBadStatus(BadStatus.Sleep);
   }
 
   /**
@@ -345,6 +349,26 @@ class Enemy extends Actor {
 	 * 移動要求をする
 	 **/
   public function requestMove():Void {
+
+    // ■行動可能かどうかをチェック
+    var checkActive = function() {
+     switch(_badstatus) {
+       case BadStatus.Sleep: return false;
+       case BadStatus.Paralysis: return false;
+       default:
+         if(_state == Actor.State.TurnEnd) {
+           // ターン終了している
+           return false;
+         }
+         return true;
+     }
+    }
+    if(checkActive() == false) {
+      // 動けないのでターン終了
+      _change(Actor.State.TurnEnd);
+      return;
+    }
+
     var pt = FlxPoint.get(_xnext, _ynext);
     _dir = _aiMoveDir();
     pt = DirUtil.move(_dir, pt);
