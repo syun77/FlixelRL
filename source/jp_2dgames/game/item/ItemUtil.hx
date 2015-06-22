@@ -259,6 +259,10 @@ class ItemUtil {
             // 最大満腹度上昇
             actor.addFoodMax(extval);
             Message.push2(Msg.GROW_FOOD, [extval]);
+          case "str":
+            // 力上昇
+            actor.addStr(extval);
+            Message.push2(Msg.GROW_STR, [extval]);
         }
 
         // 満腹度も少し回復

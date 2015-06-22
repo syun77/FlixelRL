@@ -34,7 +34,7 @@ int,str,str,int,int,int,str,int,int,str,int,str
 32,Portion,回復薬160,160,10,,,,,,,飲むとHPが160回復します
 33,Portion,命の薬,,10,,,,,hpmax,3,最大HPが上昇します
 34,Portion,胃拡張の薬,,10,,,,,food,10,最大満腹度が上昇します
-35,Portion,薬19,1,10,,,,,,,飲むとHPが1回復します
+35,Portion,力の薬,,10,,,,,str,1,力が上昇します
 36,Portion,薬20,1,10,,,,,,,飲むとHPが1回復します
 37,Portion,薬21,1,10,,,,,,,飲むとHPが1回復します
 38,Portion,薬22,1,10,,,,,,,飲むとHPが1回復します

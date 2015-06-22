@@ -35,6 +35,7 @@ class Msg {
   public static inline var ITEM_SCROLL:Int = 23; // 巻物を読んだ
   public static inline var GROW_HPMAX:Int = 24; // 最大HP上昇
   public static inline var GROW_FOOD:Int = 25; // 最大満腹度上昇
+  public static inline var GROW_STR:Int = 26; // 力上昇
 
   // メニュー
   public static inline var MENU_USE:Int = 32; // メニュー: 使う

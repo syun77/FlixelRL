@@ -275,6 +275,11 @@ class Actor extends FlxSprite {
     _params.exp += exp;
   }
 
+  // 力上昇
+  public function addStr(val:Int):Void {
+    _params.str += val;
+  }
+
   // 指定した方向を向く
   public function look(i:Int, j:Int):Void {
     _dir = DirUtil.look(_xprev, _yprev, i, j);
