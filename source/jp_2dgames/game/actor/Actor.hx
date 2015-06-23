@@ -58,6 +58,7 @@ class Actor extends FlxSprite {
   private static inline var TIMER_DAMAGE:Int = 8;
   // バッドステータスが有効なターン数
   private static inline var BADSTATUS_TURN:Int = 10;
+  private static inline var BADSTATUS_TURN_PARALYSIS:Int = 3; // 麻痺は3ターンのみ
 
   // 状態
   private var _state:State;
@@ -293,10 +294,15 @@ class Actor extends FlxSprite {
   public function changeBadStatus(stt:BadStatus):Void {
     _badstatus = stt;
     params.badstatus = BadStatusUtil.toString(stt);
-    if(stt != BadStatus.None) {
-      // 有効ターン数設定
-      _params.badstatus_turn = BADSTATUS_TURN;
+    var turn:Int = 0;
+    switch(stt) {
+      case BadStatus.None: turn = 0;
+      case BadStatus.Paralysis: turn = BADSTATUS_TURN_PARALYSIS;
+      default: turn = BADSTATUS_TURN;
     }
+
+    // 有効ターン数設定
+    _params.badstatus_turn = turn;
     _balloon.show(stt);
   }
   // バッドステータスを回復する
@@ -318,6 +324,15 @@ class Actor extends FlxSprite {
 
     // バッドステータスアイコン
     _balloon = new ActorBalloon();
+  }
+
+  /**
+   * 消滅
+   **/
+  override public function kill() {
+    // バッドステータスアイコンを消しておく
+    _balloon.show(BadStatus.None);
+    super.kill();
   }
 
   /**

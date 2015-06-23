@@ -195,8 +195,8 @@ class Enemy extends Actor {
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
 
-    // TODO: 眠り状態にしておく
-//    changeBadStatus(BadStatus.Sleep);
+    // TODO: 麻痺状態にしておく
+    changeBadStatus(BadStatus.Paralysis);
   }
 
   /**
