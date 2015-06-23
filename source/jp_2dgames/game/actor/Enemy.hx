@@ -195,8 +195,8 @@ class Enemy extends Actor {
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
 
-    // TODO: 麻痺状態にしておく
-    changeBadStatus(BadStatus.Paralysis);
+    // TODO: 混乱状態にしておく
+    changeBadStatus(BadStatus.Confusion);
   }
 
   /**
@@ -261,6 +261,12 @@ class Enemy extends Actor {
 	 * 移動方向を決める
 	 **/
   private function _aiMoveDir():Dir {
+
+    if(_badstatus == BadStatus.Confusion) {
+      // 混乱しているのでランダム移動
+      return DirUtil.random();
+    }
+
     // 移動方向判定
     var player = cast(FlxG.state, PlayState).player;
     var dx = player.xchip - xchip;
