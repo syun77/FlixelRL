@@ -31,6 +31,7 @@ private enum State {
   Move;           // 移動
   EnemyActBegin;  // 敵の行動開始
   EnemyAct;       // 敵の行動
+  EnemyActEnd;    // 敵の行動終了
   TurnEnd;        // ターン終了
   NextFloor;      // 次のフロアに進むかどうか
   NextFloorWait;  // 次のフロアに進む（完了待ち）
@@ -92,6 +93,7 @@ class SeqMgr {
       case State.Move:
       case State.EnemyActBegin:
       case State.EnemyAct:
+      case State.EnemyActEnd:
       case State.TurnEnd:
       case State.NextFloor:
         help = GuiStatus.HELP_DIALOG_YN;
@@ -319,10 +321,18 @@ class SeqMgr {
             _moveAllEnemy();
           }
           else {
-            _change(State.TurnEnd);
+            _change(State.EnemyActEnd);
           }
           ret = true;
         }
+      case State.EnemyActEnd:
+        // ■敵の行動終了
+        if(ExpMgr.get() > 0) {
+          // 経験値獲得＆レベルアップ
+          _player.addExp(ExpMgr.get());
+        }
+        _change(State.TurnEnd);
+
       case State.TurnEnd:
         // ■ターン終了
         ExpMgr.turnEnd();

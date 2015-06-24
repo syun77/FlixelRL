@@ -127,7 +127,7 @@ class Player extends Actor {
     super.init(X, Y, dir, params, bCreate);
 
     // TODO: バッドステータスにする
-    changeBadStatus(BadStatus.Confusion);
+//    changeBadStatus(BadStatus.Poison);
   }
 
   // アニメーション名を取得する
@@ -258,6 +258,12 @@ class Player extends Actor {
       addHp2(AUTOHEAL_RATIO, false);
     }
     _bAutoRecovery = true;
+
+    // 毒ダメージ
+    if(badstatus == BadStatus.Poison) {
+      var v = getPoisonDamage();
+      damage(v);
+    }
 
     super.turnEnd();
   }

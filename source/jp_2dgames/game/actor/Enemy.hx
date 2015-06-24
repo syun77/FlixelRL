@@ -195,8 +195,31 @@ class Enemy extends Actor {
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
 
-    // TODO: 怒り状態にしておく
-//    changeBadStatus(BadStatus.Anger);
+    // TODO: バッドステータスにしておく
+//    changeBadStatus(BadStatus.Poison);
+  }
+
+  /**
+   * ターン終了
+   **/
+  override public function turnEnd():Void {
+    if(badstatus == BadStatus.Poison) {
+      // 毒ダメージ
+      var v = getPoisonDamage();
+      if(damage(v)) {
+        // 敵を倒した
+        Message.push2(Msg.ENEMY_DEFEAT, [name]);
+        kill();
+        FlxG.sound.play("destroy");
+        // 経験値獲得
+        ExpMgr.add(params.xp);
+        // エフェクト再生
+        Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
+
+        return;
+      }
+    }
+    super.turnEnd();
   }
 
   /**
@@ -253,7 +276,7 @@ class Enemy extends Actor {
         // 何もしない
 
       case Actor.State.TurnEnd:
-      // 何もしない
+        // 何もしない
     }
   }
 

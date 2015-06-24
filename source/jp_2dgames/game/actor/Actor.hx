@@ -59,6 +59,7 @@ class Actor extends FlxSprite {
   // バッドステータスが有効なターン数
   private static inline var BADSTATUS_TURN:Int = 10;
   private static inline var BADSTATUS_TURN_PARALYSIS:Int = 3; // 麻痺は3ターンのみ
+  private static inline var DAMAGE_POISON:Int = 5;
 
   // 状態
   private var _state:State;
@@ -204,6 +205,17 @@ class Actor extends FlxSprite {
     if(_params.hp < _params.hpmax) {
       _params.hp = _params.hpmax;
     }
+  }
+
+  /**
+   * 毒ダメージの値を取得する
+   **/
+  public function getPoisonDamage():Int {
+    var v = _params.hpmax * DAMAGE_POISON / 100;
+    if(v < 1) {
+      v = 1;
+    }
+    return Std.int(v);
   }
 
   /**
