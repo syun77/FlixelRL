@@ -53,7 +53,7 @@ enum Action {
 class Actor extends FlxSprite {
 
   // 1マス進むのにかかるフレーム数
-  private static inline var TIMER_WALK:Int = 16;
+  private static inline var TIMER_WALK:Int = 12;
   // ダメージアニメーションのフレーム数
   private static inline var TIMER_DAMAGE:Int = 8;
   // バッドステータスが有効なターン数
