@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleMessage;
 import flixel.FlxG;
@@ -124,6 +125,9 @@ class Player extends Actor {
       params.vit = _csv.getInt(1, "vit");
     }
     super.init(X, Y, dir, params, bCreate);
+
+    // TODO: バッドステータスにする
+//    changeBadStatus(BadStatus.Sleep);
   }
 
   // アニメーション名を取得する
@@ -379,6 +383,14 @@ class Player extends Actor {
 	 **/
   private function _updateKeyInput():Void {
     _bStop = true;
+
+    switch(badstatus) {
+      case BadStatus.Sleep:
+        // 眠り状態の場合は行動不能
+        standby();
+        return;
+      default:
+    }
 
     if(Key.press.B) {
       // メニューを開く
