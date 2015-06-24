@@ -269,6 +269,10 @@ class ItemUtil {
             // 毒状態になる
             actor.changeBadStatus(BadStatus.Poison);
             Message.push2(Msg.BAD_POISON, [actor.name]);
+          case "sleep":
+            // 眠り状態になる
+            actor.changeBadStatus(BadStatus.Sleep);
+            Message.push2(Msg.BAD_SLEEP, [actor.name]);
         }
 
         // 満腹度も少し回復

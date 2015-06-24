@@ -467,6 +467,10 @@ class Enemy extends Actor {
               // 毒状態になる
               target.changeBadStatus(BadStatus.Poison);
               Message.push2(Msg.BAD_POISON, [target.name]);
+            case "sleep":
+              // 眠り状態になる
+              target.changeBadStatus(BadStatus.Sleep);
+              Message.push2(Msg.BAD_SLEEP, [target.name]);
             default:
               // ダメージ
               return damage(FlxRandom.intRanged(1, 3));

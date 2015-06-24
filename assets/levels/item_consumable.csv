@@ -36,7 +36,7 @@ int,str,str,int,int,int,str,int,int,str,int,str
 34,Portion,胃拡張の薬,,10,,,,,food,10,最大満腹度が上昇します
 35,Portion,力の薬,,10,,,,,str,1,力が上昇します
 36,Portion,毒薬,,10,,,,,poison,,猛毒の薬。飲んではいけません
-37,Portion,薬21,1,10,,,,,,,飲むとHPが1回復します
+37,Portion,眠り薬,,10,,,,,sleep,,飲むと眠くなる薬
 38,Portion,薬22,1,10,,,,,,,飲むとHPが1回復します
 39,Portion,薬23,1,10,,,,,,,飲むとHPが1回復します
 40,Portion,薬24,1,10,,,,,,,飲むとHPが1回復します
