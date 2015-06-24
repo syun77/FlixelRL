@@ -240,6 +240,10 @@ class ItemUtil {
    * 消費アイテムを使用する
    **/
   public static function use(actor:Actor, item:ItemData, bMsg=true):Void {
+    // 拡張パラメータ
+    var extra = ItemUtil.getParamString(item.id, "extra");
+    var extval = ItemUtil.getParam(item.id, "extval");
+
     switch(item.type) {
       case IType.Portion:
         // 薬
@@ -248,9 +252,6 @@ class ItemUtil {
           actor.addHp(val);
           Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
-        // 拡張パラメータ
-        var extra = ItemUtil.getParamString(item.id, "extra");
-        var extval = ItemUtil.getParam(item.id, "extval");
         switch(extra) {
           case "hpmax":
             // 最大HP上昇
@@ -285,6 +286,12 @@ class ItemUtil {
         }
         else {
           Message.push2(Msg.RECOVER_FOOD);
+        }
+        switch(extra) {
+          case "poison":
+          // 毒状態になる
+          actor.changeBadStatus(BadStatus.Poison);
+          Message.push2(Msg.BAD_POISON, [actor.name]);
         }
         FlxG.sound.play("eat");
 

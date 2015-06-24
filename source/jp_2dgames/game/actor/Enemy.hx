@@ -445,6 +445,10 @@ class Enemy extends Actor {
     }
 
     var func = function() {
+      // 拡張パラメータ
+      var extra = ItemUtil.getParamString(item.id, "extra");
+      var extval = ItemUtil.getParam(item.id, "extval");
+
       switch(item.type) {
         case IType.Portion:
           var val = ItemUtil.getParam(item.id, "hp");
@@ -458,6 +462,15 @@ class Enemy extends Actor {
             // ダメージ
             return damage(-val);
           }
+          switch(extra) {
+            case "poison":
+              // 毒状態になる
+              target.changeBadStatus(BadStatus.Poison);
+              Message.push2(Msg.BAD_POISON, [target.name]);
+            default:
+              // ダメージ
+              return damage(FlxRandom.intRanged(1, 3));
+          }
           return false;
         case IType.Weapon:
           // 武器はダメージ量が少しだけ多い
@@ -467,6 +480,12 @@ class Enemy extends Actor {
           // リンゴは飛び道具として使える
           var v = FlxRandom.intRanged(5, 7);
           v += ItemUtil.getParam(item.id, "atk");
+          switch(extra) {
+            case "poison":
+              // 毒状態になる
+              target.changeBadStatus(BadStatus.Poison);
+              Message.push2(Msg.BAD_POISON, [target.name]);
+          }
           return damage(v);
 
         default:

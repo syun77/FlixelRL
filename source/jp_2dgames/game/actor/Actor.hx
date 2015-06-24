@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.FlxG;
 import jp_2dgames.game.particle.ParticleRecovery;
@@ -491,12 +492,12 @@ class Actor extends FlxSprite {
     if(id == 0) {
       // プレイヤーダメージ
       Message.push2(Msg.PLAYER_DAMAGE, [name, val]);
-      FlxG.sound.play("hit");
+      Snd.playSe("hit", true);
     }
     else {
       // 敵ダメージ
       Message.push2(Msg.ENEMY_DAMAGE, [name, val]);
-      FlxG.sound.play("hit");
+      Snd.playSe("hit", true);
     }
 
     if(_badstatus == BadStatus.Sleep) {
