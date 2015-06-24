@@ -202,7 +202,7 @@ class Player extends Actor {
       // 攻撃開始の処理
       var cbStart = function(tween:FlxTween) {
         // 攻撃開始
-        if(Calc.checkHitAttack()) {
+        if(Calc.checkHitAttack(_target)) {
           // 攻撃が当たった
           var val = Calc.damage(this, _target, Inventory.getWeaponData(), null);
           if(_target.damage(val)) {

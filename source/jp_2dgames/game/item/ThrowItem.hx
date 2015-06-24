@@ -87,7 +87,7 @@ class ThrowItem {
           var xtarget = Field.toWorldX(xpos);
           var ytarget = Field.toWorldY(ypos);
           FlxTween.tween(_spr, {x:xtarget, y:ytarget}, distance, {ease:FlxEase.backIn, complete:function(tween:FlxTween) {
-            if(e.hitItem(actor, item) == false) {
+            if(e.hitItem(actor, e, item) == false) {
               // 敵がかわした
               Message.push2(Msg.MISS, [e.name]);
               pt.set(xpos, ypos);

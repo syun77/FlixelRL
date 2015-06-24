@@ -121,7 +121,7 @@ class Enemy extends Actor {
       // 攻撃開始の処理
       var cbStart = function(tween:FlxTween) {
         // 攻撃開始
-        if(Calc.checkHitAttackForEnemy()) {
+        if(Calc.checkHitAttackFromEnemy(target)) {
           // 攻撃が当たった
           var val = Calc.damage(this, target, null, Inventory.getArmorData());
           target.damage(val);
@@ -195,8 +195,8 @@ class Enemy extends Actor {
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
 
-    // TODO: 混乱状態にしておく
-    changeBadStatus(BadStatus.Confusion);
+    // TODO: 怒り状態にしておく
+//    changeBadStatus(BadStatus.Anger);
   }
 
   /**
@@ -409,12 +409,13 @@ class Enemy extends Actor {
   /**
    * アイテムをぶつける
    * @param actor アイテムを投げた人
+   * @param target ぶつける相手
    * @param item ぶつけるアイテム
    * @return 当たったら true / 外れたら false
    **/
-  override public function hitItem(actor:Actor, item:ItemData):Bool {
+  override public function hitItem(actor:Actor, target:Actor, item:ItemData):Bool {
 
-    if(Calc.checkHitThrow() == false) {
+    if(Calc.checkHitThrow(target) == false) {
       // 外した
       Snd.playSe("avoid");
       return false;

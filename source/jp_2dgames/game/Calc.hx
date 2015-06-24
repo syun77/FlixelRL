@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import Math;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;
@@ -27,6 +28,10 @@ class Calc {
   public static function damage(act1:Actor, act2:Actor, item1:ItemData, item2:ItemData):Int {
     // 力
     var str = act1.params.str;
+    if(act1.badstatus == BadStatus.Anger) {
+      // 怒り状態は攻撃力2倍
+      str *= 2;
+    }
     // 耐久力
     var vit = act2.params.vit;
     // 攻撃力
@@ -96,24 +101,45 @@ class Calc {
 
   /**
    * 攻撃が当たるかどうかをチェック
+   * @param target 攻撃する対象
    **/
-  public static function checkHitAttack():Bool {
+  public static function checkHitAttack(target:Actor):Bool {
+
+    if(target.badstatus == BadStatus.Anger) {
+      // 怒り状態のときは必ず当たる
+      return true;
+    }
+
     // 92%の確率で当たる
     return FlxRandom.chanceRoll(92);
   }
 
   /**
    * 敵の攻撃が当たるかどうかをチェック
+   * @param target 攻撃する対象
    **/
-  public static function checkHitAttackForEnemy():Bool {
+  public static function checkHitAttackFromEnemy(target:Actor):Bool {
+
+    if(target.badstatus == BadStatus.Anger) {
+      // 怒り状態のときは必ず当たる
+      return true;
+    }
+
     // 87%の確率で当たる
     return FlxRandom.chanceRoll(87);
   }
 
   /**
    * アイテム投げが当たるかどうかチェック
+   * @param target 攻撃する対象
    **/
-  public static function checkHitThrow():Bool {
+  public static function checkHitThrow(target:Actor):Bool {
+
+    if(target.badstatus == BadStatus.Anger) {
+      // 怒り状態のときは必ず当たる
+      return true;
+    }
+
     // 87%の確率で当たる
     return FlxRandom.chanceRoll(87);
   }
