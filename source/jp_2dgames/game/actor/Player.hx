@@ -127,7 +127,7 @@ class Player extends Actor {
     super.init(X, Y, dir, params, bCreate);
 
     // TODO: バッドステータスにする
-//    changeBadStatus(BadStatus.Sleep);
+    changeBadStatus(BadStatus.Confusion);
   }
 
   // アニメーション名を取得する
@@ -405,6 +405,23 @@ class Player extends Actor {
 
     var bAttack = false;
     var dir = DirUtil.getInputDirection();
+    var checkRandom = function() {
+      if(Key.on.X) {
+        // 方向転換時はチェック不要
+        return false;
+      }
+      if(badstatus == BadStatus.Confusion) {
+        // 混乱しているときは移動方向がランダム
+        return true;
+      }
+
+      return false;
+    };
+
+    if(checkRandom()) {
+      // ランダム移動
+      dir = DirUtil.random();
+    }
 
     if(Key.press.A) {
       // 攻撃 or 待機
