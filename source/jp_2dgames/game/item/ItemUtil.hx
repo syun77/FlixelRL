@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxRandom;
 import flixel.FlxG;
 import flixel.util.FlxColor;
@@ -263,6 +264,10 @@ class ItemUtil {
             // 力上昇
             actor.addStr(extval);
             Message.push2(Msg.GROW_STR, [extval]);
+          case "poison":
+            // 毒状態になる
+            actor.changeBadStatus(BadStatus.Poison);
+            Message.push2(Msg.BAD_POISON, [actor.name]);
         }
 
         // 満腹度も少し回復

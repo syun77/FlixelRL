@@ -36,28 +36,35 @@ class Msg {
   public static inline var GROW_HPMAX:Int = 24; // 最大HP上昇
   public static inline var GROW_FOOD:Int = 25; // 最大満腹度上昇
   public static inline var GROW_STR:Int = 26; // 力上昇
+  public static inline var BAD_CONFUSION:Int = 27; // 混乱
+  public static inline var BAD_SLEEP:Int = 28; // 眠り
+  public static inline var BAD_PARALYSIS:Int = 29; // 麻痺
+  public static inline var BAD_SICKNESS:Int = 30; // 病気
+  public static inline var BAD_POWERFUL:Int = 31; // 元気いっぱい
+  public static inline var BAD_AnGER:Int = 32; // 怒り
+  public static inline var BAD_POISON:Int = 33; // 毒
 
   // メニュー
-  public static inline var MENU_USE:Int = 32; // メニュー: 使う
-  public static inline var MENU_EQUIP:Int = 33; // メニュー: 装備
-  public static inline var MENU_UNEQUIP:Int = 34; // メニュー: 外す
-  public static inline var MENU_THROW:Int = 35; // メニュー: 投げる
-  public static inline var MENU_PUT:Int = 36; // メニュー: 置く
-  public static inline var MENU_CHANGE:Int = 37; // メニュー: 交換
-  public static inline var MENU_PICKUP:Int = 38; // メニュー: 拾う
-  public static inline var MENU_NEXTFLOOR_MSG:Int = 39; // メニュー: 歓談がある
-  public static inline var MENU_NEXTFLOOR:Int = 40; // メニュー: 下りる
-  public static inline var MENU_STAY:Int = 41; // メニュー: そのまま
+  public static inline var MENU_USE:Int = 48; // メニュー: 使う
+  public static inline var MENU_EQUIP:Int = 49; // メニュー: 装備
+  public static inline var MENU_UNEQUIP:Int = 50; // メニュー: 外す
+  public static inline var MENU_THROW:Int = 51; // メニュー: 投げる
+  public static inline var MENU_PUT:Int = 52; // メニュー: 置く
+  public static inline var MENU_CHANGE:Int = 53; // メニュー: 交換
+  public static inline var MENU_PICKUP:Int = 54; // メニュー: 拾う
+  public static inline var MENU_NEXTFLOOR_MSG:Int = 55; // メニュー: 歓談がある
+  public static inline var MENU_NEXTFLOOR:Int = 56; // メニュー: 下りる
+  public static inline var MENU_STAY:Int = 57; // メニュー: そのまま
 
   // ページ
-  public static inline var PAGE_FEET:Int = 48; // 足下
-  public static inline var PAGE_NOITEM:Int = 49; // 何も持っていない
+  public static inline var PAGE_FEET:Int = 64; // 足下
+  public static inline var PAGE_NOITEM:Int = 65; // 何も持っていない
 
   // ヘルプ
-  public static inline var HELP_KEYINPUT:Int = 56; // ヘルプ: 通常
-  public static inline var HELP_INVENCTORY:Int = 57; // ヘルプ: インベントリ
-  public static inline var HELP_DIALOG:Int = 58; // ヘルプ: ダイアログ
-  public static inline var HELP_INVENCTORYCOMMAND:Int = 59; // ヘルプ: インベントリ・コマンド
+  public static inline var HELP_KEYINPUT:Int = 72; // ヘルプ: 通常
+  public static inline var HELP_INVENCTORY:Int = 73; // ヘルプ: インベントリ
+  public static inline var HELP_DIALOG:Int = 74; // ヘルプ: ダイアログ
+  public static inline var HELP_INVENCTORYCOMMAND:Int = 75; // ヘルプ: インベントリ・コマンド
 }
 
 /**
