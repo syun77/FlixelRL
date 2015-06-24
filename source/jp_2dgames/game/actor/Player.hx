@@ -127,7 +127,7 @@ class Player extends Actor {
     super.init(X, Y, dir, params, bCreate);
 
     // TODO: バッドステータスにする
-//    changeBadStatus(BadStatus.Poison);
+//    changeBadStatus(BadStatus.Sickness);
   }
 
   // アニメーション名を取得する
@@ -253,8 +253,28 @@ class Player extends Actor {
       }
       damage(v);
     }
-    if(food > 0 && _bAutoRecovery) {
-      // 空腹でない && 自動回復有効 であればHP回復
+
+    // 自動回復が有効かどうか
+    var checkFood = function() {
+      if(food <= 0) {
+        // 空腹時は回復できない
+        return false;
+      }
+      if(_bAutoRecovery == false) {
+        // 自動回復無効
+        return false;
+      }
+      if(_badstatus == BadStatus.Sickness) {
+        // 病気中は自動回復できない
+        return false;
+      }
+
+      // 自動回復可能
+      return true;
+    }
+
+    if(checkFood()) {
+      // 自動回復可能
       addHp2(AUTOHEAL_RATIO, false);
     }
     _bAutoRecovery = true;
