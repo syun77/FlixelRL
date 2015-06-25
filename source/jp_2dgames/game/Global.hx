@@ -106,6 +106,9 @@ class Global {
         // りんごを持たせる
         var param = new ItemExtraParam();
         items.push(new ItemData(1, param));
+        for(i in 65...70) {
+          items.push(new ItemData(i, param));
+        }
       }
     }
     else {

@@ -1017,6 +1017,8 @@ class Inventory extends FlxGroup {
         Message.push2(Msg.ITEM_DRINK, [name]);
       case IType.Scroll:
         Message.push2(Msg.ITEM_SCROLL, [_player.name, name]);
+      case IType.Wand:
+        Message.push2(Msg.ITEM_WAND, [_player.name, name]);
       default:
         throw 'Error: Invalid item. id=${item.id}';
     }

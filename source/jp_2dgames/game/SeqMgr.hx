@@ -211,11 +211,23 @@ class SeqMgr {
             // インベントリを非表示
             _inventory.setActive(false);
             var item = _inventory.getTargetItem();
-//            ItemUtil.useScroll(_player, _inventory.getTargetItem());
             _inventory.clearTargetItem();
-            if(ItemUtil.getParam(item.id, "atk") > 0) {
+            if(item.type == IType.Scroll) {
+              // 巻物
+              if(ItemUtil.getParam(item.id, "atk") > 0) {
+                // 魔法弾発射
+                MagicShotMgr.start(_player.x, _player.y, item);
+                _change(State.Magicbullet);
+              }
+              else {
+                // 何か別の効果
+                _change(State.PlayerActEnd);
+              }
+            }
+            else {
+              // 杖
               // 魔法弾発射
-              MagicShotMgr.start(_player.x, _player.y, item);
+              MagicShot.start(_player.x, _player.y, null, item);
               _change(State.Magicbullet);
             }
         }

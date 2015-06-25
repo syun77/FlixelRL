@@ -1,4 +1,7 @@
 package jp_2dgames.game;
+import jp_2dgames.game.actor.Enemy;
+import flixel.FlxG;
+import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.item.ItemData;
 import flash.display.BlendMode;
 import flixel.util.FlxAngle;
@@ -6,6 +9,11 @@ import flixel.util.FlxRandom;
 import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
+
+private enum ShotType {
+  Horming;   // ホーミング
+  FrontOnly; // 前方に発射するだけ
+}
 
 /**
  * 敵に向かって飛んでいく魔法弾
@@ -38,6 +46,8 @@ class MagicShot extends FlxSprite {
   private var _target:Actor;
   // アイテム情報
   private var _item:ItemData;
+  // ショットの種別
+  private var _shotType:ShotType;
 
   /**
    * コンストラクタ
@@ -75,14 +85,34 @@ class MagicShot extends FlxSprite {
     _target = target;
     _item = item;
 
-    // ランダムな速度を設定
-    var speed = FlxRandom.floatRanged(20, 200);
-    // 目標と反対側の角度を設定
-    var deg = FlxAngle.angleBetween(this, _target, true);
-    deg -= 180;
+    if(item.type == IType.Scroll) {
+      // ホーミングする
+      _shotType = ShotType.Horming;
+    }
+    else {
+      // 前方に発射するだけ
+      _shotType = ShotType.FrontOnly;
+    }
 
-    velocity.x = speed * Math.cos(deg * FlxAngle.TO_RAD);
-    velocity.y = speed * -Math.sin(deg * FlxAngle.TO_RAD);
+    switch(_shotType) {
+      case ShotType.Horming:
+        // ランダムな速度を設定
+        var speed = FlxRandom.floatRanged(20, 200);
+        // 目標と反対側の角度を設定
+        var deg = FlxAngle.angleBetween(this, _target, true);
+        deg -= 180;
+
+        velocity.x = speed * Math.cos(deg * FlxAngle.TO_RAD);
+        velocity.y = speed * -Math.sin(deg * FlxAngle.TO_RAD);
+      case ShotType.FrontOnly:
+        // プレイヤーの前方に移動
+        var player = cast(FlxG.state, PlayState).player;
+        var v = DirUtil.getVector(player.dir);
+        var speed = 800;
+        velocity.x = v.x * speed;
+        velocity.y = v.y * speed;
+        v.put();
+    }
   }
 
   /**
@@ -96,19 +126,36 @@ class MagicShot extends FlxSprite {
     scale.set(sc, sc);
 
     // 衝突判定
-    {
-      var dx = _target.x - x;
-      var dy = _target.y - y;
-      if(16*16 > dx*dx + dy*dy) {
-        // 衝突
-        MagicShotMgr.hitTarget(_target, _item);
-        kill();
-        return;
-      }
+    switch(_shotType) {
+      case ShotType.Horming:
+        // ホーミング
+        var dx = _target.x - x;
+        var dy = _target.y - y;
+        if(16*16 > dx*dx + dy*dy) {
+          // 衝突
+          MagicShotMgr.hitTarget(_target, _item);
+          kill();
+          return;
+        }
+        // ホーミング移動する
+        _homing();
+
+      case ShotType.FrontOnly:
+        // 前方に移動するだけ
+        var px = Std.int(Field.toChipX(x));
+        var py = Std.int(Field.toChipY(y));
+        var e = Enemy.getFromPositino(px, py);
+        if(e != null) {
+          var player = cast(FlxG.state, PlayState).player;
+          e.hitItem(player, _item);
+          kill();
+        }
+        else if(Field.isCollision(px, py)) {
+          // 壁に当たって消滅
+          kill();
+        }
     }
 
-    // ホーミング移動する
-    _homing();
 
   }
 

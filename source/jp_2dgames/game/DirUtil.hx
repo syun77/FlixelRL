@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxVector;
 import flixel.util.FlxRandom;
 import flixel.util.FlxPoint;
 
@@ -52,6 +53,22 @@ class DirUtil {
       default:
         return Dir.Down;
     }
+  }
+
+  /**
+   * 移動ベクトルを取得する
+   **/
+  public static function getVector(dir:Dir):FlxPoint {
+    var pt = FlxPoint.get();
+    switch(dir) {
+      case Dir.Left:  pt.set(-1, 0);
+      case Dir.Up:    pt.set(0,  -1);
+      case Dir.Right: pt.set(1,  0);
+      case Dir.Down:  pt.set(0,  1);
+      default:
+    }
+
+    return pt;
   }
 
   /**

@@ -432,11 +432,10 @@ class Enemy extends Actor {
   /**
    * アイテムをぶつける
    * @param actor アイテムを投げた人
-   * @param target ぶつける相手
    * @param item ぶつけるアイテム
    * @return 当たったら true / 外れたら false
    **/
-  override public function hitItem(actor:Actor, target:Actor, item:ItemData):Bool {
+  override public function hitItem(actor:Actor, item:ItemData):Bool {
 
     if(Calc.checkHitThrow(target) == false) {
       // 外した
@@ -469,7 +468,7 @@ class Enemy extends Actor {
                 return damage(FlxRandom.intRanged(1, 3));
               default:
                 // 特殊効果あり
-                ItemUtil.useExtra(target, extra, extval);
+                ItemUtil.useExtra(this, extra, extval);
             }
           }
           return false;
@@ -488,6 +487,12 @@ class Enemy extends Actor {
               Message.push2(Msg.BAD_POISON, [target.name]);
           }
           return damage(v);
+
+        case IType.Wand:
+          if(extra != "") {
+            ItemUtil.useExtra(this, extra, extval);
+          }
+          return false;
 
         default:
           // ポーション以外は微量のダメージ
