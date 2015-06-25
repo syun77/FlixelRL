@@ -194,9 +194,6 @@ class Enemy extends Actor {
     // 出現演出
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
-
-    // TODO: バッドステータスにしておく
-//    changeBadStatus(BadStatus.Poison);
   }
 
   /**
@@ -375,6 +372,33 @@ class Enemy extends Actor {
   }
 
   /**
+   * ターゲットに対して攻撃可能かどうか
+   **/
+  private function _checkAttack():Bool {
+
+    var bAttack = false;
+
+    switch(_getCsvParam("range")) {
+      case "":
+        // 上下左右1マス先のみ
+        var pt = FlxPoint.get();
+        for(dir in [Dir.Left, Dir.Up, Dir.Right, Dir.Down]) {
+          pt.set(_xprev, _yprev);
+          pt = DirUtil.move(dir, pt);
+          if(target.checkPosition(Std.int(pt.x), Std.int(pt.y))) {
+            // 攻撃できる
+            _dir = dir;
+            bAttack = true;
+            break;
+          }
+        }
+        pt.put();
+    }
+
+    return bAttack;
+  }
+
+  /**
 	 * 移動要求をする
 	 **/
   public function requestMove():Void {
@@ -394,16 +418,25 @@ class Enemy extends Actor {
     }
     if(checkActive() == false) {
       // 動けないのでターン終了
-      _change(Actor.State.TurnEnd);
+      standby();
       return;
     }
 
-    // 移動方向を決める
+    // ■攻撃可能かどうかをチェック
+    if(_checkAttack()) {
+      // 攻撃可能
+      // 移動方向を反映
+      _changeAnime();
+      _change(Actor.State.ActBegin);
+      return;
+    }
+
+    // ■移動方向を決める
     var xnext:Int = Std.int(_xprev);
     var ynext:Int = Std.int(_yprev);
     var pt = FlxPoint.get(_xprev, _yprev);
-    switch(_getCsvParam("ai")) {
-      case "chase":
+    switch(_getCsvParam("move")) {
+      case "":
         // 追跡AI
         _dir = _aiMoveDir();
         pt = DirUtil.move(_dir, pt);
@@ -465,6 +498,7 @@ class Enemy extends Actor {
    * @return 当たったら true / 外れたら false
    **/
   override public function hitItem(actor:Actor, item:ItemData, bAlwaysHit=false):Bool {
+
     if(bAlwaysHit == false) {
       if(Calc.checkHitThrow(target) == false) {
         // 外した
@@ -502,6 +536,7 @@ class Enemy extends Actor {
             }
           }
           return false;
+
         case IType.Weapon:
           // 武器はダメージ量が少しだけ多い
           var v = FlxRandom.intRanged(8, 12);

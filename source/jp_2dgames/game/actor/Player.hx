@@ -125,9 +125,6 @@ class Player extends Actor {
       params.vit = _csv.getInt(1, "vit");
     }
     super.init(X, Y, dir, params, bCreate);
-
-    // TODO: バッドステータスにする
-//    changeBadStatus(BadStatus.Sickness);
   }
 
   // アニメーション名を取得する
