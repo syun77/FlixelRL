@@ -398,6 +398,7 @@ class Enemy extends Actor {
       return;
     }
 
+    // 移動方向を決める
     var pt = FlxPoint.get(_xnext, _ynext);
     _dir = _aiMoveDir();
     pt = DirUtil.move(_dir, pt);
