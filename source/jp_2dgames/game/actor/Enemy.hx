@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleEnemy;
@@ -6,7 +7,6 @@ import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
 import flixel.util.FlxRandom;
-import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.actor.Actor;
@@ -127,7 +127,7 @@ class Enemy extends Actor {
       // 攻撃アニメーション開始
       if(_checkShot()) {
         // 弾を撃つ
-        var itemid = _getCsvParamInt("skill2");
+        var itemid = _getCsvParamInt("missile");
         var p = new ItemExtraParam();
         var item = new ItemData(itemid, p);
         var ms = MagicShot.start(x, y, this, target, item);
@@ -153,9 +153,26 @@ class Enemy extends Actor {
       var cbStart = function(tween:FlxTween) {
         if(Calc.checkHitAttackFromEnemy(target)) {
           // 攻撃が当たった
-          // 通常攻撃
-          var val = Calc.damage(this, target, null, Inventory.getArmorData());
-          target.damage(val);
+          var checkSkill = function() {
+            // スキル発動チェック
+            var extra = _getCsvParam("extra");
+            if(extra == "") {
+              return false;
+            }
+            var ratio = _getCsvParamInt("ratio");
+            if(FlxRandom.chanceRoll(ratio)) {
+              // スキル発動
+              var extval = _getCsvParamInt("extval");
+              ItemUtil.useExtra(target, extra, extval);
+              return true;
+            }
+            return false;
+          }
+          if(checkSkill() == false) {
+            // 通常攻撃
+            var val = Calc.damage(this, target, null, Inventory.getArmorData());
+            target.damage(val);
+          }
           if(target.existsEnemyInFront() == false) {
             // プレイヤーの正面に敵がいなければ攻撃した敵の方を振り向く
             var pt = FlxPoint.get(_xprev, _yprev);
