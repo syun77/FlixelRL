@@ -435,12 +435,13 @@ class Enemy extends Actor {
    * @param item ぶつけるアイテム
    * @return 当たったら true / 外れたら false
    **/
-  override public function hitItem(actor:Actor, item:ItemData):Bool {
-
-    if(Calc.checkHitThrow(target) == false) {
-      // 外した
-      Snd.playSe("avoid");
-      return false;
+  override public function hitItem(actor:Actor, item:ItemData, bAlwaysHit=false):Bool {
+    if(bAlwaysHit == false) {
+      if(Calc.checkHitThrow(target) == false) {
+        // 外した
+        Snd.playSe("avoid");
+        return false;
+      }
     }
 
     var func = function() {

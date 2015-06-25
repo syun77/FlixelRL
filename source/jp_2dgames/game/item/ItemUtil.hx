@@ -53,6 +53,7 @@ class ItemUtil {
     var name = csv.searchItem("id", '${item.id}', "name");
     switch(ItemUtil.getType(item.id)) {
       case IType.Weapon, IType.Armor:
+        // 武器と防具
         if(item.param.value != 0) {
           // ±がある
           var val = '${item.param.value}';
@@ -64,6 +65,10 @@ class ItemUtil {
         else {
           name = '${name}[${item.param.condition}]';
         }
+
+      case IType.Wand:
+        // 杖は使用回数制限がある
+        name = '${name}[${item.param.value}]';
       default:
     }
     return name;
@@ -285,6 +290,17 @@ class ItemUtil {
       case IType.Scroll:
         // 巻物
         // 何もしない
+
+      case IType.Wand:
+        // 杖
+        if(item.param.value > 0) {
+          // 使用回数を減らす
+          item.param.value -= 1;
+        }
+        else {
+          // 何も起こらなかった
+          Message.push2(Msg.NOTHING_HAPPENED);
+        }
 
       default:
         // ここにくることはない

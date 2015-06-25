@@ -226,8 +226,15 @@ class SeqMgr {
             }
             else {
               // 杖
-              // 魔法弾発射
-              MagicShot.start(_player.x, _player.y, null, item);
+              if(item != null) {
+                // 魔法弾発射
+                var px = Field.toWorldX(_player.xchip);
+                var py = Field.toWorldY(_player.ychip);
+                MagicShot.start(px, py, null, item);
+              }
+              else {
+                trace("wand is null");
+              }
               _change(State.Magicbullet);
             }
         }

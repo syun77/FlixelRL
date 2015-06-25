@@ -138,6 +138,9 @@ class Generator {
                 else { return 5;} // 4%
               }
               param.value = func();
+            case IType.Wand:
+              // 使用回数
+              param.value = FlxRandom.intRanged(3, 6);
             default:
           }
           DropItem.add(i, j, itemid, param);

@@ -600,9 +600,15 @@ class Inventory extends FlxGroup {
         _menumode = mode;
         var item2 = getSelectedItem();
         switch(ItemUtil.getType(item2.id)) {
-          case IType.Scroll, IType.Wand:
+          case IType.Scroll:
             // 登録する
             _targetItem = new ItemData(item2.id, item2.param);
+          case IType.Wand:
+            if(item2.param.value > 0) {
+              // 登録する
+              _targetItem = new ItemData(item2.id, item2.param);
+            }
+
           default:
             // 登録しない
         }
@@ -1019,6 +1025,8 @@ class Inventory extends FlxGroup {
         Message.push2(Msg.ITEM_SCROLL, [_player.name, name]);
       case IType.Wand:
         Message.push2(Msg.ITEM_WAND, [_player.name, name]);
+        // 杖は使ってもなくならない
+        bDelete = false;
       default:
         throw 'Error: Invalid item. id=${item.id}';
     }

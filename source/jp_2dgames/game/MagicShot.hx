@@ -108,7 +108,7 @@ class MagicShot extends FlxSprite {
         // プレイヤーの前方に移動
         var player = cast(FlxG.state, PlayState).player;
         var v = DirUtil.getVector(player.dir);
-        var speed = 800;
+        var speed = 500;
         velocity.x = v.x * speed;
         velocity.y = v.y * speed;
         v.put();
@@ -147,7 +147,9 @@ class MagicShot extends FlxSprite {
         var e = Enemy.getFromPositino(px, py);
         if(e != null) {
           var player = cast(FlxG.state, PlayState).player;
-          e.hitItem(player, _item);
+          // 必中
+          var bAlwaysHit = true;
+          e.hitItem(player, _item, bAlwaysHit);
           kill();
         }
         else if(Field.isCollision(px, py)) {

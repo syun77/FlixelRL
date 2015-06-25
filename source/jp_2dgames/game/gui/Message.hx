@@ -44,6 +44,7 @@ class Msg {
   public static inline var BAD_AnGER:Int = 32; // 怒り
   public static inline var BAD_POISON:Int = 33; // 毒
   public static inline var ITEM_WAND:Int = 34; // 杖を振った
+  public static inline var NOTHING_HAPPENED:Int = 35; // 何も起こらなかった
 
   // メニュー
   public static inline var MENU_USE:Int = 48; // メニュー: 使う

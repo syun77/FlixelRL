@@ -523,13 +523,16 @@ class Actor extends FlxSprite {
    * アイテムをぶつける
    * @param actor アイテムを投げた人
    * @param item ぶつけるアイテム
+   * @param bAlwaysHit 必中フラグ
    * @return 当たったら true / 外れたら false
    **/
-  public function hitItem(actor:Actor, item:ItemData):Bool {
+  public function hitItem(actor:Actor, item:ItemData, bAlwaysHit=false):Bool {
 
-    if(Calc.checkHitThrow(this) == false) {
-      // 外した
-      return false;
+    if(bAlwaysHit == false) {
+      if(Calc.checkHitThrow(this) == false) {
+        // 外した
+        return false;
+      }
     }
 
     if(damage(100)) {
