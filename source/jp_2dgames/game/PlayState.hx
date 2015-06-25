@@ -407,7 +407,7 @@ class PlayState extends FlxState {
       // 魔法弾発射テスト
       var param = new ItemExtraParam();
       var item = new ItemData(33, param);
-      MagicShotMgr.start(_player.x, _player.y, item);
+      MagicShotMgr.startAllEnemy(_player.x, _player.y, item);
     }
 
     // アイテム配置デバッグ機能

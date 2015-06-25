@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import flixel.FlxG;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.MagicShot;
@@ -24,11 +25,12 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
   }
 
   /**
-   * 魔法弾発射
+   * 敵全体に魔法弾発射
    **/
-  public static function start(px:Float, py:Float, item:ItemData) {
+  public static function startAllEnemy(px:Float, py:Float, item:ItemData) {
+    var player = cast(FlxG.state, PlayState).player;
     Enemy.parent.forEachAlive(function(e:Enemy) {
-      MagicShot.start(px, py, e, item);
+      MagicShot.start(px, py, player, e, item);
     });
   }
 

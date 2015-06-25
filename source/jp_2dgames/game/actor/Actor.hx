@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxRandom;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.FlxG;
@@ -547,5 +549,69 @@ class Actor extends FlxSprite {
     }
 
     return true;
+  }
+
+  /**
+   * ぶつけたアイテムの効果発動
+   * @return ぶつけたアイテムで倒したかどうか
+   **/
+  public function hitItemEffect(actor:Actor, item:ItemData, bPlayer:Bool):Bool {
+
+    // 拡張パラメータ
+    var extra = ItemUtil.getParamString(item.id, "extra");
+    var extval = ItemUtil.getParam(item.id, "extval");
+
+    switch(item.type) {
+      case IType.Portion:
+        var val = ItemUtil.getParam(item.id, "hp");
+        if(val > 0) {
+          // HP回復
+          addHp(val);
+          Message.push2(Msg.RECOVER_HP, [name, val]);
+          return false;
+        }
+        else if(val < 0) {
+          // ダメージ
+          return damage(-val);
+        }
+        if(extra != "") {
+          switch(extra) {
+            case "hpmax", "food", "str", "powerful":
+              // ダメージ
+              return damage(FlxRandom.intRanged(1, 3));
+            default:
+              // 特殊効果あり
+              ItemUtil.useExtra(this, extra, extval);
+          }
+        }
+        return false;
+
+      case IType.Weapon:
+        // 武器はダメージ量が少しだけ多い
+        var v = FlxRandom.intRanged(8, 12);
+        return damage(v);
+      case IType.Food:
+        // リンゴは飛び道具として使える
+        var v = FlxRandom.intRanged(5, 7);
+        v += ItemUtil.getParam(item.id, "atk");
+        switch(extra) {
+          case "poison":
+            // 毒状態になる
+            changeBadStatus(BadStatus.Poison);
+            Message.push2(Msg.BAD_POISON, [name]);
+        }
+        return damage(v);
+
+      case IType.Wand:
+        if(extra != "") {
+          ItemUtil.useExtra(this, extra, extval);
+        }
+        return false;
+
+      default:
+        // ポーション以外は微量のダメージ
+        var v = FlxRandom.intRanged(5, 7);
+        return damage(v);
+    }
   }
 }

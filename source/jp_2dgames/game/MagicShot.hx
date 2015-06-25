@@ -11,8 +11,9 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
 private enum ShotType {
-  Horming;   // ホーミング
-  FrontOnly; // 前方に発射するだけ
+  Horming;     // ホーミング
+  PlayerFront; // プレイヤーの前方に発射
+  EnemyFront;  // 敵の前方に発射
 }
 
 /**
@@ -27,12 +28,13 @@ class MagicShot extends FlxSprite {
    * 生成
    * @param X 開始座標(X)
    * @param Y 開始座標(Y)
+   * @param actor 主体者
    * @param target 攻撃対象
    * @param item アイテム情報
    **/
-  public static function start(X:Float, Y:Float, target:Actor, item:ItemData):MagicShot {
+  public static function start(X:Float, Y:Float, actor:Actor, target:Actor, item:ItemData):MagicShot {
     var ms:MagicShot = parent.recycle();
-    ms.init(X, Y, target, item);
+    ms.init(X, Y, actor, target, item);
 
     return ms;
   }
@@ -42,12 +44,19 @@ class MagicShot extends FlxSprite {
   // 最大旋回速度
   public static inline var ROT_SPEED_MAX:Float = 45;
 
+  // 主体者
+  private var _actor:Actor;
   // ターゲット
   private var _target:Actor;
   // アイテム情報
   private var _item:ItemData;
   // ショットの種別
   private var _shotType:ShotType;
+  // 消滅時にコールバックする関数
+  private var _cbEnd:Void->Void;
+  public function setEndCallback(func:Void->Void):Void {
+    _cbEnd = func;
+  }
 
   /**
    * コンストラクタ
@@ -72,6 +81,9 @@ class MagicShot extends FlxSprite {
     // 色を変える
     color = FlxColor.YELLOW;
 
+    // コールバック関数初期化
+    _cbEnd = null;
+
     // いったん消す
     kill();
   }
@@ -79,11 +91,13 @@ class MagicShot extends FlxSprite {
   /**
    * 初期化
    **/
-  public function init(X:Float, Y:Float, target:Actor, item:ItemData):Void {
+  public function init(X:Float, Y:Float, actor:Actor, target:Actor, item:ItemData):Void {
     x = X;
     y = Y;
+    _actor = actor;
     _target = target;
     _item = item;
+    _cbEnd = null;
 
     if(item.type == IType.Scroll) {
       // ホーミングする
@@ -91,7 +105,14 @@ class MagicShot extends FlxSprite {
     }
     else {
       // 前方に発射するだけ
-      _shotType = ShotType.FrontOnly;
+      if(actor.id == 0) {
+        // プレイヤー
+        _shotType = ShotType.PlayerFront;
+      }
+      else {
+        // 敵
+        _shotType = ShotType.EnemyFront;
+      }
     }
 
     switch(_shotType) {
@@ -104,15 +125,26 @@ class MagicShot extends FlxSprite {
 
         velocity.x = speed * Math.cos(deg * FlxAngle.TO_RAD);
         velocity.y = speed * -Math.sin(deg * FlxAngle.TO_RAD);
-      case ShotType.FrontOnly:
-        // プレイヤーの前方に移動
-        var player = cast(FlxG.state, PlayState).player;
-        var v = DirUtil.getVector(player.dir);
+
+      case ShotType.PlayerFront, ShotType.EnemyFront:
+        // 前方に発射
+        var v = DirUtil.getVector(actor.dir);
         var speed = 500;
         velocity.x = v.x * speed;
         velocity.y = v.y * speed;
         v.put();
     }
+  }
+
+  /**
+   * 消滅時にコールバックされる関数
+   **/
+  override public function kill():Void {
+    if(_cbEnd != null) {
+      _cbEnd();
+    }
+
+    super.kill();
   }
 
   /**
@@ -140,16 +172,31 @@ class MagicShot extends FlxSprite {
         // ホーミング移動する
         _homing();
 
-      case ShotType.FrontOnly:
-        // 前方に移動するだけ
+      case ShotType.PlayerFront:
+        // 前方に移動（プレイヤー）
         var px = Std.int(Field.toChipX(x));
         var py = Std.int(Field.toChipY(y));
+        // 敵との当たり判定をチェック
         var e = Enemy.getFromPositino(px, py);
         if(e != null) {
-          var player = cast(FlxG.state, PlayState).player;
           // 必中
           var bAlwaysHit = true;
-          e.hitItem(player, _item, bAlwaysHit);
+          e.hitItem(_actor, _item, bAlwaysHit);
+          kill();
+        }
+        else if(Field.isCollision(px, py)) {
+          // 壁に当たって消滅
+          kill();
+        }
+
+      case ShotType.EnemyFront:
+        // 前方に移動（敵）
+        var px = Std.int(Field.toChipX(x));
+        var py = Std.int(Field.toChipY(y));
+        if(_target.checkPosition(px, py)) {
+          // 必中
+          var bAlwaysHit = true;
+          _target.hitItem(_actor, _item, bAlwaysHit);
           kill();
         }
         else if(Field.isCollision(px, py)) {
@@ -157,8 +204,6 @@ class MagicShot extends FlxSprite {
           kill();
         }
     }
-
-
   }
 
   /**

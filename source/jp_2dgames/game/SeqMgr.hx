@@ -216,7 +216,7 @@ class SeqMgr {
               // 巻物
               if(ItemUtil.getParam(item.id, "atk") > 0) {
                 // 魔法弾発射
-                MagicShotMgr.start(_player.x, _player.y, item);
+                MagicShotMgr.startAllEnemy(_player.x, _player.y, item);
                 _change(State.Magicbullet);
               }
               else {
@@ -230,7 +230,7 @@ class SeqMgr {
                 // 魔法弾発射
                 var px = Field.toWorldX(_player.xchip);
                 var py = Field.toWorldY(_player.ychip);
-                MagicShot.start(px, py, null, item);
+                MagicShot.start(px, py, _player, null, item);
               }
               else {
                 trace("wand is null");

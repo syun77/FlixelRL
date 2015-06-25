@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleMessage;
@@ -228,11 +229,11 @@ class Player extends Actor {
           Snd.playSe("avoid");
           Message.push2(Msg.MISS, [_target.name]);
         }
-        FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
+        FlxTween.tween(this, {x:x1, y:y1}, 0.1, {ease:FlxEase.expoOut, complete:cbEnd});
       }
 
       // アニメーション開始
-      FlxTween.tween(this, {x:x2, y:y2}, 0.2, {ease:FlxEase.expoIn, complete:cbStart});
+      FlxTween.tween(this, {x:x2, y:y2}, 0.1, {ease:FlxEase.expoIn, complete:cbStart});
     }
     super.beginAction();
   }
@@ -594,6 +595,34 @@ class Player extends Actor {
     // 画面を0.5秒間、白フラッシュします
     FlxG.camera.flash(0xffFFFFFF, 0.5);
     super.kill();
+  }
+
+  /**
+   * アイテムをぶつける
+   * @param actor アイテムを投げた人
+   * @param item ぶつけるアイテム
+   * @return 当たったら true / 外れたら false
+   **/
+  override public function hitItem(actor:Actor, item:ItemData, bAlwaysHit=false):Bool {
+
+    if(bAlwaysHit == false) {
+      if(Calc.checkHitThrow(this) == false) {
+        // 外した
+        Snd.playSe("avoid");
+        return false;
+      }
+    }
+
+    // アイテムヒットした
+    if(hitItemEffect(actor, item, true)) {
+      // 倒された
+      // エフェクト再生
+      Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
+
+      kill();
+    }
+
+    return true;
   }
 
   /**

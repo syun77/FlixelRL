@@ -103,16 +103,46 @@ class Enemy extends Actor {
   }
 
   /**
+   * 弾を発射するかどうかチェック
+   **/
+  private function _checkShot():Bool {
+    var dx = target.xchip - xchip;
+    var dy = target.ychip - ychip;
+    var dir = Dir.None;
+    if(Math.abs(dx) > 1) {
+      return true;
+    }
+    if(Math.abs(dy) > 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
 	 * 攻撃開始
 	 **/
   override public function beginAction():Void {
     if(_state == Actor.State.ActBegin) {
       // 攻撃アニメーション開始
+      if(_checkShot()) {
+        // 弾を撃つ
+        var p = new ItemExtraParam();
+        // TODO:
+        var ms = MagicShot.start(x, y, this, target, new ItemData(33, p));
+        ms.setEndCallback(function() {
+          // 消滅時に行動終了にする
+          _change(Actor.State.TurnEnd);
+        });
+        super.beginAction();
+        return;
+      }
+
+      // 通常攻撃
       var x1:Float = x;
       var y1:Float = y;
       var x2:Float = target.x;
       var y2:Float = target.y;
-
       // 攻撃終了の処理
       var cbEnd = function(tween:FlxTween) {
         _change(Actor.State.TurnEnd);
@@ -120,9 +150,9 @@ class Enemy extends Actor {
 
       // 攻撃開始の処理
       var cbStart = function(tween:FlxTween) {
-        // 攻撃開始
         if(Calc.checkHitAttackFromEnemy(target)) {
           // 攻撃が当たった
+          // 通常攻撃
           var val = Calc.damage(this, target, null, Inventory.getArmorData());
           target.damage(val);
           if(target.existsEnemyInFront() == false) {
@@ -142,10 +172,9 @@ class Enemy extends Actor {
           Snd.playSe("avoid");
           Message.push2(Msg.MISS, [target.name]);
         }
-        FlxTween.tween(this, {x:x1, y:y1}, 0.2, {ease:FlxEase.expoOut, complete:cbEnd});
+        FlxTween.tween(this, {x:x1, y:y1}, 0.1, {ease:FlxEase.expoOut, complete:cbEnd});
       }
-
-      FlxTween.tween(this, {x:x2, y:y2}, 0.2, {ease:FlxEase.expoIn, complete:cbStart});
+      FlxTween.tween(this, {x:x2, y:y2}, 0.1, {ease:FlxEase.expoIn, complete:cbStart});
     }
 
     super.beginAction();
@@ -393,6 +422,32 @@ class Enemy extends Actor {
           }
         }
         pt.put();
+      case "line":
+        // 上下左右のライン攻撃可能
+        var pt = FlxPoint.get();
+        for(dir in [Dir.Left, Dir.Up, Dir.Right, Dir.Down]) {
+          pt.set(_xprev, _yprev);
+          while(true) {
+            pt = DirUtil.move(dir, pt);
+            var px = Std.int(pt.x);
+            var py = Std.int(pt.y);
+            if(Field.isCollision(px, py)) {
+              // 壁に当たったので攻撃できない
+              break;
+            }
+            if(target.checkPosition(px, py)) {
+              // 攻撃できる
+              _dir = dir;
+              bAttack = true;
+              break;
+            }
+          }
+          if(bAttack) {
+            break;
+          }
+        }
+        pt.put();
+
     }
 
     return bAttack;
@@ -500,74 +555,16 @@ class Enemy extends Actor {
   override public function hitItem(actor:Actor, item:ItemData, bAlwaysHit=false):Bool {
 
     if(bAlwaysHit == false) {
-      if(Calc.checkHitThrow(target) == false) {
+      if(Calc.checkHitThrow(this) == false) {
         // 外した
         Snd.playSe("avoid");
         return false;
       }
     }
 
-    var func = function() {
-      // 拡張パラメータ
-      var extra = ItemUtil.getParamString(item.id, "extra");
-      var extval = ItemUtil.getParam(item.id, "extval");
-
-      switch(item.type) {
-        case IType.Portion:
-          var val = ItemUtil.getParam(item.id, "hp");
-          if(val > 0) {
-            // HP回復
-            addHp(val);
-            Message.push2(Msg.RECOVER_HP, [name, val]);
-            return false;
-          }
-          else if(val < 0) {
-            // ダメージ
-            return damage(-val);
-          }
-          if(extra != "") {
-            switch(extra) {
-              case "hpmax", "food", "str", "powerful":
-                // ダメージ
-                return damage(FlxRandom.intRanged(1, 3));
-              default:
-                // 特殊効果あり
-                ItemUtil.useExtra(this, extra, extval);
-            }
-          }
-          return false;
-
-        case IType.Weapon:
-          // 武器はダメージ量が少しだけ多い
-          var v = FlxRandom.intRanged(8, 12);
-          return damage(v);
-        case IType.Food:
-          // リンゴは飛び道具として使える
-          var v = FlxRandom.intRanged(5, 7);
-          v += ItemUtil.getParam(item.id, "atk");
-          switch(extra) {
-            case "poison":
-              // 毒状態になる
-              target.changeBadStatus(BadStatus.Poison);
-              Message.push2(Msg.BAD_POISON, [target.name]);
-          }
-          return damage(v);
-
-        case IType.Wand:
-          if(extra != "") {
-            ItemUtil.useExtra(this, extra, extval);
-          }
-          return false;
-
-        default:
-          // ポーション以外は微量のダメージ
-          var v = FlxRandom.intRanged(5, 7);
-          return damage(v);
-      }
-    }
-
-    if(func()) {
-      // 倒した
+    // アイテムヒットした
+    if(hitItemEffect(actor, item, false)) {
+      // 倒された
       Message.push2(Msg.ENEMY_DEFEAT, [name]);
       // 経験値獲得
       actor.addExp(params.xp);
