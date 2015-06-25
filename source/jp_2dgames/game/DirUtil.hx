@@ -1,6 +1,5 @@
 package jp_2dgames.game;
 
-import flixel.util.FlxVector;
 import flixel.util.FlxRandom;
 import flixel.util.FlxPoint;
 
@@ -107,7 +106,6 @@ class DirUtil {
   /**
 	 * 垂直方向かどうか
 	 **/
-
   public static function isVertical(dir:Dir):Bool {
     switch(dir) {
       case Dir.Up:
@@ -139,6 +137,19 @@ class DirUtil {
     else {
       // 入力がない
       return Dir.None;
+    }
+  }
+
+  /**
+   * 方向を反転する
+   **/
+  public static function invert(dir):Dir {
+    switch(dir) {
+      case Dir.Left:  return Dir.Right;
+      case Dir.Up:    return Dir.Down;
+      case Dir.Right: return Dir.Left;
+      case Dir.Down:  return Dir.Up;
+      default: return Dir.None;
     }
   }
 

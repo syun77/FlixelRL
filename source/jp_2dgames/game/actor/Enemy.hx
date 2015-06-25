@@ -399,11 +399,39 @@ class Enemy extends Actor {
     }
 
     // 移動方向を決める
-    var pt = FlxPoint.get(_xnext, _ynext);
-    _dir = _aiMoveDir();
-    pt = DirUtil.move(_dir, pt);
-    var xnext = Std.int(pt.x);
-    var ynext = Std.int(pt.y);
+    var xnext:Int = Std.int(_xprev);
+    var ynext:Int = Std.int(_yprev);
+    var pt = FlxPoint.get(_xprev, _yprev);
+    switch(_getCsvParam("ai")) {
+      case "chase":
+        // 追跡AI
+        _dir = _aiMoveDir();
+        pt = DirUtil.move(_dir, pt);
+        xnext = Std.int(pt.x);
+        ynext = Std.int(pt.y);
+      case "stay":
+        // 移動しない
+        _dir = _aiMoveDir();
+        pt = DirUtil.move(_dir, pt);
+        var xc = Std.int(pt.x);
+        var yc = Std.int(pt.y);
+        if(target.checkPosition(xc, yc)) {
+          // 近くにプレイヤーがいるので攻撃
+          xnext = xc;
+          ynext = yc;
+        }
+      case "escape":
+        // 逃走
+        _dir = _aiMoveDir();
+        var d = Math.abs(target.xchip - xchip) + Math.abs(target.ychip - ychip);
+        if(d < 3) {
+          // 近づかれると反転
+          _dir = DirUtil.invert(_dir);
+        }
+        pt = DirUtil.move(_dir, pt);
+        xnext = Std.int(pt.x);
+        ynext = Std.int(pt.y);
+    }
     pt.put();
 
     // 移動方向を反映
