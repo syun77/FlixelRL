@@ -462,18 +462,15 @@ class Enemy extends Actor {
             // ダメージ
             return damage(-val);
           }
-          switch(extra) {
-            case "poison":
-              // 毒状態になる
-              target.changeBadStatus(BadStatus.Poison);
-              Message.push2(Msg.BAD_POISON, [target.name]);
-            case "sleep":
-              // 眠り状態になる
-              target.changeBadStatus(BadStatus.Sleep);
-              Message.push2(Msg.BAD_SLEEP, [target.name]);
-            default:
-              // ダメージ
-              return damage(FlxRandom.intRanged(1, 3));
+          if(extra != "") {
+            switch(extra) {
+              case "hpmax", "food", "str", "powerful":
+                // ダメージ
+                return damage(FlxRandom.intRanged(1, 3));
+              default:
+                // 特殊効果あり
+                ItemUtil.useExtra(target, extra, extval);
+            }
           }
           return false;
         case IType.Weapon:

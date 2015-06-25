@@ -252,27 +252,10 @@ class ItemUtil {
           actor.addHp(val);
           Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
-        switch(extra) {
-          case "hpmax":
-            // 最大HP上昇
-            actor.addHpMax(extval);
-            Message.push2(Msg.GROW_HPMAX, [actor.name, extval]);
-          case "food":
-            // 最大満腹度上昇
-            actor.addFoodMax(extval);
-            Message.push2(Msg.GROW_FOOD, [extval]);
-          case "str":
-            // 力上昇
-            actor.addStr(extval);
-            Message.push2(Msg.GROW_STR, [extval]);
-          case "poison":
-            // 毒状態になる
-            actor.changeBadStatus(BadStatus.Poison);
-            Message.push2(Msg.BAD_POISON, [actor.name]);
-          case "sleep":
-            // 眠り状態になる
-            actor.changeBadStatus(BadStatus.Sleep);
-            Message.push2(Msg.BAD_SLEEP, [actor.name]);
+
+        if(extra != "") {
+          // 特殊効果あり
+          useExtra(actor, extra, extval);
         }
 
         // 満腹度も少し回復
@@ -306,6 +289,50 @@ class ItemUtil {
       default:
         // ここにくることはない
         trace('Error: Invalid item ${item.id}');
+    }
+  }
+
+  /**
+   * 特殊アイテムを使った
+   **/
+  public static function useExtra(actor:Actor, extra:String, extval:Int):Void {
+    switch(extra) {
+      case "hpmax":
+        // 最大HP上昇
+        actor.addHpMax(extval);
+        Message.push2(Msg.GROW_HPMAX, [actor.name, extval]);
+      case "food":
+        // 最大満腹度上昇
+        actor.addFoodMax(extval);
+        Message.push2(Msg.GROW_FOOD, [extval]);
+      case "str":
+        // 力上昇
+        actor.addStr(extval);
+        Message.push2(Msg.GROW_STR, [extval]);
+      case "poison":
+        // 毒状態になる
+        actor.changeBadStatus(BadStatus.Poison);
+        Message.push2(Msg.BAD_POISON, [actor.name]);
+      case "sleep":
+        // 眠り状態になる
+        actor.changeBadStatus(BadStatus.Sleep);
+        Message.push2(Msg.BAD_SLEEP, [actor.name]);
+      case "paralysis":
+        // 麻痺状態になる
+        actor.changeBadStatus(BadStatus.Paralysis);
+        Message.push2(Msg.BAD_PARALYSIS, [actor.name]);
+      case "confusion":
+        // 混乱状態になる
+        actor.changeBadStatus(BadStatus.Confusion);
+        Message.push2(Msg.BAD_CONFUSION, [actor.name]);
+      case "anger":
+        // 怒り状態になる
+        actor.changeBadStatus(BadStatus.Anger);
+        Message.push2(Msg.BAD_AnGER, [actor.name]);
+      case "powerful":
+        // 元気状態になる
+        actor.changeBadStatus(BadStatus.Powerful);
+        Message.push2(Msg.BAD_POWERFUL, [actor.name]);
     }
   }
 

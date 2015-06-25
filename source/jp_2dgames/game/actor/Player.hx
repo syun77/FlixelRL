@@ -275,7 +275,12 @@ class Player extends Actor {
 
     if(checkFood()) {
       // 自動回復可能
-      addHp2(AUTOHEAL_RATIO, false);
+      var v = AUTOHEAL_RATIO;
+      if(badstatus == BadStatus.Powerful) {
+        // 元気状態の場合は回復量2倍
+        v *= 2;
+      }
+      addHp2(v, false);
     }
     _bAutoRecovery = true;
 
@@ -411,8 +416,8 @@ class Player extends Actor {
     _bStop = true;
 
     switch(badstatus) {
-      case BadStatus.Sleep:
-        // 眠り状態の場合は行動不能
+      case BadStatus.Sleep, BadStatus.Paralysis:
+        // 行動不能
         standby();
         return;
       default:
