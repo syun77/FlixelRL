@@ -88,15 +88,49 @@ class Calc {
   /**
    * アイテムによるダメージ計算
    **/
-  public static function damageItem(act:Actor, item:ItemData):Int {
+  public static function damageItem(act:Actor, item:ItemData, armor:ItemData):Int {
+    var str = 0;
+    var vit = act.params.vit;
     var atk = ItemUtil.getParam(item.id, "atk");
-    var val = atk;
-    var d = atk * FlxRandom.floatRanged(0, 0.05);
-    if(d < 0) {
-      d = FlxRandom.intRanged(1, 3);
+    var def = 0;
+    if(armor != null) {
+      def = ItemUtil.getParam(armor.id, "def");
+      def += armor.param.value;
     }
-    val += Std.int(d);
-    return val;
+    var val = atk;
+
+    // 威力
+    var power = str + atk;
+
+    // 力係数 (基礎体力の差)
+    var str_rate = Math.pow(1.02, str - vit);
+
+    // 威力係数 (装備アイテムの差)
+    var power_rate = Math.pow(1.15, atk - def);
+
+    // ダメージ量を計算
+    var val = (power * str_rate * power_rate);
+    if(val <= 0) {
+      // 0ダメージはランダムで1〜3ダメージ
+      val = FlxRandom.intRanged(1, 3);
+    }
+    else {
+      // ランダムで+5%変動
+      var d = val * FlxRandom.floatRanged(0, 0.05);
+      if(Math.abs(d) < 1) {
+        // 1以下の場合は+1〜3する
+        val += FlxRandom.intRanged(1, 3);
+      }
+      else {
+        val += d;
+        if(val > MAX_DAMAGE) {
+          // 最大ダメージ量を超えないようにする
+          val = MAX_DAMAGE;
+        }
+      }
+    }
+
+    return Std.int(val);
   }
 
   /**

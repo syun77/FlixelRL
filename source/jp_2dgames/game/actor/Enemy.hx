@@ -127,9 +127,10 @@ class Enemy extends Actor {
       // 攻撃アニメーション開始
       if(_checkShot()) {
         // 弾を撃つ
+        var itemid = _getCsvParamInt("skill2");
         var p = new ItemExtraParam();
-        // TODO:
-        var ms = MagicShot.start(x, y, this, target, new ItemData(33, p));
+        var item = new ItemData(itemid, p);
+        var ms = MagicShot.start(x, y, this, target, item);
         ms.setEndCallback(function() {
           // 消滅時に行動終了にする
           _change(Actor.State.TurnEnd);
@@ -563,7 +564,7 @@ class Enemy extends Actor {
     }
 
     // アイテムヒットした
-    if(hitItemEffect(actor, item, false)) {
+    if(hitItemEffect(actor, item, false, null)) {
       // 倒された
       Message.push2(Msg.ENEMY_DEFEAT, [name]);
       // 経験値獲得

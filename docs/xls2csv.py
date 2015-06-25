@@ -8,7 +8,7 @@ import yaml
 # コンバート実行
 def conv(sheet, outFile, const):
 	print " [sheet] %s ... "%(sheet.name)
-	
+
 	nrows = sheet.nrows
 	ncols = sheet.ncols
 	row = 0
@@ -40,7 +40,7 @@ def conv(sheet, outFile, const):
 	f.write(ret)
 	f.close
 	print "   -> %s"%outFile
-	
+
 
 # メイン処理
 def main(inFile, out, const):
@@ -61,9 +61,9 @@ if __name__ == '__main__':
 		quit()
 	if argc >= 4:
 		# 定数ファイル読み込み
-		fHeader = sys.argv[3]
-		f = open(fHeader)
-		const = yaml.load(f)
-		f.close
+		for fHeader in sys.argv[3].split(","):
+			f = open(fHeader)
+			const.update(yaml.load(f))
+			f.close
 	main(sys.argv[1], sys.argv[2], const)
 	# main("enemy.xlsx", "/Users/syun/Desktop/FlixelRL/assets/levels/enemy.csv")

@@ -614,7 +614,7 @@ class Player extends Actor {
     }
 
     // アイテムヒットした
-    if(hitItemEffect(actor, item, true)) {
+    if(hitItemEffect(actor, item, true, Inventory.getArmorData())) {
       // 倒された
       // エフェクト再生
       Particle.start(PType.Ring, x, y, FlxColor.YELLOW);

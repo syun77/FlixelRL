@@ -555,7 +555,7 @@ class Actor extends FlxSprite {
    * ぶつけたアイテムの効果発動
    * @return ぶつけたアイテムで倒したかどうか
    **/
-  public function hitItemEffect(actor:Actor, item:ItemData, bPlayer:Bool):Bool {
+  public function hitItemEffect(actor:Actor, item:ItemData, bPlayer:Bool, armor:ItemData):Bool {
 
     // 拡張パラメータ
     var extra = ItemUtil.getParamString(item.id, "extra");
@@ -606,10 +606,14 @@ class Actor extends FlxSprite {
         if(extra != "") {
           ItemUtil.useExtra(this, extra, extval);
         }
+        else {
+          var v = Calc.damageItem(this, item, armor);
+          return damage(v);
+        }
         return false;
 
       default:
-        // ポーション以外は微量のダメージ
+        // それ以外は微量のダメージ
         var v = FlxRandom.intRanged(5, 7);
         return damage(v);
     }

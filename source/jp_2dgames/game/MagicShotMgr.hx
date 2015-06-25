@@ -50,7 +50,7 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
    * 命中処理
    **/
   public static function hitTarget(target:Actor, item:ItemData):Void {
-    var val = Calc.damageItem(target, item);
+    var val = Calc.damageItem(target, item, null);
     if(target.damage(val)) {
       // 目標を倒した
       Message.push2(Msg.ENEMY_DEFEAT, [target.name]);
