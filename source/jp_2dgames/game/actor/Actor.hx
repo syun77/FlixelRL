@@ -487,6 +487,14 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * 座標を調整する
+   **/
+  public function adjustPosition():Void {
+    x = Field.toWorldX(xchip);
+    y = Field.toWorldY(ychip);
+  }
+
+  /**
 	 * ダメージを与える
 	 **/
   public function damage(val:Int):Bool {

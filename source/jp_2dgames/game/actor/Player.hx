@@ -429,6 +429,11 @@ class Player extends Actor {
 
     if(_isKeyInput() == false) {
       // キー入力をしていない
+      // 座標を調整
+      adjustPosition();
+      Enemy.parent.forEachAlive(function(e:Enemy) {
+        e.adjustPosition();
+      });
       return;
     }
 
