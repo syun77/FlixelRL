@@ -349,6 +349,10 @@ class ItemUtil {
         // 元気状態になる
         actor.changeBadStatus(BadStatus.Powerful);
         Message.push2(Msg.BAD_POWERFUL, [actor.name]);
+      case "recover":
+        // 状態異常回復
+        actor.cureBadStatus();
+        Message.push2(Msg.BAD_CURE, [actor.name]);
     }
   }
 

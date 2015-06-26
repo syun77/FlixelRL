@@ -45,6 +45,7 @@ class Msg {
   public static inline var BAD_POISON:Int = 33; // 毒
   public static inline var ITEM_WAND:Int = 34; // 杖を振った
   public static inline var NOTHING_HAPPENED:Int = 35; // 何も起こらなかった
+  public static inline var BAD_CURE:Int = 36; // 正常に戻った
 
   // メニュー
   public static inline var MENU_USE:Int = 48; // メニュー: 使う

@@ -41,7 +41,7 @@ int,str,str,int,int,int,str,str,int,str
 39,Portion,混乱の薬,,10,,,confusion,,混乱する薬
 40,Portion,怒りの薬,,10,,,anger,,怒り状態になります
 41,Portion,元気になる薬,,10,,,powerful,,元気状態になります
-42,Portion,薬26,1,10,,,,,飲むとHPが1回復します
+42,Portion,いやしの薬,,10,,,recover,,状態異常が回復します
 43,Portion,薬27,1,10,,,,,飲むとHPが1回復します
 44,Portion,薬28,1,10,,,,,飲むとHPが1回復します
 45,Portion,薬29,1,10,,,,,飲むとHPが1回復します
