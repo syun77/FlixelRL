@@ -130,7 +130,9 @@ class Enemy extends Actor {
         var itemid = _getCsvParamInt("missile");
         var p = new ItemExtraParam();
         var item = new ItemData(itemid, p);
-        var ms = MagicShot.start(x, y, this, target, item);
+        var px = Field.toWorldX(xchip);
+        var py = Field.toWorldY(ychip);
+        var ms = MagicShot.start(px, py, this, target, item);
         ms.setEndCallback(function() {
           // 消滅時に行動終了にする
           _change(Actor.State.TurnEnd);
@@ -451,6 +453,10 @@ class Enemy extends Actor {
             var py = Std.int(pt.y);
             if(Field.isCollision(px, py)) {
               // 壁に当たったので攻撃できない
+              break;
+            }
+            if(Enemy.getFromPositino(px, py) != null) {
+              // 別の敵に当たるので攻撃できない
               break;
             }
             if(target.checkPosition(px, py)) {
