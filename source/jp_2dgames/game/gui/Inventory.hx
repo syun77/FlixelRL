@@ -752,7 +752,12 @@ class Inventory extends FlxGroup {
               _guistatus.changeHelp(GuiStatus.HELP_INVENTORYCOMMAND);
             case EXECMODE_SELL:
               // 売却モードはそのまま売る
-              // TODO: お金の獲得
+              // お金を獲得
+              var itemid = getSelectedItem().id;
+              // 売却金額を取得
+              var money = ItemUtil.getParam(itemid, "sell");
+              Global.addMoney(money);
+              // アイテムを消す
               delItem(-1);
               if(isEmpty()) {
                 // アイテムがなくなったらメニューを閉じる
