@@ -32,6 +32,32 @@
     <set name="BUILD_DIR" value="export"/>
     <classpath name="source"/>
     <assets path="assets" include="*.tmx|*.png|*.csv|*.ttf" />
+    <!-- BGM -->
+    <assets path="assets/music" if="flash" include="*.mp3">
+        <sound path="001.mp3" id="001" />
+        <sound path="002.mp3" id="002" />
+        <sound path="003.mp3" id="003" />
+        <sound path="004.mp3" id="004" />
+        <sound path="005.mp3" id="005" />
+        <sound path="006.mp3" id="006" />
+        <sound path="007.mp3" id="007" />
+        <sound path="008.mp3" id="008" />
+        <sound path="009.mp3" id="009" />
+        <sound path="010.mp3" id="010" />
+    </assets>
+    <assets path="assets/music" unless="flash" include="*.ogg">
+        <sound path="001.ogg" id="001" />
+        <sound path="002.ogg" id="002" />
+        <sound path="003.ogg" id="003" />
+        <sound path="004.ogg" id="004" />
+        <sound path="005.ogg" id="005" />
+        <sound path="006.ogg" id="006" />
+        <sound path="007.ogg" id="007" />
+        <sound path="008.ogg" id="008" />
+        <sound path="009.ogg" id="009" />
+        <sound path="010.ogg" id="010" />
+    </assets>
+    <!-- SE -->
     <assets path="assets/sounds" if="flash" include="*.mp3">
         <sound path="pickup2.mp3" id="pickup" />
         <sound path="foot2.mp3" id="foot" />

@@ -9,3 +9,4 @@ docs/monster/tmp/*.png
 upload.command
 
 /docs/sounds/list.txt
+docs/sounds/list_bgm.txt

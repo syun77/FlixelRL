@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.TextUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxEase;
@@ -121,6 +122,14 @@ class PlayState extends FlxState {
       });
     });
 
+    // BGM再生開始
+#if flash
+    {
+      var nBgm = Global.getFloor()%11;
+      var strBgm = TextUtil.fillZero(nBgm, 3);
+      Snd.playMusic(strBgm);
+    }
+#end
   }
 
   private function _start() {
