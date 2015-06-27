@@ -123,13 +123,15 @@ class PlayState extends FlxState {
     });
 
     // BGM再生開始
-#if flash
-    {
+    var bPlayBgm = false;
+    #if flash
+    bPlayBgm = true;
+    #end
+    if(bPlayBgm) {
       var nBgm = Global.getFloor()%11;
       var strBgm = TextUtil.fillZero(nBgm, 3);
       Snd.playMusic(strBgm);
     }
-#end
   }
 
   private function _start() {
