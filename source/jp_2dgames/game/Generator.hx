@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.FlxG;
 import jp_2dgames.lib.Layer2D;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.item.DropItem;
@@ -173,6 +174,7 @@ class Generator {
     }
 
     var info = new GenerateInfo(csv, GenerateInfo.TYPE_ENEMY);
+    var player = cast(FlxG.state, PlayState).player;
 
     for(i in 0...cnt) {
 
@@ -188,6 +190,10 @@ class Generator {
         var px = Std.int(pt.x);
         var py = Std.int(pt.y);
         pt.put();
+        if(player.checkPosition(px, py)) {
+          // 生成できないのでやり直す
+          continue;
+        }
         if(Enemy.getFromPositino(px, py) != null) {
           // 生成できないのでやり直す
           continue;

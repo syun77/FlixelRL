@@ -47,6 +47,9 @@ class Player extends Actor {
   // 自動回復フラグ
   private var _bAutoRecovery:Bool = true;
 
+  // 足踏みタイマー
+  private var _tFoot:Int = 0;
+
   // 攻撃力
   public var atk(get, never):Int;
   private function get_atk() {
@@ -408,17 +411,59 @@ class Player extends Actor {
   }
 
   /**
+   * バッドステータスチェック
+   **/
+  private function _checkBadStatus():Bool {
+    switch(badstatus) {
+      case BadStatus.Sleep, BadStatus.Paralysis:
+        // 行動不能
+        return true;
+      default:
+    }
+
+    // 行動不能でない
+    return false;
+  }
+
+  /**
+   * 足踏みチェック
+   **/
+  private function _checkFoot():Bool {
+    if(Key.on.A) {
+      if(hpratio < 100) {
+        _tFoot++;
+        if(_tFoot > 24) {
+          // 足踏み
+          _tFoot = 22;
+          return true;
+        }
+      }
+    }
+    else {
+      _tFoot = 0;
+    }
+
+    return false;
+  }
+
+  /**
 	 * 更新・キー入力待ち
 	 **/
   private function _updateKeyInput():Void {
     _bStop = true;
 
-    switch(badstatus) {
-      case BadStatus.Sleep, BadStatus.Paralysis:
-        // 行動不能
-        standby();
-        return;
-      default:
+    // バッドステータスチェック
+    if(_checkBadStatus()) {
+      // 行動不能
+      standby();
+      return;
+    }
+
+    // 足踏みチェック
+    if(_checkFoot()) {
+      // 行動終了
+      standby();
+      return;
     }
 
     if(Key.press.B) {
