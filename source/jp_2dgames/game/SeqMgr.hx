@@ -35,8 +35,10 @@ private enum State {
   TurnEnd;        // ターン終了
   NextFloor;      // 次のフロアに進むかどうか
   NextFloorWait;  // 次のフロアに進む（完了待ち）
-  Shop;           // ショップ
-  ShopMain;       // ショップ(メイン処理)
+  ShopOpen;       // ショップメニューを開く
+  ShopRoot;       // ショップルートメニュー
+  ShopSell;       // ショップ(売却)
+  ShopBuy;        // ショップ(購入)
 }
 
 /**
@@ -100,8 +102,10 @@ class SeqMgr {
       case State.NextFloor:
         help = GuiStatus.HELP_DIALOG_YN;
       case State.NextFloorWait:
-      case State.Shop:
-      case State.ShopMain:
+      case State.ShopOpen:
+      case State.ShopRoot:
+      case State.ShopSell:
+      case State.ShopBuy:
     }
 
     _guistatus.changeHelp(help);
@@ -372,12 +376,7 @@ class SeqMgr {
 
         case StompChip.Shop:
           // ショップ
-          _change(State.Shop);
-          var msg = Message.getText(Msg.MENU_SHOP_MSG);
-          var cmd1 = Message.getText(Msg.MENU_SHOP_BUY);
-          var cmd2 = Message.getText(Msg.MENU_SHOP_SELL);
-          var cmd3 = Message.getText(Msg.MENU_SHOP_NOTHING);
-          Dialog.open(Dialog.SELECT3, msg, [cmd1, cmd2, cmd3]);
+          _change(State.ShopOpen);
 
         case StompChip.None:
           // ターン数を進める
@@ -419,21 +418,55 @@ class SeqMgr {
         // ■次のフロアに進む（完了待ち）
         // 何もしない
 
-      case State.Shop:
+      case State.ShopOpen:
         // ■ショップメニュー表示
+        var msg = Message.getText(Msg.MENU_SHOP_MSG);
+        var cmd1 = Message.getText(Msg.MENU_SHOP_BUY);
+        var cmd2 = Message.getText(Msg.MENU_SHOP_SELL);
+        var cmd3 = Message.getText(Msg.MENU_SHOP_NOTHING);
+        Dialog.open(Dialog.SELECT3, msg, [cmd1, cmd2, cmd3]);
+        _change(State.ShopRoot);
+
+      case State.ShopRoot:
+        // ■ショップルートメニュー
         if(Dialog.isClosed()) {
-          if(Dialog.getCursor() == 0) {
+          switch(Dialog.getCursor()) {
+            case 0:
+              // 購入
+              _change(State.ShopBuy);
+            case 1:
+              // 売却
+              if(_inventory.checkOpen()) {
+                // インベントリを売却モードで開く
+                _inventory.setActive(true, Inventory.EXECMODE_SELL);
+                _change(State.ShopSell);
+              }
+              else {
+                // 開けない
+                _change(State.ShopOpen);
+              }
+            case 2:
+              // 何もしない
+              // 踏みつけているチップをクリア
+              _player.endStompChip();
+              _player.turnEnd();
+              _change(State.KeyInput);
           }
-          else {
-          }
-          // 踏みつけているチップをクリア
-          _player.endStompChip();
-          _player.turnEnd();
-          _change(State.KeyInput);
         }
-      case State.ShopMain:
-        // ■ショップメニュー表示(メイン処理)
-        _change(State.Shop);
+      case State.ShopSell:
+        // ■ショップメニュー表示(売却)
+        switch(_inventory.proc()) {
+          case Inventory.RET_CONTINUE:
+            // 処理を続ける
+          case Inventory.RET_CANCEL:
+            // インベントリを閉じた
+            _change(State.ShopOpen);
+        }
+
+      case State.ShopBuy:
+        // ■ショップメニュー表示(購入)
+        _change(State.ShopOpen);
+
     }
 
     return ret;

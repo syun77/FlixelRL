@@ -44,6 +44,10 @@ class Inventory extends FlxGroup {
   public static inline var RET_THROW:Int    = 3; // アイテムを投げた
   public static inline var RET_SCROLL:Int   = 4; // 巻物を読んだ
 
+  // 起動モード
+  public static inline var EXECMODE_NORMAL:Int = 0; // 通常起動
+  public static inline var EXECMODE_SELL:Int   = 1; // 売却モード
+
   // 装備アイテム
   private static inline var EQUIP_WEAPON:Int = 0;
   private static inline var EQUIP_ARMOR:Int = 1;
@@ -127,6 +131,9 @@ class Inventory extends FlxGroup {
   private var _nCursor:Int = 0;
   // カーソルアニメタイマー
   private var _tCursor:Int = 0;
+
+  // 起動モード
+  private var _execMode:Int;
 
   // 詳細
   private var _detail:FlxSpriteGroup;
@@ -470,7 +477,7 @@ class Inventory extends FlxGroup {
   /**
    * アクティブフラグの設定
    **/
-  public function setActive(b:Bool) {
+  public function setActive(b:Bool, execMode:Int=EXECMODE_NORMAL) {
     // カーソル表示を切り替え
     _cursor.visible = b;
 
@@ -501,6 +508,9 @@ class Inventory extends FlxGroup {
       _bg.color = FlxColor.TEAL;
       // カーソルタイマー初期化
       _tCursor = 90;
+
+      // 起動モードを設定
+      _execMode = execMode;
 
       Snd.playSe("menu");
     }
@@ -723,19 +733,34 @@ class Inventory extends FlxGroup {
 
         if(Key.press.B) {
           // メニューを閉じる
+          _cursor.visible = false;
           return RET_CANCEL;
         }
 
         if(Key.press.A) {
-          // コマンドメニューを開く
-          var param = _getMenuParam();
-          var itemid = getSelectedItem();
-          _cmd = new InventoryCommand(CMD_X, CMD_Y, _cbAction, param);
-          this.add(_cmd);
-          _state = State.Command;
+          switch(_execMode) {
+            case EXECMODE_NORMAL:
+              // 通常モード
+              // コマンドメニューを開く
+              var param = _getMenuParam();
+              var itemid = getSelectedItem();
+              _cmd = new InventoryCommand(CMD_X, CMD_Y, _cbAction, param);
+              this.add(_cmd);
+              _state = State.Command;
 
-          // ヘルプ変更
-          _guistatus.changeHelp(GuiStatus.HELP_INVENTORYCOMMAND);
+              // ヘルプ変更
+              _guistatus.changeHelp(GuiStatus.HELP_INVENTORYCOMMAND);
+            case EXECMODE_SELL:
+              // 売却モードはそのまま売る
+              // TODO: お金の獲得
+              delItem(-1);
+              if(isEmpty()) {
+                // アイテムがなくなったらメニューを閉じる
+                // カーソルを消す
+                _cursor.visible = false;
+                return RET_CANCEL;
+              }
+          }
         }
 
       case State.Command:
