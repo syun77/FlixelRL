@@ -25,6 +25,7 @@ class Field {
   public static inline var WALL:Int    = 3;  // 壁
   public static inline var PASSAGE:Int = 4;  // 通路
   public static inline var HINT:Int    = 5;  // ヒント
+  public static inline var SHOP:Int    = 6;  // お店
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
 
@@ -91,6 +92,12 @@ class Field {
       layer.setFromFlxPoint(p, GOAL);
       p.put();
     }
+    // ショップの配置
+    {
+      var p = layer.searchRandom(NONE);
+      layer.setFromFlxPoint(p, SHOP);
+      p.put();
+    }
     // 敵を配置
     {
       // 参照するデータ番号を調べる
@@ -101,8 +108,10 @@ class Field {
       // 敵配置
       for(i in 0...cnt) {
         var p = layer.searchRandom(NONE);
-        layer.setFromFlxPoint(p ,ENEMY);
-        p.put();
+        if(p != null) {
+          layer.setFromFlxPoint(p ,ENEMY);
+          p.put();
+        }
       }
     }
 
@@ -112,8 +121,10 @@ class Field {
       var cnt = csv.enemy_appear.getInt(id, "item");
       for(i in 0...cnt) {
         var p = layer.searchRandom(NONE);
-        layer.setFromFlxPoint(p, ITEM);
-        p.put();
+        if(p != null) {
+          layer.setFromFlxPoint(p, ITEM);
+          p.put();
+        }
       }
     }
   }
@@ -143,7 +154,7 @@ class Field {
           rect.left = (v - 1) * GRID_SIZE;
           rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt);
-        case HINT:
+        case HINT, SHOP:
           rect.left = (v - 1) * GRID_SIZE;
           rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
