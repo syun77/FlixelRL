@@ -21,6 +21,15 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
 /**
+ * 踏みつけているチップ
+ **/
+enum StompChip {
+  None;   // 何もない
+  Stairs; // 階段
+  Shop;   // ショップ
+}
+
+/**
  * プレイヤー
  */
 class Player extends Actor {
@@ -33,6 +42,17 @@ class Player extends Actor {
   private var _target:Enemy = null;
   private var _csv:CsvLoader = null;
 
+  // 踏みつけているチップ
+  private var _stompChip = StompChip.None;
+  public var stompChip(get, never):StompChip;
+  private function get_stompChip() {
+    return _stompChip;
+  }
+  // 踏みつけているチップをリセットする
+  public function endStompChip() {
+    _stompChip = StompChip.None;
+  }
+  /*
   // 階段の上に乗っているかどうか
   private var _bOnStairs:Bool;
   public var isOnStairs(get, never):Bool;
@@ -43,6 +63,7 @@ class Player extends Actor {
   public function endOnStairs() {
     _bOnStairs = false;
   }
+  */
 
   // 自動回復フラグ
   private var _bAutoRecovery:Bool = true;
@@ -108,8 +129,8 @@ class Player extends Actor {
     _change(Actor.State.KeyInput);
     _stateprev = _state;
 
-    // 階段の上にいるフラグ
-    _bOnStairs = false;
+    // 踏みつけているチップ
+    _stompChip = StompChip.None;
 
     // 攻撃カーソル生成
     _cursor = new FlxSprite().loadGraphic("assets/images/cursor.png", true);
@@ -365,14 +386,17 @@ class Player extends Actor {
       case Actor.State.Move:
         if(_updateWalk()) {
           // 移動完了
-          // 階段チェック
-          if(Field.getChip(xchip, ychip) == Field.GOAL) {
-            // 移動先が階段
-            _bOnStairs = true;
-          }
-          if(Field.getChip(xchip, ychip) == Field.HINT) {
-            // ヒント表示
-            Message.pushHint();
+          switch(Field.getChip(xchip, ychip)) {
+            case Field.GOAL:
+              // 移動先が階段
+              _stompChip = StompChip.Stairs;
+            case Field.SHOP:
+              // 移動先がお店
+              _stompChip = StompChip.Shop;
+            case Field.HINT:
+              // ヒント表示
+              Message.pushHint();
+            default:
           }
           // アイテムがあれば拾う
           DropItem.pickup(xchip, ychip);

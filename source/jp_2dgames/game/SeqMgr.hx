@@ -35,6 +35,8 @@ private enum State {
   TurnEnd;        // ターン終了
   NextFloor;      // 次のフロアに進むかどうか
   NextFloorWait;  // 次のフロアに進む（完了待ち）
+  Shop;           // ショップ
+  ShopMain;       // ショップ(メイン処理)
 }
 
 /**
@@ -98,6 +100,8 @@ class SeqMgr {
       case State.NextFloor:
         help = GuiStatus.HELP_DIALOG_YN;
       case State.NextFloorWait:
+      case State.Shop:
+      case State.ShopMain:
     }
 
     _guistatus.changeHelp(help);
@@ -357,15 +361,25 @@ class SeqMgr {
         ExpMgr.turnEnd();
         // 的の行動終了
         _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
-        if(_player.isOnStairs) {
+        switch(_player.stompChip) {
+        case StompChip.Stairs:
           // 次のフロアに進む
           _change(State.NextFloor);
           var msg = Message.getText(Msg.MENU_NEXTFLOOR_MSG);
           var cmd1 = Message.getText(Msg.MENU_NEXTFLOOR);
           var cmd2 = Message.getText(Msg.MENU_STAY);
           Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
-        }
-        else {
+
+        case StompChip.Shop:
+          // ショップ
+          _change(State.Shop);
+          var msg = Message.getText(Msg.MENU_SHOP_MSG);
+          var cmd1 = Message.getText(Msg.MENU_SHOP_BUY);
+          var cmd2 = Message.getText(Msg.MENU_SHOP_SELL);
+          var cmd3 = Message.getText(Msg.MENU_SHOP_NOTHING);
+          Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2, cmd3]);
+
+        case StompChip.None:
           // ターン数を進める
           Global.nextTurn();
           {
@@ -396,13 +410,30 @@ class SeqMgr {
           else {
             // 階段を降りない
             _change(State.KeyInput);
-            // 階段フラグを下げる
-            _player.endOnStairs();
+            // 踏みつけているチップをクリア
+            _player.endStompChip();
             _player.turnEnd();
           }
         }
       case State.NextFloorWait:
         // ■次のフロアに進む（完了待ち）
+        // 何もしない
+
+      case State.Shop:
+        // ■ショップメニュー表示
+        if(Dialog.isClosed()) {
+          if(Dialog.getCursor() == 0) {
+          }
+          else {
+          }
+          // 踏みつけているチップをクリア
+          _player.endStompChip();
+          _player.turnEnd();
+          _change(State.KeyInput);
+        }
+      case State.ShopMain:
+        // ■ショップメニュー表示(メイン処理)
+        _change(State.Shop);
     }
 
     return ret;

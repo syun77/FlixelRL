@@ -58,6 +58,10 @@ class Msg {
   public static inline var MENU_NEXTFLOOR_MSG:Int = 55; // メニュー: 歓談がある
   public static inline var MENU_NEXTFLOOR:Int = 56; // メニュー: 下りる
   public static inline var MENU_STAY:Int = 57; // メニュー: そのまま
+  public static inline var MENU_SHOP_MSG:Int = 58; // メニュー: お店がある
+  public static inline var MENU_SHOP_BUY:Int = 59; // メニュー: 買う
+  public static inline var MENU_SHOP_SELL:Int = 60; // メニュー: 売る
+  public static inline var MENU_SHOP_NOTHING:Int = 61; // メニュー: 何もしない
 
   // ページ
   public static inline var PAGE_FEET:Int = 64; // 足下
