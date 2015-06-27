@@ -377,7 +377,7 @@ class SeqMgr {
           var cmd1 = Message.getText(Msg.MENU_SHOP_BUY);
           var cmd2 = Message.getText(Msg.MENU_SHOP_SELL);
           var cmd3 = Message.getText(Msg.MENU_SHOP_NOTHING);
-          Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2, cmd3]);
+          Dialog.open(Dialog.SELECT3, msg, [cmd1, cmd2, cmd3]);
 
         case StompChip.None:
           // ターン数を進める

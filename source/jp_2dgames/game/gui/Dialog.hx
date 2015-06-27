@@ -19,6 +19,7 @@ class Dialog extends FlxGroup {
   public static inline var OK:Int = 0; // OKダイアログ
   public static inline var YESNO:Int = 1; // Yes/Noダイアログ
   public static inline var SELECT2:Int = 2; // 2択ダイアログ
+  public static inline var SELECT3:Int = 3; // 3択ダイアログ
 
   private static var _instance:Dialog = null;
   // カーソル番号
@@ -70,6 +71,9 @@ class Dialog extends FlxGroup {
     var px = Reg.centerX();
     var py = Reg.centerY();
     var height = 64;
+    if(type == SELECT3) {
+      height += 24;
+    }
     // ウィンドウ
     var spr = new FlxSprite(px, py - height);
     this.add(spr);
@@ -124,12 +128,32 @@ class Dialog extends FlxGroup {
         txtNo.x = px + 12;
         this.add(txtNo);
         _cursorMax = 2;
+
+      case SELECT3:
+        for(i in 0...3) {
+          var px2 = px - 8 * sels[i].length/2;
+          var txt = new FlxText(px2, py2, 0, 64);
+          txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+          txt.text = sels[i];
+          txt.x = px2;
+          this.add(txt);
+          py2 += 24;
+        }
+        _cursorMax = 3;
+
     }
 
     // カーソル
-    _cursor = new FlxSprite(px - 80, py2);
-    _cursor.makeGraphic(84, 32, FlxColor.AQUAMARINE);
-    _cursor.alpha = 0.3;
+    if(_type == SELECT3) {
+      _cursor = new FlxSprite(px, py2);
+      _cursor.makeGraphic(128, 24, FlxColor.AQUAMARINE);
+      _cursor.alpha = 0.3;
+    }
+    else {
+      _cursor = new FlxSprite(px - 80, py2);
+      _cursor.makeGraphic(84, 32, FlxColor.AQUAMARINE);
+      _cursor.alpha = 0.3;
+    }
     this.add(_cursor);
   }
 
@@ -172,11 +196,18 @@ class Dialog extends FlxGroup {
 
   private function _updataeCursor():Void {
     var px = Reg.centerX();
-    switch(_nCursor) {
-      case 0:
-        _cursor.x = px - 80;
-      case 1:
-        _cursor.x = px + 12;
+    if(_type == SELECT3) {
+      _cursor.x = px - 64;
+      var py2 = FlxG.height / 2;
+      _cursor.y = py2 + 24 * _nCursor;
+    }
+    else {
+      switch(_nCursor) {
+        case 0:
+          _cursor.x = px - 80;
+        case 1:
+          _cursor.x = px + 12;
+      }
     }
   }
 }
