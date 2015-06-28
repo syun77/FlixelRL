@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import haxe.ds.ArraySort;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
@@ -80,6 +81,12 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   private function _open():Void {
     _state = State.Main;
+    // ソート
+    ArraySort.sort(_itemList, function(a:ItemData, b:ItemData):Int {
+      var aKey:Int = ItemUtil.getParam(a.id, "sort");
+      var bKey:Int = ItemUtil.getParam(b.id, "sort");
+      return aKey - bKey;
+    });
     _nCursor = 0;
     _itemDetail.show(_itemList[_nCursor]);
     _updateText();
