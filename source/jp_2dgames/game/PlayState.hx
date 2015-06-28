@@ -263,7 +263,7 @@ class PlayState extends FlxState {
     }
 
     // ショップ購入メニュー生成
-    GuiBuyDetail.create(640/2 - GuiBuyDetail.BG_WIDTH/2, FlxG.height/2 - GuiBuyDetail.BG_HEIGHT/2);
+    GuiBuyDetail.create(640/2 - GuiBuyDetail.BG_WIDTH/2 - 80, FlxG.height/2 - GuiBuyDetail.BG_HEIGHT/2);
 
     // 敵やアイテムを自動配置
     Generator.exec(_csv, layer);

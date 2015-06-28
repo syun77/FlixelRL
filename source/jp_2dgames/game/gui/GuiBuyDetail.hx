@@ -33,6 +33,9 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private static inline var MSG_DY = 24;
   private static inline var MSG_X2 = BG_WIDTH - 96;
 
+  private static inline var ITEMDETAIL_X = BG_WIDTH + 16;
+  private static inline var ITEMDETAIL_Y = 0;
+
   // インスタンス
   private static var _instance:GuiBuyDetail = null;
 
@@ -49,6 +52,8 @@ class GuiBuyDetail extends FlxSpriteGroup {
 
   // 状態
   private var _state:State = State.Main;
+
+  private var _itemDetail:GuiItemDetail;
 
   /**
    * 閉じたかどうか
@@ -75,6 +80,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private function _open():Void {
     _state = State.Main;
     _nCursor = 0;
+    _itemDetail.show(_itemList[_nCursor]);
     _updateText();
     _updateCursor();
   }
@@ -151,6 +157,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
     this.add(_cursor);
 
     _nCursor = 0;
+
+    // アイテム詳細
+    _itemDetail = new GuiItemDetail(ITEMDETAIL_X, ITEMDETAIL_Y);
+    this.add(_itemDetail);
   }
 
   /**
@@ -186,12 +196,12 @@ class GuiBuyDetail extends FlxSpriteGroup {
         if(Key.press.UP) {
           _nCursor--;
           if(_nCursor < 0) {
-            _nCursor = ITEM_MAX - 1;
+            _nCursor = _itemList.length - 1;
           }
         }
         else if(Key.press.DOWN) {
           _nCursor++;
-          if(_nCursor >= ITEM_MAX) {
+          if(_nCursor >= _itemList.length) {
             _nCursor = 0;
           }
         }
@@ -237,6 +247,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   private function _updateCursor():Void {
     _cursor.y = y + MSG_Y + _nCursor * MSG_DY;
+    var item = _itemList[_nCursor];
+    if(item != null) {
+      _itemDetail.setSelectedItem(item);
+    }
   }
 
   /**
