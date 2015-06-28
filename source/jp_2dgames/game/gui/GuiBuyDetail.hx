@@ -260,8 +260,8 @@ class GuiBuyDetail extends FlxSpriteGroup {
       }
       else {
         // 買えない
-        _txtList[idx].color = FlxColor.CORAL;
-        _txtPriceList[idx].color = FlxColor.CORAL;
+        _txtList[idx].color = FlxColor.SILVER;
+        _txtPriceList[idx].color = FlxColor.SILVER;
       }
       idx++;
     }
