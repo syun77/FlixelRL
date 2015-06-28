@@ -453,7 +453,7 @@ class SeqMgr {
                 // 開けない
                 _change(State.ShopOpen);
               }
-            case 2:
+            case -1, 2:
               // 何もしない
               // 踏みつけているチップをクリア
               _player.endStompChip();

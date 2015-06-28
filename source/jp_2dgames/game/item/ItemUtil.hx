@@ -84,6 +84,24 @@ class ItemUtil {
   }
 
   /**
+   * アイテムの購入価格を取得する
+   **/
+  public static function getBuy(item:ItemData):Int {
+    var csv = getCsv(item.id);
+    var price = csv.searchItemInt("id", '${item.id}', "buy");
+    return price;
+  }
+
+  /**
+   * アイテムの売却価格を取得する
+   **/
+  public static function getSell(item:ItemData):Int {
+    var csv = getCsv(item.id);
+    var price = csv.searchItemInt("id", '${item.id}', "sell");
+    return price;
+  }
+
+  /**
 	 * アイテムIDからアイテム種別を求める
 	 **/
   public static function getType(id:Int):IType {

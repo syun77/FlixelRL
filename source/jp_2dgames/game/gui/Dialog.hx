@@ -178,6 +178,13 @@ class Dialog extends FlxGroup {
         _updataeCursor();
 
         if(Key.press.A) {
+          // 決定
+          _state = State.Closed;
+          FlxG.state.remove(this);
+        }
+        else if(Key.press.B) {
+          // キャンセル
+          _nCursor = -1;
           _state = State.Closed;
           FlxG.state.remove(this);
         }

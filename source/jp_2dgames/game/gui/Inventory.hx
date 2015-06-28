@@ -763,7 +763,7 @@ class Inventory extends FlxGroup {
               // お金を獲得
               var item = getSelectedItem();
               // 売却金額を取得
-              var money = ItemUtil.getParam(item.id, "sell");
+              var money = ItemUtil.getSell(item);
               Global.addMoney(money);
               // 売却メッセージ表示
               Message.push2(Msg.SHOP_SELL, [ItemUtil.getName(item), money]);

@@ -31,6 +31,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private static inline var MSG_X = 16;
   private static inline var MSG_Y = 8;
   private static inline var MSG_DY = 24;
+  // 価格
   private static inline var MSG_X2 = BG_WIDTH - 96;
 
   private static inline var ITEMDETAIL_X = BG_WIDTH + 16;
@@ -168,7 +169,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   private function _execBuy():Bool {
     var item = _itemList[_nCursor];
-    var price = ItemUtil.getParam(item.id, "buy");
+    var price = ItemUtil.getBuy(item);
     if(Global.getMoney() < price) {
       // お金が足りない
       Message.push2(Msg.SHOP_SHORT_OF_MONEY);
@@ -214,7 +215,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
           if(_execBuy()) {
             // 購入可能
             var item = _itemList[_nCursor];
-            var price = ItemUtil.getParam(item.id, "buy");
+            var price = ItemUtil.getBuy(item);
             var name = ItemUtil.getName(item);
             // アイテムを増やす
             Inventory.push(item.id, item.param);
@@ -231,8 +232,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
             }
           }
         }
-
-        if(Key.press.B) {
+        else if(Key.press.B) {
           // キャンセル
           _state = State.Closed;
           FlxG.state.remove(this);
@@ -270,7 +270,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
     var idx = 0;
     for(item in _itemList) {
       _txtList[idx].text = ItemUtil.getName(item);
-      var price = ItemUtil.getParam(item.id, "buy");
+      var price = ItemUtil.getBuy(item);
       _txtPriceList[idx].text = '${price}円';
       if(Global.getMoney() >= price) {
         // 購入可能
