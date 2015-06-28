@@ -48,6 +48,8 @@ class Msg {
   public static inline var BAD_CURE:Int = 36; // 正常に戻った
   public static inline var SHOP_SELL:Int = 37; // アイテム売却
   public static inline var SHOP_BUY:Int = 38; // アイテム購入
+  public static inline var SHOP_SHORT_OF_MONEY:Int = 39; // お金が足りない
+  public static inline var SHOP_ITEM_FULL:Int = 40; // アイテムが一杯で買えない
 
   // メニュー
   public static inline var MENU_USE:Int = 48; // メニュー: 使う

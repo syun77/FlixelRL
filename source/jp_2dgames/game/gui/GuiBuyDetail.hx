@@ -160,13 +160,14 @@ class GuiBuyDetail extends FlxSpriteGroup {
     var item = _itemList[_nCursor];
     var price = ItemUtil.getParam(item.id, "buy");
     if(Global.getMoney() < price) {
-      // TODO: お金が足りないので買えない
+      // お金が足りない
+      Message.push2(Msg.SHOP_SHORT_OF_MONEY);
       return false;
     }
     if(Inventory.isFull()) {
-      // TODO: アイテムが一杯なので買えない
+      // アイテムが一杯なので買えない
       var name = ItemUtil.getName(item);
-      Message.push2(Msg.ITEM_FULL);
+      Message.push2(Msg.SHOP_ITEM_FULL);
       return false;
     }
 
