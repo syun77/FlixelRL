@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.ItemData;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -46,15 +47,29 @@ class GuiBuyDetail extends FlxSpriteGroup {
    * 閉じたかどうか
    **/
   public static function isClosed():Bool {
-    return _instance == null;
+    return _instance._state == State.Closed;
   }
 
   /**
    * 開く
    **/
   public static function open(X:Float, Y:Float):Void {
-    _instance = new GuiBuyDetail(X, Y);
     FlxG.state.add(_instance);
+    _instance._state = State.Main;
+  }
+
+  /**
+   * 生成
+   **/
+  public static function create(X:Float, Y:Float):Void {
+    _instance = new GuiBuyDetail(X, Y);
+  }
+
+  /**
+   * アイテムを追加する
+   **/
+  public static function addItem(item:ItemData):Void {
+    _instance._addItem(item);
   }
 
   /**
@@ -116,7 +131,6 @@ class GuiBuyDetail extends FlxSpriteGroup {
         if(Key.press.A) {
           _state = State.Closed;
           FlxG.state.remove(this);
-          _instance = null;
         }
 
       case State.Closed:
