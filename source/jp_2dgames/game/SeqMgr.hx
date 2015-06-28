@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.GuiBuyDetail;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import jp_2dgames.game.item.ItemUtil;
@@ -433,6 +434,7 @@ class SeqMgr {
           switch(Dialog.getCursor()) {
             case 0:
               // 購入
+              GuiBuyDetail.open();
               _change(State.ShopBuy);
             case 1:
               // 売却
@@ -467,7 +469,9 @@ class SeqMgr {
 
       case State.ShopBuy:
         // ■ショップメニュー表示(購入)
-        _change(State.ShopOpen);
+        if(GuiBuyDetail.isClosed()) {
+          _change(State.ShopOpen);
+        }
 
     }
 

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -17,11 +18,11 @@ private enum State {
 class GuiBuyDetail extends FlxSpriteGroup {
 
   // アイテムの最大数
-  private static inline var ITEM_MAX:Int = 8;
+  public static inline var ITEM_MAX:Int = 8;
 
   // 背景の枠
-  private static inline var BG_WIDTH = 200;
-  private static inline var BG_HEIGHT = 100;
+  public static inline var BG_WIDTH = 280;
+  public static inline var BG_HEIGHT = MSG_Y*2 + ITEM_MAX*MSG_DY;
 
   // テキストの幅
   private static inline var TXT_WIDTH = BG_WIDTH;
@@ -35,6 +36,8 @@ class GuiBuyDetail extends FlxSpriteGroup {
 
   // テキストリスト
   private var _txtList:Array<FlxText>;
+  // アイテムリスト
+  private var _itemList:Array<ItemData>;
 
   // カーソル
   private var _cursor:FlxSprite;
@@ -53,9 +56,17 @@ class GuiBuyDetail extends FlxSpriteGroup {
   /**
    * 開く
    **/
-  public static function open(X:Float, Y:Float):Void {
+  public static function open():Void {
     FlxG.state.add(_instance);
-    _instance._state = State.Main;
+    _instance._open();
+  }
+
+  /**
+   * 開く
+   **/
+  private function _open():Void {
+    _state = State.Main;
+    _updateText();
   }
 
   /**
@@ -73,13 +84,28 @@ class GuiBuyDetail extends FlxSpriteGroup {
   }
 
   /**
+   * アイテムを追加する
+   **/
+  private function _addItem(item:ItemData):Void {
+    _itemList.push(item);
+  }
+
+  /**
+   * アイテムリストから削除する
+   **/
+  private function delItem(idx:Int):Void {
+    _itemList.splice(idx, 1);
+    _updateText();
+  }
+
+  /**
    * コンストラクタ
    */
   public function new(X:Float, Y:Float) {
     super(X, Y);
 
     // 背景
-    var back = FlxSprite(0, 0).makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
+    var back = new FlxSprite(0, 0).makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
     back.alpha = 0.5;
     this.add(back);
 
@@ -94,6 +120,9 @@ class GuiBuyDetail extends FlxSpriteGroup {
       this.add(txt);
       _txtList.push(txt);
     }
+
+    // アイテムリスト
+    _itemList = new Array<ItemData>();
 
     // カーソル
     _cursor = new FlxSprite(MSG_X, MSG_Y);
@@ -128,7 +157,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
         // カーソル更新
         _updateCursor();
 
-        if(Key.press.A) {
+        if(Key.press.B) {
           _state = State.Closed;
           FlxG.state.remove(this);
         }
@@ -142,5 +171,23 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   private function _updateCursor():Void {
 
+  }
+
+  /**
+   * 項目テキストの更新
+   **/
+  private function _updateText():Void {
+
+    // いったんすべてクリア
+    for(txt in _txtList) {
+      txt.text = "";
+    }
+
+    // テキストを設定
+    var idx = 0;
+    for(item in _itemList) {
+      _txtList[idx].text = ItemUtil.getName(item);
+      idx++;
+    }
   }
 }

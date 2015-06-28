@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.GuiBuyDetail;
+import jp_2dgames.game.item.ItemData;
 import flixel.FlxG;
 import jp_2dgames.lib.Layer2D;
 import jp_2dgames.lib.CsvLoader;
@@ -87,6 +89,38 @@ class GenerateInfo {
     // 見つからなかった
     return 0;
   }
+
+  /**
+   * アイテムの拡張パラメータを取得する
+   **/
+  public function generateItemParam(itemid:Int) {
+
+    var param = new ItemExtraParam();
+
+    switch(ItemUtil.getType(itemid)) {
+      case IType.Weapon, IType.Armor:
+        // 使用回数
+        param.condition = FlxRandom.intRanged(5, 15);
+        // 付加威力値
+        var func = function() {
+          var rnd = FlxRandom.intRanged(0, 99);
+          if(rnd < 35) { return 0; } // 35%
+          else if(rnd < 55) { return 1; } // 20%
+          else if(rnd < 70) { return 2; } // 15%
+          else if(rnd < 80) { return 3; } // 10%
+          else if(rnd < 90) { return -1;} // 10%
+          else if(rnd < 96) { return 4; } // 6%
+          else { return 5;} // 4%
+        }
+        param.value = func();
+      case IType.Wand:
+        // 使用回数
+        param.value = FlxRandom.intRanged(3, 6);
+      default:
+    }
+
+    return param;
+  }
 }
 
 /**
@@ -122,30 +156,22 @@ class Generator {
             trace("Warning: Invalid item_appear.csv");
             itemid = 1;
           }
-          var param = new ItemExtraParam();
-          switch(ItemUtil.getType(itemid)) {
-            case IType.Weapon, IType.Armor:
-              // 使用回数
-              param.condition = FlxRandom.intRanged(5, 15);
-              // 付加威力値
-              var func = function() {
-                var rnd = FlxRandom.intRanged(0, 99);
-                if(rnd < 35) { return 0; } // 35%
-                else if(rnd < 55) { return 1; } // 20%
-                else if(rnd < 70) { return 2; } // 15%
-                else if(rnd < 80) { return 3; } // 10%
-                else if(rnd < 90) { return -1;} // 10%
-                else if(rnd < 96) { return 4; } // 6%
-                else { return 5;} // 4%
-              }
-              param.value = func();
-            case IType.Wand:
-              // 使用回数
-              param.value = FlxRandom.intRanged(3, 6);
-            default:
-          }
+          var param = gItem.generateItemParam(itemid);
           DropItem.add(i, j, itemid, param);
         //          DropItem.addMoney(i, j, 100);
+
+        case Field.SHOP:
+          // ショップが存在するのでショップの販売品を設定する
+          for(i in 0...GuiBuyDetail.ITEM_MAX) {
+            var itemid = gItem.generate();
+            if(itemid == 0) {
+              trace("Warning: Invalid item_appear.csv");
+              itemid = 1;
+            }
+            var param = gItem.generateItemParam(itemid);
+            var item = new ItemData(itemid, param);
+            GuiBuyDetail.addItem(item);
+          }
       }
     });
   }

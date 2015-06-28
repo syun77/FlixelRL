@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.lib.TextUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxColor;
@@ -260,6 +261,9 @@ class PlayState extends FlxState {
       this.add(part);
       ParticleEnemy.parent = part;
     }
+
+    // ショップ購入メニュー生成
+    GuiBuyDetail.create(640/2 - GuiBuyDetail.BG_WIDTH/2, FlxG.height/2 - GuiBuyDetail.BG_HEIGHT/2);
 
     // 敵やアイテムを自動配置
     Generator.exec(_csv, layer);
