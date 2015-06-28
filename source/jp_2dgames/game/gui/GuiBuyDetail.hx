@@ -30,12 +30,15 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private static inline var MSG_X = 16;
   private static inline var MSG_Y = 8;
   private static inline var MSG_DY = 24;
+  private static inline var MSG_X2 = BG_WIDTH - 96;
 
   // インスタンス
   private static var _instance:GuiBuyDetail = null;
 
   // テキストリスト
   private var _txtList:Array<FlxText>;
+  // 価格テキストリスト
+  private var _txtPriceList:Array<FlxText>;
   // アイテムリスト
   private var _itemList:Array<ItemData>;
 
@@ -66,7 +69,9 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   private function _open():Void {
     _state = State.Main;
+    _nCursor = 0;
     _updateText();
+    _updateCursor();
   }
 
   /**
@@ -111,14 +116,20 @@ class GuiBuyDetail extends FlxSpriteGroup {
 
     // テキスト
     _txtList = new Array<FlxText>();
+    _txtPriceList = new Array<FlxText>();
     var px = MSG_X;
+    var px2 = MSG_X2;
     var py = MSG_Y;
     for(i in 0...ITEM_MAX) {
       var txt = new FlxText(px, py, TXT_WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+      var txtPrice = new FlxText(px2, py, TXT_WIDTH);
+      txtPrice.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
       py += MSG_DY;
       this.add(txt);
+      this.add(txtPrice);
       _txtList.push(txt);
+      _txtPriceList.push(txtPrice);
     }
 
     // アイテムリスト
@@ -126,7 +137,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
 
     // カーソル
     _cursor = new FlxSprite(MSG_X, MSG_Y);
-    _cursor.makeGraphic(128, 24, FlxColor.AQUAMARINE);
+    _cursor.makeGraphic(TXT_WIDTH-MSG_X*2, 24, FlxColor.AQUAMARINE);
     _cursor.alpha = 0.3;
     this.add(_cursor);
 
@@ -170,7 +181,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
    * カーソルの更新
    **/
   private function _updateCursor():Void {
-
+    _cursor.y = y + MSG_Y + _nCursor * MSG_DY;
   }
 
   /**
@@ -182,11 +193,16 @@ class GuiBuyDetail extends FlxSpriteGroup {
     for(txt in _txtList) {
       txt.text = "";
     }
+    for(txt in _txtPriceList) {
+      txt.text = "";
+    }
 
     // テキストを設定
     var idx = 0;
     for(item in _itemList) {
       _txtList[idx].text = ItemUtil.getName(item);
+      var price = ItemUtil.getParam(item.id, "buy");
+      _txtPriceList[idx].text = '${price}円';
       idx++;
     }
   }
