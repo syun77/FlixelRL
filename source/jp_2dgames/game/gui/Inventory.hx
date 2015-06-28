@@ -753,10 +753,12 @@ class Inventory extends FlxGroup {
             case EXECMODE_SELL:
               // 売却モードはそのまま売る
               // お金を獲得
-              var itemid = getSelectedItem().id;
+              var item = getSelectedItem();
               // 売却金額を取得
-              var money = ItemUtil.getParam(itemid, "sell");
+              var money = ItemUtil.getParam(item.id, "sell");
               Global.addMoney(money);
+              // 売却メッセージ表示
+              Message.push2(Msg.SHOP_SELL, [ItemUtil.getName(item), money]);
               // アイテムを消す
               delItem(-1);
               if(isEmpty()) {

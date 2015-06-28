@@ -131,8 +131,8 @@ class Dialog extends FlxGroup {
 
       case SELECT3:
         for(i in 0...3) {
-          var px2 = px - 8 * sels[i].length/2;
-          var txt = new FlxText(px2, py2, 0, 64);
+          var px2 = px - 48;
+          var txt = new FlxText(px2, py2, 0, 128);
           txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
           txt.text = sels[i];
           txt.x = px2;
