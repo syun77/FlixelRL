@@ -140,6 +140,8 @@ class Inventory extends FlxGroup {
 
   // 装備品ステータス
   private var _detailEquip:GuiStatusDetail;
+  // 売却価格
+  private var _detailSell:GuiSellDetail;
   private var _bShowDetail:Bool = false;
 
   // アイテム詳細
@@ -446,13 +448,18 @@ class Inventory extends FlxGroup {
 
     // 詳細ステータス
     _detailEquip = new GuiStatusDetail(DETAIL_EQUIP_X, DETAIL_EQUIP_Y);
+    // 売却価格
+    _detailSell = new GuiSellDetail(DETAIL_EQUIP_X, DETAIL_EQUIP_Y);
     // アイテム詳細
     _detailItem = new GuiItemDetail(DETAIL_ITEM_X, DETAIL_ITEM_Y);
     // 詳細
     _detail = new FlxSpriteGroup(DETAIL_X, DETAIL_Y);
     _detail.add(_detailEquip);
+    _detail.add(_detailSell);
     _detail.add(_detailItem);
     // 初期状態は非表示
+    _detailEquip.visible = false;
+    _detailSell.visible = false;
     _bShowDetail = false;
   }
 
@@ -750,6 +757,7 @@ class Inventory extends FlxGroup {
 
               // ヘルプ変更
               _guistatus.changeHelp(GuiStatus.HELP_INVENTORYCOMMAND);
+
             case EXECMODE_SELL:
               // 売却モードはそのまま売る
               // お金を獲得
@@ -764,6 +772,10 @@ class Inventory extends FlxGroup {
               if(isEmpty()) {
                 // アイテムがなくなったらメニューを閉じる
                 return RET_CANCEL;
+              }
+              else {
+                // 表示アイテム更新
+                _detailSell.setSelectedItem(getSelectedItem());
               }
           }
         }
@@ -925,6 +937,7 @@ class Inventory extends FlxGroup {
 
       // 選択アイテムが変わったので詳細情報を更新
       _detailEquip.setSelectedItem(getSelectedItem());
+      _detailSell.setSelectedItem(getSelectedItem());
 
       // 説明文も更新
       _detailItem.setSelectedItem(getSelectedItem());
@@ -1243,7 +1256,14 @@ class Inventory extends FlxGroup {
       if(_bShowDetail == false) {
         // 非表示なら表示する
         this.add(_detail);
-        _detailEquip.show(getSelectedItem());
+        switch(_execMode) {
+          case EXECMODE_NORMAL:
+            _detailEquip.visible = true;
+            _detailEquip.show(getSelectedItem());
+          case EXECMODE_SELL:
+            _detailSell.visible = true;
+            _detailSell.show(getSelectedItem());
+        }
         _bShowDetail = true;
         // 説明文も表示
         _detailItem.show(getSelectedItem());
@@ -1254,6 +1274,8 @@ class Inventory extends FlxGroup {
       if(_bShowDetail) {
         // 表示していたら消す
         this.remove(_detail);
+        _detailEquip.visible = false;
+        _detailSell.visible = false;
         _bShowDetail = false;
       }
     }
