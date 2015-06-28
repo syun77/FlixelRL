@@ -460,6 +460,8 @@ class SeqMgr {
             // 処理を続ける
           case Inventory.RET_CANCEL:
             // インベントリを閉じた
+            // インベントリを非表示にする
+            _inventory.setActive(false);
             _change(State.ShopOpen);
         }
 

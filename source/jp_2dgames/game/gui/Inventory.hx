@@ -763,8 +763,6 @@ class Inventory extends FlxGroup {
               delItem(-1);
               if(isEmpty()) {
                 // アイテムがなくなったらメニューを閉じる
-                // カーソルを消す
-                _cursor.visible = false;
                 return RET_CANCEL;
               }
           }
