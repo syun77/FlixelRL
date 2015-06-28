@@ -6,9 +6,8 @@ import flixel.text.FlxText;
 import flixel.group.FlxGroup;
 
 private enum State {
-  Main; // メイン
-  Closed;
-  // 閉じた
+  Main;   // メイン
+  Closed; // 閉じた
 }
 
 /**
@@ -21,6 +20,7 @@ class Dialog extends FlxGroup {
   public static inline var SELECT2:Int = 2; // 2択ダイアログ
   public static inline var SELECT3:Int = 3; // 3択ダイアログ
 
+  // インスタンス
   private static var _instance:Dialog = null;
   // カーソル番号
   private static var _nCursor:Int = 0;
@@ -44,17 +44,15 @@ class Dialog extends FlxGroup {
   private var _cursorMax:Int = 0;
 
   /**
-	 * 閉じたかどうか
-	 **/
-
+   * 閉じたかどうか
+   **/
   public static function isClosed():Bool {
     return _instance.state == State.Closed;
   }
 
   /**
-	 * 開く
-	 **/
-
+   * 開く
+   **/
   public static function open(type:Int, msg:String, sels:Array<String>=null):Void {
     _instance = new Dialog(type, msg, sels);
     FlxG.state.add(_instance);
@@ -160,7 +158,6 @@ class Dialog extends FlxGroup {
   /**
 	 * 更新
 	 **/
-
   override public function update():Void {
     super.update();
 
