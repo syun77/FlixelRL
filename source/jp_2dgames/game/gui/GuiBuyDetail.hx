@@ -204,11 +204,15 @@ class GuiBuyDetail extends FlxSpriteGroup {
             // 購入可能
             var item = _itemList[_nCursor];
             var price = ItemUtil.getParam(item.id, "buy");
+            var name = ItemUtil.getName(item);
             // アイテムを増やす
             Inventory.push(item.id, item.param);
             // お金を減らす
             Global.useMoney(price);
             delItem(_nCursor);
+            // メッセージ表示
+            Message.push2(Msg.SHOP_BUY, [name, price]);
+
             if(_itemList.length <= 0) {
               // すべて購入したので閉じる
               _state = State.Closed;
