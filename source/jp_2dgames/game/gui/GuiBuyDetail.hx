@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
 import flixel.FlxG;
@@ -21,7 +22,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
   public static inline var ITEM_MAX:Int = 8;
 
   // 背景の枠
-  public static inline var BG_WIDTH = 280;
+  public static inline var BG_WIDTH = 344;
   public static inline var BG_HEIGHT = MSG_Y*2 + ITEM_MAX*MSG_DY;
 
   // テキストの幅
@@ -54,6 +55,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   public static function isClosed():Bool {
     return _instance._state == State.Closed;
+  }
+
+  public static function isEmpyt():Bool {
+    return _instance._itemList.length <= 0;
   }
 
   /**
@@ -100,6 +105,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
    **/
   private function delItem(idx:Int):Void {
     _itemList.splice(idx, 1);
+    if(_nCursor >= _itemList.length) {
+      _nCursor = _itemList.length-1;
+      _updateCursor();
+    }
     _updateText();
   }
 
@@ -145,6 +154,27 @@ class GuiBuyDetail extends FlxSpriteGroup {
   }
 
   /**
+   * 購入実行
+   **/
+  private function _execBuy():Bool {
+    var item = _itemList[_nCursor];
+    var price = ItemUtil.getParam(item.id, "buy");
+    if(Global.getMoney() < price) {
+      // TODO: お金が足りないので買えない
+      return false;
+    }
+    if(Inventory.isFull()) {
+      // TODO: アイテムが一杯なので買えない
+      var name = ItemUtil.getName(item);
+      Message.push2(Msg.ITEM_FULL);
+      return false;
+    }
+
+    // 購入可能
+    return true;
+  }
+
+  /**
    * 更新
    **/
   override public function update():Void {
@@ -168,7 +198,27 @@ class GuiBuyDetail extends FlxSpriteGroup {
         // カーソル更新
         _updateCursor();
 
+        if(Key.press.A) {
+          // 購入実行
+          if(_execBuy()) {
+            // 購入可能
+            var item = _itemList[_nCursor];
+            var price = ItemUtil.getParam(item.id, "buy");
+            // アイテムを増やす
+            Inventory.push(item.id, item.param);
+            // お金を減らす
+            Global.useMoney(price);
+            delItem(_nCursor);
+            if(_itemList.length <= 0) {
+              // すべて購入したので閉じる
+              _state = State.Closed;
+              FlxG.state.remove(this);
+            }
+          }
+        }
+
         if(Key.press.B) {
+          // キャンセル
           _state = State.Closed;
           FlxG.state.remove(this);
         }
@@ -203,6 +253,16 @@ class GuiBuyDetail extends FlxSpriteGroup {
       _txtList[idx].text = ItemUtil.getName(item);
       var price = ItemUtil.getParam(item.id, "buy");
       _txtPriceList[idx].text = '${price}円';
+      if(Global.getMoney() >= price) {
+        // 購入可能
+        _txtList[idx].color = FlxColor.WHITE;
+        _txtPriceList[idx].color = FlxColor.WHITE;
+      }
+      else {
+        // 買えない
+        _txtList[idx].color = FlxColor.CORAL;
+        _txtPriceList[idx].color = FlxColor.CORAL;
+      }
       idx++;
     }
   }

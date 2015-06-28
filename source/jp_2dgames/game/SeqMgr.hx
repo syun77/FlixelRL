@@ -434,8 +434,14 @@ class SeqMgr {
           switch(Dialog.getCursor()) {
             case 0:
               // 購入
-              GuiBuyDetail.open();
-              _change(State.ShopBuy);
+              if(GuiBuyDetail.isEmpyt()) {
+                // 買えるアイテムがない
+                _change(State.ShopOpen);
+              }
+              else {
+                GuiBuyDetail.open();
+                _change(State.ShopBuy);
+              }
             case 1:
               // 売却
               if(_inventory.checkOpen()) {
