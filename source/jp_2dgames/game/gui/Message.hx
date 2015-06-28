@@ -76,6 +76,8 @@ class Msg {
   public static inline var HELP_INVENCTORY:Int = 73; // ヘルプ: インベントリ
   public static inline var HELP_DIALOG:Int = 74; // ヘルプ: ダイアログ
   public static inline var HELP_INVENCTORYCOMMAND:Int = 75; // ヘルプ: インベントリ・コマンド
+  public static inline var HELP_SHOP_SELL:Int = 76; // ヘルプ: ショップ（売却）
+  public static inline var HELP_SHOP_BUY:Int = 77; // ヘルプ: ショップ（購入）
 }
 
 /**

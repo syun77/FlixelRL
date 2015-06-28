@@ -104,9 +104,12 @@ class SeqMgr {
         help = GuiStatus.HELP_DIALOG_YN;
       case State.NextFloorWait:
       case State.ShopOpen:
+        help = GuiStatus.HELP_DIALOG_YN;
       case State.ShopRoot:
       case State.ShopSell:
+        help = GuiStatus.HELP_SHOP_SELL;
       case State.ShopBuy:
+        help = GuiStatus.HELP_SHOP_BUY;
     }
 
     _guistatus.changeHelp(help);
