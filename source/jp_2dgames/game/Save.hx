@@ -22,18 +22,21 @@ private class _Global {
   public var floor:Int = 0;
   public var money:Int = 0;
   public var turn:Int  = 0;
+  public var shop:Int  = 0;
   public function new() {}
   // セーブ
   public function save() {
     floor = Global.getFloor();
     money = Global.getMoney();
     turn  = Global.getTurn();
+    shop  = Global.getShopAppearCountRaw();
   }
   // ロード
   public function load(data:Dynamic) {
     Global.setFloor(data.floor);
     Global.setMoney(data.money);
     Global.setTurn(data.turn);
+    Global.setShopAppearCount(data.shop);
   }
 }
 

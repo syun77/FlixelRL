@@ -148,6 +148,16 @@ class SeqMgr {
     });
   }
 
+  /**
+   * 次のフロアへ進む処理
+   **/
+  private function _nextFloor():Void {
+    // 次のフロアへ進む
+    Global.nextFloor();
+    // ショップカウンタを増やす
+    Global.nextShopAppearCount();
+  }
+
   private function proc():Bool {
     _player.proc();
     _enemies.forEachAlive(function(e:Enemy) e.proc());
@@ -405,7 +415,7 @@ class SeqMgr {
             FlxG.sound.play("foot");
             FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function() {
               // フェードが完了したら次のフロアへ進む
-              Global.nextFloor();
+              _nextFloor();
               FlxG.switchState(new PlayState());
             });
             _change(State.NextFloorWait);

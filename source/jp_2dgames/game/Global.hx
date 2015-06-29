@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxRandom;
 import openfl.Assets;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Inventory;
@@ -22,6 +23,7 @@ class Global {
     _items = new Array<ItemData>();
     _bInitPlayer = true;
     _params = new Params();
+    _shopAppearCount = 0;
   }
 
   // フロア数
@@ -154,5 +156,27 @@ class Global {
   // ターンを初期化する
   public static function initTurn():Void {
     _turnCount = 0;
+  }
+
+  // ショップ出現カウント
+  private static var _shopAppearCount:Int = 0;
+  public static function getShopAppearCount():Int {
+    if(getFloor() < 5) {
+      // 序盤のフロアでは出現しない
+      return 0;
+    }
+    return _shopAppearCount;
+  }
+  public static function getShopAppearCountRaw():Int {
+    return _shopAppearCount;
+  }
+  public static function setShopAppearCount(v:Int):Void {
+    _shopAppearCount = v;
+  }
+  public static function nextShopAppearCount():Void {
+    _shopAppearCount += FlxRandom.intRanged(1, 2);
+  }
+  public static function resetShopAppearCount():Void {
+    _shopAppearCount = 0;
   }
 }
