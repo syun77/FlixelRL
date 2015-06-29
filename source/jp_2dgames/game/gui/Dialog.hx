@@ -70,6 +70,7 @@ class Dialog extends FlxGroup {
     var py = Reg.centerY();
     var height = 64;
     if(type == SELECT3) {
+      // 広げる
       height += 24;
     }
     // ウィンドウ
@@ -80,6 +81,7 @@ class Dialog extends FlxGroup {
     var text = new FlxText(px, py - 48, 0, 128);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     text.text = msg;
+    // 中央揃え
     var width = text.textField.width;
     text.x = px - width / 2;
     this.add(text);
@@ -92,53 +94,32 @@ class Dialog extends FlxGroup {
     // 選択肢
     var py2 = FlxG.height / 2;
     _type = type;
+    var labels:Array<String> = [];
     switch(_type) {
       case OK:
-        var txtOk = new FlxText(px, py2, 0, 64);
-        txtOk.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-        txtOk.text = "OK";
-        txtOk.x = px - txtOk.textField.width / 2;
-        this.add(txtOk);
+        labels = ["OK"];
         _cursorMax = 1;
       case YESNO:
-        var txtYes = new FlxText(px, py2, 0, 64);
-        txtYes.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-        txtYes.text = "はい";
-        txtYes.x = px - 80;
-        this.add(txtYes);
-        var txtNo = new FlxText(px, py2, 0, 64);
-        txtNo.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-        txtNo.text = "いいえ";
-        txtNo.x = px + 24;
-        this.add(txtNo);
+        labels = ["はい", "いいえ"];
         _cursorMax = 2;
       case SELECT2:
-        var txtYes = new FlxText(px, py2, 0, 64);
-        txtYes.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-        txtYes.alignment = "center";
-        txtYes.text = sels[0];
-        txtYes.x = px - 80;
-        this.add(txtYes);
-        var txtNo = new FlxText(px, py2, 0, 64);
-        txtNo.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-        txtNo.text = sels[1];
-        txtNo.alignment = "center";
-        txtNo.x = px + 12;
-        this.add(txtNo);
+        labels = sels;
         _cursorMax = 2;
 
       case SELECT3:
-        for(i in 0...3) {
-          var px2 = px - 48;
-          var txt = new FlxText(px2, py2, 0, 128);
-          txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-          txt.text = sels[i];
-          txt.x = px2;
-          this.add(txt);
-          py2 += 24;
-        }
+        labels = sels;
         _cursorMax = 3;
+    }
 
+    // 選択肢登録
+    for(str in labels) {
+      var txt = new FlxText(px, py2, 0, 128);
+      txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+      txt.text = str;
+      // センタリング
+      txt.x -= txt.textField.width/2;
+      this.add(txt);
+      py2 += 24;
     }
 
     // カーソル
@@ -148,8 +129,8 @@ class Dialog extends FlxGroup {
       _cursor.alpha = 0.3;
     }
     else {
-      _cursor = new FlxSprite(px - 80, py2);
-      _cursor.makeGraphic(84, 32, FlxColor.AQUAMARINE);
+      _cursor = new FlxSprite(px, py2);
+      _cursor.makeGraphic(84, 24, FlxColor.AQUAMARINE);
       _cursor.alpha = 0.3;
     }
     this.add(_cursor);
@@ -200,18 +181,8 @@ class Dialog extends FlxGroup {
 
   private function _updataeCursor():Void {
     var px = Reg.centerX();
-    if(_type == SELECT3) {
-      _cursor.x = px - 64;
-      var py2 = FlxG.height / 2;
-      _cursor.y = py2 + 24 * _nCursor;
-    }
-    else {
-      switch(_nCursor) {
-        case 0:
-          _cursor.x = px - 80;
-        case 1:
-          _cursor.x = px + 12;
-      }
-    }
+    _cursor.x = px - _cursor.width/2;
+    var py2 = Reg.centerY();
+    _cursor.y = py2 + 24 * _nCursor;
   }
 }

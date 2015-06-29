@@ -377,7 +377,7 @@ class SeqMgr {
       case State.TurnEnd:
         // ■ターン終了
         ExpMgr.turnEnd();
-        // 的の行動終了
+        // 敵の行動終了
         _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
         switch(_player.stompChip) {
         case StompChip.Stairs:

@@ -161,6 +161,8 @@ class Global {
   // ショップ出現カウント
   private static var _shopAppearCount:Int = 0;
   public static function getShopAppearCount():Int {
+    // TODO:
+    return 100;
     if(getFloor() < 5) {
       // 序盤のフロアでは出現しない
       return 0;
