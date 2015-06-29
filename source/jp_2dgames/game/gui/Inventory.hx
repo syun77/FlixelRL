@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import haxe.ds.ArraySort;
 import jp_2dgames.lib.Snd;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemUtil;
@@ -362,6 +363,34 @@ class Inventory extends FlxGroup {
 
   // サブメニュー
   private var _cmd:InventoryCommand = null;
+
+  /**
+   * ソート実行
+   **/
+  private function _sort():Void {
+    // アイテムを並び替え
+    ArraySort.sort(_itemList, function(a:ItemData, b:ItemData) {
+      var aKey = ItemUtil.getParam(a.id, "sort");
+      var bKey = ItemUtil.getParam(b.id, "sort");
+      return aKey - bKey;
+    });
+
+    // 表示テキスト更新
+    _updateText();
+    // 詳細表示を更新
+    _updateDetail();
+  }
+
+  private function _updateDetail():Void {
+    // アイテム詳細
+    _detailEquip.setSelectedItem(getSelectedItem());
+    // 売却価格
+    _detailSell.setSelectedItem(getSelectedItem());
+
+    // 説明文も更新
+    _detailItem.setSelectedItem(getSelectedItem());
+
+  }
 
   /**
    * コンストラクタ
@@ -743,6 +772,10 @@ class Inventory extends FlxGroup {
           _cursor.visible = false;
           return RET_CANCEL;
         }
+        if(Key.press.X) {
+          // ソート実行
+          _sort();
+        }
 
         if(Key.press.A) {
           switch(_execMode) {
@@ -936,11 +969,7 @@ class Inventory extends FlxGroup {
       }
 
       // 選択アイテムが変わったので詳細情報を更新
-      _detailEquip.setSelectedItem(getSelectedItem());
-      _detailSell.setSelectedItem(getSelectedItem());
-
-      // 説明文も更新
-      _detailItem.setSelectedItem(getSelectedItem());
+      _updateDetail();
     }
 
     // カーソルの座標を更新

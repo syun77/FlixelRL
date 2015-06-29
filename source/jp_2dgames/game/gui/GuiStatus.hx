@@ -1,5 +1,4 @@
 package jp_2dgames.game.gui;
-import flixel.util.FlxMath;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Enemy;
@@ -63,7 +62,7 @@ class GuiStatus extends FlxGroup {
   private static inline var FOODTEXT_X = HPBAR_X + 192;
   private static inline var FOODTEXT_Y = 0;
   // ヘルプテキスト
-  private static inline var HELP_X = 32;
+  private static inline var HELP_X = 16;
   private static inline var HELP_DY = 24;
 
   // タイマー
@@ -159,7 +158,7 @@ class GuiStatus extends FlxGroup {
     _bgHelp.alpha = 0.7;
     _help.add(_bgHelp);
     // ヘルプテキスト
-    _txtHelp = new FlxText(HELP_X, 0, 600);
+    _txtHelp = new FlxText(HELP_X, 0, 640);
     _txtHelp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _help.add(_txtHelp);
     this.add(_help);
