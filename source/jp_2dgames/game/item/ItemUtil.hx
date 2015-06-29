@@ -88,8 +88,9 @@ class ItemUtil {
    **/
   public static function getBuy(item:ItemData):Int {
     var csv = getCsv(item.id);
-    var price = csv.searchItemInt("id", '${item.id}', "buy");
-    return price;
+    var price:Float = csv.searchItemInt("id", '${item.id}', "buy");
+    price = _calcAddedValue(item, price);
+    return Std.int(price);
   }
 
   /**
@@ -97,7 +98,26 @@ class ItemUtil {
    **/
   public static function getSell(item:ItemData):Int {
     var csv = getCsv(item.id);
-    var price = csv.searchItemInt("id", '${item.id}', "sell");
+    var price:Float = csv.searchItemInt("id", '${item.id}', "sell");
+    price = _calcAddedValue(item, price);
+    return Std.int(price);
+  }
+
+  private static function _calcAddedValue(item:ItemData, price:Float):Float {
+    switch(item.type) {
+      case IType.Weapon, IType.Armor:
+        var added = 100 * item.param.value;
+        var d = price * 0.1;
+        price = (d * 0.2) + (d * item.param.condition) + added;
+        if(price < 0) {
+          price = 1;
+        }
+      case IType.Wand:
+        var d = price * 0.15;
+        price = (d * 0.2) + (d * item.param.value);
+      default:
+    }
+
     return price;
   }
 
