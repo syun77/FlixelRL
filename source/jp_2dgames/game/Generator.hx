@@ -157,8 +157,19 @@ class Generator {
             itemid = 1;
           }
           var param = gItem.generateItemParam(itemid);
-          DropItem.add(i, j, itemid, param);
-        //          DropItem.addMoney(i, j, 100);
+          if(FlxRandom.chanceRoll(2)) {
+            // お金出現
+            var max = 100 + Global.getFloor() * 20;
+            if(max > 500) {
+              max = 500;
+            }
+            var v = FlxRandom.intRanged(100, max);
+            DropItem.addMoney(i, j, v);
+          }
+          else {
+            // アイテム
+            DropItem.add(i, j, itemid, param);
+          }
 
         case Field.SHOP:
           // ショップが存在するのでショップの販売品を設定する
