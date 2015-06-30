@@ -50,6 +50,7 @@ class Msg {
   public static inline var SHOP_BUY:Int = 38; // アイテム購入
   public static inline var SHOP_SHORT_OF_MONEY:Int = 39; // お金が足りない
   public static inline var SHOP_ITEM_FULL:Int = 40; // アイテムが一杯で買えない
+  public static inline var ITEM_ORB:Int = 41; // オーブを使った
 
   // メニュー
   public static inline var MENU_USE:Int = 48; // メニュー: 使う
