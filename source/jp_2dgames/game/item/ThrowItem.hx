@@ -60,7 +60,7 @@ class ThrowItem {
         DirUtil.move(actor.dir, pt);
         var xpos = Std.int(pt.x);
         var ypos = Std.int(pt.y);
-        if(Field.isCollision(xpos, ypos)) {
+        if(Field.isThroughFirearm(xpos, ypos) == false) {
           // 壁に当たった
           var xtarget = Field.toWorldX(xprev);
           var ytarget = Field.toWorldY(yprev);

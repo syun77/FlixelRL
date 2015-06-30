@@ -184,7 +184,7 @@ class MagicShot extends FlxSprite {
           e.hitItem(_actor, _item, bAlwaysHit);
           kill();
         }
-        else if(Field.isCollision(px, py)) {
+        else if(Field.isThroughFirearm(px, py) == false) {
           // 壁に当たって消滅
           kill();
         }
@@ -199,7 +199,7 @@ class MagicShot extends FlxSprite {
           _target.hitItem(_actor, _item, bAlwaysHit);
           kill();
         }
-        else if(Field.isCollision(px, py)) {
+        else if(Field.isThroughFirearm(px, py) == false) {
           // 壁に当たって消滅
           kill();
         }

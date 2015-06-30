@@ -451,7 +451,7 @@ class Enemy extends Actor {
             pt = DirUtil.move(dir, pt);
             var px = Std.int(pt.x);
             var py = Std.int(pt.y);
-            if(Field.isCollision(px, py)) {
+            if(Field.isThroughFirearm(px, py) == false) {
               // 壁に当たったので攻撃できない
               break;
             }

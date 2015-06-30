@@ -1,6 +1,5 @@
 package jp_2dgames.game;
 
-import flash.geom.Matrix;
 import jp_2dgames.lib.CsvLoader;
 import flash.Lib;
 import flixel.util.FlxRandom;
@@ -26,6 +25,7 @@ class Field {
   public static inline var PASSAGE:Int = 4;  // 通路
   public static inline var HINT:Int    = 5;  // ヒント
   public static inline var SHOP:Int    = 6;  // お店
+  public static inline var WALL2:Int   = 7;  // 壁（飛び道具は通り抜け可能）
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
 
@@ -59,9 +59,25 @@ class Field {
       // コリジョン
       return true;
     }
+    if(v == WALL2) {
+      // 通り抜けできない
+      return true;
+    }
 
     // コリジョンでない
     return false;
+  }
+
+  // 指定した座標が飛び道具が通り抜けできるかどうか
+  public static function isThroughFirearm(i:Int, j:Int):Bool {
+    var v = _cLayer.get(i, j);
+    if(v == WALL) {
+      // 壁は通り抜けできない
+      return false;
+    }
+
+    // それ以外は通過できる
+    return true;
   }
   // 指定の座標にあるチップを取得する
   public static function getChip(i:Int, j:Int):Int {
@@ -156,7 +172,7 @@ class Field {
           rect.left = (v - 1) * GRID_SIZE;
           rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt);
-        case HINT, SHOP:
+        case HINT, SHOP, WALL2:
           rect.left = (v - 1) * GRID_SIZE;
           rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
