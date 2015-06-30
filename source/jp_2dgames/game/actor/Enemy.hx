@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;

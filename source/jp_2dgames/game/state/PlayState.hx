@@ -1,12 +1,8 @@
-package jp_2dgames.game;
+package jp_2dgames.game.state;
 
 import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.lib.TextUtil;
-import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxColor;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.group.FlxSpriteGroup;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.ParticleEnemy;
 import flixel.util.FlxRandom;

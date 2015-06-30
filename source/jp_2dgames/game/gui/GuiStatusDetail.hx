@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.state.PlayState;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;

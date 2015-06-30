@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.state.PlayState;
 import haxe.ds.ArraySort;
 import jp_2dgames.lib.Snd;
 import flixel.group.FlxSpriteGroup;

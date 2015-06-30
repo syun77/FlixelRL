@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.game.item.ItemData;
 import flixel.FlxG;

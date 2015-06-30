@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.DropItem;

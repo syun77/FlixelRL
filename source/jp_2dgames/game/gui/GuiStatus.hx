@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.state.PlayState;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Enemy;
@@ -204,7 +205,7 @@ class GuiStatus extends FlxGroup {
     // ヘルプテキストのアニメーション
     {
       if(_helpOfsY > 0) {
-        _helpOfsY -= 1;
+        _helpOfsY *= 0.9;
       }
       _help.y = _helpY + _helpOfsY;
     }

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.state.PlayState;
 import jp_2dgames.lib.CsvLoader;
 import flixel.FlxG;
 import flixel.util.FlxColor;
