@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.state.EndingState;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.gui.GuiBuyDetail;
@@ -42,12 +43,19 @@ private enum State {
   ShopRoot;       // ショップルートメニュー
   ShopSell;       // ショップ(売却)
   ShopBuy;        // ショップ(購入)
+  GameClear;      // ゲームクリア
 }
 
 /**
  * ゲームシーケンス管理
  **/
 class SeqMgr {
+
+  // updateの戻り値
+  public static inline var RET_NONE:Int = 0; // 何もなし
+  public static inline var RET_GAMEOVER:Int = 1; // ゲームオーバー
+  public static inline var RET_GAMECLEAR:Int = 2; // ゲームクリア
+
   private var _player:Player;
   private var _enemies:FlxTypedGroup<Enemy>;
   private var _inventory:Inventory;
@@ -112,6 +120,7 @@ class SeqMgr {
         help = GuiStatus.HELP_SHOP_SELL;
       case State.ShopBuy:
         help = GuiStatus.HELP_SHOP_BUY;
+      case State.GameClear:
     }
 
     _guistatus.changeHelp(help);
@@ -120,7 +129,7 @@ class SeqMgr {
   /**
 	 * 更新
 	 **/
-  public function update():Bool {
+  public function update():Int {
     var cnt:Int = 0;
     var bLoop:Bool = true;
     while(bLoop) {
@@ -143,11 +152,15 @@ class SeqMgr {
       }
       else {
         _player.kill();
-        return false;
+        return RET_GAMEOVER;
       }
     }
+    else if(_state == State.GameClear) {
+      // ゲームクリア
+      return RET_GAMECLEAR;
+    }
 
-    return true;
+    return RET_NONE;
   }
 
   /**
@@ -169,6 +182,28 @@ class SeqMgr {
     Global.nextFloor();
     // ショップカウンタを増やす
     Global.nextShopAppearCount();
+  }
+
+  /**
+   * ゲームクリア判定
+   **/
+  private function _checkGameClear():Bool {
+    var _check = function(itemid:Int) {
+      // 指定したアイテムの存在チェック
+      var nCursor = Inventory.instance.searchItem(itemid);
+      return nCursor >= 0;
+    };
+
+    for(i in 0...4) {
+      var itemid = ItemConst.ORB1 + i;
+      if(_check(itemid) == false) {
+        // 存在しないオーブがある
+        return false;
+      }
+    }
+
+    // すべてオーブが揃った
+    return true;
   }
 
   private function proc():Bool {
@@ -389,35 +424,7 @@ class SeqMgr {
 
       case State.TurnEnd:
         // ■ターン終了
-        ExpMgr.turnEnd();
-        // 敵の行動終了
-        _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
-        switch(_player.stompChip) {
-        case StompChip.Stairs:
-          // 次のフロアに進む
-          _change(State.NextFloor);
-          var msg = Message.getText(Msg.MENU_NEXTFLOOR_MSG);
-          var cmd1 = Message.getText(Msg.MENU_NEXTFLOOR);
-          var cmd2 = Message.getText(Msg.MENU_STAY);
-          Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
-
-        case StompChip.Shop:
-          // ショップ
-          _change(State.ShopOpen);
-
-        case StompChip.None:
-          // ターン数を進める
-          Global.nextTurn();
-          {
-            // ランダム敵の出現
-            var layer = cast(FlxG.state, PlayState).lField;
-            Generator.checkRandomEnemy(_csv, layer);
-          }
-
-          // キー入力に戻る
-          _player.turnEnd();
-          _change(State.KeyInput);
-        }
+        _procTurnEnd();
         ret = true;
 
       case State.NextFloor:
@@ -505,9 +512,52 @@ class SeqMgr {
           _change(State.ShopOpen);
         }
 
+      case State.GameClear:
+        // ■ゲームクリア
     }
 
     return ret;
   }
 
+  /**
+   * 更新・ターン終了
+   **/
+  private function _procTurnEnd():Void {
+
+    if(_checkGameClear()) {
+      // ゲームクリアした
+      _change(State.GameClear);
+      return;
+    }
+
+    ExpMgr.turnEnd();
+    // 敵の行動終了
+    _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
+    switch(_player.stompChip) {
+      case StompChip.Stairs:
+        // 次のフロアに進む
+        _change(State.NextFloor);
+        var msg = Message.getText(Msg.MENU_NEXTFLOOR_MSG);
+        var cmd1 = Message.getText(Msg.MENU_NEXTFLOOR);
+        var cmd2 = Message.getText(Msg.MENU_STAY);
+        Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
+
+      case StompChip.Shop:
+        // ショップ
+        _change(State.ShopOpen);
+
+      case StompChip.None:
+        // ターン数を進める
+        Global.nextTurn();
+        {
+          // ランダム敵の出現
+          var layer = cast(FlxG.state, PlayState).lField;
+          Generator.checkRandomEnemy(_csv, layer);
+        }
+
+        // キー入力に戻る
+        _player.turnEnd();
+        _change(State.KeyInput);
+    }
+  }
 }
