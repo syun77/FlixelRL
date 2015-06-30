@@ -23,6 +23,7 @@ enum IType {
   Ring;    // 指輪
   Money;   // お金
   Food;    // 食べ物
+  Orb;     // 宝珠
 }
 
 /**

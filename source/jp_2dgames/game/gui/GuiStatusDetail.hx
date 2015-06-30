@@ -128,6 +128,7 @@ class GuiStatusDetail extends FlxSpriteGroup {
       case IType.Portion:
       case IType.Scroll:
       case IType.Wand:
+      case IType.Orb:
     }
   }
 
