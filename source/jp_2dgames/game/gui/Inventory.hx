@@ -108,7 +108,7 @@ class Inventory extends FlxGroup {
   private static inline var MSG_POS_Y = 32;
   // 'E'の座標オフセット
   private static inline var EQUIP_POS_X = 4;
-  private static inline var EQUIP_POS_Y = 6;
+  private static inline var EQUIP_POS_Y = 2;
   // メッセージ表示間隔
   private static inline var DY = 26;
 
@@ -1146,8 +1146,7 @@ class Inventory extends FlxGroup {
     for(txt in _txtList) {
       if(i < itemcount) {
         var item = itemList[i];
-        var name = ItemUtil.getName(item);
-        txt.text = name;
+        txt.text = ItemUtil.getName(item);
       }
       else {
         txt.text = "";
