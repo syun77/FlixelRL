@@ -137,6 +137,8 @@ class SeqMgr {
         // 白のオーブを持っているので復活
         Inventory.instance.delItem(nCursor);
         _player.addHp(9999);
+        var name = ItemUtil.getParamString(ItemConst.ORB3, "name");
+        Message.push2(Msg.ITEM_REVIVE, [name]);
       }
       else {
         _player.kill();
