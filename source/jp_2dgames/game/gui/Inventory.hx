@@ -1099,6 +1099,8 @@ class Inventory extends FlxGroup {
         Message.push2(Msg.ITEM_WAND, [_player.name, name]);
         // 杖は使ってもなくならない
         bDelete = false;
+      case IType.Orb:
+        Message.push2(Msg.ITEM_SCROLL, [_player.name, name]);
       default:
         throw 'Error: Invalid item. id=${item.id}';
     }

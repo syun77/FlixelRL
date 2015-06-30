@@ -187,6 +187,9 @@ class ItemUtil {
     else if(str == '${IType.Food}') {
       return IType.Food;
     }
+    else if(str == '${IType.Orb}') {
+      return IType.Orb;
+    }
     else {
       return IType.None;
     }
@@ -215,19 +218,21 @@ class ItemUtil {
       case IType.Weapon:
         return FlxRandom.intRanged(1001, 1007);
       case IType.Armor:
-        return FlxRandom.intRanged(1021, 1027);
+        return FlxRandom.intRanged(1100, 1106);
       case IType.Ring:
-        return FlxRandom.intRanged(1041, 1042);
+        return FlxRandom.intRanged(1200, 1206);
       case IType.Money:
         return FlxRandom.intRanged(100, 1000);
       case IType.Food:
-        return FlxRandom.intRanged(1, 2);
+        return FlxRandom.intRanged(1, 4);
       case IType.Portion:
-        return FlxRandom.intRanged(3, 4);
+        return FlxRandom.intRanged(100, 125);
       case IType.Scroll:
-        return FlxRandom.intRanged(33, 34);
+        return FlxRandom.intRanged(200, 202);
       case IType.Wand:
-        return FlxRandom.intRanged(49, 50);
+        return FlxRandom.intRanged(300, 305);
+      case IType.Orb:
+        return FlxRandom.intRanged(400, 403);
       default:
         trace('Warning: invalid type ${type}');
         return 0;
@@ -274,6 +279,9 @@ class ItemUtil {
     }
     if(FlxG.keys.pressed.COMMA) {
       return IType.Wand;
+    }
+    if(FlxG.keys.pressed.PERIOD) {
+      return IType.Orb;
     }
 
     // 該当するキーを押していない
@@ -340,6 +348,10 @@ class ItemUtil {
           // 何も起こらなかった
           Message.push2(Msg.NOTHING_HAPPENED);
         }
+
+      case IType.Orb:
+        // オーブ
+        // TODO: 未実装
 
       default:
         // ここにくることはない

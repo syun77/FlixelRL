@@ -432,6 +432,9 @@ class PlayState extends FlxState {
       var j = Field.getMouseChipY();
       var itemid = ItemUtil.random(itemtype);
       var params = new ItemExtraParam();
+      if(itemtype == IType.Orb) {
+        params.value = itemid - 400;
+      }
       _debugItem.init(i, j, itemtype, itemid, params);
       _debugItem.revive();
       if(FlxG.mouse.justPressed) {

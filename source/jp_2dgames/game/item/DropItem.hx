@@ -222,7 +222,14 @@ class DropItem extends FlxSprite {
     }
 
     // アニメーション再生
-    animation.play(ItemUtil.toString(type));
+    if(type == IType.Orb) {
+      // オーブはそれぞれに画像の種類がある
+      var name = ItemUtil.toString(type) + param.value;
+      animation.play(name);
+    }
+    else {
+      animation.play(ItemUtil.toString(type));
+    }
   }
 
   /**
@@ -238,5 +245,9 @@ class DropItem extends FlxSprite {
     animation.add(ItemUtil.toString(ItemUtil.IType.Ring), [5], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Money), [6], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Food), [7], 1);
+    animation.add(ItemUtil.toString(ItemUtil.IType.Orb) + "0", [8], 1);
+    animation.add(ItemUtil.toString(ItemUtil.IType.Orb) + "1", [9], 1);
+    animation.add(ItemUtil.toString(ItemUtil.IType.Orb) + "2", [10], 1);
+    animation.add(ItemUtil.toString(ItemUtil.IType.Orb) + "3", [11], 1);
   }
 }
