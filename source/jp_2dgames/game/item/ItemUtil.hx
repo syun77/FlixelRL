@@ -352,6 +352,8 @@ class ItemUtil {
       case IType.Orb:
         // オーブ
         // TODO: 未実装
+        // 何も起こらなかった
+        Message.push2(Msg.NOTHING_HAPPENED);
 
       default:
         // ここにくることはない
