@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.lib.Snd;
@@ -619,6 +620,17 @@ class Actor extends FlxSprite {
           return damage(v);
         }
         return false;
+
+      case IType.Orb:
+        switch(item.id) {
+          case ItemConst.ORB1:
+            // 赤オーブ
+            return damage(9999);
+          default:
+            // それ以外は微量ダメージ
+            var v = FlxRandom.intRanged(5, 7);
+            return damage(v);
+        }
 
       default:
         // それ以外は微量のダメージ
