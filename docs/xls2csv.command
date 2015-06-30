@@ -13,6 +13,9 @@ python xls2csv.py message.xlsx ../assets/data
 # アイテム
 python xls2csv.py item.xlsx ../assets/levels header_item.txt
 
+# 定数ヘッダ出力
+python export_const.py header_item.txt ../source/jp_2dgames/game/item/ItemConst.hx
+
 #read Wait
 
 # ターミナルを閉じる

@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.gui.GuiBuyDetail;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
@@ -131,7 +132,7 @@ class SeqMgr {
 
     if(_player.isDead()) {
       // 復活チェック
-      var nCursor = Inventory.instance.searchItem(402);
+      var nCursor = Inventory.instance.searchItem(ItemConst.ORB3);
       if(nCursor >= 0) {
         // 白のオーブを持っているので復活
         Inventory.instance.delItem(nCursor);
