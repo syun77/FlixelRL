@@ -12,6 +12,7 @@ enum BadStatus {
   Powerful;  // 元気いっぱい
   Anger;     // 怒り
   Poison;    // 毒
+  Star;      // 無敵
 }
 
 /**
@@ -32,6 +33,7 @@ class BadStatusUtil {
       case BadStatus.Powerful: return "powerful";
       case BadStatus.Anger: return "anger";
       case BadStatus.Poison: return "poison";
+      case BadStatus.Star: return "star";
     }
   }
 
@@ -48,6 +50,7 @@ class BadStatusUtil {
       case "powerful": return BadStatus.Powerful;
       case "anger": return BadStatus.Anger;
       case "poison": return BadStatus.Poison;
+      case "star": return BadStatus.Star;
       default: return BadStatus.None;
     }
   }

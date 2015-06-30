@@ -330,7 +330,6 @@ class ItemUtil {
           case "poison":
           // 毒状態になる
           actor.changeBadStatus(BadStatus.Poison);
-          Message.push2(Msg.BAD_POISON, [actor.name]);
         }
         FlxG.sound.play("eat");
 
@@ -351,9 +350,17 @@ class ItemUtil {
 
       case IType.Orb:
         // オーブ
-        // TODO: 未実装
-        // 何も起こらなかった
-        Message.push2(Msg.NOTHING_HAPPENED);
+        switch(item.id) {
+          case ItemConst.ORB4:
+            // 緑オーブ
+            actor.changeBadStatus(BadStatus.Star);
+            Message.push2(Msg.BAD_STAR, [actor.name]);
+          default:
+            // それ以外
+            // TODO:
+            // 何も起こらなかった
+            Message.push2(Msg.NOTHING_HAPPENED);
+        }
 
       default:
         // ここにくることはない
@@ -381,27 +388,21 @@ class ItemUtil {
       case "poison":
         // 毒状態になる
         actor.changeBadStatus(BadStatus.Poison);
-        Message.push2(Msg.BAD_POISON, [actor.name]);
       case "sleep":
         // 眠り状態になる
         actor.changeBadStatus(BadStatus.Sleep);
-        Message.push2(Msg.BAD_SLEEP, [actor.name]);
       case "paralysis":
         // 麻痺状態になる
         actor.changeBadStatus(BadStatus.Paralysis);
-        Message.push2(Msg.BAD_PARALYSIS, [actor.name]);
       case "confusion":
         // 混乱状態になる
         actor.changeBadStatus(BadStatus.Confusion);
-        Message.push2(Msg.BAD_CONFUSION, [actor.name]);
       case "anger":
         // 怒り状態になる
         actor.changeBadStatus(BadStatus.Anger);
-        Message.push2(Msg.BAD_AnGER, [actor.name]);
       case "powerful":
         // 元気状態になる
         actor.changeBadStatus(BadStatus.Powerful);
-        Message.push2(Msg.BAD_POWERFUL, [actor.name]);
       case "recover":
         // 状態異常回復
         actor.cureBadStatus();

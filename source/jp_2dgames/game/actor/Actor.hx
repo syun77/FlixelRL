@@ -307,7 +307,16 @@ class Actor extends FlxSprite {
     return _badstatus;
   }
   // バッドステータスを設定する
-  public function changeBadStatus(stt:BadStatus):Void {
+  public function changeBadStatus(stt:BadStatus):Bool {
+
+    if(_badstatus == BadStatus.Star) {
+      if(_params.badstatus_turn > 0) {
+        // 無敵状態なので状態変化しない
+        Message.push2(Msg.NOTHING_HAPPENED);
+        return false;
+      }
+    }
+
     _badstatus = stt;
     params.badstatus = BadStatusUtil.toString(stt);
     var turn:Int = 0;
@@ -320,6 +329,24 @@ class Actor extends FlxSprite {
     // 有効ターン数設定
     _params.badstatus_turn = turn;
     _balloon.show(stt);
+
+    var msgid = 0;
+    switch(stt) {
+      case BadStatus.Poison: msgid = Msg.BAD_POISON;
+      case BadStatus.Star: msgid = Msg.BAD_STAR;
+      case BadStatus.Sleep: msgid = Msg.BAD_SLEEP;
+      case BadStatus.Anger: msgid = Msg.BAD_AnGER;
+      case BadStatus.Confusion: msgid = Msg.BAD_CONFUSION;
+      case BadStatus.Paralysis: msgid = Msg.BAD_PARALYSIS;
+      case BadStatus.Powerful: msgid = Msg.BAD_POWERFUL;
+      case BadStatus.Sickness: msgid = Msg.BAD_SICKNESS;
+      case BadStatus.None:
+    }
+    if(msgid > 0) {
+      Message.push2(msgid, [name]);
+    }
+
+    return true;
   }
   // バッドステータスを回復する
   public function cureBadStatus() {
@@ -500,6 +527,14 @@ class Actor extends FlxSprite {
 	 **/
   public function damage(val:Int):Bool {
     _tShake = TIMER_DAMAGE;
+
+    if(_badstatus == BadStatus.Star) {
+      // 無敵状態なのでダメージを受けない
+      Particle.start(PType.Circle, x, y, FlxColor.RED);
+      ParticleDamage.start(x, y, 0);
+      return false;
+    }
+
     if(id == 0) {
       // プレイヤーダメージ
       Message.push2(Msg.PLAYER_DAMAGE, [name, val]);
@@ -607,7 +642,6 @@ class Actor extends FlxSprite {
           case "poison":
             // 毒状態になる
             changeBadStatus(BadStatus.Poison);
-            Message.push2(Msg.BAD_POISON, [name]);
         }
         return damage(v);
 

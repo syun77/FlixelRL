@@ -52,6 +52,7 @@ class Msg {
   public static inline var SHOP_ITEM_FULL:Int = 40; // アイテムが一杯で買えない
   public static inline var ITEM_ORB:Int = 41; // オーブを使った
   public static inline var ITEM_REVIVE:Int = 42; // アイテムの力で復活
+  public static inline var BAD_STAR:Int = 43; // 無敵状態になった
 
   // メニュー
   public static inline var MENU_USE:Int = 48; // メニュー: 使う
