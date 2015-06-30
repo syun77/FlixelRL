@@ -1034,12 +1034,32 @@ class Inventory extends FlxGroup {
   }
 
   /**
-	 * アイテムの削除
-	 * @param idx カーソル番号 (-1指定で _nCursor を使う)
-	 * @param bMsg 削除メッセージを表示するかどうか
-	 * @param bCursorAdjust カーソル位置の調整を行うかどうか
-	 * @return アイテムがすべてなくなったらtrue
-	 **/
+   * 指定のアイテムを検索する
+   * @param itemid アイテムID
+   * @return 指定のアイテムがあるカーソル位置(存在しない場合は-1)
+   **/
+  public function searchItem(itemid:Int):Int {
+    var nCursor:Int = -1;
+    var idx:Int = 0;
+    for(item in _itemList) {
+      if(item.id == itemid) {
+        // アイテムIDが一致
+        nCursor = idx;
+        break;
+      }
+      idx++;
+    }
+
+    return nCursor;
+  }
+
+  /**
+   * アイテムの削除
+   * @param idx カーソル番号 (-1指定で _nCursor を使う)
+   * @param bMsg 削除メッセージを表示するかどうか
+   * @param bCursorAdjust カーソル位置の調整を行うかどうか
+   * @return アイテムがすべてなくなったらtrue
+   **/
   public function delItem(idx:Int, bMsg:Bool = false, bAdjustCursor=true):Bool {
     if(idx == -1) {
       // 現在のカーソルを使う

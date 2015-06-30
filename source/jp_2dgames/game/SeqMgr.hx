@@ -130,8 +130,17 @@ class SeqMgr {
     }
 
     if(_player.isDead()) {
-      _player.kill();
-      return false;
+      // 復活チェック
+      var nCursor = Inventory.instance.searchItem(402);
+      if(nCursor >= 0) {
+        // 白のオーブを持っているので復活
+        Inventory.instance.delItem(nCursor);
+        _player.addHp(9999);
+      }
+      else {
+        _player.kill();
+        return false;
+      }
     }
 
     return true;
