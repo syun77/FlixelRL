@@ -407,6 +407,9 @@ class ItemUtil {
         // 状態異常回復
         actor.cureBadStatus();
         Message.push2(Msg.BAD_CURE, [actor.name]);
+      case "closed":
+        // 封印状態になる
+        actor.changeBadStatus(BadStatus.Closed);
     }
   }
 
