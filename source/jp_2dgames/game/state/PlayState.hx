@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.lib.TextUtil;
 import flixel.util.FlxColor;
@@ -35,15 +37,20 @@ import jp_2dgames.game.Save;
  * 状態
  **/
 private enum State {
-  FloorStart; // フロア開始演出
-  Main; // メイン処理
-  Gameover; // ゲームオーバー
+  FloorStart;   // フロア開始演出
+  Main;         // メイン処理
+  GameoverWait; // ゲームオーバー待ち時間
+  Gameover;     // ゲームオーバー
 }
 
 /**
  * メインゲーム
  */
 class PlayState extends FlxState {
+
+  // タイマー
+  private static inline var TIMER_GAMEOVER:Int = 60;
+
   // プレイヤー情報
   private var _player:Player;
   public var player(get, never):Player;
@@ -62,6 +69,9 @@ class PlayState extends FlxState {
 
   // 状態
   private var _state:State;
+
+  // 汎用タイマー
+  private var _timer:Int;
 
   // 背景
   private var _back:FlxSprite;
@@ -97,6 +107,7 @@ class PlayState extends FlxState {
 
     // 状態を設定
     _state = State.FloorStart;
+    _timer = 0;
     // フロア開始演出スタート
     _bgFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
     _txtFloor = new FlxText(FlxG.width/3.2, FlxG.height/2.5, 256, "", 48);
@@ -351,22 +362,32 @@ class PlayState extends FlxState {
             });
           case SeqMgr.RET_GAMEOVER:
             // ゲームオーバー
-            _state = State.Gameover;
-            var spr = new FlxSprite(0, 240-32).makeGraphic(640, 64, FlxColor.BLACK);
-            spr.alpha = 0.5;
-            this.add(spr);
-            var txt = new FlxText(216+2, 212+2, 0, 640);
-            txt.setFormat(Reg.PATH_FONT, 48);
-            txt.color = FlxColor.BLACK;
-            txt.text = "GAME OVER";
-            this.add(txt);
-            var txt2 = new FlxText(txt.x-2, txt.y-2, 0, 640);
-            txt2.setFormat(Reg.PATH_FONT, 48);
-            txt2.color = FlxColor.WHITE;
-            txt2.text = "GAME OVER";
-            this.add(txt2);
-
             Snd.playSe("gameover");
+            _timer = TIMER_GAMEOVER;
+            _state = State.GameoverWait;
+        }
+
+      case State.GameoverWait:
+        _timer--;
+        if(_timer < 1) {
+          // ゲームオーバーの表示
+          var spr = new FlxSprite(0, 240-32).makeGraphic(640, 64, FlxColor.BLACK);
+          spr.alpha = 0.5;
+          spr.scale.y = 0;
+          FlxTween.tween(spr.scale, {y:1}, 1, {ease:FlxEase.expoOut});
+          this.add(spr);
+          var txt = new FlxText(216+2, 212+2, 0, 640);
+          txt.setFormat(Reg.PATH_FONT, 48);
+          txt.color = FlxColor.BLACK;
+          txt.text = "GAME OVER";
+          this.add(txt);
+          var txt2 = new FlxText(txt.x-2, txt.y-2, 0, 640);
+          txt2.setFormat(Reg.PATH_FONT, 48);
+          txt2.color = FlxColor.WHITE;
+          txt2.text = "GAME OVER";
+          this.add(txt2);
+
+          _state = State.Gameover;
         }
 
       case State.Gameover:
