@@ -158,8 +158,13 @@ class Enemy extends Actor {
           // 攻撃が当たった
           var checkSkill = function() {
             // スキル発動チェック
+            if(_badstatus == BadStatus.Closed) {
+              // 封印中は無効
+              return false;
+            }
             var extra = _getCsvParam("extra");
             if(extra == "") {
+              // 特殊攻撃なし
               return false;
             }
             var ratio = _getCsvParamInt("ratio");
@@ -428,7 +433,12 @@ class Enemy extends Actor {
 
     var bAttack = false;
 
-    switch(_getCsvParam("range")) {
+    var range = _getCsvParam("range");
+    if(_badstatus == BadStatus.Closed) {
+      // 封印状態
+      range = "";
+    }
+    switch(range) {
       case "":
         // 上下左右1マス先のみ
         var pt = FlxPoint.get();
