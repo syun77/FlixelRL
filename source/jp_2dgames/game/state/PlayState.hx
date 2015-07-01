@@ -365,28 +365,28 @@ class PlayState extends FlxState {
             Snd.playSe("gameover");
             _timer = TIMER_GAMEOVER;
             _state = State.GameoverWait;
+
+            // ゲームオーバーの表示
+            var spr = new FlxSprite(0, 240-32).makeGraphic(640, 64, FlxColor.BLACK);
+            spr.alpha = 0.5;
+            spr.scale.y = 0;
+            FlxTween.tween(spr.scale, {y:1}, 1, {ease:FlxEase.expoOut});
+            this.add(spr);
+            var txt = new FlxText(216+2, 212+2, 0, 640);
+            txt.setFormat(Reg.PATH_FONT, 48);
+            txt.color = FlxColor.BLACK;
+            txt.text = "GAME OVER";
+            this.add(txt);
+            var txt2 = new FlxText(txt.x-2, txt.y-2, 0, 640);
+            txt2.setFormat(Reg.PATH_FONT, 48);
+            txt2.color = FlxColor.WHITE;
+            txt2.text = "GAME OVER";
+            this.add(txt2);
         }
 
       case State.GameoverWait:
         _timer--;
         if(_timer < 1) {
-          // ゲームオーバーの表示
-          var spr = new FlxSprite(0, 240-32).makeGraphic(640, 64, FlxColor.BLACK);
-          spr.alpha = 0.5;
-          spr.scale.y = 0;
-          FlxTween.tween(spr.scale, {y:1}, 1, {ease:FlxEase.expoOut});
-          this.add(spr);
-          var txt = new FlxText(216+2, 212+2, 0, 640);
-          txt.setFormat(Reg.PATH_FONT, 48);
-          txt.color = FlxColor.BLACK;
-          txt.text = "GAME OVER";
-          this.add(txt);
-          var txt2 = new FlxText(txt.x-2, txt.y-2, 0, 640);
-          txt2.setFormat(Reg.PATH_FONT, 48);
-          txt2.color = FlxColor.WHITE;
-          txt2.text = "GAME OVER";
-          this.add(txt2);
-
           _state = State.Gameover;
         }
 
