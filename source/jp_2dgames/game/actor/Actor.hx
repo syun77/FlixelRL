@@ -340,6 +340,13 @@ class Actor extends FlxSprite {
       case BadStatus.Paralysis: msgid = Msg.BAD_PARALYSIS;
       case BadStatus.Powerful: msgid = Msg.BAD_POWERFUL;
       case BadStatus.Sickness: msgid = Msg.BAD_SICKNESS;
+      case BadStatus.Closed:
+        if(id == 0) {
+          msgid = Msg.BAD_CLOSED_PLAYER;
+        }
+        else {
+          msgid = Msg.BAD_CLOSED_ENEMY;
+        }
       case BadStatus.None:
     }
     if(msgid > 0) {

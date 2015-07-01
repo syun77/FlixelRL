@@ -20,6 +20,7 @@ class ActorBalloon extends FlxSprite {
     animation.add(BadStatusUtil.toString(BadStatus.Anger),     [5], 1);
     animation.add(BadStatusUtil.toString(BadStatus.Poison),    [6], 1);
     animation.add(BadStatusUtil.toString(BadStatus.Star),      [7], 1);
+    animation.add(BadStatusUtil.toString(BadStatus.Closed),    [8], 1);
 
     // 消しておく
     kill();

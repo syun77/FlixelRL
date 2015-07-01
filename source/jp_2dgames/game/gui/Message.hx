@@ -54,6 +54,8 @@ class Msg {
   public static inline var ITEM_ORB:Int = 41; // オーブを使った
   public static inline var ITEM_REVIVE:Int = 42; // アイテムの力で復活
   public static inline var BAD_STAR:Int = 43; // 無敵状態になった
+  public static inline var BAD_CLOSED_PLAYER:Int = 44; // 封印状態になった（プレイヤー）
+  public static inline var BAD_CLOSED_ENEMY:Int = 45; // 封印状態になった（敵）
 
   // メニュー
   public static inline var MENU_USE:Int = 48; // メニュー: 使う

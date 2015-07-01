@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
 import openfl.Assets;
 import jp_2dgames.game.item.ItemData;
@@ -107,7 +108,7 @@ class Global {
       if(_items.length == 0 && getFloor() == 1) {
         // りんごを持たせる
         var param = new ItemExtraParam();
-        items.push(new ItemData(1, param));
+        items.push(new ItemData(ItemConst.FOOD1, param));
       }
     }
     else {

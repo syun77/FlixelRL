@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.state.PlayState;
 import haxe.ds.ArraySort;
 import jp_2dgames.lib.Snd;
@@ -565,6 +566,24 @@ class Inventory extends FlxGroup {
   }
 
   /**
+   * アイテムを使えるかどうか
+   **/
+  private function _checkUse(item:ItemData):Bool {
+    if(_player.badstatus != BadStatus.Closed) {
+      // 使える
+      return true;
+    }
+
+    switch(item.type) {
+      case IType.Scroll, IType.Wand:
+        // 封印中は巻物と杖が使えない
+        return false;
+      default:
+        return true;
+    }
+  }
+
+  /**
    * コマンドメニューのパラメータを取得する
    **/
   private function _getMenuParam():Array<Int> {
@@ -592,7 +611,9 @@ class Inventory extends FlxGroup {
       }
       else {
         // 消費アイテム
-        p.push(MENU_CONSUME);
+        if(_checkUse(item)) {
+          p.push(MENU_CONSUME);
+        }
       }
 
       if(bFeet) {
