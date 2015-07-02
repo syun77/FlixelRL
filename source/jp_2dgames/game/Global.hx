@@ -110,9 +110,6 @@ class Global {
         // りんごを持たせる
         var param = new ItemExtraParam();
         items.push(new ItemData(ItemConst.FOOD1, param));
-        for(i in 0...8) {
-          items.push(new ItemData(ItemConst.PORTION1+i, param));
-        }
       }
     }
     else {
