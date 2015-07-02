@@ -279,8 +279,8 @@ class Inventory extends FlxGroup {
     return instance._ring;
   }
 
-  public static function setItemList(items:Array<ItemData>):Void {
-    instance.init(items);
+  public static function setItemList(items:Array<ItemData>, nCursor:Int):Void {
+    instance.init(items, nCursor);
   }
 
   public static function getItemList():Array<ItemData> {
@@ -449,10 +449,11 @@ class Inventory extends FlxGroup {
   /**
    * 初期化
    **/
-  private function init(items:Array<ItemData>):Void {
+  private function init(items:Array<ItemData>, nCursor:Int):Void {
     // カーソルは初期状態非表示
     _cursor.visible = false;
-    _nCursor = 0;
+    _nCursor = nCursor;
+    _nPage = Std.int(_nCursor/PAGE_DISP);
 
     _player = cast(FlxG.state, PlayState).player;
 
@@ -476,6 +477,9 @@ class Inventory extends FlxGroup {
 
     // テキスト更新
     _updateText();
+
+    // カーソル位置も更新
+    _updateCursorPosition();
 
     // 詳細ステータス
     _detailEquip = new GuiStatusDetail(DETAIL_EQUIP_X, DETAIL_EQUIP_Y);
@@ -559,6 +563,9 @@ class Inventory extends FlxGroup {
 
       // 背景色を元に戻す
       _bg.color = FlxColor.GRAY;
+
+      // カーソル位置を記憶しておく
+      Global.setCursorInventory(_nCursor);
     }
 
     // 詳細表示切り替え

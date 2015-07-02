@@ -22,6 +22,7 @@ class Global {
     _floor = 1;
     _money = 0;
     _items = new Array<ItemData>();
+    _nCursorInventory = 0;
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 0;
@@ -109,13 +110,22 @@ class Global {
         // りんごを持たせる
         var param = new ItemExtraParam();
         items.push(new ItemData(ItemConst.FOOD1, param));
+        for(i in 0...8) {
+          items.push(new ItemData(ItemConst.PORTION1+i, param));
+        }
       }
     }
     else {
       // 外部のデータを使う
       _items = items;
     }
-    Inventory.setItemList(items);
+    Inventory.setItemList(items, _nCursorInventory);
+  }
+
+  // インベントリのカーソル位置
+  private static var _nCursorInventory:Int = 0;
+  public static function setCursorInventory(v:Int):Void {
+    _nCursorInventory = v;
   }
 
   // プレイヤーのデータを初期化するかどうか
