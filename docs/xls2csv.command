@@ -14,8 +14,8 @@ python xls2csv.py message.xlsx ../assets/data
 python xls2csv.py item.xlsx ../assets/levels header_item.txt
 
 # 定数ヘッダ出力
-python export_const.py header_item.txt ../source/jp_2dgames/game/item/ItemConst.hx
-python export_const.py header_enemy.txt ../source/jp_2dgames/game/actor/EnemyConst.hx
+python export_const.py header_item.txt ../source/jp_2dgames/game/item
+python export_const.py header_enemy.txt ../source/jp_2dgames/game/actor
 
 #read Wait
 

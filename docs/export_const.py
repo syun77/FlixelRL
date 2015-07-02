@@ -23,6 +23,7 @@ def main(inFile, out):
 		txt += "  public static inline var %s:Int = %d;\n"%(k, v)
 	txt += "}\n"
 
+	out = "%s/%s.hx"%(out, header["class"])
 	fOut = open(out, "w")
 	fOut.write(txt)
 	fOut.close()
@@ -39,4 +40,4 @@ if __name__ == '__main__':
 		usage()
 		quit()
 	main(sys.argv[1], sys.argv[2])
-	# main("header_item.txt", "/Users/syun/Desktop/FlixelRL/source/jp_2dgames/game/item/ItemConst.hx")
+	# main("header_item.txt", "/Users/syun/Desktop/FlixelRL/source/jp_2dgames/game/item")
