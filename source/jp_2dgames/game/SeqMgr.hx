@@ -547,6 +547,8 @@ class SeqMgr {
         _change(State.ShopOpen);
 
       case StompChip.None:
+        // ナイトメア出現ターン数を減らす
+        NightmareMgr.instance.nextTurn();
         // ターン数を進める
         Global.nextTurn();
         {

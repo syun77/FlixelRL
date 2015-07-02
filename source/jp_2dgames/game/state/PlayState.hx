@@ -212,6 +212,9 @@ class PlayState extends FlxState {
     }
     this.add(MagicShot.parent);
 
+    // ナイトメア管理
+    NightmareMgr.instance = new NightmareMgr();
+
     // メッセージ生成
     var message = new Message(_csv.message, _csv.hint);
     Message.instance = message;
@@ -327,6 +330,7 @@ class PlayState extends FlxState {
     ParticleDamage.parent = null;
     ParticleRecovery.parent = null;
     ParticleEnemy.parent = null;
+    NightmareMgr.instance = null;
     MagicShot.parent = null;
     DropItem.parent = null;
     Enemy.parent = null;
@@ -393,8 +397,7 @@ class PlayState extends FlxState {
       case State.Gameover:
         if(Key.press.A) {
           // ゲームデータを初期化
-          Global.init();
-          FlxG.switchState(new PlayState());
+          FlxG.switchState(new PlayInitState());
         }
     }
 

@@ -27,6 +27,8 @@ class Global {
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 0;
+    _turnLimitNightmare = NightmareMgr.TURN_LIMIT_FIRST;
+    trace(_turnLimitNightmare);
   }
 
   // フロア数
@@ -174,6 +176,15 @@ class Global {
   // ターンを初期化する
   public static function initTurn():Void {
     _turnCount = 0;
+  }
+
+  // ナイトメア出現までのターン数
+  private static var _turnLimitNightmare:Int = 0;
+  public static function getTurnLimitNightmare():Int {
+    return _turnLimitNightmare;
+  }
+  public static function setTurnLimitNightmare(v:Int):Void {
+    _turnLimitNightmare = v;
   }
 
   // ショップ出現カウント

@@ -23,6 +23,9 @@ class GuiNightmare extends FlxSpriteGroup {
   private static inline var TURN_X = 8;
   private static inline var TURN_Y = 32;
 
+  // 残りターン数
+  private var _turnLimit:Int;
+
   // ターン数のテキスト
   private var _txtInfo:FlxText;
   private var _txtTurn:FlxText;
@@ -47,14 +50,26 @@ class GuiNightmare extends FlxSpriteGroup {
     _txtTurn.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtTurn);
 
-    // TODO:
-    setTurn(10);
+    _turnLimit = 0;
   }
 
   /**
    * ターン数を設定する
    **/
   public function setTurn(turnCount:Int):Void {
-    _txtTurn.text = '残り${turnCount}ターン';
+    if(_turnLimit != turnCount) {
+      // 値が前回と違っていたら更新
+      _turnLimit = turnCount;
+      _txtTurn.text = '残り${turnCount}ターン';
+    }
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    setTurn(Global.getTurnLimitNightmare());
   }
 }
