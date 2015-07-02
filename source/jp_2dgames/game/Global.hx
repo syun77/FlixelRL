@@ -28,7 +28,6 @@ class Global {
     _params = new Params();
     _shopAppearCount = 0;
     _turnLimitNightmare = NightmareMgr.TURN_LIMIT_FIRST;
-    trace(_turnLimitNightmare);
   }
 
   // フロア数
