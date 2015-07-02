@@ -753,10 +753,14 @@ class Inventory extends FlxGroup {
         // 投げる
         // 落ちているアイテムを投げることもあるのでモードを戻しておく
         _menumode = mode;
-        var item = getSelectedItem();
-        _targetItem = new ItemData(item.id, item.param);
+        var item2 = getSelectedItem();
+        _targetItem = new ItemData(item2.id, item2.param);
         // 選択しているアイテムを消す
         delItem(-1);
+        if(mode == MenuMode.Feet) {
+          // 足下メニューの場合は足下アイテムを消す
+          DropItem.killFromPosition(_player.xchip, _player.ychip);
+        }
     }
     // 元に戻す
     _menumode = mode;
