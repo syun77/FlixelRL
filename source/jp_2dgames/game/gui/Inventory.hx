@@ -135,7 +135,7 @@ class Inventory extends FlxGroup {
   }
   // アイテム所持可能な最大数
   private var _itemMax:Int = ITEM_MAX_FIRST;
-  public function _getItemMax():Int {
+  public function getItemMax():Int {
     return _itemMax;
   }
 
@@ -289,8 +289,8 @@ class Inventory extends FlxGroup {
     return instance._ring;
   }
 
-  public static function setItemList(items:Array<ItemData>, nCursor:Int):Void {
-    instance.init(items, nCursor);
+  public static function setItemList(items:Array<ItemData>, nCursor:Int, itemmax:Int):Void {
+    instance.init(items, nCursor, itemmax);
   }
 
   public static function getItemList():Array<ItemData> {
@@ -299,7 +299,7 @@ class Inventory extends FlxGroup {
 
   // アイテム枠がいっぱいかどうか
   public static function isFull():Bool {
-    return instance.getItemCountFromCarry() >= instance._getItemMax();
+    return instance.getItemCountFromCarry() >= instance.getItemMax();
   }
   // アイテムを所持していないかどうか
   public static function isEmpty():Bool {
@@ -459,11 +459,16 @@ class Inventory extends FlxGroup {
   /**
    * 初期化
    **/
-  private function init(items:Array<ItemData>, nCursor:Int):Void {
+  private function init(items:Array<ItemData>, nCursor:Int, itemmax:Int):Void {
     // カーソルは初期状態非表示
     _cursor.visible = false;
+
+    // カーソル位置を設定
     _nCursor = nCursor;
     _nPage = Std.int(_nCursor/PAGE_DISP);
+
+    // アイテム最大数
+    _itemMax = itemmax;
 
     _player = cast(FlxG.state, PlayState).player;
 

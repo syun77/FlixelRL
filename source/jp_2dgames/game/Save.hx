@@ -4,7 +4,6 @@ package jp_2dgames.game;
 import sys.io.File;
 #end
 import jp_2dgames.game.state.PlayState;
-import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.item.ItemUtil;
@@ -20,17 +19,19 @@ import haxe.Json;
  * グローバルデータ
  **/
 private class _Global {
-  public var floor:Int = 0;
-  public var money:Int = 0;
-  public var turn:Int  = 0;
-  public var shop:Int  = 0;
+  public var floor:Int   = 0;
+  public var money:Int   = 0;
+  public var turn:Int    = 0;
+  public var shop:Int    = 0;
+  public var itemmax:Int = 0;
   public function new() {}
   // セーブ
   public function save() {
-    floor = Global.getFloor();
-    money = Global.getMoney();
-    turn  = Global.getTurn();
-    shop  = Global.getShopAppearCountRaw();
+    floor   = Global.getFloor();
+    money   = Global.getMoney();
+    turn    = Global.getTurn();
+    shop    = Global.getShopAppearCountRaw();
+    itemmax = Global.getItemMaxInventory();
   }
   // ロード
   public function load(data:Dynamic) {
@@ -38,6 +39,7 @@ private class _Global {
     Global.setMoney(data.money);
     Global.setTurn(data.turn);
     Global.setShopAppearCount(data.shop);
+    Global.setItemMaxInventory(data.itemmax);
   }
 }
 

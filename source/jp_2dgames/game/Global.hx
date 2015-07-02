@@ -23,7 +23,7 @@ class Global {
     _money = 0;
     _items = new Array<ItemData>();
     _nCursorInventory = 0;
-    _ItemMaxInventory = Inventory.ITEM_MAX_FIRST;
+    _itemMaxInventory = Inventory.ITEM_MAX_FIRST;
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 0;
@@ -117,7 +117,7 @@ class Global {
       // 外部のデータを使う
       _items = items;
     }
-    Inventory.setItemList(items, _nCursorInventory);
+    Inventory.setItemList(items, _nCursorInventory, _itemMaxInventory);
   }
 
   // インベントリのカーソル位置
@@ -127,7 +127,13 @@ class Global {
   }
 
   // インベントリに格納可能な最大アイテム数
-  private static var _ItemMaxInventory:Int = Inventory.ITEM_MAX_FIRST;
+  private static var _itemMaxInventory:Int = Inventory.ITEM_MAX_FIRST;
+  public static function getItemMaxInventory():Int {
+    return _itemMaxInventory;
+  }
+  public static function setItemMaxInventory(v:Int):Void {
+    _itemMaxInventory = v;
+  }
 
   // プレイヤーのデータを初期化するかどうか
   private static var _bInitPlayer = true;
