@@ -1,6 +1,5 @@
 package jp_2dgames.game;
 
-import jp_2dgames.game.state.EndingState;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.gui.GuiBuyDetail;
@@ -547,13 +546,14 @@ class SeqMgr {
         _change(State.ShopOpen);
 
       case StompChip.None:
+
+        var layer = cast(FlxG.state, PlayState).lField;
         // ナイトメア出現ターン数を減らす
-        NightmareMgr.instance.nextTurn();
+        NightmareMgr.instance.nextTurn(layer);
         // ターン数を進める
         Global.nextTurn();
         {
           // ランダム敵の出現
-          var layer = cast(FlxG.state, PlayState).lField;
           Generator.checkRandomEnemy(_csv, layer);
         }
 
