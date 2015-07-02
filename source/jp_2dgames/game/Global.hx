@@ -23,6 +23,7 @@ class Global {
     _money = 0;
     _items = new Array<ItemData>();
     _nCursorInventory = 0;
+    _ItemMaxInventory = Inventory.ITEM_MAX_FIRST;
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 0;
@@ -124,6 +125,9 @@ class Global {
   public static function setCursorInventory(v:Int):Void {
     _nCursorInventory = v;
   }
+
+  // インベントリに格納可能な最大アイテム数
+  private static var _ItemMaxInventory:Int = Inventory.ITEM_MAX_FIRST;
 
   // プレイヤーのデータを初期化するかどうか
   private static var _bInitPlayer = true;

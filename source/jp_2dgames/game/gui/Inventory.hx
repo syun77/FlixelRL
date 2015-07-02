@@ -67,13 +67,14 @@ class Inventory extends FlxGroup {
   private static inline var MENU_CHANGE:Int = Msg.MENU_CHANGE; // 交換
   private static inline var MENU_PICKUP:Int = Msg.MENU_PICKUP; // 拾う
 
-  // ページ数の最大
-  private static inline var PAGE_MAX:Int = 3;
   // 1ページあたりの最大表示数
   private static inline var PAGE_DISP:Int = 8;
 
   // アイテム所持の最大
-  private static inline var MAX:Int = (PAGE_DISP * PAGE_MAX);
+  // 初期状態
+  public static inline var ITEM_MAX_FIRST:Int = 8;
+  // 最大
+  private static inline var ITEM_MAX_LAST:Int = 24;
 
   // ウィンドウ座標
   private static inline var POS_X = 640 + 8;
@@ -128,6 +129,15 @@ class Inventory extends FlxGroup {
   private var _txtPage:FlxText;
   // ページ数
   private var _nPage:Int = 0;
+  // ページ数の最大
+  private function _getPageMax():Int {
+    return Std.int(_itemMax / PAGE_DISP);
+  }
+  // アイテム所持可能な最大数
+  private var _itemMax:Int = ITEM_MAX_FIRST;
+  public function _getItemMax():Int {
+    return _itemMax;
+  }
 
   // カーソル
   private var _cursor:FlxSprite;
@@ -289,7 +299,7 @@ class Inventory extends FlxGroup {
 
   // アイテム枠がいっぱいかどうか
   public static function isFull():Bool {
-    return instance.getItemCountFromCarry() >= MAX;
+    return instance.getItemCountFromCarry() >= instance._getItemMax();
   }
   // アイテムを所持していないかどうか
   public static function isEmpty():Bool {
