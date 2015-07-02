@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import xlrd
 import yaml
 
 
@@ -11,13 +10,16 @@ import yaml
 def main(inFile, out):
 	# 定数ファイル読み込み
 	fConst = open(inFile)
-	const = yaml.load(fConst)
+	tbl = yaml.load(fConst)
 	fConst.close()
 
-	txt = "package jp_2dgames.game.item;\n"
+	header = tbl["header"]
+	data = tbl["data"]
+
+	txt = "package %s;\n"%(header["package"])
 	txt += "\n"
-	txt += "class ItemConst {\n"
-	for k, v in const.items():
+	txt += "class %s {\n"%(header["class"])
+	for k, v in data.items():
 		txt += "  public static inline var %s:Int = %d;\n"%(k, v)
 	txt += "}\n"
 

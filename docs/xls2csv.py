@@ -63,7 +63,8 @@ if __name__ == '__main__':
 		# 定数ファイル読み込み
 		for fHeader in sys.argv[3].split(","):
 			f = open(fHeader)
-			const.update(yaml.load(f))
+			data = yaml.load(f)["data"]
+			const.update(data)
 			f.close
 	main(sys.argv[1], sys.argv[2], const)
 	# main("enemy.xlsx", "/Users/syun/Desktop/FlixelRL/assets/levels/enemy.csv")

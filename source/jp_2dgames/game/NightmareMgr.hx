@@ -3,6 +3,7 @@ package jp_2dgames.game;
 /**
  * ナイトメア管理
  **/
+import jp_2dgames.game.actor.EnemyConst;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.state.PlayState;
 import flixel.FlxG;
@@ -38,7 +39,7 @@ class NightmareMgr {
           var px = Std.int(pt.x);
           var py = Std.int(pt.y);
           pt.put();
-          Enemy.add(137, px, py);
+          Enemy.add(EnemyConst.NIGHTMARE, px, py);
           _exists = true;
         }
       }
@@ -53,7 +54,7 @@ class NightmareMgr {
     var ret = false;
 
     Enemy.parent.forEachAlive(function(e:Enemy) {
-      if(e.id == 137) {
+      if(e.id == EnemyConst.NIGHTMARE) {
         ret = true;
       }
     });
