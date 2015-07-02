@@ -84,6 +84,8 @@ class GuiStatus extends FlxGroup {
 
   // 敵情報
   private var _enemyInfo:GuiEnemy;
+  // ナイトメア出現ターン数
+  private var _nightmareInfo:GuiNightmare;
 
   // ヘルプ
   private var _help:FlxSpriteGroup;
@@ -148,6 +150,10 @@ class GuiStatus extends FlxGroup {
     // ■敵情報
     _enemyInfo = new GuiEnemy();
     this.add(_enemyInfo);
+
+    // ■ナイトメア情報
+    _nightmareInfo = new GuiNightmare();
+    this.add(_nightmareInfo);
 
     // ■ヘルプ
     _help = new FlxSpriteGroup();
