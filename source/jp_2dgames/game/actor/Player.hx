@@ -549,7 +549,7 @@ class Player extends Actor {
     // 移動先に敵がいるかどうかチェック
     _target = null;
     Enemy.parent.forEachAlive(function(e:Enemy) {
-      if(e.checkPosition(xnext, ynext)) {
+      if(e.existsPosition(xnext, ynext)) {
         // 敵がいた
         _target = e;
       }
@@ -603,7 +603,7 @@ class Player extends Actor {
       var i = Std.int(pt.x);
       var j = Std.int(pt.y);
       Enemy.parent.forEachAlive(function(e:Enemy) {
-        if(e.checkPosition(i, j)) {
+        if(e.existsPosition(i, j)) {
           bFront = true;
         }
       });

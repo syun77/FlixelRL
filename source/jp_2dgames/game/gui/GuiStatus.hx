@@ -263,7 +263,7 @@ class GuiStatus extends FlxGroup {
       var pt = FlxPoint.get(player.xchip, player.ychip);
       pt = DirUtil.move(player.dir, pt);
       Enemy.parent.forEachAlive(function(e:Enemy) {
-        if(e.checkPosition(Std.int(pt.x), Std.int(pt.y))) {
+        if(e.existsPosition(Std.int(pt.x), Std.int(pt.y))) {
           enemy = e;
         }
       });

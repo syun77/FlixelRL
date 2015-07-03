@@ -59,7 +59,7 @@ class Enemy extends Actor {
   public static function getFromPositino(xchip:Int, ychip:Int):Enemy {
     var ret:Enemy = null;
     parent.forEachAlive(function(e:Enemy) {
-      if(e.checkPosition(xchip, ychip)) {
+      if(e.existsPosition(xchip, ychip)) {
         ret = e;
       }
     });
@@ -188,7 +188,7 @@ class Enemy extends Actor {
             var i = Std.int(pt.x);
             var j = Std.int(pt.y);
             pt.put();
-            if(target.checkPosition(i, j)) {
+            if(target.existsPosition(i, j)) {
               target.look(xchip, ychip);
             }
           }
@@ -445,7 +445,7 @@ class Enemy extends Actor {
         for(dir in [Dir.Left, Dir.Up, Dir.Right, Dir.Down]) {
           pt.set(_xprev, _yprev);
           pt = DirUtil.move(dir, pt);
-          if(target.checkPosition(Std.int(pt.x), Std.int(pt.y))) {
+          if(target.existsPosition(Std.int(pt.x), Std.int(pt.y))) {
             // 攻撃できる
             _dir = dir;
             bAttack = true;
@@ -470,7 +470,7 @@ class Enemy extends Actor {
               // 別の敵に当たるので攻撃できない
               break;
             }
-            if(target.checkPosition(px, py)) {
+            if(target.existsPosition(px, py)) {
               // 攻撃できる
               _dir = dir;
               bAttack = true;
@@ -538,7 +538,7 @@ class Enemy extends Actor {
         pt = DirUtil.move(_dir, pt);
         var xc = Std.int(pt.x);
         var yc = Std.int(pt.y);
-        if(target.checkPosition(xc, yc)) {
+        if(target.existsPosition(xc, yc)) {
           // 近くにプレイヤーがいるので攻撃
           xnext = xc;
           ynext = yc;
@@ -561,7 +561,7 @@ class Enemy extends Actor {
     _changeAnime();
 
     // 移動先にプレイヤーがいるかどうかをチェック
-    if(target.checkPosition(xnext, ynext)) {
+    if(target.existsPosition(xnext, ynext)) {
       // プレイヤーがいるので攻撃
       _change(Actor.State.ActBegin);
       return;

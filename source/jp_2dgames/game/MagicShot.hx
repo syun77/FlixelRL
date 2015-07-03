@@ -193,7 +193,7 @@ class MagicShot extends FlxSprite {
         // 前方に移動（敵）
         var px = Std.int(Field.toChipX(x));
         var py = Std.int(Field.toChipY(y));
-        if(_target.checkPosition(px, py)) {
+        if(_target.existsPosition(px, py)) {
           // 必中
           var bAlwaysHit = true;
           _target.hitItem(_actor, _item, bAlwaysHit);

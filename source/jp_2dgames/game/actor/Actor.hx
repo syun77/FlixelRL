@@ -454,7 +454,7 @@ class Actor extends FlxSprite {
     _change(State.KeyInput);
   }
   // 指定の座標に存在するかどうかをチェックする
-  public function checkPosition(xc:Int, yc:Int):Bool {
+  public function existsPosition(xc:Int, yc:Int):Bool {
     if(xc == xchip && yc == ychip) {
       // 座標が一致
       return true;

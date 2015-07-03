@@ -229,7 +229,7 @@ class Generator {
         var px = Std.int(pt.x);
         var py = Std.int(pt.y);
         pt.put();
-        if(player.checkPosition(px, py)) {
+        if(player.existsPosition(px, py)) {
           // 生成できないのでやり直す
           continue;
         }

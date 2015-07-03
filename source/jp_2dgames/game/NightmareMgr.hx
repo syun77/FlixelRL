@@ -12,7 +12,6 @@ import jp_2dgames.lib.Layer2D;
 class NightmareMgr {
   // ゲーム開始時の残りターン数
   public static inline var TURN_LIMIT_FIRST:Int = 120;
-//  public static inline var TURN_LIMIT_FIRST:Int = 10;
 
   public static var instance:NightmareMgr = null;
 
@@ -75,7 +74,7 @@ class NightmareMgr {
       var pt = layer.search(Field.PLAYER);
       var px = Std.int(pt.x);
       var py = Std.int(pt.y);
-      if(player.checkPosition(px, py)) {
+      if(player.existsPosition(px, py) == false) {
         // 生成可能
         return pt;
       }
@@ -91,7 +90,7 @@ class NightmareMgr {
       var px = Std.int(pt.x);
       var py = Std.int(pt.y);
 
-      if(player.checkPosition(px, py)) {
+      if(player.existsPosition(px, py)) {
         // 生成できないのでやり直す
         continue;
       }
