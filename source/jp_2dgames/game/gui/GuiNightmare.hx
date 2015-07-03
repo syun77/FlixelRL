@@ -64,13 +64,12 @@ class GuiNightmare extends FlxSpriteGroup {
 
       if(_turnLimit < 10) {
         // 文字を赤くする
-        _txtInfo.color = FlxColor.SALMON;
+        _txtTurn.color = FlxColor.SALMON;
       }
       else {
         // 文字を白にする
-        _txtInfo.color = FlxColor.WHITE;
+        _txtTurn.color = FlxColor.WHITE;
       }
-      _txtTurn.color = _txtInfo.color;
     }
   }
 
