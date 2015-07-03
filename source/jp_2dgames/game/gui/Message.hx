@@ -103,7 +103,7 @@ class Message extends FlxGroup {
   private static inline var MSG_POS_X = 8;
   private static inline var MSG_POS_Y = 8;
   // メッセージ表示間隔
-  private static inline var DY = 26;
+  private static inline var DY = 20;
 
   // ウィンドウが消えるまでの時間 (5sec)
   private static inline var TIMER_DISAPPEAR:Float = 5;
@@ -236,7 +236,7 @@ class Message extends FlxGroup {
 	 **/
   private function _push(msg:String) {
     var text = new FlxText(POS_X + MSG_POS_X, 0, WIDTH);
-    text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     text.text = msg;
     if(_msgList.length >= MESSAGE_MAX) {
       // 最大を超えたので先頭のメッセージを削除
