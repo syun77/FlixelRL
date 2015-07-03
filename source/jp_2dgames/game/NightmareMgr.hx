@@ -12,6 +12,7 @@ import jp_2dgames.lib.Layer2D;
 class NightmareMgr {
   // ゲーム開始時の残りターン数
   public static inline var TURN_LIMIT_FIRST:Int = 120;
+//  public static inline var TURN_LIMIT_FIRST:Int = 10;
 
   public static var instance:NightmareMgr = null;
 
@@ -30,7 +31,7 @@ class NightmareMgr {
     var v = Global.getTurnLimitNightmare();
     // ターン数を減らす
     v -= 1;
-    if(v < 0) {
+    if(v <= 0) {
       v = 0;
       if(_exists == false) {
         var pt = _searchNightmarePosition(layer);
