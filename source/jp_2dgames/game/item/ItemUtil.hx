@@ -432,8 +432,15 @@ class ItemUtil {
     actor.extParams.str += str;
     var vit = getParam(item.id, "def");
     actor.extParams.vit += vit;
-    var hpmax = getParam(item.id, "hpmax");
-    actor.extParams.hpmax += hpmax;
+    var extra = getParamString(item.id, "extra");
+    var ext_val = getParam(item.id, "ext_val");
+    switch(extra) {
+      case "hpmax":
+        actor.extParams.hpmax += ext_val;
+      default:
+    }
+
+    actor.trancateHp();
   }
 
   /**
@@ -442,5 +449,7 @@ class ItemUtil {
   public static function unequipRing(actor:Actor, item:ItemData):Void {
     // 拡張パラメータを初期化
     ParamsUtil.init(actor.extParams);
+
+    actor.trancateHp();
   }
 }

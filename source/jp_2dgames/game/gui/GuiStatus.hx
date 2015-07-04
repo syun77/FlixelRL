@@ -191,7 +191,7 @@ class GuiStatus extends FlxGroup {
 
     // HP
     var hp = player.params.hp;
-    var hpmax = player.params.hpmax;
+    var hpmax = player.getHpMax();
     _txtHp.text = 'HP: ${hp}/${hpmax}';
     _hpBar.percent = 100 * hp / hpmax;
 

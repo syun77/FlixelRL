@@ -168,16 +168,25 @@ class Actor extends FlxSprite {
   }
 
   // HP(0〜100%で返す)
-  public var hpratio(get, null):Float;
-
+  public var hpratio(get, never):Float;
   private function get_hpratio() {
-    return 100 * _params.hp / _params.hpmax;
+//    return 100 * _params.hp / getHpMax();
+    return 100 * _params.hp / getHpMax();
+  }
+
+  /**
+   * HPを最大HPに丸める
+   **/
+  public function trancateHp():Void {
+    if(_params.hp > getHpMax()) {
+      _params.hp = getHpMax();
+    }
   }
 
   public function addHp(val:Int, bEffect=true):Void {
     _params.hp += val;
-    if(_params.hp > _params.hpmax) {
-      _params.hp = _params.hpmax;
+    if(_params.hp > getHpMax()) {
+      _params.hp = getHpMax();
     }
 
     if(bEffect) {
@@ -188,7 +197,7 @@ class Actor extends FlxSprite {
 
   public function addHp2(val:Int, bEffect=true):Void {
     // パーセンテージで回復
-    var val2 = _params.hpmax * val / 100;
+    var val2 = getHpMax() * val / 100;
     if(val2 < 1) {
       val2 = 1;
     }
@@ -212,16 +221,20 @@ class Actor extends FlxSprite {
 
   public function subHpMax(val:Int):Void {
     _params.hpmax -= val;
-    if(_params.hp < _params.hpmax) {
-      _params.hp = _params.hpmax;
+    if(_params.hp < getHpMax()) {
+      _params.hp = getHpMax();
     }
+  }
+
+  public function getHpMax():Int {
+    return _params.hpmax + _extParams.hpmax;
   }
 
   /**
    * 毒ダメージの値を取得する
    **/
   public function getPoisonDamage():Int {
-    var v = _params.hpmax * DAMAGE_POISON / 100;
+    var v = getHpMax() * DAMAGE_POISON / 100;
     if(v < 1) {
       v = 1;
     }
