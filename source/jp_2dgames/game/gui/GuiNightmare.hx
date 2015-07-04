@@ -30,6 +30,12 @@ class GuiNightmare extends FlxSpriteGroup {
   private var _txtInfo:FlxText;
   private var _txtTurn:FlxText;
 
+  // 点滅タイマー
+  private var _tBlink:Int = 0;
+
+  /**
+   * コンストラクタ
+   **/
   public function new() {
     super(POS_X, POS_Y);
 
@@ -62,14 +68,6 @@ class GuiNightmare extends FlxSpriteGroup {
       _turnLimit = turnCount;
       _txtTurn.text = '残り${turnCount}ターン';
 
-      if(_turnLimit < 10) {
-        // 文字を赤くする
-        _txtTurn.color = FlxColor.SALMON;
-      }
-      else {
-        // 文字を白にする
-        _txtTurn.color = FlxColor.WHITE;
-      }
     }
   }
 
@@ -80,5 +78,14 @@ class GuiNightmare extends FlxSpriteGroup {
     super.update();
 
     setTurn(Global.getTurnLimitNightmare());
+
+    _tBlink++;
+    _txtTurn.color = FlxColor.WHITE;
+    if(_turnLimit < 10) {
+      if(_tBlink%32 < 16) {
+        // 文字を赤くする
+        _txtTurn.color = FlxColor.CRIMSON;
+      }
+    }
   }
 }
