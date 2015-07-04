@@ -4,14 +4,22 @@
 import sys
 import xlrd
 import yaml
+import re
 
 # コンバート実行
 def conv(sheet, outFile, const):
 	print " [sheet] %s ... "%(sheet.name)
 
+	# 数値判定用正規表現オブジェクト
+	regex_num = re.compile("^\d+\.?\d*\Z")
+
+	ROW_KEY  = 0 # 0行目はキー
+	ROW_TYPE = 1 # 1行目は型
+	ROW_DATA = 2 # 2行目以降はデータ
 	nrows = sheet.nrows
 	ncols = sheet.ncols
 	row = 0
+	types = [] # 型チェック用
 	ret = ""
 	while row < nrows:
 		col = 0
@@ -19,6 +27,23 @@ def conv(sheet, outFile, const):
 			if col > 0:
 				ret += ","
 			v = sheet.cell(row, col).value
+			# 型情報を保存
+			if row == ROW_TYPE:
+				types.append(v)
+			# 有効な値かどうかをチェック
+			elif row >= ROW_DATA:
+				if types[col] == "int":
+					# 数値かどうかをチェック
+					if bool(regex_num.match(str(v))) == False and str(v) != "":
+						# 数値でない
+						if not(v in const):
+							# 定数でもない
+							print "**********************************************************"
+							msg = "Invalid integer: %s range(%s%d) val=%s"%(sheet.name, chr(65+col), row+1, v)
+							print msg
+							print "**********************************************************"
+							raise Exception(msg)
+
 			try:
 				# 数値
 				ret += str(int(v))
