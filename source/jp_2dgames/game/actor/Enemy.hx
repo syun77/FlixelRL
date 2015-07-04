@@ -445,9 +445,17 @@ class Enemy extends Actor {
     var bAttack = false;
 
     var range = _getCsvParam("range");
-    if(_badstatus == BadStatus.Closed) {
-      // 封印状態
-      range = "";
+    switch(_badstatus) {
+      case BadStatus.Closed:
+        // 封印状態
+        range = "";
+      case BadStatus.Confusion:
+        // 混乱状態
+        range = "";
+      case BadStatus.Anger:
+        // 怒り状態
+        range = "";
+      default:
     }
     switch(range) {
       case "":
