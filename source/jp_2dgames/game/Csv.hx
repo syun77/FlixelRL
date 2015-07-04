@@ -7,44 +7,50 @@ import jp_2dgames.lib.CsvLoader;
 class Csv {
   // プレイヤー情報
   private var _player:CsvLoader = null;
-  public var player(get, null):CsvLoader;
+  public var player(get, never):CsvLoader;
   private function get_player() {
     return _player;
   }
   // 敵情報
   private var _enemy:CsvLoader = null;
-  public var enemy(get, null):CsvLoader;
+  public var enemy(get, never):CsvLoader;
   private function get_enemy() {
     return _enemy;
   }
   // 敵出現
   private var _enemy_appear:CsvLoader = null;
-  public var enemy_appear(get, null):CsvLoader;
+  public var enemy_appear(get, never):CsvLoader;
   private function get_enemy_appear() {
     return _enemy_appear;
+  }
+  // ナイトメア出現
+  private var _enemy_nightmare:CsvLoader = null;
+  public var enemy_nightmare(get, never):CsvLoader;
+  private function get_enemy_nightmare() {
+    return _enemy_nightmare;
   }
 
   // 消費アイテム
   private var _itemConsumable:CsvLoader = null;
-  public var itemConsumable(get, null):CsvLoader;
+  public var itemConsumable(get, never):CsvLoader;
   private function get_itemConsumable() {
     return _itemConsumable;
   }
   // 装備アイテム
   private var _itemEquipment:CsvLoader = null;
-  public var itemEquipment(get, null):CsvLoader;
+  public var itemEquipment(get, never):CsvLoader;
   private function get_itemEquipment() {
     return _itemEquipment;
   }
   // アイテム出現テーブル
   private var _item_appear:CsvLoader = null;
-  public var item_appear(get, null):CsvLoader;
+  public var item_appear(get, never):CsvLoader;
   private function get_item_appear() {
     return _item_appear;
   }
   // メッセージ
   private var _message:CsvLoader = null;
-  public var message(get, null):CsvLoader;
+  public var message(get, never):CsvLoader;
 
   private function get_message() {
     return _message;
@@ -60,6 +66,7 @@ class Csv {
     _player = new CsvLoader("assets/levels/player.csv");
     _enemy = new CsvLoader("assets/levels/enemy.csv");
     _enemy_appear = new CsvLoader("assets/levels/enemy_appear.csv");
+    _enemy_nightmare = new CsvLoader("assets/levels/enemy_nightmare.csv");
     _itemConsumable = new CsvLoader("assets/levels/item_consumable.csv");
     _itemEquipment = new CsvLoader("assets/levels/item_equipment.csv");
     _item_appear = new CsvLoader("assets/levels/item_appear.csv");

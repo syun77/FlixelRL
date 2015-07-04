@@ -1,26 +1,54 @@
 package jp_2dgames.game;
 
-/**
- * ナイトメア管理
- **/
-import jp_2dgames.game.actor.EnemyConst;
+import flixel.FlxObject;
+import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.state.PlayState;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.lib.Layer2D;
-class NightmareMgr {
-  // ゲーム開始時の残りターン数
-  public static inline var TURN_LIMIT_FIRST:Int = 10;
 
+/**
+ * ナイトメア管理
+ **/
+class NightmareMgr extends FlxObject {
   public static var instance:NightmareMgr = null;
 
+  /**
+   * ナイトメア出現ターン数を取得する
+   **/
+  public static function getTurnLimit():Int {
+    return instance._getTurnLimit();
+  }
+  private function _getTurnLimit():Int {
+    return _csv.getInt(_lv, "turn");
+  }
+
+  /**
+   * ナイトメア敵IDを取得する
+   **/
+  public static function getEnemyID():Int {
+    return instance._getEnemyID();
+  }
+  private function _getEnemyID():Int {
+    return _csv.getInt(_lv, "enemy_id");
+  }
+
+  // ナイトメアが存在しているかどうか
   private var _exists:Bool;
+  // ナイトメア出現テーブル
+  private var _csv:CsvLoader;
+  // ナイトメアレベル
+  private var _lv:Int;
+
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(csv:CsvLoader) {
+    super();
     _exists = false;
+    _csv    = csv;
+    _lv     = 1;
   }
 
   /**
@@ -39,7 +67,7 @@ class NightmareMgr {
           var px = Std.int(pt.x);
           var py = Std.int(pt.y);
           pt.put();
-          Enemy.add(EnemyConst.NIGHTMARE, px, py);
+          Enemy.add(_getEnemyID(), px, py);
           _exists = true;
         }
       }
@@ -54,7 +82,7 @@ class NightmareMgr {
     var ret = false;
 
     Enemy.parent.forEachAlive(function(e:Enemy) {
-      if(e.id == EnemyConst.NIGHTMARE) {
+      if(e.id == _getEnemyID()) {
         ret = true;
       }
     });
@@ -107,5 +135,12 @@ class NightmareMgr {
 
     // 出現できない
     return null;
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
   }
 }

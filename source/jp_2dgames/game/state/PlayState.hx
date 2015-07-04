@@ -213,7 +213,7 @@ class PlayState extends FlxState {
     this.add(MagicShot.parent);
 
     // ナイトメア管理
-    NightmareMgr.instance = new NightmareMgr();
+    NightmareMgr.instance = new NightmareMgr(_csv.enemy_nightmare);
 
     // メッセージ生成
     var message = new Message(_csv.message, _csv.hint);

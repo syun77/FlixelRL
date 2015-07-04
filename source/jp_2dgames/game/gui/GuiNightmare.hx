@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.Enemy;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
@@ -49,7 +50,11 @@ class GuiNightmare extends FlxSpriteGroup {
     _txtInfo = new FlxText(INFO_X, INFO_Y, 0, 160);
     _txtInfo.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtInfo);
-    _txtInfo.text = "ナイトメア Lv1";
+    {
+      var eid = NightmareMgr.getEnemyID();
+      var name = Enemy.getNameFromID(eid);
+      _txtInfo.text = name;
+    }
 
     // ターン数のテキスト
     _txtTurn = new FlxText(TURN_X, TURN_Y, 0, 160);

@@ -38,6 +38,17 @@ class Enemy extends Actor {
   public static var csv:CsvLoader = null;
 
   /**
+   * 敵IDを指定して敵の名前を取得する
+   **/
+  public static function getNameFromID(eid:Int):String {
+    if(csv == null) {
+      return "none";
+    }
+
+    return csv.searchItem("id", '${eid}', "name");
+  }
+
+  /**
    * 敵を生成する
    **/
   public static function add(eid:Int, xchip:Int, ychip:Int):Enemy {

@@ -27,7 +27,7 @@ class Global {
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 0;
-    _turnLimitNightmare = NightmareMgr.TURN_LIMIT_FIRST;
+    _turnLimitNightmare = NightmareMgr.getTurnLimit();
   }
 
   // フロア数
