@@ -112,6 +112,7 @@ class Global {
         // りんごを持たせる
         var param = new ItemExtraParam();
         items.push(new ItemData(ItemConst.FOOD1, param));
+        items.push(new ItemData(ItemConst.PORTION24, param));
       }
     }
     else {

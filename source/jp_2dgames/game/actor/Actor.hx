@@ -335,7 +335,7 @@ class Actor extends FlxSprite {
       case BadStatus.Poison: msgid = Msg.BAD_POISON;
       case BadStatus.Star: msgid = Msg.BAD_STAR;
       case BadStatus.Sleep: msgid = Msg.BAD_SLEEP;
-      case BadStatus.Anger: msgid = Msg.BAD_AnGER;
+      case BadStatus.Anger: msgid = Msg.BAD_ANGER;
       case BadStatus.Confusion: msgid = Msg.BAD_CONFUSION;
       case BadStatus.Paralysis: msgid = Msg.BAD_PARALYSIS;
       case BadStatus.Powerful: msgid = Msg.BAD_POWERFUL;

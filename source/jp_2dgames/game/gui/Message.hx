@@ -42,7 +42,7 @@ class Msg {
   public static inline var BAD_PARALYSIS:Int = 29; // 麻痺
   public static inline var BAD_SICKNESS:Int = 30; // 病気
   public static inline var BAD_POWERFUL:Int = 31; // 元気いっぱい
-  public static inline var BAD_AnGER:Int = 32; // 怒り
+  public static inline var BAD_ANGER:Int = 32; // 怒り
   public static inline var BAD_POISON:Int = 33; // 毒
   public static inline var ITEM_WAND:Int = 34; // 杖を振った
   public static inline var NOTHING_HAPPENED:Int = 35; // 何も起こらなかった
@@ -117,7 +117,9 @@ class Message extends FlxGroup {
   }
 
   public static function push2(msgId:Int, args:Array<Dynamic>=null) {
-    Message.instance._push2(msgId, args);
+    if(Message.instance != null) {
+      Message.instance._push2(msgId, args);
+    }
   }
 
   // ヒントメッセージの追加
