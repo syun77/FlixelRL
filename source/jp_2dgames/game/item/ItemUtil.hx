@@ -434,8 +434,6 @@ class ItemUtil {
     actor.extParams.vit += vit;
     var hpmax = getParam(item.id, "hpmax");
     actor.extParams.hpmax += hpmax;
-
-    trace(actor.extParams);
   }
 
   /**
