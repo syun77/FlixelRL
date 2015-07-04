@@ -27,13 +27,13 @@ class Calc {
 	 **/
   public static function damage(act1:Actor, act2:Actor, item1:ItemData, item2:ItemData):Int {
     // 力
-    var str = act1.params.str;
+    var str = act1.getStr();
     if(act1.badstatus == BadStatus.Anger) {
       // 怒り状態は攻撃力2倍
       str *= 2;
     }
     // 耐久力
-    var vit = act2.params.vit;
+    var vit = act2.getVit();
     // 攻撃力
     var atk = 0;
     if(item1 != null) {

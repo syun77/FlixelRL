@@ -486,6 +486,10 @@ class Inventory extends FlxGroup {
     for(item in items) {
       if(item.isEquip) {
         equip(i);
+        if(item.type == IType.Ring) {
+          // 指輪であれば装備パラメータを反映する
+          ItemUtil.equipRing(_player, item);
+        }
       }
       i++;
     }
@@ -1288,6 +1292,8 @@ class Inventory extends FlxGroup {
       case IType.Ring:
         _ring = itemdata;
         spr = _fonts[EQUIP_RING];
+        // 指輪パラメータを反映
+        ItemUtil.equipRing(_player, itemdata);
       default:
         trace('warning: invalid itemid = ${itemdata.id}');
     }
@@ -1321,6 +1327,7 @@ class Inventory extends FlxGroup {
       case IType.Armor:
         _armor = null;
       case IType.Ring:
+        ItemUtil.unequipRing(_player, item);
         _ring = null;
       default:
         trace('warning: invalid type = ${type}');

@@ -1,5 +1,5 @@
-id,type,name,atk,def,attr,extra,rustless,food,buy,sell,sort,detail
-int,str,str,int,int,int,int,int,int,int,int,int,str
+id,type,name,atk,def,attr,extra,ext_val,food,buy,sell,sort,detail
+int,str,str,int,int,int,str,int,int,int,int,int,str
 1001,Weapon,竹刀,1,,,,,,300,105,100,竹で作られた刀。攻撃力1
 1002,Weapon,木刀,2,,,,,,400,140,101,木で作られた刀。攻撃力2
 1003,Weapon,ダガー,3,,,,,,500,175,102,小型の刃物。攻撃力3

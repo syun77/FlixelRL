@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.actor.Params.ParamsUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxRandom;
 import flixel.FlxG;
@@ -418,5 +419,30 @@ class ItemUtil {
    **/
   public static function useScroll(actor:Actor, item:ItemData):Void {
 
+  }
+
+  /**
+   * 指輪を装備する
+   **/
+  public static function equipRing(actor:Actor, item:ItemData):Void {
+    // 拡張パラメータを初期化
+    ParamsUtil.init(actor.extParams);
+
+    var str = getParam(item.id, "atk");
+    actor.extParams.str += str;
+    var vit = getParam(item.id, "def");
+    actor.extParams.vit += vit;
+    var hpmax = getParam(item.id, "hpmax");
+    actor.extParams.hpmax += hpmax;
+
+    trace(actor.extParams);
+  }
+
+  /**
+   * 指輪を外す
+   **/
+  public static function unequipRing(actor:Actor, item:ItemData):Void {
+    // 拡張パラメータを初期化
+    ParamsUtil.init(actor.extParams);
   }
 }

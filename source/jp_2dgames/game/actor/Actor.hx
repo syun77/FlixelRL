@@ -86,6 +86,8 @@ class Actor extends FlxSprite {
   private var _ytarget:Int = 0;
   // ステータスパラメータ
   private var _params:Params;
+  // 拡張パラメータ (一時的なパラメータの増減値)
+  private var _extParams:Params;
   // ID
   private var _id:Int = 1;
   // 名前
@@ -118,9 +120,13 @@ class Actor extends FlxSprite {
   }
   // パラメータ
   public var params(get_params, never):Params;
-
   private function get_params() {
     return _params;
+  }
+  // 拡張パラメータ
+  public var extParams(get, never):Params;
+  private function get_extParams() {
+    return _extParams;
   }
   // 名前
   public var name(get_name, never):String;
@@ -296,6 +302,12 @@ class Actor extends FlxSprite {
   public function addStr(val:Int):Void {
     _params.str += val;
   }
+  public function getStr():Int {
+    return _params.str + _extParams.str;
+  }
+  public function getVit():Int {
+    return _params.vit + _extParams.vit;
+  }
 
   // 指定した方向を向く
   public function look(i:Int, j:Int):Void {
@@ -403,6 +415,8 @@ class Actor extends FlxSprite {
     _dir = dir;
     // ステータス
     _params = params;
+    // 拡張パラメータ
+    _extParams = new Params();
     // ID
     _id = params.id;
     // バッドステータス設定

@@ -91,9 +91,9 @@ class GuiStatusDetail extends FlxSpriteGroup {
 
     var player = cast(FlxG.state, PlayState).player;
     // 力
-    _txtStr.text = '力: ${player.params.str}';
+    _txtStr.text = '力: ${player.getStr()}';
     // 体力
-    _txtVit.text = '体力: ${player.params.vit}';
+    _txtVit.text = '体力: ${player.getVit()}';
     // 攻撃力
     _txtAtk.text = '攻撃力: ${player.atk}';
     _txtAtk.color = FlxColor.WHITE;

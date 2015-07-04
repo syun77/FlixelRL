@@ -19,5 +19,19 @@ class Params {
 
   public function new() {
   }
+}
 
+/**
+ * キャラクターステータスユーティリティ
+ **/
+class ParamsUtil {
+
+  /**
+   * 初期化
+   **/
+  public static function init(p:Params):Void {
+    p.str = 0;
+    p.vit = 0;
+    p.hpmax = 0;
+  }
 }
