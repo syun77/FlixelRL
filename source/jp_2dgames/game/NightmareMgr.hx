@@ -1,6 +1,5 @@
 package jp_2dgames.game;
 
-import flixel.FlxObject;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.state.PlayState;
@@ -11,7 +10,7 @@ import jp_2dgames.lib.Layer2D;
 /**
  * ナイトメア管理
  **/
-class NightmareMgr extends FlxObject {
+class NightmareMgr {
   public static var instance:NightmareMgr = null;
 
   /**
@@ -38,28 +37,41 @@ class NightmareMgr extends FlxObject {
   private var _exists:Bool;
   // ナイトメア出現テーブル
   private var _csv:CsvLoader;
+  // ナイトメア出現ターン数
+  private var _turn(get, set):Int;
+  private function get__turn() {
+    return Global.getTurnLimitNightmare();
+  }
+  private function set__turn(v:Int):Int {
+    Global.setTurnLimitNightmare(v);
+    return v;
+  }
   // ナイトメアレベル
-  private var _lv:Int;
+  private var _lv(get, set):Int;
+  private function get__lv() {
+    return Global.getNightmareLv();
+  }
+  private function set__lv(v:Int):Int {
+    Global.setNightmareLv(v);
+    return v;
+  }
 
   /**
    * コンストラクタ
    **/
   public function new(csv:CsvLoader) {
-    super();
     _exists = false;
     _csv    = csv;
-    _lv     = 1;
   }
 
   /**
    * 次のターンに進む
    **/
   public function nextTurn(layer:Layer2D):Void {
-    var v = Global.getTurnLimitNightmare();
     // ターン数を減らす
-    v -= 1;
-    if(v <= 0) {
-      v = 0;
+    _turn -= 1;
+    if(_turn <= 0) {
+      _turn = 0;
       if(_exists == false) {
         var pt = _searchNightmarePosition(layer);
         if(pt != null) {
@@ -72,7 +84,22 @@ class NightmareMgr extends FlxObject {
         }
       }
     }
-    Global.setTurnLimitNightmare(v);
+
+    if(_exists) {
+      // 倒したかどうかをチェック
+      if(_existsNightmare() == false) {
+        // ナイトメアを倒した
+        if(_csv.hasId(_lv+1)) {
+          // レベルアップ
+          _lv++;
+        }
+
+        // 出現ターン数を設定
+        _turn = _getTurnLimit();
+
+        _exists = false;
+      }
+    }
   }
 
   /**
@@ -135,12 +162,5 @@ class NightmareMgr extends FlxObject {
 
     // 出現できない
     return null;
-  }
-
-  /**
-   * 更新
-   **/
-  override public function update():Void {
-    super.update();
   }
 }

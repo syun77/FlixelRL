@@ -28,6 +28,7 @@ class Global {
     _params = new Params();
     _shopAppearCount = 0;
     _turnLimitNightmare = NightmareMgr.getTurnLimit();
+    _nightmareLv = 1;
   }
 
   // フロア数
@@ -184,6 +185,14 @@ class Global {
   }
   public static function setTurnLimitNightmare(v:Int):Void {
     _turnLimitNightmare = v;
+  }
+  // ナイトメアレベル
+  private static var _nightmareLv:Int = 1;
+  public static function getNightmareLv():Int {
+    return _nightmareLv;
+  }
+  public static function setNightmareLv(v:Int):Void {
+    _nightmareLv = v;
   }
 
   // ショップ出現カウント

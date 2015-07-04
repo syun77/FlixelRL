@@ -34,6 +34,9 @@ class GuiNightmare extends FlxSpriteGroup {
   // 点滅タイマー
   private var _tBlink:Int = 0;
 
+  // ナイトメアの敵ID
+  private var _eid:Int = 0;
+
   /**
    * コンストラクタ
    **/
@@ -51,8 +54,8 @@ class GuiNightmare extends FlxSpriteGroup {
     _txtInfo.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtInfo);
     {
-      var eid = NightmareMgr.getEnemyID();
-      var name = Enemy.getNameFromID(eid);
+      _eid = NightmareMgr.getEnemyID();
+      var name = Enemy.getNameFromID(_eid);
       _txtInfo.text = name;
     }
 
@@ -83,6 +86,14 @@ class GuiNightmare extends FlxSpriteGroup {
     super.update();
 
     setTurn(Global.getTurnLimitNightmare());
+
+    var eid = NightmareMgr.getEnemyID();
+    if(_eid != eid) {
+      // 別のナイトメアになったので名前を更新
+      _eid = eid;
+      var name = Enemy.getNameFromID(_eid);
+      _txtInfo.text = name;
+    }
 
     _tBlink++;
     _txtTurn.color = FlxColor.WHITE;
