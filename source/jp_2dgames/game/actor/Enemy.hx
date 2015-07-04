@@ -56,7 +56,7 @@ class Enemy extends Actor {
    * @param ychip チップ座標(Y)
    * @return 存在しない場合は null
    **/
-  public static function getFromPositino(xchip:Int, ychip:Int):Enemy {
+  public static function getFromPosition(xchip:Int, ychip:Int):Enemy {
     var ret:Enemy = null;
     parent.forEachAlive(function(e:Enemy) {
       if(e.existsPosition(xchip, ychip)) {
@@ -466,7 +466,7 @@ class Enemy extends Actor {
               // 壁に当たったので攻撃できない
               break;
             }
-            if(Enemy.getFromPositino(px, py) != null) {
+            if(Enemy.getFromPosition(px, py) != null) {
               // 別の敵に当たるので攻撃できない
               break;
             }

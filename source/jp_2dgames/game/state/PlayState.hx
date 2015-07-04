@@ -503,7 +503,7 @@ class PlayState extends FlxState {
       if(FlxG.mouse.justPressed) {
         var i = Field.getMouseChipX();
         var j = Field.getMouseChipY();
-        var e = Enemy.getFromPositino(i, j);
+        var e = Enemy.getFromPosition(i, j);
         if(e != null) {
           // つかみ開始
           _debugEnemy = e;

@@ -233,7 +233,7 @@ class Generator {
           // 生成できないのでやり直す
           continue;
         }
-        if(Enemy.getFromPositino(px, py) != null) {
+        if(Enemy.getFromPosition(px, py) != null) {
           // 生成できないのでやり直す
           continue;
         }

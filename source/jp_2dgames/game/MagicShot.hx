@@ -177,7 +177,7 @@ class MagicShot extends FlxSprite {
         var px = Std.int(Field.toChipX(x));
         var py = Std.int(Field.toChipY(y));
         // 敵との当たり判定をチェック
-        var e = Enemy.getFromPositino(px, py);
+        var e = Enemy.getFromPosition(px, py);
         if(e != null) {
           // 必中
           var bAlwaysHit = true;

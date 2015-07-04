@@ -81,7 +81,7 @@ class ThrowItem {
           }});
           break;
         }
-        var e:Enemy = Enemy.getFromPositino(xpos, ypos);
+        var e:Enemy = Enemy.getFromPosition(xpos, ypos);
         if(e != null) {
           // 敵に当たった
           var xtarget = Field.toWorldX(xpos);

@@ -75,8 +75,10 @@ class NightmareMgr {
       var px = Std.int(pt.x);
       var py = Std.int(pt.y);
       if(player.existsPosition(px, py) == false) {
-        // 生成可能
-        return pt;
+        if(Enemy.getFromPosition(px, py) == null) {
+          // 生成可能
+          return pt;
+        }
       }
     }
 
@@ -94,7 +96,7 @@ class NightmareMgr {
         // 生成できないのでやり直す
         continue;
       }
-      if(Enemy.getFromPositino(px, py) != null) {
+      if(Enemy.getFromPosition(px, py) != null) {
         // 生成できないのでやり直す
         continue;
       }
