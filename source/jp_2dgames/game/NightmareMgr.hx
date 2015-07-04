@@ -73,14 +73,20 @@ class NightmareMgr {
     if(_turn <= 0) {
       _turn = 0;
       if(_exists == false) {
-        var pt = _searchNightmarePosition(layer);
-        if(pt != null) {
-          // ナイトメア出現
-          var px = Std.int(pt.x);
-          var py = Std.int(pt.y);
-          pt.put();
-          Enemy.add(_getEnemyID(), px, py);
+        if(_existsNightmare()) {
+          // すでに存在している
           _exists = true;
+        }
+        else {
+          var pt = _searchNightmarePosition(layer);
+          if(pt != null) {
+            // ナイトメア出現
+            var px = Std.int(pt.x);
+            var py = Std.int(pt.y);
+            pt.put();
+            Enemy.add(_getEnemyID(), px, py);
+            _exists = true;
+          }
         }
       }
     }

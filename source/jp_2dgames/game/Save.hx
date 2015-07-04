@@ -19,19 +19,23 @@ import haxe.Json;
  * グローバルデータ
  **/
 private class _Global {
-  public var floor:Int   = 0;
-  public var money:Int   = 0;
-  public var turn:Int    = 0;
-  public var shop:Int    = 0;
-  public var itemmax:Int = 0;
+  public var floor:Int         = 0;
+  public var money:Int         = 0;
+  public var turn:Int          = 0;
+  public var shop:Int          = 0;
+  public var itemmax:Int       = 0;
+  public var nightmareTurn:Int = 0;
+  public var nightmareLv:Int   = 0;
   public function new() {}
   // セーブ
   public function save() {
-    floor   = Global.getFloor();
-    money   = Global.getMoney();
-    turn    = Global.getTurn();
-    shop    = Global.getShopAppearCountRaw();
-    itemmax = Global.getItemMaxInventory();
+    floor         = Global.getFloor();
+    money         = Global.getMoney();
+    turn          = Global.getTurn();
+    shop          = Global.getShopAppearCountRaw();
+    itemmax       = Global.getItemMaxInventory();
+    nightmareTurn = Global.getTurnLimitNightmare();
+    nightmareLv   = Global.getNightmareLv();
   }
   // ロード
   public function load(data:Dynamic) {
@@ -40,6 +44,8 @@ private class _Global {
     Global.setTurn(data.turn);
     Global.setShopAppearCount(data.shop);
     Global.setItemMaxInventory(data.itemmax);
+    Global.setTurnLimitNightmare(data.nightmareTurn);
+    Global.setNightmareLv(data.nightmareLv);
   }
 }
 
