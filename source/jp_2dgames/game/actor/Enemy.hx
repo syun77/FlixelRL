@@ -480,9 +480,20 @@ class Enemy extends Actor {
           pt.set(_xprev, _yprev);
           pt = DirUtil.move(dir, pt);
           if(target.existsPosition(Std.int(pt.x), Std.int(pt.y))) {
-            // 攻撃できる
-            _dir = dir;
-            bAttack = true;
+            // 近くにプレイヤーがいる
+            if(badstatus == BadStatus.Confusion) {
+              // 混乱しているときは向きがランダム
+              if(DirUtil.random() == _dir) {
+                // 攻撃できる
+                _dir = dir;
+                bAttack = true;
+              }
+            }
+            else {
+              // 攻撃できる
+              _dir = dir;
+              bAttack = true;
+            }
             break;
           }
         }
