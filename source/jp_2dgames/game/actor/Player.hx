@@ -52,18 +52,6 @@ class Player extends Actor {
   public function endStompChip() {
     _stompChip = StompChip.None;
   }
-  /*
-  // 階段の上に乗っているかどうか
-  private var _bOnStairs:Bool;
-  public var isOnStairs(get, never):Bool;
-  private function get_isOnStairs() {
-    return _bOnStairs;
-  }
-  // 階段の上に乗ったフラグをリセットする
-  public function endOnStairs() {
-    _bOnStairs = false;
-  }
-  */
 
   // 自動回復フラグ
   private var _bAutoRecovery:Bool = true;
@@ -114,8 +102,6 @@ class Player extends Actor {
 
     // 初期化
     Global.initPlayer(this, X, Y, Dir.Down, null);
-    // プレイヤーはID「0」にしておく
-    _id = 0;
     // 名前を設定
     _name = NAME;
 
@@ -150,6 +136,9 @@ class Player extends Actor {
       params.vit = _csv.getInt(1, "vit");
     }
     super.init(X, Y, dir, params, bCreate);
+
+    // プレイヤーはID「0」にしておく
+    _id = 0;
   }
 
   // アニメーション名を取得する
