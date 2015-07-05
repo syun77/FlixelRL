@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.item.ItemUtil;
@@ -716,5 +717,14 @@ class Actor extends FlxSprite {
         var v = FlxRandom.intRanged(5, 7);
         return damage(v);
     }
+  }
+
+  /**
+   * ワープする
+   **/
+  public function warp(X:Int, Y:Int):Void {
+    setPositionChip(X, Y);
+    // ワープエフェクト再生
+    ParticleSmoke.start("warp", x, y);
   }
 }

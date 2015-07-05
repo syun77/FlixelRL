@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.actor.Enemy;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.actor.Params.ParamsUtil;
@@ -442,7 +443,8 @@ class ItemUtil {
 
           if(Enemy.getFromPosition(px, py) == null) {
             // ワープ可能
-            actor.setPositionChip(px, py);
+            ParticleSmoke.start("warp", actor.x, actor.y);
+            actor.warp(px, py);
             break;
           }
           pt.put();

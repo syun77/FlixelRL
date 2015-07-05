@@ -3,7 +3,7 @@ import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;
-import jp_2dgames.game.particle.ParticleEnemy;
+import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
@@ -275,7 +275,7 @@ class Enemy extends Actor {
     _changeAnime();
 
     // 出現演出
-    ParticleEnemy.start(x, y+height/4);
+    ParticleSmoke.start("enemy", x, y+height/4);
     Snd.playSe("enemy", true);
 
     // ナイトメアかどうかをチェック

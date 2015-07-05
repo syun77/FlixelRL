@@ -6,7 +6,7 @@ import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.lib.TextUtil;
 import flixel.util.FlxColor;
 import jp_2dgames.lib.Snd;
-import jp_2dgames.game.particle.ParticleEnemy;
+import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.particle.ParticleMessage;
 import jp_2dgames.game.particle.ParticleRecovery;
@@ -264,12 +264,12 @@ class PlayState extends FlxState {
 
     // パーティクル（敵の出現）
     {
-      var part = new FlxTypedGroup<ParticleEnemy>(Enemy.parent.maxSize);
+      var part = new FlxTypedGroup<ParticleSmoke>(Enemy.parent.maxSize);
       for(i in 0...part.maxSize) {
-        part.add(new ParticleEnemy());
+        part.add(new ParticleSmoke());
       }
       this.add(part);
-      ParticleEnemy.parent = part;
+      ParticleSmoke.parent = part;
     }
 
     // ショップ購入メニュー生成
@@ -329,7 +329,7 @@ class PlayState extends FlxState {
     Particle.parent = null;
     ParticleDamage.parent = null;
     ParticleRecovery.parent = null;
-    ParticleEnemy.parent = null;
+    ParticleSmoke.parent = null;
     NightmareMgr.instance = null;
     MagicShot.parent = null;
     DropItem.parent = null;
