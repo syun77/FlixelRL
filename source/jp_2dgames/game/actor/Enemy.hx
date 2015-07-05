@@ -97,6 +97,11 @@ class Enemy extends Actor {
     return _hpBar;
   }
 
+  // ナイトメアかどうか
+  private var _bNightmare:Bool = false;
+  // ナイトメアアニメーション
+  private var _tNightmare:Int = 0;
+
   /**
    * コンストラクタ
    **/
@@ -122,6 +127,7 @@ class Enemy extends Actor {
    **/
   override public function kill():Void {
     _hpBar.visible = false;
+    _bNightmare = false;
     super.kill();
   }
 
@@ -271,6 +277,13 @@ class Enemy extends Actor {
     // 出現演出
     ParticleEnemy.start(x, y+height/4);
     Snd.playSe("enemy", true);
+
+    // ナイトメアかどうかをチェック
+    if(NightmareMgr.getEnemyID() == params.id) {
+      // ナイトメア
+      _bNightmare = true;
+      _tNightmare = 0;
+    }
   }
 
   /**
@@ -311,6 +324,22 @@ class Enemy extends Actor {
     else {
       // 満タンの場合は表示しない
       _hpBar.visible = false;
+    }
+
+    if(_bNightmare) {
+      // ナイトメアアニメーション
+      _tNightmare++;
+      if(_tNightmare < 32 && _tNightmare%6 == 0) {
+        // 出現エフェクト
+        Particle.start(PType.Ring, x, y, FlxColor.SILVER);
+      }
+      if(_tNightmare%16 == 0) {
+        var dy = height/2;
+        Particle.start(PType.Night, x, y+dy, FlxColor.WHITE);
+      }
+      if(_tNightmare%60 == 0) {
+        Particle.start(PType.Ring2, x, y, FlxColor.SILVER);
+      }
     }
   }
 

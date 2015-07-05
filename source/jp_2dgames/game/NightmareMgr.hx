@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.state.PlayState;
@@ -84,10 +86,12 @@ class NightmareMgr {
             var px = Std.int(pt.x);
             var py = Std.int(pt.y);
             pt.put();
-            // 画面を揺らす
-            FlxG.camera.shake(0.01);
-            Enemy.add(_getEnemyID(), px, py);
-            _exists = true;
+            var e = Enemy.add(_getEnemyID(), px, py);
+            if(e != null) {
+              // 画面を揺らす
+              FlxG.camera.shake(0.01);
+              _exists = true;
+            }
           }
         }
       }
