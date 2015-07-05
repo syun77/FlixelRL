@@ -25,6 +25,8 @@ class GuiEnemy extends FlxSpriteGroup {
   private static inline var NAME_Y = 8;
   private static inline var HP_X = 48;
   private static inline var HP_Y = NAME_Y + 16;
+  private static inline var DETAIL_X = 8;
+  private static inline var DETAIL_Y = HP_Y + 20;
 
   // 敵画像
   private var _imgEnemy:FlxSprite;
@@ -32,6 +34,8 @@ class GuiEnemy extends FlxSpriteGroup {
   private var _txtName:FlxText;
   // 敵のHP
   private var _txtHp:FlxText;
+  // 敵の詳細
+  private var _txtDetail:FlxText;
 
   // 対象となる敵
   private var _enemy:Enemy = null;
@@ -66,6 +70,11 @@ class GuiEnemy extends FlxSpriteGroup {
     _txtHp = new FlxText(HP_X, HP_Y, 0, 160);
     _txtHp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtHp);
+
+    // 敵の詳細
+    _txtDetail = new FlxText(DETAIL_X, DETAIL_Y, 192);
+    _txtDetail.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    this.add(_txtDetail);
 
     // 初期状態は非表示
     visible = false;
@@ -123,6 +132,7 @@ class GuiEnemy extends FlxSpriteGroup {
 
     _txtName.text = _enemy.name;
     _txtHp.text = 'HP: ${_enemy.params.hp}/${_enemy.params.hpmax}';
+    _txtDetail.text = Enemy.getDetailFromID(_enemy.id);
 
     // ユニークID更新
     _enemyUID = _enemy.ID;

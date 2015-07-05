@@ -49,6 +49,17 @@ class Enemy extends Actor {
   }
 
   /**
+   * 敵IDを指定して詳細情報を取得する
+   **/
+  public static function getDetailFromID(eid:Int):String {
+    if(csv == null) {
+      return "not description.";
+    }
+
+    return csv.searchItem("id", '${eid}', "detail");
+  }
+
+  /**
    * 敵を生成する
    **/
   public static function add(eid:Int, xchip:Int, ychip:Int):Enemy {
