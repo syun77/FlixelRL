@@ -139,7 +139,7 @@ class Enemy extends Actor {
       // 攻撃アニメーション開始
       if(_checkShot()) {
         // 弾を撃つ
-        var itemid = _getCsvParamInt("missile");
+        var itemid = _getCsvParamInt("firearm");
         var p = new ItemExtraParam();
         var item = new ItemData(itemid, p);
         var px = Field.toWorldX(xchip);
@@ -428,9 +428,24 @@ class Enemy extends Actor {
       return false;
     }
 
-    if(Field.isCollision(xnext, ynext)) {
-      // 壁なので移動できない
-      return false;
+    // 飛行属性を取得する
+    var fly = _getCsvParam("fly");
+    switch(fly) {
+      case "fly":
+        // 空を飛んでいる
+        if(Field.isThroughFirearm(xnext, ynext) == false) {
+          // 飛んでいても抜けられない
+          return false;
+        }
+      case "wall":
+        // どんな壁も抜けられる
+
+      default:
+        // 通常
+        if(Field.isCollision(xnext, ynext)) {
+          // 壁なので移動できない
+          return false;
+        }
     }
 
     // 移動できる
