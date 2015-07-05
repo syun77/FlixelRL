@@ -181,6 +181,8 @@ class SeqMgr {
     Global.nextFloor();
     // ショップカウンタを増やす
     Global.nextShopAppearCount();
+    // ナイトメアターン数を回復
+    NightmareMgr.nextFloor();
   }
 
   /**

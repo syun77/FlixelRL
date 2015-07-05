@@ -84,6 +84,8 @@ class NightmareMgr {
             var px = Std.int(pt.x);
             var py = Std.int(pt.y);
             pt.put();
+            // 画面を揺らす
+            FlxG.camera.shake(0.01);
             Enemy.add(_getEnemyID(), px, py);
             _exists = true;
           }
@@ -105,6 +107,19 @@ class NightmareMgr {
 
         _exists = false;
       }
+    }
+  }
+
+  /**
+   * 次のフロアに進むときの処理
+   **/
+  public static function nextFloor() {
+    instance._nextFloor();
+  }
+  private function _nextFloor():Void {
+    if(_exists) {
+      // 存在していれば残りターン数を回復
+      _turn += _csv.getInt(_lv, "add");
     }
   }
 
