@@ -5,7 +5,6 @@ import flixel.util.FlxRandom;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
-import flixel.FlxG;
 import jp_2dgames.game.particle.ParticleRecovery;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.particle.Particle;
@@ -414,12 +413,9 @@ class Actor extends FlxSprite {
 	 * 初期化
 	 **/
   public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
-    _xprev = X;
-    _yprev = Y;
-    _xnext = X;
-    _ynext = Y;
-    x = Field.toWorldX(X);
-    y = Field.toWorldY(Y);
+
+    // 座標を設定
+    setPositionChip(X, Y);
 
     _state = State.KeyInput;
     _stateprev = _state;
@@ -434,6 +430,21 @@ class Actor extends FlxSprite {
     _id = params.id;
     // バッドステータス設定
     changeBadStatus(BadStatusUtil.fromString(_params.badstatus));
+  }
+
+  /**
+   * 座標を設定する
+   **/
+  public function setPositionChip(X:Int, Y:Int):Void {
+    var px = Std.int(X);
+    var py = Std.int(Y);
+    _xprev = px;
+    _yprev = py;
+    _xnext = px;
+    _ynext = py;
+    var px2 = Field.toWorldX(X);
+    var py2 = Field.toWorldY(Y);
+    super.setPosition(px2, py2);
   }
 
   // 行動開始する

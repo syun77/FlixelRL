@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxPoint;
 import jp_2dgames.lib.CsvLoader;
 import flash.Lib;
 import flixel.util.FlxRandom;
@@ -48,6 +49,12 @@ class Field {
 
   // コリジョンレイヤーの設定
   private static var _cLayer:Layer2D;
+  public static function getLayerWidth() {
+    return _cLayer.width;
+  }
+  public static function getLayerHeight() {
+    return _cLayer.height;
+  }
 
   public static function setCollisionLayer(layer:Layer2D):Void {
     _cLayer = layer;
@@ -199,5 +206,12 @@ class Field {
    **/
   public static function getMouseChipY():Int {
     return Std.int(Field.toChipY(FlxG.mouse.y + Field.GRID_SIZE/2));
+  }
+
+  /**
+   * 指定したチップがある座標をランダムで返す
+   **/
+  public static function searchRandom(chipid:Int):FlxPoint {
+    return _cLayer.searchRandom(chipid);
   }
 }

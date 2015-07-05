@@ -1,5 +1,7 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.actor.Enemy;
+import flixel.util.FlxPoint;
 import jp_2dgames.game.actor.Params.ParamsUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxRandom;
@@ -411,6 +413,40 @@ class ItemUtil {
       case "closed":
         // 封印状態になる
         actor.changeBadStatus(BadStatus.Closed);
+      case "warp":
+        // ワープする
+        var distance = Field.getLayerWidth()*Field.getLayerHeight()/4;
+        for(i in 0...1000) {
+          var pt:FlxPoint = null;
+          if(FlxRandom.chanceRoll()) {
+            // 部屋から探す
+            pt = Field.searchRandom(Field.NONE);
+          }
+          else {
+            pt = Field.searchRandom(Field.PASSAGE);
+          }
+
+          if(pt == null) {
+            continue;
+          }
+
+          var px = Std.int(pt.x);
+          var py = Std.int(pt.y);
+          var dx = px - actor.xchip;
+          var dy = py - actor.ychip;
+          if(dx*dx + dy*dy < distance) {
+            // もっと遠くの場所を探す
+            distance--;
+            continue;
+          }
+
+          if(Enemy.getFromPosition(px, py) == null) {
+            // ワープ可能
+            actor.setPositionChip(px, py);
+            break;
+          }
+          pt.put();
+        }
     }
   }
 
