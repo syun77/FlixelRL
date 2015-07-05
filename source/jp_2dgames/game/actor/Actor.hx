@@ -693,7 +693,7 @@ class Actor extends FlxSprite {
 
       case IType.Wand:
         if(extra != "") {
-          ItemUtil.useExtra(this, extra, extval);
+          ItemUtil.useExtra(this, extra, extval, actor);
         }
         else {
           var v = Calc.damageItem(this, item, armor);

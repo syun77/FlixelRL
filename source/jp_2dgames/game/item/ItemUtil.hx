@@ -374,8 +374,12 @@ class ItemUtil {
 
   /**
    * 特殊アイテムを使った
+   * @param actor    対象相手
+   * @param extra    特殊効果名
+   * @param extval   パラメータ
+   * @param useActor アイテムを使った人
    **/
-  public static function useExtra(actor:Actor, extra:String, extval:Int):Void {
+  public static function useExtra(actor:Actor, extra:String, extval:Int, useActor:Actor=null):Void {
     switch(extra) {
       case "hpmax":
         // 最大HP上昇
@@ -417,7 +421,8 @@ class ItemUtil {
       case "warp":
         // ワープする
         var distance = Field.getLayerWidth()*Field.getLayerHeight()/4;
-        for(i in 0...1000) {
+        var cnt = 1000; // 試行回数
+        for(i in 0...cnt) {
           var pt:FlxPoint = null;
           if(FlxRandom.chanceRoll()) {
             // 部屋から探す
@@ -449,6 +454,14 @@ class ItemUtil {
           }
           pt.put();
         }
+      case "change":
+        // お互いの位置をチェンジ
+        var use_xchip = useActor.xchip;
+        var use_ychip = useActor.ychip;
+        var target_xchip = actor.xchip;
+        var target_ychip = actor.ychip;
+        useActor.warp(target_xchip, target_ychip);
+        actor.warp(use_xchip, use_ychip);
     }
   }
 
