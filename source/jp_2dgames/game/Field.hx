@@ -27,6 +27,7 @@ class Field {
   public static inline var HINT:Int    = 5;  // ヒント
   public static inline var SHOP:Int    = 6;  // お店
   public static inline var WALL2:Int   = 7;  // 壁（飛び道具は通り抜け可能）
+  public static inline var SPIKE:Int   = 8;  // トゲ
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
 
@@ -183,6 +184,9 @@ class Field {
           rect.left = (v - 1) * GRID_SIZE;
           rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
+        case SPIKE:
+          // トゲを配置
+          Pit.start(i, j);
       }
     }
 

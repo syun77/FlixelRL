@@ -1,6 +1,5 @@
 package jp_2dgames.game;
 import jp_2dgames.game.actor.Enemy;
-import flixel.FlxG;
 import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.item.ItemData;
 import flash.display.BlendMode;

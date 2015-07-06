@@ -159,6 +159,13 @@ class PlayState extends FlxState {
     _back = new FlxSprite();
     this.add(_back);
 
+    // トラップ生成
+    Pit.parent = new FlxTypedGroup<Pit>(32);
+    for(i in 0...Pit.parent.maxSize) {
+      Pit.parent.add(new Pit());
+    }
+    this.add(Pit.parent);
+
     // 階段の位置をランダムに配置する
     Field.randomize(layer, Global.getFloor(), _csv);
 
@@ -335,6 +342,7 @@ class PlayState extends FlxState {
     DropItem.parent = null;
     Enemy.parent = null;
     Enemy.csv = null;
+    Pit.parent = null;
     Message.instance = null;
     Inventory.instance = null;
     ItemUtil.csvConsumable = null;

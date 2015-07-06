@@ -531,7 +531,12 @@ class SeqMgr {
       return;
     }
 
+    // トゲを切り替え
+    Pit.turnEnd();
+
+    // 経験値管理
     ExpMgr.turnEnd();
+
     // 敵の行動終了
     _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
     switch(_player.stompChip) {
