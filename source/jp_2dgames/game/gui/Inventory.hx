@@ -383,7 +383,15 @@ class Inventory extends FlxGroup {
     // アイテムを並び替え
     ArraySort.sort(_itemList, function(a:ItemData, b:ItemData) {
       var aKey = ItemUtil.getParam(a.id, "sort");
+      if(a.isEquip) {
+        // 装備しているときは表示順が最優先
+        aKey -= 10000;
+      }
       var bKey = ItemUtil.getParam(b.id, "sort");
+      if(b.isEquip) {
+        // 装備しているときは表示順が最優先
+        bKey -= 10000;
+      }
       return aKey - bKey;
     });
 
