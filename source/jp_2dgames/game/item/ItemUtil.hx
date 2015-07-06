@@ -65,10 +65,10 @@ class ItemUtil {
           if(item.param.value > 0) {
             val = '+${val}';
           }
-          name = '${name}${val}[${item.param.condition}]';
+          name = '${name}${val}';
         }
         else {
-          name = '${name}[${item.param.condition}]';
+          name = '${name}';
         }
 
       case IType.Wand:

@@ -56,7 +56,7 @@ class Calc {
     var str_rate = Math.pow(1.02, str - vit);
 
     // 威力係数 (装備アイテムの差)
-    var power_rate = Math.pow(1.15, atk - def);
+    var power_rate = Math.pow(1.05, atk - def);
 
 //    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 

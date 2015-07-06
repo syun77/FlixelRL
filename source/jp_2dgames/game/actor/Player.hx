@@ -230,12 +230,6 @@ class Player extends Actor {
             // エフェクト再生
             Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
           }
-
-          // 武器の使用回数減少
-          if(Inventory.degradeEquipment(IType.Weapon)) {
-            // 武器破壊
-            ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
-          }
         }
         else {
           // 攻撃を外した
@@ -331,12 +325,6 @@ class Player extends Actor {
       // 画面を0.2秒間、赤フラッシュします
       FlxG.camera.flash(FlxColor.RED, 0.2);
       Snd.playSe("critical");
-    }
-
-    // 防具の使用回数減少
-    if(Inventory.degradeEquipment(IType.Armor)) {
-      // 防具破壊
-      ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
     }
 
     return ret;
