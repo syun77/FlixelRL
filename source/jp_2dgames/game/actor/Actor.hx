@@ -727,4 +727,15 @@ class Actor extends FlxSprite {
     // ワープエフェクト再生
     ParticleSmoke.start("warp", x, y);
   }
+
+  /**
+   * スパイクダメージ
+   **/
+  public function damageSpike():Bool {
+    var v = Std.int(getHpMax() * 0.3);
+    if(v < 1) {
+      v = 1;
+    }
+    return damage(v);
+  }
 }
