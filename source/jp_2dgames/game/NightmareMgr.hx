@@ -1,13 +1,29 @@
 package jp_2dgames.game;
 
-import flixel.util.FlxColor;
-import jp_2dgames.game.particle.Particle;
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.state.PlayState;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.lib.Layer2D;
+
+/**
+ * ナイトメア特殊スキル
+ **/
+enum NightmareSkill {
+  None;        // なし
+  AutoRecover; // 自動回復無効
+  Hungry;      // 満腹度減少率上昇
+  WeaponBreak; // 強制武器破壊
+  Wand;        // 杖使用不可
+  Ring;        // 指輪無効化
+  Attack;      // 通常攻撃不可
+  Potion;      // 薬使用不可
+  Scroll;      // 巻物使用不可
+}
 
 /**
  * ナイトメア管理
@@ -35,8 +51,59 @@ class NightmareMgr {
     return _csv.getInt(_lv, "enemy_id");
   }
 
+  /**
+   * ナイトメア特殊スキルを取得する
+   **/
+  public static function getSkill():NightmareSkill {
+    if(Exists() == false) {
+      // 存在していないのでスキル無効
+      return NightmareSkill.None;
+    }
+
+    return instance._getSkillRaw();
+  }
+  public static function getSkillRaw():NightmareSkill {
+    return instance._getSkillRaw();
+  }
+  private function _getSkillRaw():NightmareSkill {
+    switch(_csv.getString(_lv, "skill")) {
+      case "auto_recover": return NightmareSkill.AutoRecover;
+      case "hungry":       return NightmareSkill.Hungry;
+      case "weapon_break": return NightmareSkill.WeaponBreak;
+      case "wand":         return NightmareSkill.Wand;
+      case "ring":         return NightmareSkill.Ring;
+      case "attack":       return NightmareSkill.Attack;
+      case "potion":       return NightmareSkill.Potion;
+      case "scroll":       return NightmareSkill.Scroll;
+      default:             return NightmareSkill.None;
+    }
+  }
+
+  /**
+   * ナイトメア特殊スキル名を取得する
+   **/
+  public static function getSkillName():String {
+    return instance._getSkillName();
+  }
+  private function _getSkillName():String {
+    switch(_getSkillRaw()) {
+      case NightmareSkill.None: return "なし";
+      case NightmareSkill.AutoRecover: return "自動回復無効";
+      case NightmareSkill.Hungry: return "満腹度減少率上昇";
+      case NightmareSkill.WeaponBreak: return "強制武器破壊";
+      case NightmareSkill.Wand: return "杖使用不可";
+      case NightmareSkill.Ring: return "指輪無効化";
+      case NightmareSkill.Attack: return "通常攻撃不可";
+      case NightmareSkill.Potion: return "薬使用不可";
+      case NightmareSkill.Scroll: return "巻物使用不可";
+    }
+  }
+
   // ナイトメアが存在しているかどうか
   private var _exists:Bool;
+  public static function Exists():Bool {
+    return instance._exists;
+  }
   // ナイトメア出現テーブル
   private var _csv:CsvLoader;
   // ナイトメア出現ターン数
@@ -69,7 +136,10 @@ class NightmareMgr {
   /**
    * 次のターンに進む
    **/
-  public function nextTurn(layer:Layer2D):Void {
+  public static function nextTurn(layer:Layer2D):Void {
+    instance._nextTurn(layer);
+  }
+  private function _nextTurn(layer:Layer2D):Void {
     // ターン数を減らす
     _turn -= 1;
     if(_turn <= 0) {
@@ -121,9 +191,14 @@ class NightmareMgr {
     instance._nextFloor();
   }
   private function _nextFloor():Void {
-    if(_exists) {
-      // 存在していれば残りターン数を回復
-      _turn += _csv.getInt(_lv, "add");
+    // 残りターン数を回復
+    var add = _csv.getInt(_lv, "add");
+    if(_turn < add) {
+      // 回復値より小さければ足し込む
+      _turn += add;
+      if(_turn > add) {
+        _turn = add;
+      }
     }
   }
 

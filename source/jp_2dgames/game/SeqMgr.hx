@@ -556,7 +556,7 @@ class SeqMgr {
 
         var layer = cast(FlxG.state, PlayState).lField;
         // ナイトメア出現ターン数を減らす
-        NightmareMgr.instance.nextTurn(layer);
+        NightmareMgr.nextTurn(layer);
         // ターン数を進める
         Global.nextTurn();
         {

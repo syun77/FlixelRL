@@ -16,26 +16,29 @@ class GuiNightmare extends FlxSpriteGroup {
 
   // 背景のサイズ
   private static inline var WIDTH = 212 - 8*2;
-  private static inline var HEIGHT = 48 + 8*2;
+  private static inline var HEIGHT = 64 + 8*2;
 
   // 標示物の座標
   private static inline var INFO_X = 8;
   private static inline var INFO_Y = 8;
   private static inline var TURN_X = 8;
-  private static inline var TURN_Y = 32;
+  private static inline var TURN_Y = INFO_Y+24;
+  private static inline var SKILL_X = 8;
+  private static inline var SKILL_Y = TURN_Y+24;
 
   // 残りターン数
   private var _turnLimit:Int;
 
-  // ターン数のテキスト
-  private var _txtInfo:FlxText;
-  private var _txtTurn:FlxText;
+  // テキスト
+  private var _txtInfo:FlxText; // 名前
+  private var _txtTurn:FlxText; // 残りターン数
+  private var _txtSkill:FlxText; // スキル
 
   // 点滅タイマー
   private var _tBlink:Int = 0;
 
   // ナイトメアの敵ID
-  private var _eid:Int = 0;
+  private var _eid:Int = -1;
 
   /**
    * コンストラクタ
@@ -53,16 +56,16 @@ class GuiNightmare extends FlxSpriteGroup {
     _txtInfo = new FlxText(INFO_X, INFO_Y, 0, 160);
     _txtInfo.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtInfo);
-    {
-      _eid = NightmareMgr.getEnemyID();
-      var name = Enemy.getNameFromID(_eid);
-      _txtInfo.text = name;
-    }
 
     // ターン数のテキスト
     _txtTurn = new FlxText(TURN_X, TURN_Y, 0, 160);
     _txtTurn.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtTurn);
+
+    // スキルテキスト
+    _txtSkill = new FlxText(SKILL_X, SKILL_Y, 0, 160);
+    _txtSkill.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    this.add(_txtSkill);
 
     _turnLimit = 0;
   }
@@ -93,6 +96,9 @@ class GuiNightmare extends FlxSpriteGroup {
       _eid = eid;
       var name = Enemy.getNameFromID(_eid);
       _txtInfo.text = name;
+      // スキル名を設定
+      var skill = NightmareMgr.getSkillName();
+      _txtSkill.text = skill;
     }
 
     _tBlink++;
@@ -102,6 +108,14 @@ class GuiNightmare extends FlxSpriteGroup {
         // 文字を赤くする
         _txtTurn.color = FlxColor.CRIMSON;
       }
+    }
+
+    // スキル
+    if(NightmareMgr.Exists()) {
+      _txtSkill.color = FlxColor.YELLOW;
+    }
+    else {
+      _txtSkill.color = FlxColor.GRAY;
     }
   }
 }

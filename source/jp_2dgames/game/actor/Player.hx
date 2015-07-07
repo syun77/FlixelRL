@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.gui.InventoryUtil;
 import jp_2dgames.game.item.ItemData;
@@ -267,6 +268,10 @@ class Player extends Actor {
       }
       if(_badstatus == BadStatus.Sickness) {
         // 病気中は自動回復できない
+        return false;
+      }
+      if(NightmareMgr.getSkill() == NightmareSkill.AutoRecover) {
+        // 自動回復無効
         return false;
       }
 

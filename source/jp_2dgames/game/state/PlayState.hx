@@ -466,6 +466,12 @@ class PlayState extends FlxState {
         Field.breakWall(i, j);
       }
     }
+    if(FlxG.keys.justPressed.N) {
+      // ナイトメアターンを進める
+      for(i in 0...500) {
+        NightmareMgr.nextTurn(_lField);
+      }
+    }
 
     // アイテム配置デバッグ機能
     var itemtype = ItemUtil.getDebugItemType();
