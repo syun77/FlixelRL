@@ -48,6 +48,14 @@ class Field {
     return Math.floor((y - GRID_SIZE / 2) / GRID_SIZE);
   }
 
+  // 設定したメンバ変数を消去する
+  public static function clear():Void {
+    _cLayer = null;
+  }
+
+  // 背景画像
+  private static var _sprBack:FlxSprite;
+
   // コリジョンレイヤーの設定
   private static var _cLayer:Layer2D;
   public static function getLayerWidth() {
@@ -69,6 +77,10 @@ class Field {
     }
     if(v == WALL2) {
       // 通り抜けできない
+      return true;
+    }
+    if(v == -1) {
+      // 画面外
       return true;
     }
 
@@ -195,7 +207,51 @@ class Field {
     spr.dirty = true;
     spr.updateFrameData();
 
+    // メンバ変数に保存
+    _sprBack = spr;
+
     return spr;
+  }
+
+  /**
+   * 指定の座標の背景を別のチップで塗りつぶす
+   **/
+  public static function drawBackgroundChip(chipid:Int, i:Int, j:Int):Void {
+    // 背景スプライトを保持
+    var spr = _sprBack;
+    // チップIDを保持
+    var v = chipid;
+
+    // チップ画像読み込み
+    var chip = FlxG.bitmap.add("assets/levels/tileset.png");
+    // 透明なスプライトを作成
+    var col = FlxColor.SILVER;// FlxColor.TRANSPARENT;
+    // 転送先の座標
+    var pt = new Point();
+    pt.x = i * GRID_SIZE;
+    pt.y = j * GRID_SIZE;
+    // 転送領域の作成
+    var rect = new Rectangle(0, 0, GRID_SIZE, GRID_SIZE);
+    // 描画関数
+    switch(chipid) {
+      case GOAL, WALL:
+        rect.left = (v - 1) * GRID_SIZE;
+        rect.right = rect.left + GRID_SIZE;
+        spr.pixels.copyPixels(chip.bitmap, rect, pt);
+      case HINT, SHOP, WALL2:
+        rect.left = (v - 1) * GRID_SIZE;
+        rect.right = rect.left + GRID_SIZE;
+        spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
+      case NONE:
+        spr.pixels.fillRect(new Rectangle(pt.x, pt.y, GRID_SIZE, GRID_SIZE), col);
+      case SPIKE:
+        // トゲを配置
+        Pit.start(i, j);
+    }
+
+    // レイヤーを走査する
+    spr.dirty = true;
+    spr.updateFrameData();
   }
 
   /**
@@ -217,5 +273,25 @@ class Field {
    **/
   public static function searchRandom(chipid:Int):FlxPoint {
     return _cLayer.searchRandom(chipid);
+  }
+
+  /**
+   * 指定座標の壁を壊す
+   * @return 破壊できたらtrue
+   **/
+  public static function breakWall(i:Int, j:Int):Bool {
+    if(_cLayer.get(i, j) != WALL) {
+      // 壁出ないので壊せない
+      return false;
+    }
+
+    // レイヤー情報更新
+    _cLayer.set(i, j, NONE);
+
+    // 背景画像を更新
+    drawBackgroundChip(NONE, i, j);
+
+    // 壊せた
+    return true;
   }
 }

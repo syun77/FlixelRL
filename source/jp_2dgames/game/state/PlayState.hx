@@ -347,6 +347,7 @@ class PlayState extends FlxState {
     Inventory.instance = null;
     ItemUtil.csvConsumable = null;
     ItemUtil.csvEquipment = null;
+    Field.clear();
     super.destroy();
   }
 
@@ -457,11 +458,13 @@ class PlayState extends FlxState {
       // 1つ前のフロアに進む
       Global.backFloor();
     }
-    if(FlxG.keys.justPressed.T) {
-      // 魔法弾発射テスト
-      var param = new ItemExtraParam();
-      var item = new ItemData(33, param);
-      MagicShotMgr.startAllEnemy(_player.x, _player.y, item);
+    if(FlxG.keys.pressed.T) {
+      if(FlxG.mouse.justPressed) {
+        // 壁を壊す
+        var i = Field.getMouseChipX();
+        var j = Field.getMouseChipY();
+        Field.breakWall(i, j);
+      }
     }
 
     // アイテム配置デバッグ機能
