@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.InventoryUtil;
 import flixel.FlxG;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
@@ -349,12 +350,7 @@ class Actor extends FlxSprite {
     }
     if(isPlayer()) {
       var check = function() {
-        var ring_id = Inventory.getRing();
-        if(ring_id == ItemUtil.NONE) {
-          // 防げない
-          return false;
-        }
-        var extra = ItemUtil.getParamString(ring_id, "extra");
+        var extra = InventoryUtil.getRingExtra();
         switch(stt) {
           case BadStatus.Sleep:
             return extra == "sleep";

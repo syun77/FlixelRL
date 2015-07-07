@@ -101,6 +101,14 @@ class GenerateInfo {
 
     switch(ItemUtil.getType(itemid)) {
       case IType.Weapon, IType.Armor:
+        // 使用回数
+        var extra  = ItemUtil.getExtra(itemid);
+        var extval = ItemUtil.getExtVal(itemid);
+        if(extra == "drill") {
+
+          param.condition = FlxRandom.intRanged(5, 15);
+        }
+
         // 付加威力値
         var func = function() {
           var rnd = FlxRandom.intRanged(0, 99);

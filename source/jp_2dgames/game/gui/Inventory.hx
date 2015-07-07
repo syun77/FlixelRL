@@ -200,10 +200,10 @@ class Inventory extends FlxGroup {
   /**
    * 装備アイテムを劣化させる
    **/
-  public static function degradeEquipment(type:IType):Bool {
+  public static function degradeEquipment(type:IType, val:Int=1):Bool {
     var itemdata = getEquipment(type);
     if(itemdata != null) {
-      itemdata.param.condition--;
+      itemdata.param.condition -= val;
       if(itemdata.param.condition <= 0) {
         itemdata.param.condition = 0;
         // アイテム破壊

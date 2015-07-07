@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxRandom;
+import jp_2dgames.game.gui.InventoryUtil;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.lib.Snd;
@@ -528,6 +530,20 @@ class Player extends Actor {
 
     if(bAttack) {
       // 攻撃 or 待機
+      if(Field.isWall(xnext, ynext)) {
+        var extra = InventoryUtil.getWeaponExtra();
+        if(extra == "drill") {
+          // 壁が壊せる
+          Field.breakWall(xnext, ynext);
+          // 使用回数減少
+          var val = FlxRandom.intRanged(2, 5);
+          if(Inventory.degradeEquipment(IType.Weapon, val)) {
+            // 武器破壊
+            ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
+          }
+        }
+      }
+
       if(_target != null) {
         // 攻撃する
         _xtarget = xnext;
@@ -553,14 +569,10 @@ class Player extends Actor {
 
     // 移動先チェック
     var canWalk = function() {
-      var ring_id = Inventory.getRing();
-      if(ring_id != ItemUtil.NONE) {
-        // 指輪を装備している
-        var extra = ItemUtil.getParamString(ring_id, "extra");
-        if(extra == "passage") {
-          // 透明な壁を通過可能
-          return Field.isThroughFirearm(xnext, ynext);
-        }
+      var extra = InventoryUtil.getRingExtra();
+      if(extra == "passage") {
+        // 透明な壁を通過可能
+        return Field.isThroughFirearm(xnext, ynext);
       }
       return Field.isCollision(xnext, ynext) == false;
     };

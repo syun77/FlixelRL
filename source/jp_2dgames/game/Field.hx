@@ -68,6 +68,17 @@ class Field {
   public static function setCollisionLayer(layer:Layer2D):Void {
     _cLayer = layer;
   }
+
+  // 指定した座標が壁かどうか
+  public static function isWall(i:Int, j:Int):Bool {
+    var v = _cLayer.get(i, j);
+    if(v == WALL) {
+      return true;
+    }
+
+    return false;
+  }
+
   // 指定した座標がコリジョンかどうか
   public static function isCollision(i:Int, j:Int):Bool {
     var v = _cLayer.get(i, j);

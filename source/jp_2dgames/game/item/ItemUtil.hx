@@ -108,6 +108,22 @@ class ItemUtil {
     return Std.int(price);
   }
 
+  /**
+   * アイテムの拡張パラメータを取得する
+   **/
+  public static function getExtra(itemid:Int):String {
+    if(itemid == ItemUtil.NONE) {
+      return "";
+    }
+    return getParamString(itemid, "extra");
+  }
+  public static function getExtVal(itemid:Int):Int {
+    if(itemid == ItemUtil.NONE) {
+      return 0;
+    }
+    return getParam(itemid, "extval");
+  }
+
   private static function _calcAddedValue(item:ItemData, price:Float):Float {
     switch(item.type) {
       case IType.Weapon, IType.Armor:

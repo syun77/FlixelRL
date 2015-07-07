@@ -113,7 +113,8 @@ class Global {
         // りんごを持たせる
         var param = new ItemExtraParam();
         items.push(new ItemData(ItemConst.FOOD1, param));
-        items.push(new ItemData(ItemConst.RING6, param));
+        param.condition = 50;
+        items.push(new ItemData(ItemConst.WEAPON8, param));
       }
     }
     else {

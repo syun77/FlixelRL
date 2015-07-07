@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.gui.InventoryUtil;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
@@ -216,24 +217,20 @@ class Enemy extends Actor {
             // 通常攻撃
             var val = Calc.damage(this, target, null, Inventory.getArmorData());
             target.damage(val);
-            var armor_id = Inventory.getArmor();
-            if(armor_id != ItemUtil.NONE) {
-              // 防具を装備している
-              var extra = ItemUtil.getParamString(armor_id, "extra");
-              if(extra == "counter") {
-                // 反撃属性あり
-                // 終了関数上書き
-                cbEnd = function(tween:FlxTween) {
-                  var val2 = Std.int(val * 0.3);
-                  if(val2 < 1) {
-                    val2 = 1;
-                  }
-                  if(damage(val2)) {
-                    // 敵を倒した
-                    effectDestroyEnemy();
-                  }
-                  _cbActionEnd();
+            var extra = InventoryUtil.getArmorExtra();
+            if(extra == "counter") {
+              // 反撃属性あり
+              // 終了関数上書き
+              cbEnd = function(tween:FlxTween) {
+                var val2 = Std.int(val * 0.3);
+                if(val2 < 1) {
+                  val2 = 1;
                 }
+                if(damage(val2)) {
+                  // 敵を倒した
+                  effectDestroyEnemy();
+                }
+                _cbActionEnd();
               }
             }
           }
