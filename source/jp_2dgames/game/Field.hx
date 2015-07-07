@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxPoint;
 import jp_2dgames.lib.CsvLoader;
 import flash.Lib;
@@ -301,6 +302,11 @@ class Field {
 
     // 背景画像を更新
     drawBackgroundChip(NONE, i, j);
+
+    // 破壊エフェクト
+    var px = Field.toWorldX(i);
+    var py = Field.toWorldY(j);
+    ParticleSmoke.start("drill", px, py);
 
     // 壊せた
     return true;

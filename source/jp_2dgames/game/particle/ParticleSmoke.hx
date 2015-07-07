@@ -27,6 +27,7 @@ class ParticleSmoke extends FlxSprite {
     // アニメーション登録
     animation.add("enemy", [0, 1,  2,  3,  4,  5,  6,  7,  8], 16, false);
     animation.add("warp",  [9, 10, 11, 12, 13, 14, 15, 16, 17], 16, false);
+    animation.add("drill", [9, 10, 11, 12, 13, 14, 15, 16, 17], 16, false);
 
     // 中心を基準に描画
     offset.set(width / 2, height / 2);
@@ -43,6 +44,12 @@ class ParticleSmoke extends FlxSprite {
 
   public function init(type:String, X:Float, Y:Float, direction:Float, speed:Float):Void {
     animation.play(type);
+    if(type == "drill") {
+      color = FlxColor.BROWN;
+    }
+    else {
+      color = FlxColor.WHITE;
+    }
 
     // 座標と速度を設定
     x = X;
