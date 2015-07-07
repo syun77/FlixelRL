@@ -222,13 +222,7 @@ class Player extends Actor {
           var val = Calc.damage(this, _target, Inventory.getWeaponData(), null);
           if(_target.damage(val)) {
             // 敵を倒した
-            Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
-            _target.kill();
-            FlxG.sound.play("destroy");
-            // 経験値獲得
-            ExpMgr.add(_target.params.xp);
-            // エフェクト再生
-            Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+            _target.effectDestroyEnemy();
           }
         }
         else {

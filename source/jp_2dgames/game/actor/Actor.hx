@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import flixel.FlxG;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.item.ItemConst;
@@ -765,5 +766,18 @@ class Actor extends FlxSprite {
       v = 1;
     }
     return damage(v);
+  }
+
+  /**
+   * 敵を倒した
+   **/
+  public function effectDestroyEnemy():Void {
+    Message.push2(Msg.ENEMY_DEFEAT, [name]);
+    kill();
+    FlxG.sound.play("destroy");
+    // 経験値獲得
+    ExpMgr.add(params.xp);
+    // エフェクト再生
+    Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
   }
 }
