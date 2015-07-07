@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
@@ -117,6 +118,10 @@ class Actor extends FlxSprite {
 
   private function get_id() {
     return _id;
+  }
+  // プレイヤーかどうか
+  public function isPlayer():Bool {
+    return id == 0;
   }
   // パラメータ
   public var params(get_params, never):Params;
@@ -341,6 +346,29 @@ class Actor extends FlxSprite {
         return false;
       }
     }
+    if(isPlayer()) {
+      var check = function() {
+        var ring_id = Inventory.getRing();
+        if(ring_id == ItemUtil.NONE) {
+          // 防げない
+          return false;
+        }
+        var extra = ItemUtil.getParamString(ring_id, "extra");
+        switch(stt) {
+          case BadStatus.Sleep:
+            return extra == "sleep";
+          case BadStatus.Confusion:
+            return extra == "confusion";
+          default:
+        }
+        // 防げない
+        return false;
+      };
+      if(check()) {
+        // 無効化した
+        return false;
+      }
+    }
 
     _badstatus = stt;
     params.badstatus = BadStatusUtil.toString(stt);
@@ -366,7 +394,7 @@ class Actor extends FlxSprite {
       case BadStatus.Powerful: msgid = Msg.BAD_POWERFUL;
       case BadStatus.Sickness: msgid = Msg.BAD_SICKNESS;
       case BadStatus.Closed:
-        if(id == 0) {
+        if(isPlayer()) {
           msgid = Msg.BAD_CLOSED_PLAYER;
         }
         else {
@@ -581,7 +609,7 @@ class Actor extends FlxSprite {
       return false;
     }
 
-    if(id == 0) {
+    if(isPlayer()) {
       // プレイヤーダメージ
       Message.push2(Msg.PLAYER_DAMAGE, [name, val]);
       Snd.playSe("hit", true);
@@ -652,7 +680,7 @@ class Actor extends FlxSprite {
     var extval = ItemUtil.getParam(item.id, "extval");
 
     switch(item.type) {
-      case IType.Portion:
+      case IType.Potion:
         var val = ItemUtil.getParam(item.id, "hp");
         if(val > 0) {
           // HP回復

@@ -158,7 +158,7 @@ class Generator {
           }
           var param = gItem.generateItemParam(itemid);
           if(FlxRandom.chanceRoll(2)) {
-            // お金出現
+            // 2%でお金出現
             var max = 100 + Global.getFloor() * 20;
             if(max > 500) {
               max = 500;

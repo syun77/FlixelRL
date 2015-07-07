@@ -104,7 +104,7 @@ class MagicShot extends FlxSprite {
     }
     else {
       // 前方に発射するだけ
-      if(actor.id == 0) {
+      if(actor.isPlayer()) {
         // プレイヤー
         _shotType = ShotType.PlayerFront;
       }
