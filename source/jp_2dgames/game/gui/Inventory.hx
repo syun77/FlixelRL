@@ -1171,7 +1171,7 @@ class Inventory extends FlxGroup {
     switch(item.type) {
       case IType.Food:
         Message.push2(Msg.ITEM_EAT, [name]);
-      case IType.Portion:
+      case IType.Potion:
         Message.push2(Msg.ITEM_DRINK, [name]);
       case IType.Scroll:
         Message.push2(Msg.ITEM_SCROLL, [_player.name, name]);

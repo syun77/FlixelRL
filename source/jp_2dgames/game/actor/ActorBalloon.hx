@@ -42,4 +42,10 @@ class ActorBalloon extends FlxSprite {
     var str = BadStatusUtil.toString(stt);
     animation.play(str);
   }
+
+  override function kill():Void {
+    // 画面外に出しておく
+    x = -100000;
+    super.kill();
+  }
 }

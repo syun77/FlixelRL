@@ -149,6 +149,14 @@ class Enemy extends Actor {
   }
 
   /**
+   * アクション終了時に呼び出される関数
+   **/
+  private function _cbActionEnd():Void {
+    // 消滅時に行動終了にする
+    _change(Actor.State.TurnEnd);
+  }
+
+  /**
 	 * 攻撃開始
 	 **/
   override public function beginAction():Void {
@@ -164,7 +172,7 @@ class Enemy extends Actor {
         var ms = MagicShot.start(px, py, this, target, item);
         ms.setEndCallback(function() {
           // 消滅時に行動終了にする
-          _change(Actor.State.TurnEnd);
+          _cbActionEnd();
         });
         super.beginAction();
         return;
@@ -177,7 +185,7 @@ class Enemy extends Actor {
       var y2:Float = target.y;
       // 攻撃終了の処理
       var cbEnd = function(tween:FlxTween) {
-        _change(Actor.State.TurnEnd);
+        _cbActionEnd();
       }
 
       // 攻撃開始の処理
@@ -208,6 +216,26 @@ class Enemy extends Actor {
             // 通常攻撃
             var val = Calc.damage(this, target, null, Inventory.getArmorData());
             target.damage(val);
+            var armor_id = Inventory.getArmor();
+            if(armor_id != ItemUtil.NONE) {
+              // 防具を装備している
+              var extra = ItemUtil.getParamString(armor_id, "extra");
+              if(extra == "counter") {
+                // 反撃属性あり
+                // 終了関数上書き
+                cbEnd = function(tween:FlxTween) {
+                  var val2 = Std.int(val * 0.3);
+                  if(val2 < 1) {
+                    val2 = 1;
+                  }
+                  if(damage(val2)) {
+                    // 敵を倒した
+                    effectDestroyEnemy();
+                  }
+                  _cbActionEnd();
+                }
+              }
+            }
           }
           if(target.existsEnemyInFront() == false) {
             // プレイヤーの正面に敵がいなければ攻撃した敵の方を振り向く

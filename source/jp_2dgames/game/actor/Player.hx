@@ -222,13 +222,7 @@ class Player extends Actor {
           var val = Calc.damage(this, _target, Inventory.getWeaponData(), null);
           if(_target.damage(val)) {
             // 敵を倒した
-            Message.push2(Msg.ENEMY_DEFEAT, [_target.name]);
-            _target.kill();
-            FlxG.sound.play("destroy");
-            // 経験値獲得
-            ExpMgr.add(_target.params.xp);
-            // エフェクト再生
-            Particle.start(PType.Ring, _target.x, _target.y, FlxColor.YELLOW);
+            _target.effectDestroyEnemy();
           }
         }
         else {
@@ -558,7 +552,19 @@ class Player extends Actor {
     }
 
     // 移動先チェック
-    if(Field.isCollision(xnext, ynext) == false) {
+    var canWalk = function() {
+      var ring_id = Inventory.getRing();
+      if(ring_id != ItemUtil.NONE) {
+        // 指輪を装備している
+        var extra = ItemUtil.getParamString(ring_id, "extra");
+        if(extra == "passage") {
+          // 透明な壁を通過可能
+          return Field.isThroughFirearm(xnext, ynext);
+        }
+      }
+      return Field.isCollision(xnext, ynext) == false;
+    };
+    if(canWalk()) {
       // 移動可能
       _xnext = xnext;
       _ynext = ynext;

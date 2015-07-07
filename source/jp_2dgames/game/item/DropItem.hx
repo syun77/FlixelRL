@@ -241,7 +241,7 @@ class DropItem extends FlxSprite {
     animation.add(ItemUtil.toString(ItemUtil.IType.Armor), [1], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Scroll), [2], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Wand), [3], 1);
-    animation.add(ItemUtil.toString(ItemUtil.IType.Portion), [4], 1);
+    animation.add(ItemUtil.toString(ItemUtil.IType.Potion), [4], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Ring), [5], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Money), [6], 1);
     animation.add(ItemUtil.toString(ItemUtil.IType.Food), [7], 1);

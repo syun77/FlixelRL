@@ -136,13 +136,7 @@ class Pit extends FlxSprite {
           if(e.existsPosition(xchip, ychip)) {
             if(e.damageSpike()) {
               // 敵を倒した
-              Message.push2(Msg.ENEMY_DEFEAT, [e.name]);
-              e.kill();
-              FlxG.sound.play("destroy");
-              // 経験値獲得
-              ExpMgr.add(e.params.xp);
-              // エフェクト再生
-              Particle.start(PType.Ring, e.x, e.y, FlxColor.YELLOW);
+              e.effectDestroyEnemy();
             }
           }
         });

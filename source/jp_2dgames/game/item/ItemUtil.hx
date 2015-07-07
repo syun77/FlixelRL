@@ -18,16 +18,16 @@ import jp_2dgames.lib.CsvLoader;
  * アイテム種別
  **/
 enum IType {
-  None;    // なし
-  Weapon;  // 武器
-  Armor;   // よろい
-  Scroll;  // 巻物
-  Wand;    // 杖
-  Portion; // ポーション
-  Ring;    // 指輪
-  Money;   // お金
-  Food;    // 食べ物
-  Orb;     // 宝珠
+  None;   // なし
+  Weapon; // 武器
+  Armor;  // よろい
+  Scroll; // 巻物
+  Wand;   // 杖
+  Potion; // ポーション
+  Ring;   // 指輪
+  Money;  // お金
+  Food;   // 食べ物
+  Orb;    // 宝珠
 }
 
 /**
@@ -162,7 +162,7 @@ class ItemUtil {
     //			case '${IType.Armor}': return IType.Armor;
     //			case '${IType.Scroll}': return IType.Scroll;
     //			case '${IType.Wand}': return IType.Wand;
-    //			case '${IType.Portion}': return IType.Portion;
+    //			case '${IType.Potion}': return IType.Potion;
     //			case '${IType.Ring}': return IType.Ring;
     //			case '${IType.Food}': return IType.Food;
     //			default: throw "Error"; return IType.None;
@@ -179,8 +179,8 @@ class ItemUtil {
     else if(str == '${IType.Wand}') {
       return IType.Wand;
     }
-    else if(str == '${IType.Portion}') {
-      return IType.Portion;
+    else if(str == '${IType.Potion}') {
+      return IType.Potion;
     }
     else if(str == '${IType.Ring}') {
       return IType.Ring;
@@ -229,7 +229,7 @@ class ItemUtil {
         return FlxRandom.intRanged(100, 1000);
       case IType.Food:
         return FlxRandom.intRanged(1, 4);
-      case IType.Portion:
+      case IType.Potion:
         return FlxRandom.intRanged(100, 125);
       case IType.Scroll:
         return FlxRandom.intRanged(200, 202);
@@ -250,7 +250,7 @@ class ItemUtil {
       IType.Armor,
 //      IType.Scroll,
 //      IType.Wand,
-      IType.Portion,
+      IType.Potion,
 //      IType.Ring,
 //      IType.Money,
       IType.Food,
@@ -273,7 +273,7 @@ class ItemUtil {
       return IType.Food;
     }
     if(FlxG.keys.pressed.K) {
-      return IType.Portion;
+      return IType.Potion;
     }
     if(FlxG.keys.pressed.L) {
       return IType.Money;
@@ -301,7 +301,7 @@ class ItemUtil {
     var extval = ItemUtil.getParam(item.id, "extval");
 
     switch(item.type) {
-      case IType.Portion:
+      case IType.Potion:
         // 薬
         var val = ItemUtil.getParam(item.id, "hp");
         if(val > 0) {

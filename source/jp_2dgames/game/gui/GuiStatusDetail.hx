@@ -126,7 +126,7 @@ class GuiStatusDetail extends FlxSpriteGroup {
       case IType.Food:
       case IType.Money:
       case IType.None:
-      case IType.Portion:
+      case IType.Potion:
       case IType.Scroll:
       case IType.Wand:
       case IType.Orb:
