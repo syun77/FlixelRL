@@ -552,7 +552,19 @@ class Player extends Actor {
     }
 
     // 移動先チェック
-    if(Field.isCollision(xnext, ynext) == false) {
+    var canWalk = function() {
+      var ring_id = Inventory.getRing();
+      if(ring_id != ItemUtil.NONE) {
+        // 指輪を装備している
+        var extra = ItemUtil.getParamString(ring_id, "extra");
+        if(extra == "passage") {
+          // 透明な壁を通過可能
+          return Field.isThroughFirearm(xnext, ynext);
+        }
+      }
+      return Field.isCollision(xnext, ynext) == false;
+    };
+    if(canWalk()) {
       // 移動可能
       _xnext = xnext;
       _ynext = ynext;
