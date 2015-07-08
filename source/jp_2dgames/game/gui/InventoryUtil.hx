@@ -1,6 +1,6 @@
 package jp_2dgames.game.gui;
 
-import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.item.ItemUtil;
 
 /**
@@ -24,6 +24,11 @@ class InventoryUtil {
     return ItemUtil.getExtVal(id);
   }
   public static function getRingExtra():String {
+    if(NightmareMgr.getSkill() == NightmareSkill.Ring) {
+      // 指輪効果無効
+      return "";
+    }
+
     var id = Inventory.getRing();
     return ItemUtil.getExtra(id);
   }

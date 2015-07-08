@@ -56,7 +56,7 @@ class NightmareMgr {
    **/
   public static function getSkill():NightmareSkill {
     // TODO: テスト用にスキルを有効化
-//    return NightmareSkill.Attack;
+//    return NightmareSkill.Ring;
 
     if(Exists() == false) {
       // 存在していないのでスキル無効
