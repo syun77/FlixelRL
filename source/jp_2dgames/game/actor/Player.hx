@@ -554,6 +554,11 @@ class Player extends Actor {
         }
       }
 
+      if(NightmareMgr.getSkill() == NightmareSkill.Attack) {
+        // 通常攻撃不可
+        _target = null;
+      }
+
       if(_target != null) {
         // 攻撃する
         _xtarget = xnext;
