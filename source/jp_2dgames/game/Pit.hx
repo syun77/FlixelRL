@@ -134,6 +134,11 @@ class Pit extends FlxSprite {
         }
         Enemy.parent.forEachAlive(function(e:Enemy) {
           if(e.existsPosition(xchip, ychip)) {
+            if(e.id == NightmareMgr.getEnemyID()) {
+              // ナイトメアはダメージ床の影響を受けない
+              e.damage(0);
+              return;
+            }
             if(e.damageSpike()) {
               // 敵を倒した
               e.effectDestroyEnemy();
