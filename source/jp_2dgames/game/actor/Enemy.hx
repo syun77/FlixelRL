@@ -1,4 +1,6 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.particle.ParticleMessage;
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.gui.InventoryUtil;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemUtil;
@@ -217,6 +219,19 @@ class Enemy extends Actor {
             // 通常攻撃
             var val = Calc.damage(this, target, null, Inventory.getArmorData());
             target.damage(val);
+
+            // ナイトメアスキル反映
+            if(NightmareMgr.getSkill() == NightmareSkill.WeaponBreak) {
+              if(id == NightmareMgr.getEnemyID()) {
+                // 武器破壊
+                if(Inventory.degradeEquipment(IType.Weapon, 9999)) {
+                  // 破壊エフェクト
+                  ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
+                }
+              }
+            }
+
+            // 鎧特殊効果反映
             var extra = InventoryUtil.getArmorExtra();
             if(extra == "counter") {
               // 反撃属性あり
