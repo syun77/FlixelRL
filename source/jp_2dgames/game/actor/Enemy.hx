@@ -32,6 +32,7 @@ class Enemy extends Actor {
 
   private static inline var HP_BAR_MARGIN_W:Int = 4;
   private static inline var HP_BAR_MARGIN_H:Int = 2;
+  private static inline var ID_UNKNOWN = EnemyConst.LEGION;
 
   // 管理クラス
   public static var parent:FlxTypedGroup<Enemy> = null;
@@ -290,7 +291,14 @@ class Enemy extends Actor {
   override public function init(X:Int, Y:Int, dir:Dir, params:Params, bCreate:Bool = false):Void {
 
     // アニメーションを登録
-    _registAnim(params.id);
+    var eid = params.id;
+    if(NightmareMgr.getSkill() == NightmareSkill.Unknown) {
+      if(NightmareMgr.getEnemyID() != params.id) {
+        // アンノウンにする
+        eid = ID_UNKNOWN;
+      }
+    }
+    _registAnim(eid);
 
     // 中心を基準に描画
     offset.set(width / 2, height / 2);
@@ -324,6 +332,18 @@ class Enemy extends Actor {
       _bNightmare = true;
       _tNightmare = 0;
     }
+  }
+
+  /**
+   * アンノウンにする
+   **/
+  public function changeUnknown():Void {
+    // 画像変更
+    _registAnim(ID_UNKNOWN);
+
+    // 出現演出
+    ParticleSmoke.start("enemy", x, y+height/4);
+    Snd.playSe("enemy", true);
   }
 
   /**
@@ -743,6 +763,9 @@ class Enemy extends Actor {
   private function _registAnim(eid:Int):Void {
     // 敵画像をアニメーションとして読み込む
     var name = csv.searchItem("id", '${eid}', "image");
+    _registAnim2(name);
+  }
+  private function _registAnim2(name:String):Void {
     loadGraphic('assets/images/monster/${name}.png', true);
 
     // アニメーションを登録

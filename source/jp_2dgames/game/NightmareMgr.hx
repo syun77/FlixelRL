@@ -23,6 +23,7 @@ enum NightmareSkill {
   Attack;      // 通常攻撃不可
   Potion;      // 薬使用不可
   Scroll;      // 巻物使用不可
+  Unknown;     // 敵をすべてアンノウンにする
 }
 
 /**
@@ -56,7 +57,7 @@ class NightmareMgr {
    **/
   public static function getSkill():NightmareSkill {
     // TODO: テスト用にスキルを有効化
-//    return NightmareSkill.Ring;
+//    return NightmareSkill.Unknown;
 
     if(Exists() == false) {
       // 存在していないのでスキル無効
@@ -78,6 +79,7 @@ class NightmareMgr {
       case "attack":       return NightmareSkill.Attack;
       case "potion":       return NightmareSkill.Potion;
       case "scroll":       return NightmareSkill.Scroll;
+      case "unknown":      return NightmareSkill.Unknown;
       default:             return NightmareSkill.None;
     }
   }
@@ -99,6 +101,7 @@ class NightmareMgr {
       case NightmareSkill.Attack: return "通常攻撃不可";
       case NightmareSkill.Potion: return "薬使用不可";
       case NightmareSkill.Scroll: return "巻物使用不可";
+      case NightmareSkill.Unknown: return "敵の見た目変化";
     }
   }
 
@@ -164,6 +167,16 @@ class NightmareMgr {
               // 画面を揺らす
               FlxG.camera.shake(0.01);
               _exists = true;
+            }
+
+            if(getSkill() == NightmareSkill.Unknown) {
+              // すべての敵をアンノウン化
+              var eid = getEnemyID();
+              Enemy.parent.forEachAlive(function(e:Enemy) {
+                if(e.id != eid) {
+                  e.changeUnknown();
+                }
+              });
             }
           }
         }
