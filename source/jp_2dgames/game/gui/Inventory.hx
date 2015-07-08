@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.state.PlayState;
 import haxe.ds.ArraySort;
@@ -603,18 +604,36 @@ class Inventory extends FlxGroup {
    * アイテムを使えるかどうか
    **/
   private function _checkUse(item:ItemData):Bool {
-    if(_player.badstatus != BadStatus.Closed) {
-      // 使える
-      return true;
+    if(_player.badstatus == BadStatus.Closed) {
+      switch(item.type) {
+        case IType.Scroll, IType.Wand:
+          // 封印中は巻物と杖が使えない
+          return false;
+        default:
+      }
     }
 
-    switch(item.type) {
-      case IType.Scroll, IType.Wand:
-        // 封印中は巻物と杖が使えない
-        return false;
+    switch(NightmareMgr.getSkill()) {
+      case NightmareSkill.Wand:
+        if(item.type == IType.Wand) {
+          // 杖封印状態
+          return false;
+        }
+      case NightmareSkill.Scroll:
+        if(item.type == IType.Scroll) {
+          // 巻物封印
+          return false;
+        }
+      case NightmareSkill.Potion:
+        if(item.type == IType.Potion) {
+          // 薬使用不可
+          return false;
+        }
       default:
-        return true;
     }
+
+    // 使える
+    return true;
   }
 
   /**
