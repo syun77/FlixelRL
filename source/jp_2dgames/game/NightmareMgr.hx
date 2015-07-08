@@ -55,6 +55,9 @@ class NightmareMgr {
    * ナイトメア特殊スキルを取得する
    **/
   public static function getSkill():NightmareSkill {
+    // TODO: テスト用にスキルを有効化
+//    return NightmareSkill.Hungry;
+
     if(Exists() == false) {
       // 存在していないのでスキル無効
       return NightmareSkill.None;

@@ -246,7 +246,12 @@ class Player extends Actor {
   override public function turnEnd():Void {
     // 満腹度を減らす
     // 2ターンで1%減る
-    if(subFood(0.5)) {
+    var subFoodVal = 0.5;
+    if(NightmareMgr.getSkill() == NightmareSkill.Hungry) {
+      // 満腹殿減少率が3倍
+      subFoodVal *= 3;
+    }
+    if(subFood(subFoodVal)) {
       // 空腹ダメージ
       // HPが5%減る
       var v = Std.int(params.hpmax * 0.05);
