@@ -1,4 +1,6 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.Generator.GenerateInfo;
+import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.particle.ParticleMessage;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.gui.InventoryUtil;
@@ -782,6 +784,35 @@ class Enemy extends Actor {
   private function _changeAnime():Void {
     var name = DirUtil.toString(_dir);
     animation.play(name);
+  }
+
+  /**
+   * ドロップアイテムの出現チェック
+   **/
+  override public function checkDropItem():Void {
+    var ratio = FlxRandom.intRanged(0, 999);
+    var sum:Int = 0;
+
+    for(i in 1...4) {
+      var itemid = _getCsvParamInt('drop${i}');
+      var val = _getCsvParamInt('dropval${i}');
+      if(val <= 0) {
+        // チェック不要
+        continue;
+      }
+      sum += val;
+      if(ratio < sum) {
+        // 出現
+        // 場所チェック
+        var pt = FlxPoint.get();
+        if(DropItem.checkDrop(pt, xchip, ychip)) {
+          // 出現可能
+          var param = GenerateInfo.generateItemParam(itemid);
+          DropItem.add(Std.int(pt.x), Std.int(pt.y), itemid, param);
+        }
+        break;
+      }
+    }
   }
 
   /**

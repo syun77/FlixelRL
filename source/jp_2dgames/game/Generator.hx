@@ -95,7 +95,7 @@ class GenerateInfo {
   /**
    * アイテムの拡張パラメータを取得する
    **/
-  public function generateItemParam(itemid:Int) {
+  public static function generateItemParam(itemid:Int) {
 
     var param = new ItemExtraParam();
 
@@ -164,7 +164,7 @@ class Generator {
             trace("Warning: Invalid item_appear.csv");
             itemid = 1;
           }
-          var param = gItem.generateItemParam(itemid);
+          var param = GenerateInfo.generateItemParam(itemid);
           if(FlxRandom.chanceRoll(2)) {
             // 2%でお金出現
             var max = 100 + Global.getFloor() * 20;
@@ -187,7 +187,7 @@ class Generator {
               trace("Warning: Invalid item_appear.csv");
               itemid = 1;
             }
-            var param = gItem.generateItemParam(itemid);
+            var param = GenerateInfo.generateItemParam(itemid);
             var item = new ItemData(itemid, param);
             GuiBuyDetail.addItem(item);
           }

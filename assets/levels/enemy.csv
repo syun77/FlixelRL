@@ -1,6 +1,6 @@
 id,race,name_old,name,image,rank,hp,xp,str,vit,fly,move,range,extra,ratio,extval,firearm,drop1,dropval1,drop2,dropval2,drop3,dropval3,detail
 int,str,str,str,str,str,int,int,int,int,str,str,str,str,int,int,int,int,int,int,int,int,int,str
-86,動物,コウモリ,コウモリ,bat,1,10,3,1,1,fly,,,,,,,1,500,2,200,3,100,飛行属性
+86,動物,コウモリ,コウモリ,bat,1,10,3,1,1,fly,,,,,,,,,,,,,飛行属性
 111,昆虫,アント,アント,worker_ant,1,15,5,2,1,,stay,,,,,,,,,,,,その場から動かない
 110,昆虫,キラービー,キラービー,bee,1,5,1,0,0,fly,,,,,,,,,,,,,耐久力は低い。飛行属性
 16,悪霊,亡霊,亡霊,specter,1,15,5,2,1,fly,,line,,,,305,,,,,,,遠距離攻撃をしてくる。飛行属性

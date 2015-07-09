@@ -775,5 +775,14 @@ class Actor extends FlxSprite {
     ExpMgr.add(params.xp);
     // エフェクト再生
     Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
+    // ドロップアイテム
+    checkDropItem();
+  }
+
+  /**
+   * ドロップアイテムの出現チェック
+   **/
+  public function checkDropItem():Void {
+    // 派生クラスで実装する
   }
 }
