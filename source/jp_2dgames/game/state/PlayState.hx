@@ -474,7 +474,7 @@ class PlayState extends FlxState {
     }
     if(FlxG.keys.justPressed.Y) {
       // アイテム所持最大数増加
-      Inventory.instance.addItemMax(2);
+      Global.addItemMaxInventory(2);
     }
 
     // アイテム配置デバッグ機能

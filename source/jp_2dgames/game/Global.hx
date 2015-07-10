@@ -136,6 +136,13 @@ class Global {
   public static function setItemMaxInventory(v:Int):Void {
     _itemMaxInventory = v;
   }
+  // アイテム所持最大数を増やす
+  // @return 増えた数
+  public static function addItemMaxInventory(v:Int):Int {
+    var ret = Inventory.instance.addItemMax(v);
+    setItemMaxInventory(Inventory.instance.getItemMax());
+    return ret;
+  }
 
   // プレイヤーのデータを初期化するかどうか
   private static var _bInitPlayer = true;
