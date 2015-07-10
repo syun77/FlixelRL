@@ -472,6 +472,10 @@ class PlayState extends FlxState {
         NightmareMgr.nextTurn(_lField);
       }
     }
+    if(FlxG.keys.justPressed.Y) {
+      // アイテム所持最大数増加
+      Inventory.instance.addItemMax(2);
+    }
 
     // アイテム配置デバッグ機能
     var itemtype = ItemUtil.getDebugItemType();

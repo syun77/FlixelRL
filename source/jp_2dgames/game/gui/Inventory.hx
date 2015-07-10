@@ -139,6 +139,20 @@ class Inventory extends FlxGroup {
   public function getItemMax():Int {
     return _itemMax;
   }
+  // アイテム所持最大数を増やす
+  // @return 増えた数
+  public function addItemMax(v:Int):Int {
+    if(_itemMax >= ITEM_MAX_LAST) {
+      return 0;
+    }
+    var prev = _itemMax;
+    _itemMax += v;
+    if(_itemMax > ITEM_MAX_LAST) {
+      _itemMax = ITEM_MAX_LAST;
+    }
+
+    return _itemMax - prev;
+  }
 
   // カーソル
   private var _cursor:FlxSprite;
