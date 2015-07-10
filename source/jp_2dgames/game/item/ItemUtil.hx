@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.actor.Enemy;
 import flixel.util.FlxPoint;
@@ -355,7 +356,18 @@ class ItemUtil {
 
       case IType.Scroll:
         // 巻物
-        // 何もしない
+        switch(extra) {
+          case "itemadd":
+            // アイテム所持限度の上昇
+            var addval = Global.addItemMaxInventory(extval);
+            if(addval > 0) {
+              // 増えた
+              var max = Inventory.instance.getItemMax();
+              Message.push2(Msg.ITEM_LIMIT_ADD, [addval, max]);
+            }
+          default:
+            // 何もしない
+        }
 
       case IType.Wand:
         // 杖

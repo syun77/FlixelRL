@@ -284,7 +284,11 @@ class Enemy extends Actor {
     return csv.searchItem("id", '${id}', name);
   }
   private function _getCsvParamInt(name:String):Int {
-    return Std.parseInt(_getCsvParam(name));
+    var str = _getCsvParam(name);
+    if(str == "") {
+      return 0;
+    }
+    return Std.parseInt(str);
   }
 
   /**
