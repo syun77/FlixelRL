@@ -365,6 +365,34 @@ class ItemUtil {
               var max = Inventory.instance.getItemMax();
               Message.push2(Msg.ITEM_LIMIT_ADD, [addval, max]);
             }
+            else {
+              // 何も起きない
+              Message.push2(Msg.NOTHING_HAPPENED);
+            }
+
+          case "weapon":
+            // 武器強化
+            var weapon = Inventory.getWeaponData();
+            if(weapon == null) {
+              // 何も起きない
+              Message.push2(Msg.NOTHING_HAPPENED);
+            }
+            else {
+              weapon.param.value += 1;
+              // TODO: メッセージ表示
+            }
+
+          case "armor":
+            // 防具強化
+            var armor = Inventory.getArmorData();
+            if(armor == null) {
+              // 何も起きない
+              Message.push2(Msg.NOTHING_HAPPENED);
+            }
+            else {
+              armor.param.value += 1;
+              // TODO: メッセージ表示
+            }
           default:
             // 何もしない
         }
