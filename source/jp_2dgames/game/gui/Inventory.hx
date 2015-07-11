@@ -122,6 +122,8 @@ class Inventory extends FlxGroup {
   // ■色
   private static inline var COLOR_LISTITEM_ENABLE:Int = 0x006666;
   private static inline var COLOR_LISTITEM_DISABLE:Int = 0x003333;
+  private static inline var COLOR_LISTITEM_TEXT:Int = 0x99FFCC;
+  private static inline var COLOR_CURSOR:Int = FlxColor.YELLOW;
 
   // インスタンス
   public static var instance:Inventory = null;
@@ -456,7 +458,7 @@ class Inventory extends FlxGroup {
     // カーソル
     _cursor = new FlxSprite(POS_X, y + LIST_POS_Y, "assets/images/ui/listitem.png");
     _cursor.alpha = 0.4;
-    _cursor.color = FlxColor.YELLOW;
+    _cursor.color = COLOR_CURSOR;
     this.add(_cursor);
     // カーソルは初期状態非表示
     _cursor.visible = false;
@@ -466,7 +468,7 @@ class Inventory extends FlxGroup {
     for(i in 0...PAGE_DISP) {
       var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i * DY, 0, 160);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-      txt.color = 0x99FFCC;
+      txt.color = COLOR_LISTITEM_TEXT;
       _txtList.add(txt);
       this.add(txt);
     }
