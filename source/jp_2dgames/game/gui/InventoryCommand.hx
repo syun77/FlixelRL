@@ -78,7 +78,7 @@ class InventoryCommand extends FlxSpriteGroup {
       var py = 0 + (i * DY);
       var txt = new FlxText(px, py, 0, WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-      txt.text = Message.getText(item);
+      txt.text = UIText.getText(item);
       _txtList.add(txt);
       this.add(txt);
       i++;

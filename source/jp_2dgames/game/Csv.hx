@@ -55,6 +55,12 @@ class Csv {
   private function get_message() {
     return _message;
   }
+  // UIテキスト
+  private var _uitext:CsvLoader = null;
+  public var uitext(get, never):CsvLoader;
+  private function get_uitext() {
+    return _uitext;
+  }
   // ヒント
   private var _hint:CsvLoader = null;
   public var hint(get, never):CsvLoader;
@@ -71,6 +77,7 @@ class Csv {
     _itemEquipment = new CsvLoader("assets/levels/item_equipment.csv");
     _item_appear = new CsvLoader("assets/levels/item_appear.csv");
     _message = new CsvLoader("assets/data/message.csv");
+    _uitext = new CsvLoader("assets/data/uitext.csv");
     _hint = new CsvLoader("assets/data/hint.csv");
   }
 

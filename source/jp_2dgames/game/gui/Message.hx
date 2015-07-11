@@ -58,33 +58,6 @@ class Msg {
   public static inline var BAD_CLOSED_ENEMY:Int = 45; // 封印状態になった（敵）
   public static inline var ITEM_LIMIT_ADD:Int = 46; // アイテム所持上限が上昇した
 
-  // メニュー
-  public static inline var MENU_USE:Int = 48; // メニュー: 使う
-  public static inline var MENU_EQUIP:Int = 49; // メニュー: 装備
-  public static inline var MENU_UNEQUIP:Int = 50; // メニュー: 外す
-  public static inline var MENU_THROW:Int = 51; // メニュー: 投げる
-  public static inline var MENU_PUT:Int = 52; // メニュー: 置く
-  public static inline var MENU_CHANGE:Int = 53; // メニュー: 交換
-  public static inline var MENU_PICKUP:Int = 54; // メニュー: 拾う
-  public static inline var MENU_NEXTFLOOR_MSG:Int = 55; // メニュー: 歓談がある
-  public static inline var MENU_NEXTFLOOR:Int = 56; // メニュー: 下りる
-  public static inline var MENU_STAY:Int = 57; // メニュー: そのまま
-  public static inline var MENU_SHOP_MSG:Int = 58; // メニュー: お店がある
-  public static inline var MENU_SHOP_BUY:Int = 59; // メニュー: 買う
-  public static inline var MENU_SHOP_SELL:Int = 60; // メニュー: 売る
-  public static inline var MENU_SHOP_NOTHING:Int = 61; // メニュー: 何もしない
-
-  // ページ
-  public static inline var PAGE_FEET:Int = 64; // 足下
-  public static inline var PAGE_NOITEM:Int = 65; // 何も持っていない
-
-  // ヘルプ
-  public static inline var HELP_KEYINPUT:Int = 72; // ヘルプ: 通常
-  public static inline var HELP_INVENCTORY:Int = 73; // ヘルプ: インベントリ
-  public static inline var HELP_DIALOG:Int = 74; // ヘルプ: ダイアログ
-  public static inline var HELP_INVENCTORYCOMMAND:Int = 75; // ヘルプ: インベントリ・コマンド
-  public static inline var HELP_SHOP_SELL:Int = 76; // ヘルプ: ショップ（売却）
-  public static inline var HELP_SHOP_BUY:Int = 77; // ヘルプ: ショップ（購入）
 }
 
 /**

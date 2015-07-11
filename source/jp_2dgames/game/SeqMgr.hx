@@ -10,6 +10,7 @@ import jp_2dgames.game.Generator.GenerateInfo;
 import jp_2dgames.game.item.ThrowItem;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Message;
+import jp_2dgames.game.gui.UIText;
 import jp_2dgames.game.gui.GuiStatus;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.game.gui.Inventory;
@@ -455,10 +456,10 @@ class SeqMgr {
 
       case State.ShopOpen:
         // ■ショップメニュー表示
-        var msg = Message.getText(Msg.MENU_SHOP_MSG);
-        var cmd1 = Message.getText(Msg.MENU_SHOP_BUY);
-        var cmd2 = Message.getText(Msg.MENU_SHOP_SELL);
-        var cmd3 = Message.getText(Msg.MENU_SHOP_NOTHING);
+        var msg = UIText.getText(UIText.MENU_SHOP_MSG);
+        var cmd1 = UIText.getText(UIText.MENU_SHOP_BUY);
+        var cmd2 = UIText.getText(UIText.MENU_SHOP_SELL);
+        var cmd3 = UIText.getText(UIText.MENU_SHOP_NOTHING);
         Dialog.open(Dialog.SELECT3, msg, [cmd1, cmd2, cmd3]);
         _change(State.ShopRoot);
 
@@ -543,9 +544,9 @@ class SeqMgr {
       case StompChip.Stairs:
         // 次のフロアに進む
         _change(State.NextFloor);
-        var msg = Message.getText(Msg.MENU_NEXTFLOOR_MSG);
-        var cmd1 = Message.getText(Msg.MENU_NEXTFLOOR);
-        var cmd2 = Message.getText(Msg.MENU_STAY);
+        var msg = UIText.getText(UIText.MENU_NEXTFLOOR_MSG);
+        var cmd1 = UIText.getText(UIText.MENU_NEXTFLOOR);
+        var cmd2 = UIText.getText(UIText.MENU_STAY);
         Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
 
       case StompChip.Shop:

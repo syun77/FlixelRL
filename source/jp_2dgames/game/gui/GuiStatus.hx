@@ -291,17 +291,17 @@ class GuiStatus extends FlxGroup {
       case HELP_NONE:
         // 非表示
       case HELP_KEYINPUT:
-        text = Message.getText(Msg.HELP_KEYINPUT);
+        text = UIText.getText(UIText.HELP_KEYINPUT);
       case HELP_INVENTORY:
-        text = Message.getText(Msg.HELP_INVENCTORY);
+        text = UIText.getText(UIText.HELP_INVENCTORY);
       case HELP_DIALOG_YN:
-        text = Message.getText(Msg.HELP_DIALOG);
+        text = UIText.getText(UIText.HELP_DIALOG);
       case HELP_INVENTORYCOMMAND:
-        text = Message.getText(Msg.HELP_INVENCTORYCOMMAND);
+        text = UIText.getText(UIText.HELP_INVENCTORYCOMMAND);
       case HELP_SHOP_SELL:
-        text = Message.getText(Msg.HELP_SHOP_SELL);
+        text = UIText.getText(UIText.HELP_SHOP_SELL);
       case HELP_SHOP_BUY:
-        text = Message.getText(Msg.HELP_SHOP_BUY);
+        text = UIText.getText(UIText.HELP_SHOP_BUY);
     }
 
     _txtHelp.text = text;

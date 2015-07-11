@@ -10,6 +10,7 @@ import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
+import jp_2dgames.game.gui.UIText;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.Player;
@@ -60,13 +61,13 @@ class Inventory extends FlxGroup {
   private static inline var EQUIP_MAX:Int = 3;
 
   // 消費アイテムメニュー
-  private static inline var MENU_CONSUME:Int = Msg.MENU_USE; // 使う
-  private static inline var MENU_EQUIP:Int = Msg.MENU_EQUIP; // 装備
-  private static inline var MENU_UNEQUIP:Int = Msg.MENU_UNEQUIP; // 外す
-  private static inline var MENU_THROW:Int = Msg.MENU_THROW; // 投げる
-  private static inline var MENU_PUT:Int = Msg.MENU_PUT; // 置く
-  private static inline var MENU_CHANGE:Int = Msg.MENU_CHANGE; // 交換
-  private static inline var MENU_PICKUP:Int = Msg.MENU_PICKUP; // 拾う
+  private static inline var MENU_CONSUME:Int = UIText.MENU_USE; // 使う
+  private static inline var MENU_EQUIP:Int = UIText.MENU_EQUIP; // 装備
+  private static inline var MENU_UNEQUIP:Int = UIText.MENU_UNEQUIP; // 外す
+  private static inline var MENU_THROW:Int = UIText.MENU_THROW; // 投げる
+  private static inline var MENU_PUT:Int = UIText.MENU_PUT; // 置く
+  private static inline var MENU_CHANGE:Int = UIText.MENU_CHANGE; // 交換
+  private static inline var MENU_PICKUP:Int = UIText.MENU_PICKUP; // 拾う
 
   // 1ページあたりの最大表示数
   private static inline var PAGE_DISP:Int = 8;
@@ -1082,14 +1083,14 @@ class Inventory extends FlxGroup {
         // ページ数の更新
         if(isEmpty()) {
           // アイテムを持っていない
-          _txtPage.text = Message.getText(Msg.PAGE_NOITEM);
+          _txtPage.text = UIText.getText(UIText.PAGE_NOITEM);
         }
         else {
           _txtPage.text = 'Page (${_nPage+1}/${_pageMax})';
         }
       case MenuMode.Feet:
         // 足下
-        _txtPage.text = Message.getText(Msg.PAGE_FEET);
+        _txtPage.text = UIText.getText(UIText.PAGE_FEET);
     }
 
     // Eマークの更新

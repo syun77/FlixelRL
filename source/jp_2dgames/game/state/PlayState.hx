@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.UIText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.gui.GuiBuyDetail;
@@ -225,6 +226,7 @@ class PlayState extends FlxState {
     // メッセージ生成
     var message = new Message(_csv.message, _csv.hint);
     Message.instance = message;
+    UIText.instance = new UIText(_csv.uitext);
 
     // ステータス表示
     _guistatus = new GuiStatus();
@@ -344,6 +346,7 @@ class PlayState extends FlxState {
     Enemy.csv = null;
     Pit.parent = null;
     Message.instance = null;
+    UIText.instance = null;
     Inventory.instance = null;
     ItemUtil.csvConsumable = null;
     ItemUtil.csvEquipment = null;
