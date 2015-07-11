@@ -113,7 +113,7 @@ class Inventory extends FlxGroup {
   private static inline var MSG_POS_Y = 32+2;
   // 'E'の座標オフセット
   private static inline var EQUIP_POS_X = 4;
-  private static inline var EQUIP_POS_Y = 2;
+  private static inline var EQUIP_POS_Y = 4;
   // メッセージ表示間隔
   private static inline var DY = 26;
 
@@ -974,7 +974,7 @@ class Inventory extends FlxGroup {
     }
 
     if(bChangePage) {
-      Snd.playSe("pi");
+      Snd.playSe("pi", true);
 
       _nCursor = _pageMinId;
       // 通常メニューに戻る
@@ -1048,7 +1048,7 @@ class Inventory extends FlxGroup {
     }
 
     if(bChangeItem) {
-      Snd.playSe("pi");
+      Snd.playSe("pi", true);
       if(bDispFeetMenu) {
         if(_feetItem != null) {
           // 足下にアイテムがある

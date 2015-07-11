@@ -145,14 +145,14 @@ class InventoryCommand extends FlxSpriteGroup {
 	 **/
   private function _procCursor():Void {
     if(Key.press.UP) {
-      Snd.playSe("pi");
+      Snd.playSe("pi", true);
       _nCursor--;
       if(_nCursor < 0) {
         _nCursor = _txtList.length - 1;
       }
     }
     if(Key.press.DOWN) {
-      Snd.playSe("pi");
+      Snd.playSe("pi", true);
       _nCursor++;
       if(_nCursor >= _txtList.length) {
         _nCursor = 0;

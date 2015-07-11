@@ -31,7 +31,7 @@ class GuiSellDetail extends FlxSpriteGroup {
 
     // 背景
     var back = new FlxSprite(0, 0, "assets/images/ui/window200x100.png");
-    back.color = FlxColor.BLACK;
+    back.color = Reg.COLOR_DETAIL_FRAME;
     this.add(back);
 
     // テキスト

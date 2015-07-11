@@ -75,7 +75,7 @@ class Message extends FlxGroup {
   private static inline var POS_Y2 = 24 + 8;
   // ウィンドウサイズ
   private static inline var WIDTH = 640 - 8 * 2;
-  private static inline var HEIGHT = (MESSAGE_MAX*DY)+14;//160 - 8 * 2;
+  private static inline var HEIGHT = (MESSAGE_MAX*DY)+14;
   private static inline var MSG_POS_X = 8;
   private static inline var MSG_POS_Y = 8;
   // メッセージ表示間隔
@@ -142,9 +142,8 @@ class Message extends FlxGroup {
   public function new(csv:CsvLoader, csvHint:CsvLoader) {
     super();
     // 背景枠
-    _window = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
-    _window.color = FlxColor.BLACK;
-    _window.alpha = 0.5;
+    _window = new FlxSprite(POS_X, POS_Y, "assets/images/ui/window624x74.png");
+    _window.color = Reg.COLOR_MESSAGE_WINDOW;
     this.add(_window);
     _msgList = new List<FlxText>();
 

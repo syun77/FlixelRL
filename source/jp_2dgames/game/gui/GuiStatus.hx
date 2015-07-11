@@ -223,7 +223,7 @@ class GuiStatus extends FlxGroup {
         _txtHp.color = FlxColor.PINK;
         _tDanger++;
         var step = Std.int(Math.sin(FlxAngle.TO_RAD * (_tDanger%180)) * 100);
-        var color = FlxColorUtil.interpolateColor(FlxColor.BLACK, FlxColor.MAROON, 100, step, 178);
+        var color = FlxColorUtil.interpolateColor(Reg.COLOR_MESSAGE_WINDOW, FlxColor.MAROON, 100, step, 178);
         _bgStatus.color = color;
         _bgHelp.color = color;
         Message.setWindowColor(color);
@@ -232,7 +232,7 @@ class GuiStatus extends FlxGroup {
         _txtHp.color = FlxColor.WHITE;
         _bgStatus.color = FlxColor.BLACK;
         _bgHelp.color = FlxColor.BLACK;
-        Message.setWindowColor(FlxColor.BLACK);
+        Message.setWindowColor(Reg.COLOR_MESSAGE_WINDOW);
       }
     }
     {
