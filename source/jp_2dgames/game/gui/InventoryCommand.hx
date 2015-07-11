@@ -1,9 +1,9 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxAngle;
 import jp_2dgames.lib.Snd;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
-import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 
@@ -27,7 +27,7 @@ class InventoryCommand extends FlxSpriteGroup {
   private static inline var CURSOR_HEIGHT = DY;
 
   // 背景
-  private var _sprBack:FlxSprite;
+  private var _bgList:Array<FlxSprite>;
 
   // テキスト
   private var _txtList:List<FlxText>;
@@ -40,6 +40,7 @@ class InventoryCommand extends FlxSpriteGroup {
   private function get_cursor() {
     return _nCursor;
   }
+  private var _tCursor:Int = 0;
 
   // 項目決定時のコールバック関数
   private var _cbFunc:Int->Int;
@@ -62,12 +63,17 @@ class InventoryCommand extends FlxSpriteGroup {
     FlxTween.tween(this, {y:Y}, 0.3, {ease:FlxEase.expoOut});
 
     // 背景枠
-    _sprBack = new FlxSprite(0, 0);
-    this.add(_sprBack);
+    _bgList = new Array<FlxSprite>();
+    for(i in 0...items.length) {
+      var bg = new FlxSprite(0, i * DY, "assets/images/ui/itemcommand.png");
+      bg.color = Reg.COLOR_LISTITEM_ENABLE;
+      _bgList.push(bg);
+      this.add(bg);
+    }
 
     // カーソル
-    _cursor = new FlxSprite(0, 0).makeGraphic(WIDTH, CURSOR_HEIGHT, FlxColor.AZURE);
-    _cursor.alpha = 0.5;
+    _cursor = new FlxSprite(0, 0, "assets/images/ui/itemcommand.png");
+    _cursor.color = Reg.COLOR_COMMAND_CURSOR;
     this.add(_cursor);
 
     // メニューテキスト設定
@@ -79,16 +85,35 @@ class InventoryCommand extends FlxSpriteGroup {
       var txt = new FlxText(px, py, 0, WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
       txt.text = UIText.getText(item);
+      txt.color = Reg.COLOR_COMMAND_TEXT_UNSELECTED;
       _txtList.add(txt);
       this.add(txt);
       i++;
     }
     _items = items;
     _cbFunc = cbFunc;
+  }
 
-    // 背景枠作成
-    _sprBack.makeGraphic(WIDTH, i * DY, FlxColor.BLACK);
-    _sprBack.alpha = 0.7;
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    var i = 0;
+    for(txt in _txtList) {
+      if(i == _nCursor) {
+        txt.color = Reg.COLOR_COMMAND_TEXT_SELECTED;
+      }
+      else {
+        txt.color = Reg.COLOR_COMMAND_TEXT_UNSELECTED;
+      }
+      i++;
+    }
+
+    // カーソル更新
+    _tCursor += 4;
+    _cursor.alpha = 0.9 + 0.1 * Math.sin(_tCursor * FlxAngle.TO_RAD);
   }
 
   /**

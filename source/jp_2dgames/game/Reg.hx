@@ -35,4 +35,8 @@ class Reg {
   public static inline var COLOR_LISTITEM_TEXT:Int = 0x99FFCC;
   public static inline var COLOR_CURSOR:Int = FlxColor.YELLOW;
 
+  public static inline var COLOR_COMMAND_FRAME:Int = 0x00CCCC;
+  public static inline var COLOR_COMMAND_CURSOR:Int = 0x33CCCC;
+  public static inline var COLOR_COMMAND_TEXT_SELECTED:Int = 0x000066;
+  public static inline var COLOR_COMMAND_TEXT_UNSELECTED:Int = 0x99FFCC;
 }

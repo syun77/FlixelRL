@@ -1272,7 +1272,7 @@ class Inventory extends FlxGroup {
         txt.text = "";
         // アイテム枠も更新
         var bg = _bgItems[i%PAGE_DISP];
-        if(i >= _itemMax) {
+        if(i >= _itemMax || _menumode == MenuMode.Feet) {
           // 所持制限以上は枠を表示しない
           bg.visible = false;
         }
