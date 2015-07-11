@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.Generator.GenerateInfo;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.particle.ParticleMessage;
@@ -804,6 +805,18 @@ class Enemy extends Actor {
         // チェック不要
         continue;
       }
+
+      if(itemid == ItemConst.MONEY) {
+        // お金の場合は100%ドロップする
+        var pt = FlxPoint.get();
+        if(DropItem.checkDrop(pt, xchip, ychip)) {
+          // 90%〜110%金額が変化する
+          var money = Std.int(val * FlxRandom.floatRanged(0.9, 1.1));
+          DropItem.addMoney(Std.int(pt.x), Std.int(pt.y), money);
+        }
+        break;
+      }
+
       sum += val;
       if(ratio < sum) {
         // 出現

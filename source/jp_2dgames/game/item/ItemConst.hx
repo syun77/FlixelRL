@@ -47,6 +47,7 @@ class ItemConst {
   public static inline var WEAPON12:Int = 1012;
   public static inline var WEAPON11:Int = 1011;
   public static inline var WEAPON10:Int = 1010;
+  public static inline var MONEY:Int = 1300;
   public static inline var WEAPON19:Int = 1019;
   public static inline var WEAPON18:Int = 1018;
   public static inline var SCROLL16:Int = 215;
