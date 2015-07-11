@@ -57,6 +57,8 @@ class Msg {
   public static inline var BAD_CLOSED_PLAYER:Int = 44; // 封印状態になった（プレイヤー）
   public static inline var BAD_CLOSED_ENEMY:Int = 45; // 封印状態になった（敵）
   public static inline var ITEM_LIMIT_ADD:Int = 46; // アイテム所持上限が上昇した
+  public static inline var WEAPON_ADD:Int = 47; // 武器を強化
+  public static inline var ARMOR_ADD:Int = 48; // 防具を強化
 
 }
 

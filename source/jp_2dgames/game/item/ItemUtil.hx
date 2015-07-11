@@ -378,8 +378,10 @@ class ItemUtil {
               Message.push2(Msg.NOTHING_HAPPENED);
             }
             else {
+              // 武器を強化
               weapon.param.value += 1;
-              // TODO: メッセージ表示
+              var name = ItemUtil.getName(weapon);
+              Message.push2(Msg.WEAPON_ADD, [name]);
             }
 
           case "armor":
@@ -390,8 +392,10 @@ class ItemUtil {
               Message.push2(Msg.NOTHING_HAPPENED);
             }
             else {
+              // 防具を強化
               armor.param.value += 1;
-              // TODO: メッセージ表示
+              var name = ItemUtil.getName(armor);
+              Message.push2(Msg.ARMOR_ADD, [name]);
             }
           default:
             // 何もしない
