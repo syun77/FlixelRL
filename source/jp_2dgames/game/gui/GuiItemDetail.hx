@@ -33,8 +33,8 @@ class GuiItemDetail extends FlxSpriteGroup {
     super(X, Y);
 
     // 背景
-    var back = new FlxSprite(0, 0).makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
-    back.alpha = 0.5;
+    var back = new FlxSprite(0, 0, "assets/images/ui/window200x100.png");
+    back.color = FlxColor.BLACK;
     this.add(back);
 
     // 説明文テキスト

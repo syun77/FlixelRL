@@ -1,7 +1,7 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxColor;
 import flixel.FlxG;
-import flixel.util.FlxSave;
 
 /**
  * Handy, pre-built Registry class that can be used to store 
@@ -29,29 +29,10 @@ class Reg {
     return FlxG.height / 2;
   }
 
-  /**
-	 * Generic levels Array that can be used for cross-state stuff.
-	 * Example usage: Storing the levels of a platformer.
-	 */
-  public static var levels:Array<Dynamic> = [];
-  /**
-	 * Generic level variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current level number.
-	 */
-  public static var level:Int = 0;
-  /**
-	 * Generic scores Array that can be used for cross-state stuff.
-	 * Example usage: Storing the scores for level.
-	 */
-  public static var scores:Array<Dynamic> = [];
-  /**
-	 * Generic score variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current score.
-	 */
-  public static var score:Int = 0;
-  /**
-	 * Generic bucket for storing different FlxSaves.
-	 * Especially useful for setting up multiple save slots.
-	 */
-  public static var saves:Array<FlxSave> = [];
+  // ■色
+  public static inline var COLOR_LISTITEM_ENABLE:Int = 0x006666;
+  public static inline var COLOR_LISTITEM_DISABLE:Int = 0x003333;
+  public static inline var COLOR_LISTITEM_TEXT:Int = 0x99FFCC;
+  public static inline var COLOR_CURSOR:Int = FlxColor.YELLOW;
+
 }

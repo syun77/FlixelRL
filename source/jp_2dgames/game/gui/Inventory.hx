@@ -7,7 +7,6 @@ import jp_2dgames.lib.Snd;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemUtil;
 import flixel.util.FlxAngle;
-import flixel.util.FlxColor;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.gui.UIText;
@@ -17,7 +16,6 @@ import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.item.ItemUtil.IType;
 import flixel.FlxG;
 import flixel.text.FlxText;
-import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 
@@ -119,11 +117,6 @@ class Inventory extends FlxGroup {
   // メッセージ表示間隔
   private static inline var DY = 26;
 
-  // ■色
-  private static inline var COLOR_LISTITEM_ENABLE:Int = 0x006666;
-  private static inline var COLOR_LISTITEM_DISABLE:Int = 0x003333;
-  private static inline var COLOR_LISTITEM_TEXT:Int = 0x99FFCC;
-  private static inline var COLOR_CURSOR:Int = FlxColor.YELLOW;
 
   // インスタンス
   public static var instance:Inventory = null;
@@ -458,7 +451,7 @@ class Inventory extends FlxGroup {
     // カーソル
     _cursor = new FlxSprite(POS_X, y + LIST_POS_Y, "assets/images/ui/listitem.png");
     _cursor.alpha = 0.4;
-    _cursor.color = COLOR_CURSOR;
+    _cursor.color = Reg.COLOR_CURSOR;
     this.add(_cursor);
     // カーソルは初期状態非表示
     _cursor.visible = false;
@@ -468,7 +461,7 @@ class Inventory extends FlxGroup {
     for(i in 0...PAGE_DISP) {
       var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i * DY, 0, 160);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-      txt.color = COLOR_LISTITEM_TEXT;
+      txt.color = Reg.COLOR_LISTITEM_TEXT;
       _txtList.add(txt);
       this.add(txt);
     }
@@ -1272,7 +1265,7 @@ class Inventory extends FlxGroup {
         txt.text = ItemUtil.getName(item);
         // アイテム枠も更新
         var bg = _bgItems[i%PAGE_DISP];
-        bg.color = COLOR_LISTITEM_ENABLE;
+        bg.color = Reg.COLOR_LISTITEM_ENABLE;
         bg.visible = true;
       }
       else {
@@ -1284,7 +1277,7 @@ class Inventory extends FlxGroup {
           bg.visible = false;
         }
         else {
-          bg.color = COLOR_LISTITEM_DISABLE;
+          bg.color = Reg.COLOR_LISTITEM_DISABLE;
           bg.visible = true;
         }
       }
