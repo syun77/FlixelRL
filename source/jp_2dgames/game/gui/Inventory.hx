@@ -108,14 +108,20 @@ class Inventory extends FlxGroup {
   private static inline var PAGE_X = POS_X + 8;
   private static inline var PAGE_Y = POS_Y + 4;
 
+  // アイテム枠座標オフセット
+  private static inline var LIST_POS_Y = 32;
   // メッセージ座標オフセット
   private static inline var MSG_POS_X = 24;
-  private static inline var MSG_POS_Y = 32;
+  private static inline var MSG_POS_Y = 32+2;
   // 'E'の座標オフセット
   private static inline var EQUIP_POS_X = 4;
   private static inline var EQUIP_POS_Y = 2;
   // メッセージ表示間隔
   private static inline var DY = 26;
+
+  // ■色
+  private static inline var COLOR_LISTITEM_ENABLE:Int = 0x006666;
+  private static inline var COLOR_LISTITEM_DISABLE:Int = 0x003333;
 
   // インスタンス
   public static var instance:Inventory = null;
@@ -124,8 +130,8 @@ class Inventory extends FlxGroup {
   private var x:Float = POS_X; // X座標
   private var y:Float = POS_Y; // Y座標
 
-  // 背景
-  private var _bg:FlxSprite;
+  // アイテム背景
+  private var _bgItems:Array<FlxSprite>;
 
   // ページ数テキスト
   private var _txtPage:FlxText;
@@ -434,20 +440,23 @@ class Inventory extends FlxGroup {
   public function new() {
     super();
 
-    // 背景枠
-    _bg = new FlxSprite(POS_X, POS_Y).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
-    _bg.color = FlxColor.GRAY;
-    _bg.alpha = 0.4;
-    this.add(_bg);
-
     // ページ数
     _txtPage = new FlxText(PAGE_X, PAGE_Y, 0, 128);
     _txtPage.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtPage);
 
+    // アイテム背景
+    _bgItems = new Array<FlxSprite>();
+    for(i in 0...PAGE_DISP) {
+      var spr = new FlxSprite(x, y + LIST_POS_Y + (DY * i), "assets/images/ui/listitem.png");
+      this.add(spr);
+      _bgItems.push(spr);
+    }
+
     // カーソル
-    _cursor = new FlxSprite(POS_X, y + MSG_POS_Y).makeGraphic(WIDTH, DY, FlxColor.YELLOW);
+    _cursor = new FlxSprite(POS_X, y + LIST_POS_Y, "assets/images/ui/listitem.png");
     _cursor.alpha = 0.4;
+    _cursor.color = FlxColor.YELLOW;
     this.add(_cursor);
     // カーソルは初期状態非表示
     _cursor.visible = false;
@@ -457,6 +466,7 @@ class Inventory extends FlxGroup {
     for(i in 0...PAGE_DISP) {
       var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i * DY, 0, 160);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+      txt.color = 0x99FFCC;
       _txtList.add(txt);
       this.add(txt);
     }
@@ -589,8 +599,6 @@ class Inventory extends FlxGroup {
         _updateText();
       }
 
-      // 背景色変更
-      _bg.color = FlxColor.TEAL;
       // カーソルタイマー初期化
       _tCursor = 90;
 
@@ -603,9 +611,6 @@ class Inventory extends FlxGroup {
       // 通常表示に戻しておく
       _menumode = MenuMode.Carry;
       _updateText();
-
-      // 背景色を元に戻す
-      _bg.color = FlxColor.GRAY;
 
       // カーソル位置を記憶しておく
       Global.setCursorInventory(_nCursor);
@@ -1073,7 +1078,7 @@ class Inventory extends FlxGroup {
   // カーソルの座標を更新
   private function _updateCursorPosition():Void {
     var idx = (_nCursor % PAGE_DISP);
-    _cursor.y = POS_Y + MSG_POS_Y + (idx * DY);
+    _cursor.y = POS_Y + LIST_POS_Y + (idx * DY);
   }
 
   // ページ切り替え
@@ -1263,9 +1268,23 @@ class Inventory extends FlxGroup {
       if(i < itemcount) {
         var item = itemList[i];
         txt.text = ItemUtil.getName(item);
+        // アイテム枠も更新
+        var bg = _bgItems[i%PAGE_DISP];
+        bg.color = COLOR_LISTITEM_ENABLE;
+        bg.visible = true;
       }
       else {
         txt.text = "";
+        // アイテム枠も更新
+        var bg = _bgItems[i%PAGE_DISP];
+        if(i >= _itemMax) {
+          // 所持制限以上は枠を表示しない
+          bg.visible = false;
+        }
+        else {
+          bg.color = COLOR_LISTITEM_DISABLE;
+          bg.visible = true;
+        }
       }
       i++;
     }
