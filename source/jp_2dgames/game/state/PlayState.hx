@@ -137,7 +137,16 @@ class PlayState extends FlxState {
     bPlayBgm = true;
     #end
     if(bPlayBgm) {
-      var nBgm = Global.getFloor()%11;
+      var floor = Global.getFloor();
+      var nBgm = 1;
+      switch(floor) {
+        case 1, 2:
+          // フロア1/2はフロア番号がBGM
+          nBgm = floor;
+        default:
+          // それ以外はランダム
+          nBgm = FlxRandom.intRanged(1, 12);
+      }
       var strBgm = TextUtil.fillZero(nBgm, 3);
       Snd.playMusic(strBgm);
     }

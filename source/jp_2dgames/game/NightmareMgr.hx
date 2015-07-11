@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
@@ -167,6 +168,7 @@ class NightmareMgr {
               // 画面を揺らす
               FlxG.camera.shake(0.01);
               _exists = true;
+              Snd.playMusic("nightmare");
             }
 
             if(getSkill() == NightmareSkill.Unknown) {
