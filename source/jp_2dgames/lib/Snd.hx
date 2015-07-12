@@ -10,8 +10,11 @@ import flixel.FlxG;
 class Snd {
 
   // BGM無効フラグ
-  //    private static var _bBgmDisable = true;
+#if flash
   private static var _bBgmDisable = false;
+#else
+  private static var _bBgmDisable = true;
+#end
 
   // 現在再生中のBGM
   private static var _bgmnow = null;
@@ -95,11 +98,6 @@ class Snd {
     // BGM再生情報を保存
     _bgmprev = _bgmnow;
     _bgmnow = name;
-
-  #if !flash
-    // FLASH環境以外はBGM再生無効
-//    return;
-  #end
 
     if(_bBgmDisable) {
       // BGM無効
