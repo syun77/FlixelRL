@@ -15,8 +15,21 @@ class Snd {
 
   // 現在再生中のBGM
   private static var _bgmnow = null;
+  public static function getBgmNow():String {
+    return _bgmnow;
+  }
+  public static function setBgmNow(v:String) {
+    _bgmnow = v;
+  }
+
   // 1つ前に再生したBGM
   private static var _bgmprev = null;
+  public static function getBgmPrev():String {
+    return _bgmprev;
+  }
+  public static function setBgmPrev(v:String):Void {
+    _bgmprev = v;
+  }
 
   // SEワンショット再生用テーブル
   private static var _oneShotTable = new Map<String, SoundInfo>();
@@ -106,6 +119,9 @@ class Snd {
    * 1つ前に再生したBGMを再生する
    **/
   public static function playMusicPrev():Void {
+    if(_bgmprev == null) {
+      return;
+    }
     playMusic(_bgmprev);
   }
 }

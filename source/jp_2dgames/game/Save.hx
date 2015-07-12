@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemData;
@@ -27,6 +28,8 @@ private class _Global {
   public var itemmax:Int       = 0;
   public var nightmareTurn:Int = 0;
   public var nightmareLv:Int   = 0;
+  public var bgmnow:String     = "";
+  public var bgmprev:String    = "";
   public function new() {}
   // セーブ
   public function save() {
@@ -37,6 +40,8 @@ private class _Global {
     itemmax       = Global.getItemMaxInventory();
     nightmareTurn = Global.getTurnLimitNightmare();
     nightmareLv   = Global.getNightmareLv();
+    bgmnow        = Snd.getBgmNow();
+    bgmprev       = Snd.getBgmPrev();
   }
   // ロード
   public function load(data:Dynamic) {
@@ -47,6 +52,8 @@ private class _Global {
     Global.setItemMaxInventory(data.itemmax);
     Global.setTurnLimitNightmare(data.nightmareTurn);
     Global.setNightmareLv(data.nightmareLv);
+    Snd.setBgmNow(data.bgmprev);
+    Snd.playMusic(data.bgmnow);
   }
 }
 
