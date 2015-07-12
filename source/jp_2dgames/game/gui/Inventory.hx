@@ -748,11 +748,15 @@ class Inventory extends FlxGroup {
           default:
             // 登録しない
         }
-        useItem(-1);
-        if(mode == MenuMode.Feet) {
-          // 足下メニューの場合は足下アイテムを消す
-          DropItem.killFromPosition(_player.xchip, _player.ychip);
+        if(_menumode == MenuMode.Feet) {
+          // 足下アイテム
+          if(item2.type != IType.Wand) {
+            // 杖以外は使用前に消しておく
+            DropItem.killFromPosition(_player.xchip, _player.ychip);
+          }
         }
+
+        useItem(-1);
       case MENU_EQUIP:
         // 装備する
         equip(-1, true);

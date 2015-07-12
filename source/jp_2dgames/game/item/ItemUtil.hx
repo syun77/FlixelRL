@@ -262,23 +262,23 @@ class ItemUtil {
   public static function random(type:IType):Int {
     switch(type) {
       case IType.Weapon:
-        return FlxRandom.intRanged(1001, 1007);
+        return FlxRandom.intRanged(ItemConst.WEAPON1, ItemConst.WEAPON8);
       case IType.Armor:
-        return FlxRandom.intRanged(1100, 1106);
+        return FlxRandom.intRanged(ItemConst.ARMOR1, ItemConst.ARMOR8);
       case IType.Ring:
-        return FlxRandom.intRanged(1200, 1206);
+        return FlxRandom.intRanged(ItemConst.RING1, ItemConst.RING6);
       case IType.Money:
         return FlxRandom.intRanged(100, 1000);
       case IType.Food:
-        return FlxRandom.intRanged(1, 4);
+        return FlxRandom.intRanged(ItemConst.FOOD1, ItemConst.FOOD4);
       case IType.Potion:
-        return FlxRandom.intRanged(100, 125);
+        return FlxRandom.intRanged(ItemConst.POTION1, ItemConst.POTION28);
       case IType.Scroll:
-        return FlxRandom.intRanged(200, 202);
+        return FlxRandom.intRanged(ItemConst.SCROLL1, ItemConst.SCROLL7);
       case IType.Wand:
-        return FlxRandom.intRanged(300, 305);
+        return FlxRandom.intRanged(ItemConst.WAND1, ItemConst.WAND9);
       case IType.Orb:
-        return FlxRandom.intRanged(400, 403);
+        return FlxRandom.intRanged(ItemConst.ORB1, ItemConst.ORB4);
       default:
         trace('Warning: invalid type ${type}');
         return 0;
