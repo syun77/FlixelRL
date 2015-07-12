@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxAngle;
 import haxe.ds.ArraySort;
 import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.item.ItemUtil;
@@ -30,7 +31,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private static inline var TXT_WIDTH = BG_WIDTH;
 
   private static inline var MSG_X = 16;
-  private static inline var MSG_Y = 8;
+  private static inline var MSG_Y = 0;
   private static inline var MSG_DY = 24;
   // 価格
   private static inline var MSG_X2 = BG_WIDTH - 96;
@@ -50,10 +51,13 @@ class GuiBuyDetail extends FlxSpriteGroup {
   public static function getItemList():Array<ItemData> {
     return _instance._itemList;
   }
+  // アイテム背景
+  private var _bgItemList:Array<FlxSprite>;
 
   // カーソル
   private var _cursor:FlxSprite;
   private var _nCursor:Int;
+  private var _tCursor:Int = 0;
 
   // 状態
   private var _state:State = State.Main;
@@ -142,10 +146,15 @@ class GuiBuyDetail extends FlxSpriteGroup {
   public function new(X:Float, Y:Float) {
     super(X, Y);
 
-    // 背景
-    var back = new FlxSprite(0, 0).makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
-    back.alpha = 0.5;
-    this.add(back);
+    // アイテム背景
+    _bgItemList = new Array<FlxSprite>();
+    for(i in 0...ITEM_MAX) {
+      var spr = new FlxSprite(0, (MSG_DY * i), "assets/images/ui/listitem2.png");
+      spr.color = Reg.COLOR_LISTITEM_ENABLE;
+      spr.alpha = 0.75;
+      this.add(spr);
+      _bgItemList.push(spr);
+    }
 
     // テキスト
     _txtList = new Array<FlxText>();
@@ -169,9 +178,9 @@ class GuiBuyDetail extends FlxSpriteGroup {
     _itemList = new Array<ItemData>();
 
     // カーソル
-    _cursor = new FlxSprite(MSG_X, MSG_Y);
-    _cursor.makeGraphic(TXT_WIDTH-MSG_X*2, 24, FlxColor.AQUAMARINE);
+    _cursor = new FlxSprite(0, 0, "assets/images/ui/listitem2.png");
     _cursor.alpha = 0.3;
+    _cursor.color = Reg.COLOR_CURSOR;
     this.add(_cursor);
 
     _nCursor = 0;
@@ -263,7 +272,9 @@ class GuiBuyDetail extends FlxSpriteGroup {
    * カーソルの更新
    **/
   private function _updateCursor():Void {
-    _cursor.y = y + MSG_Y + _nCursor * MSG_DY;
+    _cursor.y = y + _nCursor * MSG_DY;
+    _tCursor += 4;
+    _cursor.alpha = 0.3 + 0.1 * Math.sin(_tCursor * FlxAngle.TO_RAD);
     var item = _itemList[_nCursor];
     if(item != null) {
       _itemDetail.setSelectedItem(item);
@@ -283,6 +294,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
       txt.text = "";
     }
 
+    // いったん背景枠を非表示
+    for(bg in _bgItemList) {
+      bg.visible = false;
+    }
     // テキストを設定
     var idx = 0;
     for(item in _itemList) {
@@ -291,14 +306,18 @@ class GuiBuyDetail extends FlxSpriteGroup {
       _txtPriceList[idx].text = '${price}円';
       if(Global.getMoney() >= price) {
         // 購入可能
-        _txtList[idx].color = FlxColor.WHITE;
-        _txtPriceList[idx].color = FlxColor.WHITE;
+        _txtList[idx].color = Reg.COLOR_LISTITEM_TEXT;
+        _txtPriceList[idx].color = Reg.COLOR_LISTITEM_TEXT;
+        _bgItemList[idx].color = Reg.COLOR_LISTITEM_ENABLE;
       }
       else {
         // 買えない
         _txtList[idx].color = FlxColor.SILVER;
         _txtPriceList[idx].color = FlxColor.SILVER;
+        _bgItemList[idx].color = Reg.COLOR_LISTITEM_DISABLE;
       }
+      // 背景枠も更新
+      _bgItemList[idx].visible = true;
       idx++;
     }
   }
