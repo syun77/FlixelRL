@@ -47,6 +47,9 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private var _txtPriceList:Array<FlxText>;
   // アイテムリスト
   private var _itemList:Array<ItemData>;
+  public static function getItemList():Array<ItemData> {
+    return _instance._itemList;
+  }
 
   // カーソル
   private var _cursor:FlxSprite;
@@ -124,6 +127,13 @@ class GuiBuyDetail extends FlxSpriteGroup {
       _updateCursor();
     }
     _updateText();
+  }
+
+  /**
+   * アイテムリストからアイテムをすべて削除する
+   **/
+  public static function delItemAll():Void {
+    _instance._itemList = new Array<ItemData>();
   }
 
   /**

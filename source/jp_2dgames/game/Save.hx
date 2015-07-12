@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.DropItem;
@@ -99,6 +100,30 @@ private class _Inventory {
       array.push(i);
     }
     Global.setItemList(array);
+  }
+}
+
+/**
+ * ショップ
+ **/
+private class _Shop {
+  public var array:Array<ItemData>;
+
+  public function new() {
+  }
+  // セーブ
+  public function save() {
+    array = GuiBuyDetail.getItemList();
+  }
+  // ロード
+  public function load(data:Dynamic) {
+    // アイテムをすべて消す
+    GuiBuyDetail.delItemAll();
+    for(idx in 0...data.array.length) {
+      var item = data.array[idx];
+      var i = new ItemData(item.id, item.param);
+      GuiBuyDetail.addItem(i);
+    }
   }
 }
 
@@ -242,6 +267,7 @@ private class SaveData {
   public var global:_Global;
   public var player:_Player;
   public var inventory:_Inventory;
+  public var shop:_Shop;
   public var enemies:_Enemies;
   public var items:_Items;
   public var map:_Map;
@@ -250,6 +276,7 @@ private class SaveData {
     global = new _Global();
     player = new _Player();
     inventory = new _Inventory();
+    shop = new _Shop();
     enemies = new _Enemies();
     items = new _Items();
     map = new _Map();
@@ -260,6 +287,7 @@ private class SaveData {
     global.save();
     player.save();
     inventory.save();
+    shop.save();
     enemies.save();
     items.save();
     map.save();
@@ -270,6 +298,7 @@ private class SaveData {
     global.load(data.global);
     player.load(data.player);
     inventory.load(data.inventory);
+    shop.load(data.shop);
     enemies.load(data.enemies);
     items.load(data.items);
     map.load(data.map);
