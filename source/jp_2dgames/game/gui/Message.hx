@@ -68,7 +68,7 @@ class Msg {
 class Message extends FlxGroup {
 
   // メッセージログの最大
-  private static inline var MESSAGE_MAX = 3;//5;
+  private static inline var MESSAGE_MAX = 5;
   // ウィンドウ座標
   private static inline var POS_X = 8;
   private static inline var POS_Y = 480 - HEIGHT - 24 - 8;
@@ -79,7 +79,7 @@ class Message extends FlxGroup {
   private static inline var MSG_POS_X = 8;
   private static inline var MSG_POS_Y = 8;
   // メッセージ表示間隔
-  private static inline var DY = 20;
+  private static inline var DY = 24;
 
   // ウィンドウが消えるまでの時間 (5sec)
   private static inline var TIMER_DISAPPEAR:Float = 5;
@@ -142,9 +142,9 @@ class Message extends FlxGroup {
   public function new(csv:CsvLoader, csvHint:CsvLoader) {
     super();
     // 背景枠
-    _window = new FlxSprite(POS_X, POS_Y, "assets/images/ui/window624x74.png");
+    _window = new FlxSprite(POS_X, POS_Y, "assets/images/ui/message.png");
     _window.color = Reg.COLOR_MESSAGE_WINDOW;
-    this.add(_window);
+//    this.add(_window);
     _msgList = new List<FlxText>();
 
     // CSVメッセージ
@@ -213,7 +213,10 @@ class Message extends FlxGroup {
 	 **/
   private function _push(msg:String) {
     var text = new FlxText(POS_X + MSG_POS_X, 0, WIDTH);
-    text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    // アウトラインをつける
+    text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+    text.color = FlxColor.BLACK;
     text.text = msg;
     if(_msgList.length >= MESSAGE_MAX) {
       // 最大を超えたので先頭のメッセージを削除
