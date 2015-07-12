@@ -81,6 +81,23 @@ class ItemUtil {
   }
 
   /**
+   * 攻撃力を取得する
+   **/
+  public static function getAtk(item:ItemData):Int {
+    var atk = getParam(item.id, "atk");
+    atk += item.param.value;
+    return atk;
+  }
+  /**
+   * 防御力を取得する
+   **/
+  public static function getDef(item:ItemData):Int {
+    var def = getParam(item.id, "def");
+    def += item.param.value;
+    return def;
+  }
+
+  /**
    * アイテムの詳細説明文を取得する
    **/
   public static function getDetail(item:ItemData):String {

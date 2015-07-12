@@ -168,7 +168,9 @@ class NightmareMgr {
               // 画面を揺らす
               FlxG.camera.shake(0.01);
               _exists = true;
+#if flash
               Snd.playMusic("nightmare");
+#end
             }
 
             if(getSkill() == NightmareSkill.Unknown) {

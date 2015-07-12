@@ -24,11 +24,11 @@ class GuiStatusDetail extends FlxSpriteGroup {
   private static inline var STR_X = MSG_X;
   private static inline var STR_Y = 8;
   // 体力
-  private static inline var VIT_X = MSG_X;
-  private static inline var VIT_Y = STR_Y + 16;
+  private static inline var VIT_X = MSG_X + 72;
+  private static inline var VIT_Y = STR_Y;
   // 攻撃力
   private static inline var ATK_X = MSG_X;
-  private static inline var ATK_Y = VIT_Y + 16;
+  private static inline var ATK_Y = VIT_Y + 32;
   // 守備力
   private static inline var DEF_X = MSG_X;
   private static inline var DEF_Y = ATK_Y + 24;
@@ -90,15 +90,27 @@ class GuiStatusDetail extends FlxSpriteGroup {
   private function _updateText(item:ItemData):Void {
 
     var player = cast(FlxG.state, PlayState).player;
+    var atk = player.atk;
+    var def = player.def;
+    // 装備品であればそのパラメータを反映
+    switch(item.type) {
+      case IType.Weapon:
+        atk = ItemUtil.getAtk(item);
+      case IType.Armor:
+        def = ItemUtil.getDef(item);
+      default:
+    }
+
+
     // 力
     _txtStr.text = '力: ${player.getStr()}';
     // 体力
-    _txtVit.text = '体力: ${player.getVit()}';
+    _txtVit.text = '耐久力: ${player.getVit()}';
     // 攻撃力
-    _txtAtk.text = '攻撃力: ${player.atk}';
+    _txtAtk.text = '攻撃力: ${atk}';
     _txtAtk.color = FlxColor.WHITE;
     // 守備力
-    _txtDef.text = '守備力: ${player.def}';
+    _txtDef.text = '守備力: ${def}';
     _txtDef.color = FlxColor.WHITE;
 
     var itemid = item.id;
@@ -114,13 +126,11 @@ class GuiStatusDetail extends FlxSpriteGroup {
     switch(type) {
       case IType.Weapon:
         var now = player.atk;
-        var next = ItemUtil.getParam(itemid, "atk");
-        next += item.param.value;
+        var next = ItemUtil.getAtk(item);
         _setDiffText(_txtAtk, next - now);
       case IType.Armor:
         var now = player.def;
-        var next = ItemUtil.getParam(itemid, "def");
-        next += item.param.value;
+        var next = ItemUtil.getDef(item);
         _setDiffText(_txtDef, next - now);
       case IType.Ring:
       case IType.Food:
