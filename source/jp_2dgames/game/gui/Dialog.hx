@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.FlxG;
@@ -19,6 +21,9 @@ class Dialog extends FlxGroup {
   public static inline var YESNO:Int = 1; // Yes/Noダイアログ
   public static inline var SELECT2:Int = 2; // 2択ダイアログ
   public static inline var SELECT3:Int = 3; // 3択ダイアログ
+
+  // 3択ダイアログのオフセット座標(Y)
+  private static inline var SELECT3_OFS_Y:Int = 24;
 
   // インスタンス
   private static var _instance:Dialog = null;
@@ -71,14 +76,14 @@ class Dialog extends FlxGroup {
     var height = 64;
     if(type == SELECT3) {
       // 広げる
-      height += 24;
+      height += SELECT3_OFS_Y;
     }
     // ウィンドウ
     var spr = new FlxSprite(px, py - height);
     this.add(spr);
 
     // メッセージ
-    var text = new FlxText(px, py - 48, 0, 128);
+    var text = new FlxText(px, py - 48, 0, 96);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     text.text = msg;
     // 中央揃え
@@ -87,9 +92,37 @@ class Dialog extends FlxGroup {
     this.add(text);
 
     // ウィンドウサイズを設定
-    spr.makeGraphic(Std.int(width * 2), height * 2, FlxColor.BLACK);
+    spr.makeGraphic(Std.int(width * 2), height * 2, FlxColor.WHITE);
+    spr.color = Reg.COLOR_MESSAGE_WINDOW;
     spr.x -= width;
     spr.alpha = 0.5;
+    spr.scale.set(0.2, 1);
+    FlxTween.tween(spr.scale, {x:1}, 0.2, {ease:FlxEase.expoOut});
+
+    // ウィンドウ飾り
+    {
+      var bg1 = new FlxSprite(px, py - height, "assets/images/ui/frame32x256.png");
+      bg1.color = Reg.COLOR_MESSAGE_WINDOW;
+      bg1.scale.set(1, height*2/256);
+      bg1.x -= bg1.width;
+      bg1.y -= height;
+      if(type == SELECT3) {
+        bg1.y += SELECT3_OFS_Y*2;
+      }
+      this.add(bg1);
+      FlxTween.tween(bg1, {x:bg1.x-width}, 0.2, {ease:FlxEase.expoOut});
+
+      var bg2 = new FlxSprite(px, py - height, "assets/images/ui/frame32x256.png");
+      bg2.color = Reg.COLOR_MESSAGE_WINDOW;
+      bg2.scale.set(1, height*2/256);
+      bg2.flipX = true;
+      bg2.y -= height;
+      if(type == SELECT3) {
+        bg2.y += SELECT3_OFS_Y*2;
+      }
+      this.add(bg2);
+      FlxTween.tween(bg2, {x:bg2.x+width}, 0.2, {ease:FlxEase.expoOut});
+    }
 
     // 選択肢
     var py2 = FlxG.height / 2;
