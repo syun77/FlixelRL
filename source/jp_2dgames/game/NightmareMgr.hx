@@ -168,9 +168,7 @@ class NightmareMgr {
               // 画面を揺らす
               FlxG.camera.shake(0.01);
               _exists = true;
-#if flash
               Snd.playMusic("nightmare");
-#end
             }
 
             if(getSkill() == NightmareSkill.Unknown) {
@@ -198,6 +196,9 @@ class NightmareMgr {
 
         // 出現ターン数を設定
         _turn = _getTurnLimit();
+
+        // BGMを元に戻す
+        Snd.playMusicPrev();
 
         _exists = false;
       }

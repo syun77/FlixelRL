@@ -13,6 +13,11 @@ class Snd {
   //    private static var _bBgmDisable = true;
   private static var _bBgmDisable = false;
 
+  // 現在再生中のBGM
+  private static var _bgmnow = null;
+  // 1つ前に再生したBGM
+  private static var _bgmprev = null;
+
   // SEワンショット再生用テーブル
   private static var _oneShotTable = new Map<String, SoundInfo>();
 
@@ -67,7 +72,21 @@ class Snd {
 
   }
 
+  /**
+   * BGMを再生する
+   * @param name BGM名
+   * @param bLoop ループフラグ
+   **/
   public static function playMusic(name:String, bLoop:Bool = true):Void {
+
+    // BGM再生情報を保存
+    _bgmprev = _bgmnow;
+    _bgmnow = name;
+
+  #if !flash
+    // FLASH環境以外はBGM再生無効
+//    return;
+  #end
 
     if(_bBgmDisable) {
       // BGM無効
@@ -81,6 +100,13 @@ class Snd {
     } else {
       FlxG.sound.playMusic(name, 1, bLoop);
     }
+  }
+
+  /**
+   * 1つ前に再生したBGMを再生する
+   **/
+  public static function playMusicPrev():Void {
+    playMusic(_bgmprev);
   }
 }
 
