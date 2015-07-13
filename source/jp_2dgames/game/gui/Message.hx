@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.lib.CsvLoader;
 import flixel.FlxG;
@@ -63,6 +65,65 @@ class Msg {
 }
 
 /**
+ * メッセージウィンドウ用のテキスト
+ **/
+class MessageText extends FlxText {
+
+  // 汎用タイマー
+  private var _timer:Int = 60 * 5;
+  // 状態
+  private var _state:Int = 0;
+
+  public function new(X:Float, Y:Float, Width:Float) {
+    super(X, Y, Width);
+    setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    // アウトラインをつける
+    setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
+    color = FlxColor.BLACK;
+    // じわじわ表示
+    alpha = 0;
+    FlxTween.tween(this, {alpha:1}, 0.3, {ease:FlxEase.sineOut});
+    // スライド表示
+    var xnext = x;
+    x += 64;
+    FlxTween.tween(this, {x:xnext}, 0.3, {ease:FlxEase.expoOut});
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    switch(_state) {
+      case 0:
+        // 表示中
+        _timer--;
+        if(_timer < 1) {
+          _state++;
+          // じわじわ消す
+          FlxTween.tween(this, {alpha:0}, 0.3, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+            _state++;
+          }});
+        }
+
+      case 1:
+        // じわじわ消えている
+
+      case 2:
+        // 消えた
+    }
+  }
+
+  /**
+   * 消してよいかどうか
+   **/
+  public function isKill():Bool {
+    return _state == 2;
+  }
+}
+
+/**
  * メッセージウィンドウ
  **/
 class Message extends FlxGroup {
@@ -119,7 +180,7 @@ class Message extends FlxGroup {
   }
 
   private var _window:FlxSprite;
-  private var _msgList:List<FlxText>;
+  private var _msgList:List<MessageText>;
 
   // ウィンドウを下に表示しているかどうか
   private var _bDispBottom:Bool = true;
@@ -145,7 +206,7 @@ class Message extends FlxGroup {
     _window = new FlxSprite(POS_X, POS_Y, "assets/images/ui/message.png");
     _window.color = Reg.COLOR_MESSAGE_WINDOW;
 //    this.add(_window);
-    _msgList = new List<FlxText>();
+    _msgList = new List<MessageText>();
 
     // CSVメッセージ
     _csv = csv;
@@ -188,6 +249,7 @@ class Message extends FlxGroup {
     super.update();
 
     if(visible) {
+      /*
       _timer -= FlxG.elapsed;
       if(_timer < 0) {
         // 一定時間で消える
@@ -196,6 +258,12 @@ class Message extends FlxGroup {
         while(_msgList.length > 0) {
           pop();
         }
+      }
+      */
+    }
+    for(text in _msgList) {
+      if(text.isKill()) {
+        pop();
       }
     }
 
@@ -212,11 +280,7 @@ class Message extends FlxGroup {
 	 * メッセージを末尾に追加
 	 **/
   private function _push(msg:String) {
-    var text = new FlxText(POS_X + MSG_POS_X, 0, WIDTH);
-    text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-    // アウトラインをつける
-    text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
-    text.color = FlxColor.BLACK;
+    var text = new MessageText(POS_X + MSG_POS_X, 0, WIDTH);
     text.text = msg;
     if(_msgList.length >= MESSAGE_MAX) {
       // 最大を超えたので先頭のメッセージを削除
