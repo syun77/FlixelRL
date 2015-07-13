@@ -70,6 +70,12 @@ class Msg {
  **/
 class MessageText extends FlxText {
 
+  private var _ofsY:Float = 0;
+  public function setOfsY(ofsY:Float) {
+    _ofsY = ofsY;
+  }
+  private var _baseY:Float = 0;
+
   public function new(X:Float, Y:Float, Width:Float) {
     super(X, Y, Width);
     setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
@@ -86,10 +92,20 @@ class MessageText extends FlxText {
     // 消滅判定
     new FlxTimer(5, function(t:FlxTimer) {
       // じわじわ消す
+      FlxTween.tween(this, {_baseY:-8}, 0.3, {ease:FlxEase.sineOut});
       FlxTween.tween(this, {alpha:0}, 0.3, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
         kill();
       }});
     });
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    y = _baseY + _ofsY;
   }
 }
 
@@ -228,7 +244,8 @@ class Message extends FlxGroup {
     _window.y = ofsY;
     var idx = 0;
     for(text in _msgList) {
-      text.y = ofsY + MSG_POS_Y + idx * DY;
+//      text.y = ofsY + MSG_POS_Y + idx * DY;
+      text.setOfsY(ofsY + MSG_POS_Y + idx * DY);
       idx++;
     }
   }
