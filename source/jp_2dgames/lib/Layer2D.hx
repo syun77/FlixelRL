@@ -12,34 +12,37 @@ class Layer2D {
   public var m_OutOfRange:Int = -1; // 範囲外を指定した際のエラー値
   private var _width:Int;
   private var _height:Int;
-  private var _pool:Map<Int, Int>;
-  public var width(get_width, null):Int;
-  public var height(get_height, null):Int;
-  public var pool(get, null):Map<Int, Int>;
+  private var _pool:Map<Int,Int>;
+  // 幅
+  public var width(get, never):Int;
+  private function get_width() {
+    return _width;
+  }
+  // 高さ
+  public var height(get, never):Int;
+  private function get_height() {
+    return _height;
+  }
+  // マップ情報
+  public var pool(get, never):Map<Int,Int>;
+  private function get_pool():Map<Int, Int> {
+    return _pool;
+  }
 
   /**
-     * コンストラクタ
-     * @param w 幅
-     * @param h 高さ
-     */
+   * コンストラクタ
+   * @param w 幅
+   * @param h 高さ
+   */
   public function new(w:Int = 0, h:Int = 0) {
     if(w > 0 && h > 0) {
       initialize(w, h);
     }
   }
 
-  private function get_width() {
-    return _width;
-  }
-
-  private function get_height() {
-    return _height;
-  }
-
-  private function get_pool():Map<Int, Int> {
-    return _pool;
-  }
-
+  /**
+   * 初期化
+   **/
   public function initialize(w:Int, h:Int):Void {
     _pool = new Map<Int, Int>();
     _width = w;
@@ -196,6 +199,17 @@ class Layer2D {
     p.y = idxToY(idx);
 
     return p;
+  }
+
+  /**
+   * 指定の値をデフォルトの値ですべて消す
+   **/
+  public function eraseAll(val:Int):Void {
+    forEach(function(i, j, v) {
+      if(v == val) {
+        set(i, j, m_Default);
+      }
+    });
   }
 
   /**

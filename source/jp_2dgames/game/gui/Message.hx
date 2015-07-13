@@ -211,13 +211,13 @@ class Message extends FlxGroup {
     var player = cast(FlxG.state, PlayState).player;
     var y = (player.ychip) * Field.GRID_SIZE;
 
-    if(y > POS_Y - 2 * Field.GRID_SIZE) {
+    if(y > POS_Y - 1 * Field.GRID_SIZE) {
       // 上にする
       _bDispBottom = false;
       return POS_Y2;
     }
 
-    if(y < POS_Y2 + 4 * Field.GRID_SIZE) {
+    if(y < POS_Y2 + 5 * Field.GRID_SIZE) {
       // 下にする
       _bDispBottom = true;
       return POS_Y;

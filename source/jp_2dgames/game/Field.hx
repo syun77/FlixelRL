@@ -118,6 +118,18 @@ class Field {
   }
 
   /**
+   * 複数あるチップを1つに絞る
+   **/
+  private static function _randomNarrowOne(layer:Layer2D, v:Int) {
+    var pt = layer.searchRandom(v);
+    if(pt != null) {
+      layer.eraseAll(v);
+      layer.set(Std.int(pt.x), Std.int(pt.y), v);
+      pt.put();
+    }
+  }
+
+  /**
    * プレイヤーの位置や階段をランダムで配置する
    * @param layer 地形レイヤー
    * @param floor フロア数
@@ -129,12 +141,15 @@ class Field {
     FlxRandom.globalSeed = flash.Lib.getTimer();
 
     // プレイヤーを配置
+    _randomNarrowOne(layer, PLAYER);
     if(layer.exists(PLAYER) == false) {
       var p = layer.searchRandom(NONE);
       layer.setFromFlxPoint(p, PLAYER);
       p.put();
     }
+
     // 階段を配置
+    _randomNarrowOne(layer, GOAL);
     if(layer.exists(GOAL) == false) {
       var p = layer.searchRandom(NONE);
       layer.setFromFlxPoint(p, GOAL);
