@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.state.PlayState;
@@ -69,11 +70,6 @@ class Msg {
  **/
 class MessageText extends FlxText {
 
-  // 汎用タイマー
-  private var _timer:Int = 60 * 5;
-  // 状態
-  private var _state:Int = 0;
-
   public function new(X:Float, Y:Float, Width:Float) {
     super(X, Y, Width);
     setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
@@ -87,39 +83,13 @@ class MessageText extends FlxText {
     var xnext = x;
     x += 64;
     FlxTween.tween(this, {x:xnext}, 0.3, {ease:FlxEase.expoOut});
-  }
-
-  /**
-   * 更新
-   **/
-  override public function update():Void {
-    super.update();
-
-    switch(_state) {
-      case 0:
-        // 表示中
-        _timer--;
-        if(_timer < 1) {
-          _state++;
-          // じわじわ消す
-          FlxTween.tween(this, {alpha:0}, 0.3, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
-            _state++;
-          }});
-        }
-
-      case 1:
-        // じわじわ消えている
-
-      case 2:
-        // 消えた
-    }
-  }
-
-  /**
-   * 消してよいかどうか
-   **/
-  public function isKill():Bool {
-    return _state == 2;
+    // 消滅判定
+    new FlxTimer(5, function(t:FlxTimer) {
+      // じわじわ消す
+      FlxTween.tween(this, {alpha:0}, 0.3, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+        kill();
+      }});
+    });
   }
 }
 
@@ -248,21 +218,8 @@ class Message extends FlxGroup {
   override public function update():Void {
     super.update();
 
-    if(visible) {
-      /*
-      _timer -= FlxG.elapsed;
-      if(_timer < 0) {
-        // 一定時間で消える
-        visible = false;
-        // メッセージを消す
-        while(_msgList.length > 0) {
-          pop();
-        }
-      }
-      */
-    }
     for(text in _msgList) {
-      if(text.isKill()) {
+      if(text.alive == false) {
         pop();
       }
     }
