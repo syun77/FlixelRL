@@ -182,6 +182,9 @@ class Message extends FlxGroup {
   // ヒントメッセージCSV
   private var _csvHint:CsvLoader;
 
+  // テキストのオフセット座標
+  private var _txtOfsY:Float = 0;
+
   /**
 	 * コンストラクタ
 	 **/
@@ -234,9 +237,12 @@ class Message extends FlxGroup {
   override public function update():Void {
     super.update();
 
+    _txtOfsY *= 0.9;
+
     for(text in _msgList) {
       if(text.alive == false) {
         pop();
+        _txtOfsY += DY;
       }
     }
 
@@ -244,8 +250,13 @@ class Message extends FlxGroup {
     _window.y = ofsY;
     var idx = 0;
     for(text in _msgList) {
-//      text.y = ofsY + MSG_POS_Y + idx * DY;
-      text.setOfsY(ofsY + MSG_POS_Y + idx * DY);
+      // 描画基準座標
+      var offsetY = ofsY + MSG_POS_Y;
+      // テキストごとのオフセット
+      offsetY += idx * DY;
+      // テキスト消去によるオフセット
+      offsetY += _txtOfsY;
+      text.setOfsY(offsetY);
       idx++;
     }
   }
