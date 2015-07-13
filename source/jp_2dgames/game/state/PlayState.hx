@@ -483,6 +483,10 @@ class PlayState extends FlxState {
       Global.addItemMaxInventory(2);
     }
 
+    if(FlxG.keys.justPressed.F) {
+      Message.push("abcdefghijklmnopqrstuvwxyz");
+    }
+
     // アイテム配置デバッグ機能
     var itemtype = ItemUtil.getDebugItemType();
     if(itemtype != IType.None) {

@@ -184,6 +184,8 @@ class Message extends FlxGroup {
 
   // テキストのオフセット座標
   private var _txtOfsY:Float = 0;
+  // 上下切り替えのオフセット座標
+  private var _txtOfsY2:Float = 0;
 
   /**
 	 * コンストラクタ
@@ -213,12 +215,20 @@ class Message extends FlxGroup {
 
     if(y > POS_Y - 1 * Field.GRID_SIZE) {
       // 上にする
+      if(_bDispBottom) {
+        // 下から上に変わった
+        _txtOfsY2 = -DY * MESSAGE_MAX;
+      }
       _bDispBottom = false;
       return POS_Y2;
     }
 
     if(y < POS_Y2 + 5 * Field.GRID_SIZE) {
       // 下にする
+      if(_bDispBottom == false) {
+        // 上から下に変わった
+        _txtOfsY2 = DY * MESSAGE_MAX;
+      }
       _bDispBottom = true;
       return POS_Y;
     }
@@ -238,6 +248,7 @@ class Message extends FlxGroup {
     super.update();
 
     _txtOfsY *= 0.9;
+    _txtOfsY2 *= 0.9;
 
     for(text in _msgList) {
       if(text.alive == false) {
@@ -254,6 +265,8 @@ class Message extends FlxGroup {
       var offsetY = ofsY + MSG_POS_Y;
       // テキストごとのオフセット
       offsetY += idx * DY;
+      // 上下切り替えによるオフセット
+      offsetY += _txtOfsY2;
       // テキスト消去によるオフセット
       offsetY += _txtOfsY;
       text.setOfsY(offsetY);
