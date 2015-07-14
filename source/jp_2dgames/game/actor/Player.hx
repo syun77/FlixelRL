@@ -585,11 +585,12 @@ class Player extends Actor {
     // 移動先チェック
     var canWalk = function() {
       var extra = InventoryUtil.getRingExtra();
-      if(extra == "passage") {
-        // 透明な壁を通過可能
-        return Field.isThroughFirearm(xnext, ynext);
-      }
-      return Field.isCollision(xnext, ynext) == false;
+//      if(extra == "passage") {
+//        // 透明な壁を通過可能
+//        return Field.isThroughFirearm(xnext, ynext);
+//      }
+//      return Field.isCollision(xnext, ynext, _dir) == false;
+      return Field.isMove(xnext, ynext, extra, _dir);
     };
     if(canWalk()) {
       // 移動可能

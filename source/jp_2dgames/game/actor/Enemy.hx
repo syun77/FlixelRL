@@ -549,7 +549,7 @@ class Enemy extends Actor {
 
       default:
         // 通常
-        if(Field.isCollision(xnext, ynext)) {
+        if(Field.isMove(xnext, ynext, "", _dir) == false) {
           // 壁なので移動できない
           return false;
         }

@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.DirUtil.Dir;
 import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxPoint;
 import jp_2dgames.lib.CsvLoader;
@@ -31,6 +32,10 @@ class Field {
   public static inline var SPIKE:Int   = 8;  // トゲ
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
+  public static inline var ONEWAY_LEFT:Int  = 17; // 一方通行(左)
+  public static inline var ONEWAY_UP:Int    = 18; // 一方通行(上)
+  public static inline var ONEWAY_RIGHT:Int = 19; // 一方通行(右)
+  public static inline var ONEWAY_DOWN:Int  = 20; // 一方通行(下)
 
   // 座標変換
   public static function toWorldX(i:Float):Float {
@@ -98,6 +103,49 @@ class Field {
 
     // コリジョンでない
     return false;
+  }
+
+  // 指定した座標に移動できるかどうか
+  public static function isMove(i:Int, j:Int, extra:String, dir:Dir):Bool {
+
+    if(extra == "passage") {
+      if(isThroughFirearm(i, j) == false) {
+        // 移動できない
+        return false;
+      }
+    }
+    else {
+      if(isCollision(i, j)) {
+        // 移動できない
+        return false;
+      }
+
+    }
+
+    var v = _cLayer.get(i, j);
+    // 一方通行チェック
+    switch(v) {
+      case ONEWAY_LEFT:
+        if(dir == Dir.Right) {
+          return false;
+        }
+      case ONEWAY_UP:
+        if(dir == Dir.Down) {
+          return false;
+        }
+      case ONEWAY_RIGHT:
+        if(dir == Dir.Left) {
+          return false;
+        }
+      case ONEWAY_DOWN:
+        if(dir == Dir.Up) {
+          return false;
+        }
+      default:
+    }
+
+    // 移動できる
+    return true;
   }
 
   // 指定した座標が飛び道具が通り抜けできるかどうか
@@ -214,14 +262,14 @@ class Field {
     var func = function(i:Int, j:Int, v:Int) {
       pt.x = i * GRID_SIZE;
       pt.y = j * GRID_SIZE;
+      rect.left   = ((v - 1) % 8) * GRID_SIZE;
+      rect.right  = rect.left + GRID_SIZE;
+      rect.top    = Std.int((v - 1) / 8) * GRID_SIZE;
+      rect.bottom = rect.top + GRID_SIZE;
       switch(v) {
         case GOAL, WALL:
-          rect.left = (v - 1) * GRID_SIZE;
-          rect.right = rect.left + GRID_SIZE;
           spr.pixels.copyPixels(chip.bitmap, rect, pt);
-        case HINT, SHOP, WALL2:
-          rect.left = (v - 1) * GRID_SIZE;
-          rect.right = rect.left + GRID_SIZE;
+        case HINT, SHOP, WALL2, ONEWAY_LEFT, ONEWAY_UP, ONEWAY_RIGHT, ONEWAY_DOWN:
           spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
         case SPIKE:
           // トゲを配置
