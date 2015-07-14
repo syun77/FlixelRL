@@ -9,8 +9,8 @@ def main():
 	# コピー元ファイル
 	src = "000.tmx"
 	# 開始番号
-	first = 31
-	last  = 35
+	first = 36
+	last  = 40
 
 	# 実行しているスクリプトのパスを取得する
 	dir = os.path.dirname(__file__)
