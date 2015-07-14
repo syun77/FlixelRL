@@ -1,13 +1,14 @@
-package jp_2dgames.game;
-import flixel.util.FlxColor;
-import jp_2dgames.game.particle.Particle;
-import jp_2dgames.game.gui.Message;
+package jp_2dgames.game.gimmick;
+
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.state.PlayState;
 import flixel.FlxG;
 import flixel.group.FlxTypedGroup;
 import flixel.FlxSprite;
 
+/**
+ * 状態
+ **/
 private enum State {
   Standby;
   Almost;

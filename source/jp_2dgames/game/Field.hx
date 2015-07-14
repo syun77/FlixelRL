@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gimmick.Door;
+import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.DirUtil.Dir;
 import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxPoint;
@@ -37,6 +39,9 @@ class Field {
   public static inline var ONEWAY_RIGHT:Int = 19; // 一方通行(右)
   public static inline var ONEWAY_DOWN:Int  = 20; // 一方通行(下)
   public static inline var BLOCK:Int        = 21; // 壊せる壁
+  public static inline var DOOR3:Int        = 22; // ドア(3)
+  public static inline var DOOR5:Int        = 23; // ドア(5)
+  public static inline var DOOR7:Int        = 24; // ドア(7)
 
   // 座標変換
   public static function toWorldX(i:Float):Float {
@@ -96,26 +101,23 @@ class Field {
 
   // 指定した座標がコリジョンかどうか
   public static function isCollision(i:Int, j:Int):Bool {
-    var v = _cLayer.get(i, j);
-    if(v == WALL) {
-      // コリジョン
-      return true;
+    switch(_cLayer.get(i, j)) {
+      case WALL:
+        // コリジョン
+        return true;
+      case WALL2:
+        // 通り抜けできない
+        return true;
+      case BLOCK, DOOR3, DOOR5, DOOR7:
+        // 通れない
+        return true;
+      case -1:
+        // 画面外
+        return true;
+      default:
+        // コリジョンでない
+        return false;
     }
-    if(v == WALL2) {
-      // 通り抜けできない
-      return true;
-    }
-    if(v == BLOCK) {
-      // 通れない
-      return true;
-    }
-    if(v == -1) {
-      // 画面外
-      return true;
-    }
-
-    // コリジョンでない
-    return false;
   }
 
   // 指定した座標に移動できるかどうか
@@ -163,14 +165,17 @@ class Field {
 
   // 指定した座標が飛び道具が通り抜けできるかどうか
   public static function isThroughFirearm(i:Int, j:Int):Bool {
-    var v = _cLayer.get(i, j);
-    if(v == WALL) {
-      // 壁は通り抜けできない
-      return false;
+    switch(_cLayer.get(i, j)) {
+      case WALL:
+        // 壁は通り抜けできない
+        return false;
+      case BLOCK, DOOR3, DOOR5, DOOR7:
+        // ブロックや扉も通れない
+        return false;
+      default:
+        // それ以外は通過できる
+        return true;
     }
-
-    // それ以外は通過できる
-    return true;
   }
   // 指定の座標にあるチップを取得する
   public static function getChip(i:Int, j:Int):Int {
@@ -285,6 +290,8 @@ class Field {
         case SPIKE:
           // トゲを配置
           Pit.start(i, j);
+        case DOOR3, DOOR5, DOOR7:
+          Door.start(v, i, j);
         default:
           // チップを描画する
           spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
@@ -385,5 +392,18 @@ class Field {
 
     // 壊せた
     return true;
+  }
+
+  /**
+   * 指定座標の扉を消す
+   **/
+  public static function eraseDoor(i:Int, j:Int):Void {
+    var v = _cLayer.get(i, j);
+    switch(v) {
+      case DOOR3, DOOR5, DOOR7:
+        _cLayer.set(i, j, NONE);
+      default:
+        trace('Warning: Not door (${i},${j}) = ${v}');
+    }
   }
 }

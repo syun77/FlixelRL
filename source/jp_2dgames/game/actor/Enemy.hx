@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.Generator.GenerateInfo;
 import jp_2dgames.game.item.DropItem;
@@ -123,7 +124,9 @@ class Enemy extends Actor {
     _hpBar.createFilledBar(FlxColor.CRIMSON, FlxColor.CHARTREUSE);
 
     // 消しておく
-    kill();
+    _hpBar.visible = false;
+    _bNightmare = false;
+    super.kill();
 
     //		FlxG.watch.add(this, "_state");
     //		FlxG.watch.add(this, "_stateprev");
@@ -136,6 +139,9 @@ class Enemy extends Actor {
     _hpBar.visible = false;
     _bNightmare = false;
     super.kill();
+
+    // 扉カウントダウン
+    Door.countDown();
   }
 
   /**

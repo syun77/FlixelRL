@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gimmick.Door;
+import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.gui.UIText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -169,6 +171,17 @@ class PlayState extends FlxState {
       Pit.parent.add(new Pit());
     }
     this.add(Pit.parent);
+
+    // ドア生成
+    Door.parent = new FlxTypedGroup<Door>(4);
+    for(i in 0...Door.parent.maxSize) {
+      Door.parent.add(new Door());
+    }
+    this.add(Door.parent);
+    // ドアHPを登録
+    Door.parent.forEach(function(d:Door) {
+      this.add(d.hpText);
+    });
 
     // 階段の位置をランダムに配置する
     Field.randomize(layer, Global.getFloor(), _csv);
@@ -348,6 +361,7 @@ class PlayState extends FlxState {
     Enemy.parent = null;
     Enemy.csv = null;
     Pit.parent = null;
+    Door.parent = null;
     Message.instance = null;
     UIText.instance = null;
     Inventory.instance = null;

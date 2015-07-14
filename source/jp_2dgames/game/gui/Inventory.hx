@@ -473,7 +473,7 @@ class Inventory extends FlxGroup {
       // str_map    += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       // str_map    += ".()[]#$%&'" + '"' + "!?^+-*/=;:_<>";
       // str_map    += "|@`";
-      var spr = new FlxSprite(x + EQUIP_POS_X, 0).loadGraphic("assets/font/font16x16.png", true);
+      var spr = new FlxSprite(x + EQUIP_POS_X, 0).loadGraphic(Reg.PATH_SPR_FONT, true);
       spr.animation.add("1", [14], 1); // 'E'
       spr.animation.play("1");
       spr.visible = false;
