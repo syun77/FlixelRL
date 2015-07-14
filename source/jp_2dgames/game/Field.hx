@@ -36,6 +36,7 @@ class Field {
   public static inline var ONEWAY_UP:Int    = 18; // 一方通行(上)
   public static inline var ONEWAY_RIGHT:Int = 19; // 一方通行(右)
   public static inline var ONEWAY_DOWN:Int  = 20; // 一方通行(下)
+  public static inline var BLOCK:Int        = 21; // 壊せる壁
 
   // 座標変換
   public static function toWorldX(i:Float):Float {
@@ -77,8 +78,16 @@ class Field {
 
   // 指定した座標が壁かどうか
   public static function isWall(i:Int, j:Int):Bool {
-    var v = _cLayer.get(i, j);
-    if(v == WALL) {
+    if(_cLayer.get(i, j) == WALL) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // 指定した座標が壊せるブロックかどうか
+  public static function isBlock(i:Int, j:Int):Bool {
+    if(_cLayer.get(i, j) == BLOCK) {
       return true;
     }
 
@@ -94,6 +103,10 @@ class Field {
     }
     if(v == WALL2) {
       // 通り抜けできない
+      return true;
+    }
+    if(v == BLOCK) {
+      // 通れない
       return true;
     }
     if(v == -1) {
@@ -267,13 +280,14 @@ class Field {
       rect.top    = Std.int((v - 1) / 8) * GRID_SIZE;
       rect.bottom = rect.top + GRID_SIZE;
       switch(v) {
-        case GOAL, WALL:
-          spr.pixels.copyPixels(chip.bitmap, rect, pt);
-        case HINT, SHOP, WALL2, ONEWAY_LEFT, ONEWAY_UP, ONEWAY_RIGHT, ONEWAY_DOWN:
-          spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
+        case NONE, PLAYER, PASSAGE, ENEMY, ITEM:
+          // 何も描画しない
         case SPIKE:
           // トゲを配置
           Pit.start(i, j);
+        default:
+          // チップを描画する
+          spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
       }
     }
 
@@ -309,11 +323,7 @@ class Field {
     var rect = new Rectangle(0, 0, GRID_SIZE, GRID_SIZE);
     // 描画関数
     switch(chipid) {
-      case GOAL, WALL:
-        rect.left = (v - 1) * GRID_SIZE;
-        rect.right = rect.left + GRID_SIZE;
-        spr.pixels.copyPixels(chip.bitmap, rect, pt);
-      case HINT, SHOP, WALL2:
+      case GOAL, WALL, HINT, SHOP, WALL2:
         rect.left = (v - 1) * GRID_SIZE;
         rect.right = rect.left + GRID_SIZE;
         spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
@@ -355,9 +365,11 @@ class Field {
    * @return 破壊できたらtrue
    **/
   public static function breakWall(i:Int, j:Int):Bool {
-    if(_cLayer.get(i, j) != WALL) {
-      // 壁出ないので壊せない
-      return false;
+    switch(_cLayer.get(i, j)) {
+      case WALL, BLOCK:
+      default:
+        // 壁でないので壊せない
+        return false;
     }
 
     // レイヤー情報更新

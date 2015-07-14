@@ -209,8 +209,8 @@ class Player extends Actor {
       // 攻撃アニメーション開始
       var x1:Float = x;
       var y1:Float = y;
-      var x2:Float = _target.x;
-      var y2:Float = _target.y;
+      var x2:Float = Field.toWorldX(_xtarget);
+      var y2:Float = Field.toWorldY(_ytarget);
 
       // 攻撃終了の処理
       var cbEnd = function(tween:FlxTween) {
@@ -220,18 +220,39 @@ class Player extends Actor {
       // 攻撃開始の処理
       var cbStart = function(tween:FlxTween) {
         // 攻撃開始
-        if(Calc.checkHitAttack(_target)) {
-          // 攻撃が当たった
-          var val = Calc.damage(this, _target, Inventory.getWeaponData(), null);
-          if(_target.damage(val)) {
-            // 敵を倒した
-            _target.effectDestroyEnemy();
+        if(_target == null) {
+          // 壁破壊
+          var tx = _xtarget;
+          var ty = _ytarget;
+          if(Field.isWall(tx, ty)) {
+            // 壁が壊せる
+            Field.breakWall(tx, ty);
+            // 使用回数減少
+            var val = FlxRandom.intRanged(2, 5);
+            if(Inventory.degradeEquipment(IType.Weapon, val)) {
+              // 武器破壊
+              ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
+            }
+          }
+          else if(Field.isBlock(tx, ty)) {
+            // ブロックが壊せる
+            Field.breakWall(tx, ty);
           }
         }
         else {
-          // 攻撃を外した
-          Snd.playSe("avoid");
-          Message.push2(Msg.MISS, [_target.name]);
+          if(Calc.checkHitAttack(_target)) {
+            // 攻撃が当たった
+            var val = Calc.damage(this, _target, Inventory.getWeaponData(), null);
+            if(_target.damage(val)) {
+              // 敵を倒した
+              _target.effectDestroyEnemy();
+            }
+          }
+          else {
+            // 攻撃を外した
+            Snd.playSe("avoid");
+            Message.push2(Msg.MISS, [_target.name]);
+          }
         }
         FlxTween.tween(this, {x:x1, y:y1}, 0.1, {ease:FlxEase.expoOut, complete:cbEnd});
       }
@@ -540,18 +561,30 @@ class Player extends Actor {
 
     if(bAttack) {
       // 攻撃 or 待機
-      if(Field.isWall(xnext, ynext)) {
+      // 目の前の壁チェック
+      var checkBreakWall = function(i:Int, j:Int):Bool {
         var extra = InventoryUtil.getWeaponExtra();
         if(extra == "drill") {
-          // 壁が壊せる
-          Field.breakWall(xnext, ynext);
-          // 使用回数減少
-          var val = FlxRandom.intRanged(2, 5);
-          if(Inventory.degradeEquipment(IType.Weapon, val)) {
-            // 武器破壊
-            ParticleMessage.start(x, y, "BROKEN", FlxColor.RED);
+          if(Field.isWall(i, j)) {
+            // 壊せる
+            return true;
           }
         }
+        if(Field.isBlock(i, j)) {
+          // 壊せる
+          return true;
+        }
+
+        // 壊せない
+        return false;
+      }
+      if(checkBreakWall(xnext, ynext)) {
+        // 壁を攻撃する
+        _target = null;
+        _xtarget = xnext;
+        _ytarget = ynext;
+        _change(Actor.State.ActBegin);
+        return;
       }
 
       if(NightmareMgr.getSkill() == NightmareSkill.Attack) {
