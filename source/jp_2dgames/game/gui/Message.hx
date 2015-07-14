@@ -76,12 +76,18 @@ class MessageText extends FlxText {
   }
   private var _baseY:Float = 0;
 
+  private var _bg:FlxSprite;
+  public var bg(get, never):FlxSprite;
+  private function get_bg() {
+    return _bg;
+  }
+
   public function new(X:Float, Y:Float, Width:Float) {
     super(X, Y, Width);
     setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     // アウトラインをつける
-    setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
-    color = FlxColor.BLACK;
+    setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.BLACK, 2);
+    color = FlxColor.WHITE;
     // じわじわ表示
     alpha = 0;
     FlxTween.tween(this, {alpha:1}, 0.3, {ease:FlxEase.sineOut});
@@ -97,6 +103,11 @@ class MessageText extends FlxText {
         kill();
       }});
     });
+
+    // 背景作成
+    _bg = new FlxSprite(X-8, Y+4, "assets/images/ui/messagetext.png");
+    _bg.alpha = 0;
+    _bg.color = Reg.COLOR_MESSAGE_WINDOW;
   }
 
   /**
@@ -106,6 +117,8 @@ class MessageText extends FlxText {
     super.update();
 
     y = _baseY + _ofsY;
+    _bg.y = y + 4;
+    _bg.alpha = alpha*0.5;
   }
 }
 
@@ -292,6 +305,7 @@ class Message extends FlxGroup {
       t.y = ofsY + MSG_POS_Y + idx * DY;
       idx++;
     }
+    this.add(text.bg);
     this.add(text);
 
     // 表示する
@@ -335,6 +349,7 @@ class Message extends FlxGroup {
 	 **/
   public function pop() {
     var t = _msgList.pop();
+    this.remove(t.bg);
     this.remove(t);
   }
 }
