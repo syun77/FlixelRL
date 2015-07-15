@@ -69,8 +69,8 @@ class Calc {
     else {
       // ランダムで+5%変動
       var d = val * FlxRandom.floatRanged(0, 0.05);
-      if(Math.abs(d) < 1) {
-        // 1以下の場合は+1〜3する
+      if(Math.abs(d) < 3) {
+        // 3より小さい場合は+1〜3する
         val += FlxRandom.intRanged(1, 3);
       }
       else {
