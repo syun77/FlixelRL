@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.util.DirUtil;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.gui.GuiBuyDetail;

@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.util;
 
 import flixel.util.FlxRandom;
 import flixel.util.FlxPoint;

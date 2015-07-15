@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
+import jp_2dgames.game.util.Key;
 import flixel.util.FlxAngle;
 import jp_2dgames.lib.Snd;
 import flixel.tweens.FlxEase;
@@ -66,14 +68,14 @@ class InventoryCommand extends FlxSpriteGroup {
     _bgList = new Array<FlxSprite>();
     for(i in 0...items.length) {
       var bg = new FlxSprite(0, i * DY, "assets/images/ui/itemcommand.png");
-      bg.color = Reg.COLOR_LISTITEM_ENABLE;
+      bg.color = MyColor.LISTITEM_ENABLE;
       _bgList.push(bg);
       this.add(bg);
     }
 
     // カーソル
     _cursor = new FlxSprite(0, 0, "assets/images/ui/itemcommand.png");
-    _cursor.color = Reg.COLOR_COMMAND_CURSOR;
+    _cursor.color = MyColor.COMMAND_CURSOR;
     this.add(_cursor);
 
     // メニューテキスト設定
@@ -85,7 +87,7 @@ class InventoryCommand extends FlxSpriteGroup {
       var txt = new FlxText(px, py, 0, WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
       txt.text = UIText.getText(item);
-      txt.color = Reg.COLOR_COMMAND_TEXT_UNSELECTED;
+      txt.color = MyColor.COMMAND_TEXT_UNSELECTED;
       _txtList.add(txt);
       this.add(txt);
       i++;
@@ -103,10 +105,10 @@ class InventoryCommand extends FlxSpriteGroup {
     var i = 0;
     for(txt in _txtList) {
       if(i == _nCursor) {
-        txt.color = Reg.COLOR_COMMAND_TEXT_SELECTED;
+        txt.color = MyColor.COMMAND_TEXT_SELECTED;
       }
       else {
-        txt.color = Reg.COLOR_COMMAND_TEXT_UNSELECTED;
+        txt.color = MyColor.COMMAND_TEXT_UNSELECTED;
       }
       i++;
     }

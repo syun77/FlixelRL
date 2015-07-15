@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -107,7 +108,7 @@ class MessageText extends FlxText {
     // 背景作成
     _bg = new FlxSprite(X-8, Y+4, "assets/images/ui/messagetext.png");
     _bg.alpha = 0;
-    _bg.color = Reg.COLOR_MESSAGE_WINDOW;
+    _bg.color = MyColor.MESSAGE_WINDOW;
   }
 
   /**
@@ -148,8 +149,8 @@ class Message extends FlxGroup {
   public static var instance:Message = null;
 
   // メッセージの追加
-  public static function push(msg:String) {
-    Message.instance._push(msg);
+  public static function push(msg:String, color:Int=FlxColor.WHITE) {
+    Message.instance._push(msg, color);
   }
 
   public static function push2(msgId:Int, args:Array<Dynamic>=null) {
@@ -208,7 +209,7 @@ class Message extends FlxGroup {
     super();
     // 背景枠
     _window = new FlxSprite(POS_X, POS_Y, "assets/images/ui/message.png");
-    _window.color = Reg.COLOR_MESSAGE_WINDOW;
+    _window.color = MyColor.MESSAGE_WINDOW;
 //    this.add(_window);
     _msgList = new List<MessageText>();
 
@@ -290,9 +291,10 @@ class Message extends FlxGroup {
   /**
 	 * メッセージを末尾に追加
 	 **/
-  private function _push(msg:String) {
+  private function _push(msg:String, color:Int) {
     var text = new MessageText(POS_X + MSG_POS_X, 0, WIDTH);
     text.text = msg;
+    text.color = color;
     if(_msgList.length >= MESSAGE_MAX) {
       // 最大を超えたので先頭のメッセージを削除
       pop();
@@ -315,6 +317,7 @@ class Message extends FlxGroup {
 
   private function _push2(msgId:Int, args:Array<Dynamic>):Void {
     var msg = _csv.searchItem("id", '${msgId}', "msg");
+    var color = FlxColor.WHITE;
     if(args != null) {
       var idx:Int = 1;
       for(val in args) {
@@ -322,7 +325,7 @@ class Message extends FlxGroup {
         idx++;
       }
     }
-    _push(msg);
+    _push(msg, color);
   }
 
   /**

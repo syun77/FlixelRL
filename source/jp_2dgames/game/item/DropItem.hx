@@ -1,7 +1,8 @@
 package jp_2dgames.game.item;
+import jp_2dgames.game.util.DirUtil;
 import flixel.FlxG;
 import flixel.util.FlxRandom;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.item.ItemData.ItemExtraParam;
 import jp_2dgames.game.item.ItemUtil.IType;

@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.Key;
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.gui.InventoryUtil;
@@ -16,7 +18,7 @@ import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.util.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;

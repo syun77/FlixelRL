@@ -1,0 +1,21 @@
+package jp_2dgames.game.util;
+
+import flixel.util.FlxColor;
+
+/**
+ * 色関連の情報
+ **/
+class MyColor {
+  public static inline var LISTITEM_ENABLE:Int = 0x006666;
+  public static inline var LISTITEM_DISABLE:Int = 0x003333;
+  public static inline var LISTITEM_TEXT:Int = 0x99FFCC;
+  public static inline var CURSOR:Int = FlxColor.YELLOW;
+
+  public static inline var COMMAND_FRAME:Int = 0x00CCCC;
+  public static inline var COMMAND_CURSOR:Int = 0x33CCCC;
+  public static inline var COMMAND_TEXT_SELECTED:Int = 0x000066;
+  public static inline var COMMAND_TEXT_UNSELECTED:Int = 0x99FFCC;
+
+  public static inline var DETAIL_FRAME:Int = 0x000033;
+  public static inline var MESSAGE_WINDOW:Int = 0x000033;
+}

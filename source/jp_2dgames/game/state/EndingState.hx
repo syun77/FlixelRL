@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.util.Key;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;

@@ -1,8 +1,9 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.gimmick.Pit;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxPoint;
 import jp_2dgames.lib.CsvLoader;

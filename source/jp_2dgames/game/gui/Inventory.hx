@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
+import jp_2dgames.game.util.Key;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.state.PlayState;
@@ -451,7 +453,7 @@ class Inventory extends FlxGroup {
     // カーソル
     _cursor = new FlxSprite(POS_X, y + LIST_POS_Y, "assets/images/ui/listitem.png");
     _cursor.alpha = 0.4;
-    _cursor.color = Reg.COLOR_CURSOR;
+    _cursor.color = MyColor.CURSOR;
     this.add(_cursor);
     // カーソルは初期状態非表示
     _cursor.visible = false;
@@ -461,7 +463,7 @@ class Inventory extends FlxGroup {
     for(i in 0...PAGE_DISP) {
       var txt = new FlxText(x + MSG_POS_X, y + MSG_POS_Y + i * DY, 0, 160);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-      txt.color = Reg.COLOR_LISTITEM_TEXT;
+      txt.color = MyColor.LISTITEM_TEXT;
       _txtList.add(txt);
       this.add(txt);
     }
@@ -1269,7 +1271,7 @@ class Inventory extends FlxGroup {
         txt.text = ItemUtil.getName(item);
         // アイテム枠も更新
         var bg = _bgItems[i%PAGE_DISP];
-        bg.color = Reg.COLOR_LISTITEM_ENABLE;
+        bg.color = MyColor.LISTITEM_ENABLE;
         bg.visible = true;
       }
       else {
@@ -1281,7 +1283,7 @@ class Inventory extends FlxGroup {
           bg.visible = false;
         }
         else {
-          bg.color = Reg.COLOR_LISTITEM_DISABLE;
+          bg.color = MyColor.LISTITEM_DISABLE;
           bg.visible = true;
         }
       }

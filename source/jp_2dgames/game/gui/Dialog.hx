@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
+import jp_2dgames.game.util.Key;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -93,7 +95,7 @@ class Dialog extends FlxGroup {
 
     // ウィンドウサイズを設定
     spr.makeGraphic(Std.int(width * 2), height * 2, FlxColor.WHITE);
-    spr.color = Reg.COLOR_MESSAGE_WINDOW;
+    spr.color = MyColor.MESSAGE_WINDOW;
     spr.x -= width;
     spr.alpha = 0.5;
     spr.scale.set(0.2, 1);
@@ -102,7 +104,7 @@ class Dialog extends FlxGroup {
     // ウィンドウ飾り
     {
       var bg1 = new FlxSprite(px, py - height, "assets/images/ui/frame32x256.png");
-      bg1.color = Reg.COLOR_MESSAGE_WINDOW;
+      bg1.color = MyColor.MESSAGE_WINDOW;
       bg1.scale.set(1, height*2/256);
       bg1.x -= bg1.width;
       bg1.y -= height;
@@ -113,7 +115,7 @@ class Dialog extends FlxGroup {
       FlxTween.tween(bg1, {x:bg1.x-width}, 0.2, {ease:FlxEase.expoOut});
 
       var bg2 = new FlxSprite(px, py - height, "assets/images/ui/frame32x256.png");
-      bg2.color = Reg.COLOR_MESSAGE_WINDOW;
+      bg2.color = MyColor.MESSAGE_WINDOW;
       bg2.scale.set(1, height*2/256);
       bg2.flipX = true;
       bg2.y -= height;

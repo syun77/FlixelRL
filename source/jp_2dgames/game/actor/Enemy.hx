@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.Generator.GenerateInfo;
@@ -26,7 +27,7 @@ import flixel.group.FlxTypedGroup;
 import jp_2dgames.lib.CsvLoader;
 import flixel.util.FlxPoint;
 import flixel.FlxG;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.FlxSprite;
 
 /**

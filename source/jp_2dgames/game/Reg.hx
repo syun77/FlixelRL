@@ -31,17 +31,4 @@ class Reg {
     return FlxG.height / 2;
   }
 
-  // ■色
-  public static inline var COLOR_LISTITEM_ENABLE:Int = 0x006666;
-  public static inline var COLOR_LISTITEM_DISABLE:Int = 0x003333;
-  public static inline var COLOR_LISTITEM_TEXT:Int = 0x99FFCC;
-  public static inline var COLOR_CURSOR:Int = FlxColor.YELLOW;
-
-  public static inline var COLOR_COMMAND_FRAME:Int = 0x00CCCC;
-  public static inline var COLOR_COMMAND_CURSOR:Int = 0x33CCCC;
-  public static inline var COLOR_COMMAND_TEXT_SELECTED:Int = 0x000066;
-  public static inline var COLOR_COMMAND_TEXT_UNSELECTED:Int = 0x99FFCC;
-
-  public static inline var COLOR_DETAIL_FRAME:Int = 0x000033;
-  public static inline var COLOR_MESSAGE_WINDOW:Int = 0x000033;
 }

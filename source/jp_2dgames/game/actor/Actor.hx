@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gui.InventoryUtil;
 import flixel.FlxG;
 import jp_2dgames.game.gui.Inventory;
@@ -16,7 +17,7 @@ import jp_2dgames.game.particle.Particle.PType;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.gui.Message;
 import flixel.util.FlxColor;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.FlxSprite;
 
 /**
