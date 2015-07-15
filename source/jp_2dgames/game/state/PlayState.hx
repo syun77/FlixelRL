@@ -389,7 +389,7 @@ class PlayState extends FlxState {
       case State.FloorStart:
         if(Key.press.A) {
           // フェード・画面揺れキャンセル
-          FlxG.camera.shake(0, 0, null, true);
+          FlxG.camera.stopFX();
           _floorStart();
         }
       case State.FloorStart2:
