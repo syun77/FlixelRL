@@ -41,6 +41,7 @@ import jp_2dgames.game.Save;
  **/
 private enum State {
   FloorStart;   // フロア開始演出
+  FloorStart2;  // フロア開始演出2
   Main;         // メイン処理
   GameoverWait; // ゲームオーバー待ち時間
   Gameover;     // ゲームオーバー
@@ -120,16 +121,7 @@ class PlayState extends FlxState {
     this.add(_txtFloor);
     FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
       FlxG.camera.shake(0.0002*Global.getFloor(), 0.5, function() {
-        // 暗転解除
-        this.remove(_bgFade);
-        this.remove(_txtFloor);
-
-        // インスタンス生成
-        _start();
-        FlxG.camera.fade(FlxColor.BLACK, 0.3, true, function() {
-          // フェード終了
-          _state = State.Main;
-        });
+        _floorStart();
       });
     });
 
@@ -146,6 +138,21 @@ class PlayState extends FlxState {
     }
     var strBgm = TextUtil.fillZero(nBgm, 3);
     Snd.playMusic(strBgm);
+  }
+
+  private function _floorStart():Void {
+    _state = State.FloorStart2;
+
+    // 暗転解除
+    this.remove(_bgFade);
+    this.remove(_txtFloor);
+
+    // インスタンス生成
+    _start();
+    FlxG.camera.fade(FlxColor.BLACK, 0.3, true, function() {
+      // フェード終了
+      _state = State.Main;
+    }, true);
   }
 
   private function _start() {
@@ -327,7 +334,7 @@ class PlayState extends FlxState {
     FlxG.watch.add(player, "_stateprev");
     FlxG.watch.add(_seq, "_state");
     FlxG.watch.add(_seq, "_stateprev");
-    FlxG.watch.add(this, "_turn");
+    FlxG.watch.add(this, "_state");
 
     //		FlxG.debugger.visible = true;
     FlxG.debugger.toggleKeys = ["ALT"];
@@ -379,6 +386,12 @@ class PlayState extends FlxState {
 
     switch(_state) {
       case State.FloorStart:
+        if(Key.press.A) {
+          // フェード・画面揺れキャンセル
+          FlxG.camera.shake(0, 0, null, true);
+          _floorStart();
+        }
+      case State.FloorStart2:
 
       case State.Main:
         // シーケンス更新
