@@ -620,11 +620,6 @@ class Player extends Actor {
     // 移動先チェック
     var canWalk = function() {
       var extra = InventoryUtil.getRingExtra();
-//      if(extra == "passage") {
-//        // 透明な壁を通過可能
-//        return Field.isThroughFirearm(xnext, ynext);
-//      }
-//      return Field.isCollision(xnext, ynext, _dir) == false;
       return Field.isMove(xnext, ynext, extra, _dir);
     };
     if(canWalk()) {
@@ -634,6 +629,10 @@ class Player extends Actor {
       _bStop = false;
       _change(Actor.State.MoveBegin);
       _tMove = 0;
+      if(Key.on.Y) {
+        // 早歩き有効
+        _bRun = true;
+      }
     }
   }
 

@@ -94,7 +94,7 @@ class NightmareMgr {
   private function _getSkillName():String {
     switch(_getSkillRaw()) {
       case NightmareSkill.None: return "なし";
-      case NightmareSkill.AutoRecover: return "自動回復無効";
+      case NightmareSkill.AutoRecover: return "自然回復無効";
       case NightmareSkill.Hungry: return "満腹度減少率上昇";
       case NightmareSkill.WeaponBreak: return "強制武器破壊";
       case NightmareSkill.Wand: return "杖使用不可";

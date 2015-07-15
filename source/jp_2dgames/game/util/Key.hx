@@ -27,6 +27,9 @@ class KeyOn {
   public var X(get, never):Bool;
 
   inline function get_X() { return Key.checkX(FlxG.keys.pressed); }
+  public var Y(get, never):Bool;
+
+  inline function get_Y() { return Key.checkY(FlxG.keys.pressed); }
 }
 
 class KeyPress {
@@ -52,6 +55,9 @@ class KeyPress {
   public var X(get, never):Bool;
 
   inline function get_X() { return Key.checkX(FlxG.keys.justPressed); }
+  public var Y(get, never):Bool;
+
+  inline function get_Y() { return Key.checkY(FlxG.keys.justPressed); }
 }
 
 /**
@@ -62,9 +68,6 @@ class Key {
   public static var press:KeyPress = new KeyPress();
 
   public static function checkA(k:FlxKeyList):Bool {
-    if(k.check(FlxKey.SPACE)) {
-      return true;
-    }
     if(k.check(FlxKey.ENTER)) {
       return true;
     }
@@ -85,10 +88,17 @@ class Key {
   }
 
   public static function checkX(k:FlxKeyList):Bool {
-    if(k.check(FlxKey.CONTROL)) {
+    if(k.check(FlxKey.SPACE)) {
       return true;
     }
     if(k.check(FlxKey.C)) {
+      return true;
+    }
+    return false;
+  }
+
+  public static function checkY(k:FlxKeyList):Bool {
+    if(k.check(FlxKey.V)) {
       return true;
     }
     return false;

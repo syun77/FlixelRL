@@ -1,4 +1,6 @@
 package jp_2dgames.game.actor;
+
+import jp_2dgames.game.util.Key;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.item.ItemConst;
@@ -733,6 +735,10 @@ class Enemy extends Actor {
       _ynext = ynext;
       _change(Actor.State.MoveBegin);
       _tMove = 0;
+      if(Key.on.Y) {
+        // 早歩き有効
+        _bRun = true;
+      }
     }
     else {
       // 移動できないのでターン終了
