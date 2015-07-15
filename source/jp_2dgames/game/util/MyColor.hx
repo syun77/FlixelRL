@@ -18,4 +18,17 @@ class MyColor {
 
   public static inline var DETAIL_FRAME:Int = 0x000033;
   public static inline var MESSAGE_WINDOW:Int = 0x000033;
+
+  public static inline function strToColor(str:String):Int {
+    switch(str) {
+      case "white": return FlxColor.WHITE;
+      case "red": return FlxColor.PINK;
+      case "green": return FlxColor.LIME;
+      case "blue": return FlxColor.AQUAMARINE;
+      case "yellow": return FlxColor.YELLOW;
+      case "orange": return FlxColor.WHEAT;
+      default:
+        return FlxColor.BLACK;
+    }
+  }
 }
