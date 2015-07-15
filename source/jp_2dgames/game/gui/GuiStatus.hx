@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.state.PlayState;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
@@ -223,7 +225,7 @@ class GuiStatus extends FlxGroup {
         _txtHp.color = FlxColor.PINK;
         _tDanger++;
         var step = Std.int(Math.sin(FlxAngle.TO_RAD * (_tDanger%180)) * 100);
-        var color = FlxColorUtil.interpolateColor(Reg.COLOR_MESSAGE_WINDOW, FlxColor.MAROON, 100, step, 178);
+        var color = FlxColorUtil.interpolateColor(MyColor.MESSAGE_WINDOW, FlxColor.MAROON, 100, step, 178);
         _bgStatus.color = color;
         _bgHelp.color = color;
         Message.setWindowColor(color);
@@ -232,7 +234,7 @@ class GuiStatus extends FlxGroup {
         _txtHp.color = FlxColor.WHITE;
         _bgStatus.color = FlxColor.BLACK;
         _bgHelp.color = FlxColor.BLACK;
-        Message.setWindowColor(Reg.COLOR_MESSAGE_WINDOW);
+        Message.setWindowColor(MyColor.MESSAGE_WINDOW);
       }
     }
     {

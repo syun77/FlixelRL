@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;
@@ -34,7 +35,7 @@ class GuiItemDetail extends FlxSpriteGroup {
 
     // 背景
     var back = new FlxSprite(0, 0, "assets/images/ui/window200x100.png");
-    back.color = Reg.COLOR_DETAIL_FRAME;
+    back.color = MyColor.DETAIL_FRAME;
     this.add(back);
 
     // 説明文テキスト

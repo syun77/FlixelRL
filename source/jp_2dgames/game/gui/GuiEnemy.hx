@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil;
+import jp_2dgames.game.util.DirUtil.Dir;
 import jp_2dgames.game.actor.Enemy;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;

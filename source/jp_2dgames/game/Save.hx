@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.GuiBuyDetail;
 import jp_2dgames.game.state.PlayState;
@@ -13,7 +14,7 @@ import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.lib.Layer2D;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.FlxG;
 import haxe.Json;
 

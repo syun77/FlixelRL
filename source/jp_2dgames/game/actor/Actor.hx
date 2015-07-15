@@ -1,8 +1,9 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.Key;
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gui.InventoryUtil;
 import flixel.FlxG;
-import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
@@ -16,7 +17,7 @@ import jp_2dgames.game.particle.Particle.PType;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.gui.Message;
 import flixel.util.FlxColor;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.FlxSprite;
 
 /**
@@ -97,6 +98,8 @@ class Actor extends FlxSprite {
   private var _name:String = "";
   // バッドステータス
   private var _badstatus:BadStatus = BadStatus.None;
+  // 早歩き
+  private var _bRun:Bool = false;
 
   // プロパティ
   // チップ座標(X)
@@ -565,16 +568,23 @@ class Actor extends FlxSprite {
 	 **/
   private function _updateWalk():Bool {
     // 経過フレームの割合を求める
-    var t = _tMove / TIMER_WALK;
+    var tWait:Int = TIMER_WALK;
+    if(_bRun) {
+      // 早歩き
+      tWait = Std.int(tWait / 3);
+    }
+
+    _tMove++;
+    var t = _tMove / tWait;
     // 移動方向を求める
     var dx = _xnext - _xprev;
     var dy = _ynext - _yprev;
     // 座標を線形補間する
     x = Field.toWorldX(_xprev) + (dx * Field.GRID_SIZE) * t;
     y = Field.toWorldY(_yprev) + (dy * Field.GRID_SIZE) * t;
-    _tMove++;
-    if(_tMove >= TIMER_WALK) {
+    if(_tMove >= tWait) {
       // 移動完了
+      _bRun = false;
       _xprev = _xnext;
       _yprev = _ynext;
       return true;

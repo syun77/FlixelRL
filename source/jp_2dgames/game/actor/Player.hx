@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.Key;
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.gui.InventoryUtil;
@@ -16,7 +18,7 @@ import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.util.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -618,11 +620,6 @@ class Player extends Actor {
     // 移動先チェック
     var canWalk = function() {
       var extra = InventoryUtil.getRingExtra();
-//      if(extra == "passage") {
-//        // 透明な壁を通過可能
-//        return Field.isThroughFirearm(xnext, ynext);
-//      }
-//      return Field.isCollision(xnext, ynext, _dir) == false;
       return Field.isMove(xnext, ynext, extra, _dir);
     };
     if(canWalk()) {
@@ -632,6 +629,10 @@ class Player extends Actor {
       _bStop = false;
       _change(Actor.State.MoveBegin);
       _tMove = 0;
+      if(Key.on.Y) {
+        // 早歩き有効
+        _bRun = true;
+      }
     }
   }
 

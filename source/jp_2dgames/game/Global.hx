@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
 import openfl.Assets;
@@ -7,7 +8,7 @@ import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.Player;
-import jp_2dgames.game.DirUtil.Dir;
+import jp_2dgames.game.util.DirUtil.Dir;
 import jp_2dgames.lib.TextUtil;
 
 /**

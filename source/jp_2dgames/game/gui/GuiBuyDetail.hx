@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.util.MyColor;
+import jp_2dgames.game.util.Key;
 import flixel.util.FlxAngle;
 import haxe.ds.ArraySort;
 import jp_2dgames.game.gui.Message.Msg;
@@ -150,7 +152,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
     _bgItemList = new Array<FlxSprite>();
     for(i in 0...ITEM_MAX) {
       var spr = new FlxSprite(0, (MSG_DY * i), "assets/images/ui/listitem2.png");
-      spr.color = Reg.COLOR_LISTITEM_ENABLE;
+      spr.color = MyColor.LISTITEM_ENABLE;
       spr.alpha = 0.75;
       this.add(spr);
       _bgItemList.push(spr);
@@ -180,7 +182,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
     // カーソル
     _cursor = new FlxSprite(0, 0, "assets/images/ui/listitem2.png");
     _cursor.alpha = 0.3;
-    _cursor.color = Reg.COLOR_CURSOR;
+    _cursor.color = MyColor.CURSOR;
     this.add(_cursor);
 
     _nCursor = 0;
@@ -306,15 +308,15 @@ class GuiBuyDetail extends FlxSpriteGroup {
       _txtPriceList[idx].text = '${price}円';
       if(Global.getMoney() >= price) {
         // 購入可能
-        _txtList[idx].color = Reg.COLOR_LISTITEM_TEXT;
-        _txtPriceList[idx].color = Reg.COLOR_LISTITEM_TEXT;
-        _bgItemList[idx].color = Reg.COLOR_LISTITEM_ENABLE;
+        _txtList[idx].color = MyColor.LISTITEM_TEXT;
+        _txtPriceList[idx].color = MyColor.LISTITEM_TEXT;
+        _bgItemList[idx].color = MyColor.LISTITEM_ENABLE;
       }
       else {
         // 買えない
         _txtList[idx].color = FlxColor.SILVER;
         _txtPriceList[idx].color = FlxColor.SILVER;
-        _bgItemList[idx].color = Reg.COLOR_LISTITEM_DISABLE;
+        _bgItemList[idx].color = MyColor.LISTITEM_DISABLE;
       }
       // 背景枠も更新
       _bgItemList[idx].visible = true;
