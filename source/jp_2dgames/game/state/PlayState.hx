@@ -135,7 +135,7 @@ class PlayState extends FlxState {
         nBgm = floor;
       default:
         // それ以外はランダム
-        nBgm = FlxRandom.intRanged(1, 12);
+        nBgm = FlxRandom.intRanged(1, 16);
     }
     var strBgm = TextUtil.fillZero(nBgm, 3);
     Snd.playMusic(strBgm);
