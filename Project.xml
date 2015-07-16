@@ -72,38 +72,6 @@
         <sound path="nightmare.ogg" id="nightmare" />
     </assets>
     <!-- SE -->
-
-    <assets path="assets/music" if="flash" include="*.mp3">
-        <sound path="001.mp3" id="001" />
-        <sound path="002.mp3" id="002" />
-        <sound path="003.mp3" id="003" />
-        <sound path="004.mp3" id="004" />
-        <sound path="005.mp3" id="005" />
-        <sound path="006.mp3" id="006" />
-        <sound path="007.mp3" id="007" />
-        <sound path="008.mp3" id="008" />
-        <sound path="009.mp3" id="009" />
-        <sound path="010.mp3" id="010" />
-        <sound path="011.mp3" id="011" />
-        <sound path="012.mp3" id="012" />
-        <sound path="nightmare.mp3" id="nightmare" />
-    </assets>
-    <assets path="assets/music" unless="flash" include="*.ogg">
-        <sound path="001.ogg" id="001" />
-        <sound path="002.ogg" id="002" />
-        <sound path="003.ogg" id="003" />
-        <sound path="004.ogg" id="004" />
-        <sound path="005.ogg" id="005" />
-        <sound path="006.ogg" id="006" />
-        <sound path="007.ogg" id="007" />
-        <sound path="008.ogg" id="008" />
-        <sound path="009.ogg" id="009" />
-        <sound path="010.ogg" id="010" />
-        <sound path="011.ogg" id="011" />
-        <sound path="012.ogg" id="012" />
-        <sound path="nightmare.ogg" id="nightmare" />
-    </assets>
-
     <assets path="assets/sounds" if="flash" include="*.mp3">
         <sound path="pickup2.mp3" id="pickup" />
         <sound path="foot2.mp3" id="foot" />
