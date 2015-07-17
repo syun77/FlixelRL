@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.addons.effects.FlxWaveSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.util.DirUtil;
@@ -66,10 +67,14 @@ class Field {
   // 設定したメンバ変数を消去する
   public static function clear():Void {
     _cLayer = null;
+    _sprBack = null;
+    _sprWave = null;
   }
 
   // 背景画像
   private static var _sprBack:FlxSprite;
+  // ゆらゆらエフェクト
+  private static var _sprWave:FlxWaveSprite;
 
   // コリジョンレイヤーの設定
   private static var _cLayer:Layer2D;
@@ -313,13 +318,22 @@ class Field {
   }
 
   /**
+   * Waveスプライトを登録する
+   **/
+  public static function setWaveSprite(spr:FlxWaveSprite):Void {
+    _sprWave = spr;
+  }
+
+  /**
    * 背景を暗くする
    **/
   public static function startFadeBackground():Void {
-    FlxTween.color(_sprBack, 1, FlxColor.WHITE, FlxColor.GRAY, 1, 1, {ease:FlxEase.sineOut});
+    FlxTween.color(_sprWave, 1, FlxColor.WHITE, FlxColor.GRAY, 1, 1, {ease:FlxEase.sineOut});
+    FlxTween.tween(_sprWave, {strength:2, speed:10}, 5, {ease:FlxEase.sineOut});
   }
   public static function resetFadeBackGround():Void {
-    FlxTween.color(_sprBack, 0.3, FlxColor.GRAY, FlxColor.WHITE, 1, 1, {ease:FlxEase.sineOut});
+    FlxTween.color(_sprWave, 0.3, FlxColor.GRAY, FlxColor.WHITE, 1, 1, {ease:FlxEase.sineOut});
+    FlxTween.tween(_sprWave, {strength:0, speed:0}, 0.3, {ease:FlxEase.sineOut});
   }
 
   /**

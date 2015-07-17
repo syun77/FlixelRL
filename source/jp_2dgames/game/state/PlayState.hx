@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flixel.addons.effects.FlxWaveSprite;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.gimmick.Pit;
@@ -351,6 +352,10 @@ class PlayState extends FlxState {
 
     // 背景画像を作成
     Field.createBackground(_lField, _back);
+    var wave = new FlxWaveSprite(_back, WaveMode.ALL, 0, -1, 0);
+    this.add(wave);
+    Field.setWaveSprite(wave);
+
     // コリジョンレイヤーを登録
     Field.setCollisionLayer(_lField);
   }
