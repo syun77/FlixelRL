@@ -105,8 +105,13 @@ class Inventory extends FlxGroup {
   private static inline var CMD_Y = DETAIL_EQUIP_Y + 112;
 
   // ページ数テキストの座標
-  private static inline var PAGE_X = POS_X + 8;
+  private static inline var PAGE_X = POS_X + 24;
   private static inline var PAGE_Y = POS_Y + 4;
+
+  // ページ切り替え矢印の座標
+  private static inline var ARROW_L_POS_X = POS_X + 4;
+  private static inline var ARROW_R_POS_X = POS_X + 128;
+  private static inline var ARROW_POS_Y = PAGE_Y + 6;
 
   // アイテム枠座標オフセット
   private static inline var LIST_POS_Y = 32;
@@ -134,10 +139,6 @@ class Inventory extends FlxGroup {
   private var _txtPage:FlxText;
   // ページ数
   private var _nPage:Int = 0;
-  // ページ数の最大
-  private function _getPageMax():Int {
-    return Std.int(_itemMax / PAGE_DISP);
-  }
   // アイテム所持可能な最大数
   private var _itemMax:Int = ITEM_MAX_FIRST;
   public function getItemMax():Int {
@@ -275,6 +276,15 @@ class Inventory extends FlxGroup {
 
   // フォント
   private var _fonts:Array<FlxSprite>;
+
+  // ページ切り替えの矢印
+  private var _arrowL:FlxSprite;
+  private var _arrowR:FlxSprite;
+  // 表示・非表示の切り替え
+  private function _setDispPageArrow(b:Bool):Void {
+    _arrowL.visible = b;
+    _arrowR.visible = b;
+  }
 
   // GUIステータス
   private var _guistatus:GuiStatus;
@@ -487,6 +497,15 @@ class Inventory extends FlxGroup {
 
     // NULLアイテム
     _itemnull = new ItemData(ItemUtil.NONE, new ItemExtraParam());
+
+    // ページ切り替え矢印
+    _arrowL = new FlxSprite(ARROW_L_POS_X, ARROW_POS_Y, "assets/images/ui/arrow.png");
+    _arrowR = new FlxSprite(ARROW_R_POS_X, ARROW_POS_Y, "assets/images/ui/arrow.png");
+    _arrowL.flipX = true;
+    // いったん非表示
+    _setDispPageArrow(false);
+    this.add(_arrowL);
+    this.add(_arrowR);
   }
 
   /**
@@ -613,6 +632,26 @@ class Inventory extends FlxGroup {
 
       // カーソル位置を記憶しておく
       Global.setCursorInventory(_nCursor);
+    }
+
+    if(b) {
+      var page = _pageMax;
+      if(_feetItem != null) {
+        // 足下にアイテムがあればページ数+1
+        page += 1;
+      }
+      if(isEmpty()) {
+        // 所持アイテムがなければページ数を減らす
+        page -= 1;
+      }
+      if(page > 1) {
+        // ページ切り替えカーソル表示
+        _setDispPageArrow(true);
+      }
+    }
+    else {
+      // ページ切り替えカーソル非表示
+      _setDispPageArrow(false);
     }
 
     // 詳細表示切り替え
@@ -847,6 +886,10 @@ class Inventory extends FlxGroup {
       // 通常
       _tCursor += 4;
       _cursor.alpha = 0.3 + 0.1 * Math.sin(_tCursor * FlxAngle.TO_RAD);
+
+      // ページ切り替え矢印更新
+      _arrowL.x = ARROW_L_POS_X + 4 * Math.sin((_tCursor%180) * FlxAngle.TO_RAD);
+      _arrowR.x = ARROW_R_POS_X - 4 * Math.sin((_tCursor%180) * FlxAngle.TO_RAD);
     }
     else {
       // サブコマンド
