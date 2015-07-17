@@ -403,13 +403,16 @@ class Actor extends FlxSprite {
       case BadStatus.None:
     }
     if(msgid > 0) {
+      // バッドステータスになった
       Message.push2(msgid, [name]);
+      Snd.playSe("badstatus", true);
     }
 
     return true;
   }
   // バッドステータスを回復する
   public function cureBadStatus() {
+    Snd.playSe("recover", true);
     changeBadStatus(BadStatus.None);
   }
   // バッドステータスアイコン
@@ -761,6 +764,7 @@ class Actor extends FlxSprite {
     setPositionChip(X, Y);
     // ワープエフェクト再生
     ParticleSmoke.start("warp", x, y);
+    Snd.playSe("warp", true);
   }
 
   /**

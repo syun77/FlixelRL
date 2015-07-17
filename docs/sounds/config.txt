@@ -12,4 +12,8 @@
 - destroy2: gameover
 - menu: menu
 - pi: pi
-
+- hint: hint
+- coin: coin
+- levelup: levelup
+- badstatus: badstatus
+- warp: warp

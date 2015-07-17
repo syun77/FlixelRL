@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.util.MyColor;
 import jp_2dgames.game.util.Key;
 import flixel.tweens.FlxEase;
@@ -169,6 +170,8 @@ class Dialog extends FlxGroup {
       _cursor.alpha = 0.3;
     }
     this.add(_cursor);
+
+    Snd.playSe("menu");
   }
 
   /**
@@ -180,12 +183,14 @@ class Dialog extends FlxGroup {
     switch(_state) {
       case State.Main:
         if(Key.press.LEFT || Key.press.UP) {
+          Snd.playSe("pi", true);
           _nCursor--;
           if(_nCursor < 0) {
             _nCursor = _cursorMax - 1;
           }
         }
         else if(Key.press.RIGHT || Key.press.DOWN) {
+          Snd.playSe("pi", true);
           _nCursor++;
           if(_nCursor >= _cursorMax) {
             _nCursor = 0;

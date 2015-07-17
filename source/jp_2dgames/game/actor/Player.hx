@@ -175,6 +175,7 @@ class Player extends Actor {
       // 演出開始
       {
         ParticleMessage.start(x, y, "LEVEL UP");
+        Snd.playSe("levelup", true);
       }
       // パラメータ上昇
       _levelup();
@@ -401,6 +402,7 @@ class Player extends Actor {
               _stompChip = StompChip.Shop;
             case Field.HINT:
               // ヒント表示
+              Snd.playSe("hint", true);
               Message.pushHint();
             default:
           }

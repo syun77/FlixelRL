@@ -87,6 +87,11 @@
         <sound path="destroy2.mp3" id="gameover" />
         <sound path="menu.mp3" id="menu" />
         <sound path="pi.mp3" id="pi" />
+        <sound path="hint.mp3" id="hint" />
+        <sound path="coin.mp3" id="coin" />
+        <sound path="levelup.mp3" id="levelup" />
+        <sound path="badstatus.mp3" id="badstatus" />
+        <sound path="warp.mp3" id="warp" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="pickup2.ogg" id="pickup" />
@@ -103,8 +108,12 @@
         <sound path="destroy2.ogg" id="gameover" />
         <sound path="menu.ogg" id="menu" />
         <sound path="pi.ogg" id="pi" />
+        <sound path="hint.ogg" id="hint" />
+        <sound path="coin.ogg" id="coin" />
+        <sound path="levelup.ogg" id="levelup" />
+        <sound path="badstatus.ogg" id="badstatus" />
+        <sound path="warp.ogg" id="warp" />
     </assets>
-
     <!--------------------------------LIBRARIES------------------------------------->
 
     <haxelib name="flixel"/>

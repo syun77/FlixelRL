@@ -146,7 +146,7 @@ class DropItem extends FlxSprite {
           Message.push2(Msg.ITEM_PICKUP, [item.name]);
           Global.addMoney(item.param.value);
           item.kill();
-          FlxG.sound.play("pickup");
+          FlxG.sound.play("coin");
         }
         else {
           // アイテム所持数をチェック

@@ -273,6 +273,10 @@ class Message extends FlxGroup {
 
     // 座標更新
     _window.y = ofsY;
+    _updateTextPosition();
+  }
+
+  private function _updateTextPosition():Void {
     var idx = 0;
     for(text in _msgList) {
       // 描画基準座標
@@ -302,10 +306,9 @@ class Message extends FlxGroup {
     _msgList.add(text);
 
     // 座標を更新
-    var idx = 0;
-    for(t in _msgList) {
-      t.y = ofsY + MSG_POS_Y + idx * DY;
-      idx++;
+    _updateTextPosition();
+    for(txt in _msgList) {
+      txt.update();
     }
     this.add(text.bg);
     this.add(text);

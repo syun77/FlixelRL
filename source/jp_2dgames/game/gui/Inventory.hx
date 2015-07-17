@@ -414,6 +414,8 @@ class Inventory extends FlxGroup {
       return aKey - bKey;
     });
 
+    Snd.playSe("menu", true);
+
     // 表示テキスト更新
     _updateText();
     // 詳細表示を更新
@@ -900,6 +902,7 @@ class Inventory extends FlxGroup {
               Global.addMoney(money);
               // 売却メッセージ表示
               Message.push2(Msg.SHOP_SELL, [ItemUtil.getName(item), money]);
+              Snd.playSe("coin", true);
               // アイテムを消す
               delItem(-1);
               if(isEmpty()) {
