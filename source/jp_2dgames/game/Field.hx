@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.gimmick.Pit;
@@ -308,6 +310,16 @@ class Field {
     _sprBack = spr;
 
     return spr;
+  }
+
+  /**
+   * 背景を暗くする
+   **/
+  public static function startFadeBackground():Void {
+    FlxTween.color(_sprBack, 1, FlxColor.WHITE, FlxColor.GRAY, 1, 1, {ease:FlxEase.sineOut});
+  }
+  public static function resetFadeBackGround():Void {
+    FlxTween.color(_sprBack, 0.3, FlxColor.GRAY, FlxColor.WHITE, 1, 1, {ease:FlxEase.sineOut});
   }
 
   /**

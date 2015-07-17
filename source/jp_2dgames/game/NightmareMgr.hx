@@ -155,6 +155,8 @@ class NightmareMgr {
         if(_existsNightmare()) {
           // すでに存在している
           _exists = true;
+          // 背景演出
+          Field.startFadeBackground();
         }
         else {
           var pt = _searchNightmarePosition(layer);
@@ -169,6 +171,8 @@ class NightmareMgr {
               FlxG.camera.shake(0.01);
               _exists = true;
               Snd.playMusic("nightmare");
+              // 背景演出
+              Field.startFadeBackground();
             }
 
             if(getSkill() == NightmareSkill.Unknown) {
@@ -199,6 +203,9 @@ class NightmareMgr {
 
         // BGMを元に戻す
         Snd.playMusicPrev();
+
+        // 背景編出解除
+        Field.resetFadeBackGround();
 
         _exists = false;
       }
