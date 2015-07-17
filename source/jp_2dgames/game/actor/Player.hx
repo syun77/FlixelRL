@@ -96,6 +96,43 @@ class Player extends Actor {
     return _cursor;
   }
 
+  // 方向転換時のカーソル
+  private var _arrowList:Array<FlxSprite>;
+  public var arrowList(get, never):Array<FlxSprite>;
+  private function get_arrowList() {
+    return _arrowList;
+  }
+  public function setVisibleArrow(b:Bool) {
+    var idx:Int = 0;
+    var d:Float = 22 + 2 * Math.sin(_tElapsed*16);
+    for(arrow in _arrowList) {
+      arrow.visible = b;
+      if(b == false) {
+        continue;
+      }
+      switch(idx) {
+      case 0:
+        arrow.x = x + d;
+        arrow.y = y;
+      case 1:
+        arrow.x = x;
+        arrow.y = y - d;
+      case 2:
+        arrow.x = x - d;
+        arrow.y = y;
+      case 3:
+        arrow.x = x;
+        arrow.y = y + d;
+      }
+      arrow.x -= 4;
+      arrow.y -= 4;
+      idx++;
+    }
+  }
+
+  // 経過時間
+  private var _tElapsed:Float = 0;
+
   /**
 	 * 生成
 	 */
@@ -129,6 +166,24 @@ class Player extends Actor {
     _cursor.animation.play("play");
     _cursor.visible = false;
     _cursor.offset.set(_cursor.width/2, _cursor.height/2);
+
+    // 方向転換のカーソル生成
+    _arrowList = new Array<FlxSprite>();
+    for(i in 0...4) {
+      var spr = new FlxSprite().loadGraphic("assets/images/ui/arrow.png");
+      switch(i) {
+        case 0:
+        case 1:
+          spr.angle = 270;
+        case 2:
+          spr.flipX = true;
+        case 3:
+          spr.angle = 90;
+      }
+      spr.color = FlxColor.WHITE;
+      spr.visible = false;
+      _arrowList.push(spr);
+    }
   }
 
   // 初期化
@@ -422,6 +477,14 @@ class Player extends Actor {
   }
 
   /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+    _tElapsed += FlxG.elapsed;
+  }
+
+  /**
 	 * キー入力チェック
 	 **/
   private function _isKeyInput():Bool {
@@ -491,6 +554,8 @@ class Player extends Actor {
       return;
     }
 
+    setVisibleArrow(false);
+
     // 足踏みチェック
     if(_checkFoot()) {
       // 行動終了
@@ -514,6 +579,7 @@ class Player extends Actor {
     var checkRandom = function() {
       if(Key.on.X) {
         // 方向転換時はチェック不要
+        setVisibleArrow(true);
         return false;
       }
       if(badstatus == BadStatus.Confusion) {

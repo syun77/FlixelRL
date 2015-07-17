@@ -225,6 +225,9 @@ class PlayState extends FlxState {
       pt.put();
     }
     this.add(_player.cursor);
+    for(arrow in _player.arrowList) {
+      this.add(arrow);
+    }
 
     // 敵からアクセスしやすいようにする
     Enemy.target = _player;
