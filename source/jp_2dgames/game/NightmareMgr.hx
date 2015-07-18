@@ -131,6 +131,15 @@ class NightmareMgr {
     Global.setNightmareLv(v);
     return v;
   }
+  // ナイトメアを無視した回数
+  private var _avoid(get, set):Int;
+  private function get__avoid() {
+    return Global.getNightmareAvoid();
+  }
+  private function set__avoid(v:Int):Int {
+    Global.setNightmareAvoid(v);
+    return v;
+  }
 
   /**
    * コンストラクタ
@@ -193,23 +202,37 @@ class NightmareMgr {
       // 倒したかどうかをチェック
       if(_existsNightmare() == false) {
         // ナイトメアを倒した
-        if(_csv.hasId(_lv+1)) {
-          // レベルアップ
-          _lv++;
-        }
-
-        // 出現ターン数を設定
-        _turn = _getTurnLimit();
-
-        // BGMを元に戻す
-        Snd.playMusicPrev();
-
-        // 背景編出解除
-        Field.resetFadeBackGround();
-
-        _exists = false;
+        _levelUp(true);
       }
     }
+  }
+
+  /**
+   * ナイトメアのレベル上昇
+   * @param bDefeat 倒したフラグ
+   **/
+  private function _levelUp(bDefeat:Bool):Void {
+    if(_csv.hasId(_lv+1)) {
+      // レベルアップ
+      _lv++;
+    }
+
+    // 出現ターン数を設定
+    _turn = _getTurnLimit();
+
+    // ナイトメアを無視した回数を初期化
+    _avoid = 0;
+
+    if(bDefeat) {
+      // BGMを元に戻す
+      Snd.playMusicPrev();
+    }
+
+    // 背景編出解除
+    Field.resetFadeBackGround();
+
+    // 生存フラグを下げる
+    _exists = false;
   }
 
   /**
@@ -226,6 +249,15 @@ class NightmareMgr {
       _turn += add;
       if(_turn > add) {
         _turn = add;
+      }
+    }
+
+    if(_exists) {
+      // 存在している
+      _avoid++;
+      if(_avoid > 1) {
+        // 2回以上無視したのでナイトメアを消す
+        _levelUp(false);
       }
     }
   }

@@ -81,6 +81,8 @@ class PlayState extends FlxState {
 
   // 背景
   private var _back:FlxSprite;
+  // 背景エフェクト
+  private var _wave:FlxWaveSprite = null;
 
   // フロア開始演出用テキスト
   private var _txtFloor:FlxText;
@@ -355,9 +357,11 @@ class PlayState extends FlxState {
 
     // 背景画像を作成
     Field.createBackground(_lField, _back);
-    var wave = new FlxWaveSprite(_back, WaveMode.ALL, 0, -1, 0);
-    this.add(wave);
-    Field.setWaveSprite(wave);
+    if(_wave == null) {
+      _wave = new FlxWaveSprite(_back, WaveMode.ALL, 0, -1, 0);
+      this.add(_wave);
+      Field.setWaveSprite(_wave);
+    }
 
     // コリジョンレイヤーを登録
     Field.setCollisionLayer(_lField);

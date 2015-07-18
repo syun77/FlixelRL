@@ -30,6 +30,7 @@ class Global {
     _shopAppearCount = 0;
     _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareLv = 1;
+    _nightmareAvoid = 0;
   }
 
   // フロア数
@@ -201,6 +202,14 @@ class Global {
   }
   public static function setNightmareLv(v:Int):Void {
     _nightmareLv = v;
+  }
+  // ナイトメアを無視して次の階に進んだ回数
+  private static var _nightmareAvoid:Int = 0;
+  public static function getNightmareAvoid():Int {
+    return _nightmareAvoid;
+  }
+  public static function setNightmareAvoid(v:Int):Void {
+    _nightmareAvoid = v;
   }
 
   // ショップ出現カウント
