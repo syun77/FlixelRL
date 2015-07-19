@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.GuiBuyDetail;
@@ -247,6 +248,55 @@ private class _Items {
   }
 }
 
+/**
+ * NPCデータ
+ **/
+private class _NPC {
+  public var x:Int = 0;
+  public var y:Int = 0;
+  public var dir:String = "down";
+  public var params:Params;
+
+  public function new() {
+  }
+}
+private class _NPCs {
+  public var array:Array<_NPC>;
+
+  public function new() {
+    array = new Array<_NPC>();
+  }
+
+  // セーブ
+  public function save() {
+    // いったん初期化
+    array = new Array<_NPC>();
+
+    Npc.parent.forEachAlive(function(npc:Npc) {
+      var npc2 = new _NPC();
+      npc2.x = npc.xchip;
+      npc2.y = npc.ychip;
+      npc2.dir = "down"; // TODO:
+      npc2.params = npc.params;
+      array.push(npc2);
+    });
+  }
+
+  // ロード
+  public function load(data:Dynamic) {
+    // NPCを全部消す
+    Npc.parent.kill();
+    Npc.parent.revive();
+    var arr:Array<_NPC> = data.array;
+    // 作り直し
+    for(npc2 in arr) {
+      var npc:Npc = Npc.parent.recycle();
+      var dir = DirUtil.fromString(npc2.dir);
+      npc.init(npc2.x, npc2.y, dir, npc2.params);
+    }
+  }
+}
+
 
 /**
  * マップデータ
@@ -287,6 +337,7 @@ private class SaveData {
   public var shop:_Shop;
   public var enemies:_Enemies;
   public var items:_Items;
+  public var npcs:_NPCs;
   public var map:_Map;
 
   public function new() {
@@ -296,6 +347,7 @@ private class SaveData {
     shop = new _Shop();
     enemies = new _Enemies();
     items = new _Items();
+    npcs = new _NPCs();
     map = new _Map();
   }
 
@@ -307,6 +359,7 @@ private class SaveData {
     shop.save();
     enemies.save();
     items.save();
+    npcs.save();
     map.save();
   }
 
@@ -318,6 +371,7 @@ private class SaveData {
     shop.load(data.shop);
     enemies.load(data.enemies);
     items.load(data.items);
+    npcs.load(data.npcs);
     map.load(data.map);
   }
 }
