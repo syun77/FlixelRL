@@ -31,7 +31,24 @@ enum NightmareSkill {
  * ナイトメア管理
  **/
 class NightmareMgr {
+
+  // ナイトメア出現開始フロア数
+  public static inline var FLOOR_APPEAR_START:Int = 5;
+
   public static var instance:NightmareMgr = null;
+
+  /**
+   * ナイトメアが有効かどうか
+   **/
+  public static function isValid():Bool {
+    if(Global.getFloor() >= FLOOR_APPEAR_START) {
+      // フロア4以降は有効
+      return true;
+    }
+
+    // 無効
+    return false;
+  }
 
   /**
    * ナイトメア出現ターン数を取得する
@@ -156,9 +173,16 @@ class NightmareMgr {
     instance._nextTurn(layer);
   }
   private function _nextTurn(layer:Layer2D):Void {
+
+    if(isValid() == false) {
+      // ナイトメア無効なので何もしない
+      return;
+    }
+
     // ターン数を減らす
     _turn -= 1;
     if(_turn <= 0) {
+      // 残りターン数が0になった
       _turn = 0;
       if(_exists == false) {
         if(_existsNightmare()) {
@@ -242,6 +266,12 @@ class NightmareMgr {
     instance._nextFloor();
   }
   private function _nextFloor():Void {
+
+    if(isValid() == false) {
+      // ナイトメアは無効なので何もしない
+      return;
+    }
+
     // 残りターン数を回復
     var add = _csv.getInt(_lv, "add");
     if(_turn < add) {

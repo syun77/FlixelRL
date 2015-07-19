@@ -86,6 +86,12 @@ class GuiNightmare extends FlxSpriteGroup {
    * 更新
    **/
   override public function update():Void {
+
+    if(NightmareMgr.isValid() == false) {
+      // ナイトメアが無効なときは何も表示しない
+      visible = false;
+    }
+
     super.update();
 
     setTurn(Global.getTurnLimitNightmare());
