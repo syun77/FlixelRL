@@ -33,8 +33,6 @@ class Npc extends Actor {
     return npc;
   }
 
-  // 停止タイマー
-  private var _tWait:Float = 0;
   /**
    * NPC種別を取得する
    **/
@@ -89,52 +87,47 @@ class Npc extends Actor {
     super.init(X, Y, dir, params);
 
     FlxG.watch.add(this, "_state");
-    FlxG.watch.add(this, "_tWait");
 
     FlxG.debugger.visible = true;
   }
 
   /**
+   * 移動要求
+   **/
+  public function requestMove():Void {
+    // 移動開始
+    // ランダムな方向
+    _dir = DirUtil.random();
+    _changeAnime();
+
+    var pt = FlxPoint.get(_xprev, _yprev);
+    pt = DirUtil.move(_dir, pt);
+    var xnext = Std.int(pt.x);
+    var ynext = Std.int(pt.y);
+    if(_isMove(xnext, ynext)) {
+      // 移動する
+      _xnext = xnext;
+      _ynext = ynext;
+      _tMove = 0;
+      _change(Actor.State.MoveBegin);
+    }
+    else {
+      // 移動できない
+      _change(Actor.State.TurnEnd);
+    }
+  }
+  /**
    * 更新
    **/
-  override public function update():Void {
-    super.update();
+  override public function proc():Void {
+    super.proc();
 
     switch(_state) {
-      case Actor.State.KeyInput:
-        _tWait -= FlxG.elapsed;
-        if(_tWait <= 0) {
-          // 移動開始
-          // ランダムな方向
-          _dir = DirUtil.random();
-          _changeAnime();
-
-          var pt = FlxPoint.get(_xprev, _yprev);
-          pt = DirUtil.move(_dir, pt);
-          var xnext = Std.int(pt.x);
-          var ynext = Std.int(pt.y);
-          if(_isMove(xnext, ynext)) {
-            // 移動する
-            _xnext = xnext;
-            _ynext = ynext;
-            _tMove = 0;
-            _change(Actor.State.Move);
-          }
-          else {
-            // 移動できない
-            _change(Actor.State.TurnEnd);
-          }
-        }
       case Actor.State.Move:
         if(_updateWalk()) {
           // 移動完了
           _change(Actor.State.TurnEnd);
         }
-      case Actor.State.TurnEnd:
-        _tWait = FlxRandom.floatRanged(5, 10);
-        _tWait = 3;
-        _change(Actor.State.KeyInput);
-
       default:
     }
   }

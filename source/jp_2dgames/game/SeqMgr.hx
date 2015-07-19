@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.item.ItemConst;
@@ -173,6 +174,12 @@ class SeqMgr {
         e.beginMove();
       }
     });
+    // NPCも動かす
+    Npc.parent.forEachAlive(function(npc:Npc) {
+      if(npc.action == Action.Move) {
+        npc.beginMove();
+      }
+    });
   }
 
   /**
@@ -212,6 +219,7 @@ class SeqMgr {
   private function proc():Bool {
     _player.proc();
     _enemies.forEachAlive(function(e:Enemy) e.proc());
+    Npc.parent.forEachAlive(function(n:Npc) n.proc());
 
     // ループフラグ
     var ret:Bool = false;
@@ -343,6 +351,9 @@ class SeqMgr {
       case State.EnemyRequestAI:
         // 敵に行動を要求する
         _enemies.forEachAlive(function(e:Enemy) e.requestMove());
+        // NPCも動かす
+        Npc.parent.forEachAlive(function(n:Npc) n.requestMove());
+
         if(_player.isTurnEnd()) {
           _change(State.EnemyActBegin);
           ret = true;
@@ -402,6 +413,21 @@ class SeqMgr {
               trace('Error: Invalid action = ${e.action}');
           }
         });
+
+        // NPCの行動終了もチェックする
+        Npc.parent.forEachAlive(function(npc:Npc) {
+          switch(npc.action) {
+            case Action.TurnEnd:
+              // 行動完了
+            case Action.Move:
+              // 移動待ちなので動かす
+              npc.beginMove();
+            default:
+              // 行動中
+              isNext = false;
+          }
+        });
+
         if(isNext) {
           // 敵が行動完了した
           if(isActRemain) {
@@ -541,6 +567,10 @@ class SeqMgr {
 
     // 敵の行動終了
     _enemies.forEachAlive(function(e:Enemy) e.turnEnd());
+
+    // NPCの行動終了
+    Npc.parent.forEachAlive(function(npc:Npc) npc.turnEnd());
+
     switch(_player.stompChip) {
       case StompChip.Stairs:
         // 次のフロアに進む

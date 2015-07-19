@@ -217,7 +217,7 @@ class PlayState extends FlxState {
     }
     this.add(Npc.parent);
     // TODO:
-//    Npc.add(Npc.TYPE_GREEN, 6, 6);
+    Npc.add(Npc.TYPE_WHITE, 6, 6);
 
     // 敵管理生成
     var enemies = new FlxTypedGroup<Enemy>(32);
