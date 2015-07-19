@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.actor.Npc;
 import flixel.addons.effects.FlxWaveSprite;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.gimmick.Door;
@@ -207,6 +208,16 @@ class PlayState extends FlxState {
     }
     this.add(items);
     DropItem.parent = items;
+
+    // NPC生成
+    Npc.parent = new FlxTypedGroup<Npc>(4);
+    for(i in 0...Npc.parent.maxSize) {
+      var npc = new Npc();
+      Npc.parent.add(npc);
+    }
+    this.add(Npc.parent);
+    // TODO:
+//    Npc.add(Npc.TYPE_GREEN, 6, 6);
 
     // 敵管理生成
     var enemies = new FlxTypedGroup<Enemy>(32);

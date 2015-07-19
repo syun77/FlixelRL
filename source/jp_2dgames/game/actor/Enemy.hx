@@ -131,8 +131,8 @@ class Enemy extends Actor {
     _bNightmare = false;
     super.kill();
 
-    //		FlxG.watch.add(this, "_state");
-    //		FlxG.watch.add(this, "_stateprev");
+    // FlxG.watch.add(this, "_state");
+    // FlxG.watch.add(this, "_stateprev");
   }
 
   /**
@@ -501,7 +501,7 @@ class Enemy extends Actor {
     // 移動方向の判定実行
     var dir = func();
 
-    // 移動先がチェックする
+    // 移動先のチェックをする
     var pt = FlxPoint.get(_xnext, _ynext);
     pt = DirUtil.move(dir, pt);
     var xnext = Std.int(pt.x);
