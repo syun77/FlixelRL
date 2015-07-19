@@ -46,7 +46,7 @@ class GuiSellDetail extends FlxSpriteGroup {
    **/
   private function _updateText(item:ItemData):Void {
     var sell = ItemUtil.getSell(item);
-    _txtSell.text = '売却価格: ${sell}円';
+    _txtSell.text = '売却価格: ${sell}G';
   }
 
   /**

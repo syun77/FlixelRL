@@ -216,7 +216,7 @@ class DropItem extends FlxSprite {
     // 名前
     if(type == IType.Money) {
       // お金は特殊
-      name = '${param.value}円';
+      name = '${param.value}G';
     }
     else {
       name = ItemUtil.getName(itemdata);

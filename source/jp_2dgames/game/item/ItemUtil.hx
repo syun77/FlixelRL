@@ -145,7 +145,7 @@ class ItemUtil {
   private static function _calcAddedValue(item:ItemData, price:Float):Float {
     switch(item.type) {
       case IType.Weapon, IType.Armor:
-        // +1 は 100円の価値がある
+        // +1 は 100Gの価値がある
         var added = 100 * item.param.value;
         if(item.id == ItemConst.WEAPON8) {
           // ドリルは消耗品なので残存価値を計算する

@@ -204,7 +204,7 @@ class GuiStatus extends FlxGroup {
 
     // 所持金
     var money = Global.getMoney();
-    _txtMoney.text = '${money}円';
+    _txtMoney.text = '${money}G';
 
     // 表示アニメーション
     _groupOfsY *= 0.8;

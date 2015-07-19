@@ -305,7 +305,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
     for(item in _itemList) {
       _txtList[idx].text = ItemUtil.getName(item);
       var price = ItemUtil.getBuy(item);
-      _txtPriceList[idx].text = '${price}円';
+      _txtPriceList[idx].text = '${price}G';
       if(Global.getMoney() >= price) {
         // 購入可能
         _txtList[idx].color = MyColor.LISTITEM_TEXT;
