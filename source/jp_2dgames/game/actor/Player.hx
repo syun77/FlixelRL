@@ -554,6 +554,7 @@ class Player extends Actor {
       return;
     }
 
+    // 方向転換矢印を非表示
     setVisibleArrow(false);
 
     // 足踏みチェック
