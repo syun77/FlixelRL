@@ -1,5 +1,8 @@
 package jp_2dgames.game.actor;
-import flixel.util.FlxRandom;
+import jp_2dgames.game.item.ItemData.ItemExtraParam;
+import jp_2dgames.game.item.DropItem;
+import jp_2dgames.game.gui.Inventory;
+import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxPoint;
 import flixel.FlxG;
 import flixel.util.FlxColor;
@@ -86,9 +89,7 @@ class Npc extends Actor {
 
     super.init(X, Y, dir, params);
 
-    FlxG.watch.add(this, "_state");
-
-    FlxG.debugger.visible = true;
+//    FlxG.watch.add(this, "_state");
   }
 
   /**
@@ -116,6 +117,42 @@ class Npc extends Actor {
       _change(Actor.State.TurnEnd);
     }
   }
+
+  /**
+   * オーブ獲得
+   **/
+  public function getOrb():Bool {
+    var itemid = ItemConst.ORB1;
+    var param = new ItemExtraParam();
+    switch(_id) {
+      case TYPE_RED:   itemid = ItemConst.ORB1; param.value = 0;
+      case TYPE_BLUE:  itemid = ItemConst.ORB2; param.value = 1;
+      case TYPE_WHITE: itemid = ItemConst.ORB3; param.value = 2;
+      case TYPE_GREEN: itemid = ItemConst.ORB4; param.value = 3;
+    }
+
+    // オーブに変化したかどうか
+    var bOrb = true;
+    if(Inventory.isFull()) {
+      // アイテムが一杯なので地面に置く
+      var pt = FlxPoint.get();
+      if(DropItem.checkDrop(pt, xchip, ychip)) {
+        // 置ける
+        DropItem.add(Std.int(pt.x), Std.int(pt.y), itemid, param);
+      }
+      else {
+        // 置けない
+        bOrb = false;
+      }
+    }
+    else {
+      // オーブ獲得
+      Inventory.instance.addItem(itemid, param);
+    }
+
+    return bOrb;
+  }
+
   /**
    * 更新
    **/
@@ -153,8 +190,16 @@ class Npc extends Actor {
       return false;
     }
 
-    if(Enemy.target.existsPosition(xnext, ynext)) {
+    var player = Enemy.target;
+    if(player.existsPosition(xnext, ynext)) {
       // プレイヤーがいるので移動できない
+      return false;
+    }
+
+    var dx = player.xchip - xchip;
+    var dy = player.ychip - ychip;
+    if(Math.abs(dx) + Math.abs(dy) < 2) {
+      // プレイヤーが近くにいるときも動けない
       return false;
     }
 

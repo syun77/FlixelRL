@@ -559,6 +559,16 @@ class SeqMgr {
       return;
     }
 
+    // ネコと重なっているかどうか
+    Npc.parent.forEachAlive(function(npc:Npc) {
+      if(npc.existsPosition(_player.xchip, _player.ychip)) {
+        if(npc.getOrb()) {
+          // オーブに変化したのでネコ消滅
+          npc.kill();
+        }
+      }
+    });
+
     // トゲを切り替え
     Pit.turnEnd();
 
