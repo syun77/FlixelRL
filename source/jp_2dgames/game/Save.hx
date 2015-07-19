@@ -23,6 +23,7 @@ import haxe.Json;
  **/
 private class _Global {
   public var floor:Int            = 0;
+  public var mapid:Int            = 0;
   public var money:Int            = 0;
   public var turn:Int             = 0;
   public var shop:Int             = 0;
@@ -37,6 +38,7 @@ private class _Global {
   // セーブ
   public function save() {
     floor           = Global.getFloor();
+    mapid           = Global.getMapID();
     money           = Global.getMoney();
     turn            = Global.getTurn();
     shop            = Global.getShopAppearCountRaw();
@@ -51,6 +53,7 @@ private class _Global {
   // ロード
   public function load(data:Dynamic) {
     Global.setFloor(data.floor);
+    Global.setMapID(data.mapid);
     Global.setMoney(data.money);
     Global.setTurn(data.turn);
     Global.setShopAppearCount(data.shop);

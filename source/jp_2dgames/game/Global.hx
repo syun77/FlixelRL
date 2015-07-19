@@ -21,6 +21,7 @@ class Global {
    **/
   public static function init():Void {
     _floor = 1;
+    _mapid = 0;
     _money = 0;
     _items = new Array<ItemData>();
     _nCursorInventory = 0;
@@ -48,14 +49,26 @@ class Global {
   }
 
   /**
-	 * 現在のフロアのマップデータのパスを取得する
-	 **/
+   * 参照しているマップの番号
+   **/
+  private static var _mapid:Int = 0;
+  public static function getMapID():Int {
+    return _mapid;
+  }
+  public static function setMapID(v:Int):Void {
+    _mapid = v;
+  }
+
+  /**
+   * 現在のフロアのマップデータのパスを取得する
+   **/
   public static function getFloorMap():String {
-    var map = TextUtil.fillZero(_floor, 3);
+    _mapid = _floor;
     if(_nightmareDefeat) {
       // ナイトメアを倒している
-      map = TextUtil.fillZero(500, 3);
+      _mapid = 500;
     }
+    var map = TextUtil.fillZero(_mapid, 3);
     return 'assets/levels/${map}.tmx';
   }
 
