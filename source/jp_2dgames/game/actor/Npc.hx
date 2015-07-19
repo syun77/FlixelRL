@@ -4,7 +4,6 @@ import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxPoint;
-import flixel.FlxG;
 import flixel.util.FlxColor;
 import jp_2dgames.game.util.DirUtil;
 import flixel.group.FlxTypedGroup;
@@ -34,6 +33,24 @@ class Npc extends Actor {
     npc.init(xchip, ychip, DirUtil.random(), params, true);
 
     return npc;
+  }
+
+  /**
+   * 種別に対応する色
+   **/
+  public static function typeToColor(type:Int):Int {
+    var c = FlxColor.WHITE;
+    switch(type) {
+      case TYPE_RED:
+        c = FlxColor.SALMON;
+      case TYPE_BLUE:
+        c = 0x80A0FF;
+      case TYPE_WHITE:
+        c = FlxColor.WHITE;
+      case TYPE_GREEN:
+        c = FlxColor.LIME;
+    }
+    return c;
   }
 
   /**
@@ -99,16 +116,7 @@ class Npc extends Actor {
     // ID取得
     _id = params.id;
 
-    switch(_id) {
-      case TYPE_RED:
-        color = FlxColor.SALMON;
-      case TYPE_BLUE:
-        color = 0x80A0FF;
-      case TYPE_WHITE:
-        color = FlxColor.WHITE;
-      case TYPE_GREEN:
-        color = FlxColor.LIME;
-    }
+    color = typeToColor(_id);
 
     // アニメーション設定
     _changeAnime();

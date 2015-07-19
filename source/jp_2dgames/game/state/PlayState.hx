@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.actor.Npc;
 import flixel.addons.effects.FlxWaveSprite;
 import jp_2dgames.game.util.Key;
@@ -87,8 +88,8 @@ class PlayState extends FlxState {
 
   // フロア開始演出用テキスト
   private var _txtFloor:FlxText;
-  // フロア開始演出用の黒い四角形
-  private var _bgFade:FlxSprite;
+  // フロア開始演出用スプライト
+  private var _sprStarts:Array<FlxSprite>;
 
   // CSVデータ
   private var _csv:Csv;
@@ -117,15 +118,42 @@ class PlayState extends FlxState {
     // 状態を設定
     _state = State.FloorStart;
     _timer = 0;
+    // スプライト表示
+    var xspr = FlxG.width/4;
+    var yspr = FlxG.height/1.5;
+    _sprStarts = new Array<FlxSprite>();
+    {
+      // プレイヤー
+      var spr = new FlxSprite(xspr, yspr).loadGraphic("assets/images/player.png", true);
+      spr.animation.add("play", [10, 11], 8);
+      spr.animation.play("play");
+      spr.velocity.x = 75;
+      this.add(spr);
+      _sprStarts.push(spr);
+    }
+
+    xspr -= Field.GRID_SIZE;
+    for(itemid in ItemConst.ORB1...(ItemConst.ORB4+1)) {
+      if(Global.hasItem(itemid)) {
+        var idx = itemid - ItemConst.ORB1 + 1;
+        var spr = new FlxSprite(xspr, yspr).loadGraphic("assets/images/cat.png", true);
+        spr.animation.add("play", [6, 7, 8, 7], 8); // 右
+        spr.animation.play("play");
+        spr.velocity.x = 75;
+        spr.color = Npc.typeToColor(idx);
+        this.add(spr);
+        _sprStarts.push(spr);
+        xspr -= Field.GRID_SIZE;
+      }
+    }
+
     // フロア開始演出スタート
-    _bgFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
     _txtFloor = new FlxText(FlxG.width/3.2, FlxG.height/2.5, 256, "", 48);
     _txtFloor.text = 'Floor ${Global.getFloor()}';
     _txtFloor.color = FlxColor.WHITE;
-    this.add(_bgFade);
     this.add(_txtFloor);
     FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
-      FlxG.camera.shake(0.0002*Global.getFloor(), 0.5, function() {
+      FlxG.camera.shake(0, 1.5, function() {
         _floorStart();
       });
     });
@@ -149,8 +177,10 @@ class PlayState extends FlxState {
     _state = State.FloorStart2;
 
     // 暗転解除
-    this.remove(_bgFade);
     this.remove(_txtFloor);
+    for(spr in _sprStarts) {
+      this.remove(spr);
+    }
 
     // インスタンス生成
     _start();
