@@ -33,7 +33,7 @@ enum NightmareSkill {
 class NightmareMgr {
 
   // ナイトメア出現開始フロア数
-  public static inline var FLOOR_APPEAR_START:Int = 5;
+  public static inline var FLOOR_APPEAR_START:Int = 1;
 
   public static var instance:NightmareMgr = null;
 
@@ -248,8 +248,12 @@ class NightmareMgr {
     _avoid = 0;
 
     if(bDefeat) {
+      // ナイトメアを倒した
       // BGMを元に戻す
       Snd.playMusicPrev();
+
+      // 倒したフラグを立てる
+      Global.setNightmareDefeat(true);
     }
 
     // 背景編出解除

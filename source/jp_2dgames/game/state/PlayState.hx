@@ -216,8 +216,6 @@ class PlayState extends FlxState {
       Npc.parent.add(npc);
     }
     this.add(Npc.parent);
-    // TODO:
-    Npc.add(Npc.TYPE_WHITE, 6, 6);
 
     // 敵管理生成
     var enemies = new FlxTypedGroup<Enemy>(32);
@@ -532,10 +530,6 @@ class PlayState extends FlxState {
     if(FlxG.keys.justPressed.Y) {
       // アイテム所持最大数増加
       Global.addItemMaxInventory(2);
-    }
-
-    if(FlxG.keys.justPressed.F) {
-      Message.push("abcdefghijklmnopqrstuvwxyz");
     }
 
     // アイテム配置デバッグ機能

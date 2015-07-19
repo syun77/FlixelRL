@@ -52,6 +52,10 @@ class Global {
 	 **/
   public static function getFloorMap():String {
     var map = TextUtil.fillZero(_floor, 3);
+    if(_nightmareDefeat) {
+      // ナイトメアを倒している
+      map = TextUtil.fillZero(500, 3);
+    }
     return 'assets/levels/${map}.tmx';
   }
 
@@ -123,6 +127,21 @@ class Global {
       _items = items;
     }
     Inventory.setItemList(items, _nCursorInventory, _itemMaxInventory);
+  }
+
+  /**
+   * 指定のアイテムを所持しているかどうか
+   **/
+  public static function hasItem(itemid:Int):Bool {
+    for(item in _items) {
+      if(item.id == itemid) {
+        // 所持している
+        return true;
+      }
+    }
+
+    // 所持していない
+    return false;
   }
 
   // インベントリのカーソル位置

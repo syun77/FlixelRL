@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.Inventory;
+import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.util.DirUtil;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.state.PlayState;
@@ -192,6 +194,22 @@ class Generator {
             var item = new ItemData(itemid, param);
             GuiBuyDetail.addItem(item);
           }
+
+        case Field.CAT:
+          // ネコ
+          var tbl = [Npc.TYPE_RED, Npc.TYPE_BLUE, Npc.TYPE_WHITE, Npc.TYPE_GREEN];
+          FlxRandom.shuffleArray(tbl, 1);
+          var type = Npc.TYPE_RED;
+          for(t in tbl) {
+            var itemid = Npc.typeToItemID(t);
+            if(Global.hasItem(itemid) == false) {
+              // 持っていないオーブ
+              type = t;
+              break;
+            }
+          }
+          // 生成
+          Npc.add(type, i, j);
       }
     });
   }

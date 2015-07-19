@@ -38,6 +38,7 @@ class Field {
   public static inline var SPIKE:Int   = 8;  // トゲ
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
+  public static inline var CAT:Int     = 11; // ネコ
   public static inline var ONEWAY_LEFT:Int  = 17; // 一方通行(左)
   public static inline var ONEWAY_UP:Int    = 18; // 一方通行(上)
   public static inline var ONEWAY_RIGHT:Int = 19; // 一方通行(右)
@@ -293,7 +294,7 @@ class Field {
       rect.top    = Std.int((v - 1) / 8) * GRID_SIZE;
       rect.bottom = rect.top + GRID_SIZE;
       switch(v) {
-        case NONE, PLAYER, PASSAGE, ENEMY, ITEM:
+        case NONE, PLAYER, PASSAGE, ENEMY, ITEM, CAT:
           // 何も描画しない
         case SPIKE:
           // トゲを配置

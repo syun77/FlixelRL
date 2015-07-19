@@ -37,6 +37,32 @@ class Npc extends Actor {
   }
 
   /**
+   * 種別に対応するアイテムIDを取得する
+   **/
+  public static function typeToItemID(type:Int):Int {
+    switch(type) {
+      case TYPE_RED:   return ItemConst.ORB1;
+      case TYPE_BLUE:  return ItemConst.ORB2;
+      case TYPE_WHITE: return ItemConst.ORB3;
+      case TYPE_GREEN: return ItemConst.ORB4;
+      default:
+        trace('Warning: Invalid type:${type}');
+        return ItemConst.FOOD1;
+    }
+  }
+  public static function typeToValue(type:Int):Int {
+    switch(type) {
+      case TYPE_RED:   return 0;
+      case TYPE_BLUE:  return 1;
+      case TYPE_WHITE: return 2;
+      case TYPE_GREEN: return 3;
+      default:
+        trace('Warning: Invalid type:${type}');
+        return 0;
+    }
+  }
+
+  /**
    * NPC種別を取得する
    **/
   public function getType():Int {
@@ -122,14 +148,9 @@ class Npc extends Actor {
    * オーブ獲得
    **/
   public function getOrb():Bool {
-    var itemid = ItemConst.ORB1;
+    var itemid = typeToItemID(_id);
     var param = new ItemExtraParam();
-    switch(_id) {
-      case TYPE_RED:   itemid = ItemConst.ORB1; param.value = 0;
-      case TYPE_BLUE:  itemid = ItemConst.ORB2; param.value = 1;
-      case TYPE_WHITE: itemid = ItemConst.ORB3; param.value = 2;
-      case TYPE_GREEN: itemid = ItemConst.ORB4; param.value = 3;
-    }
+    param.value = typeToValue(_id);
 
     // オーブに変化したかどうか
     var bOrb = true;
