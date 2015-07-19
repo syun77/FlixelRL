@@ -198,7 +198,7 @@ class Generator {
         case Field.CAT:
           // ネコ
           var tbl = [Npc.TYPE_RED, Npc.TYPE_BLUE, Npc.TYPE_WHITE, Npc.TYPE_GREEN];
-          FlxRandom.shuffleArray(tbl, 1);
+          FlxRandom.shuffleArray(tbl, 3);
           var type = Npc.TYPE_RED;
           for(t in tbl) {
             var itemid = Npc.typeToItemID(t);

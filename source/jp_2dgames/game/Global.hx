@@ -16,6 +16,9 @@ import jp_2dgames.lib.TextUtil;
  **/
 class Global {
 
+  // 特殊マップ開始番号
+  public static inline var MAP_ID_EXTRA_FIRST:Int = 500;
+
   /**
    * 初期化
    **/
@@ -39,8 +42,8 @@ class Global {
   private static var _floor:Int = 1;
 
   /**
-	 * フロア数の取得
-	 **/
+   * フロア数の取得
+   **/
   public static function getFloor():Int {
     return _floor;
   }
@@ -57,6 +60,10 @@ class Global {
   }
   public static function setMapID(v:Int):Void {
     _mapid = v;
+  }
+  // 現在のマップが特殊フロアかどうか
+  public static function isMapExtra():Bool {
+    return _mapid >= MAP_ID_EXTRA_FIRST;
   }
 
   /**
@@ -78,7 +85,8 @@ class Global {
   public static function nextFloor():Void {
     _floor++;
     // TODO: 最後まで進んだら最初に戻る
-    var path = getFloorMap();
+    var map = TextUtil.fillZero(_floor, 3);
+    var path = 'assets/levels/${map}.tmx';
     if(Assets.exists(path, TEXT) == false) {
       _floor = 1;
     }
