@@ -22,29 +22,31 @@ import haxe.Json;
  * グローバルデータ
  **/
 private class _Global {
-  public var floor:Int          = 0;
-  public var money:Int          = 0;
-  public var turn:Int           = 0;
-  public var shop:Int           = 0;
-  public var itemmax:Int        = 0;
-  public var nightmareTurn:Int  = 0;
-  public var nightmareLv:Int    = 0;
-  public var nightmareAvoid:Int = 0;
-  public var bgmnow:String      = "";
-  public var bgmprev:String     = "";
+  public var floor:Int            = 0;
+  public var money:Int            = 0;
+  public var turn:Int             = 0;
+  public var shop:Int             = 0;
+  public var itemmax:Int          = 0;
+  public var nightmareTurn:Int    = 0;
+  public var nightmareLv:Int      = 0;
+  public var nightmareAvoid:Int   = 0;
+  public var nightmareDefeat:Bool = false;
+  public var bgmnow:String        = "";
+  public var bgmprev:String       = "";
   public function new() {}
   // セーブ
   public function save() {
-    floor          = Global.getFloor();
-    money          = Global.getMoney();
-    turn           = Global.getTurn();
-    shop           = Global.getShopAppearCountRaw();
-    itemmax        = Global.getItemMaxInventory();
-    nightmareTurn  = Global.getTurnLimitNightmare();
-    nightmareLv    = Global.getNightmareLv();
-    nightmareAvoid = Global.getNightmareAvoid();
-    bgmnow         = Snd.getBgmNow();
-    bgmprev        = Snd.getBgmPrev();
+    floor           = Global.getFloor();
+    money           = Global.getMoney();
+    turn            = Global.getTurn();
+    shop            = Global.getShopAppearCountRaw();
+    itemmax         = Global.getItemMaxInventory();
+    nightmareTurn   = Global.getTurnLimitNightmare();
+    nightmareLv     = Global.getNightmareLv();
+    nightmareAvoid  = Global.getNightmareAvoid();
+    nightmareDefeat = Global.isNightmareDefeat();
+    bgmnow          = Snd.getBgmNow();
+    bgmprev         = Snd.getBgmPrev();
   }
   // ロード
   public function load(data:Dynamic) {
@@ -56,6 +58,7 @@ private class _Global {
     Global.setTurnLimitNightmare(data.nightmareTurn);
     Global.setNightmareLv(data.nightmareLv);
     Global.setNightmareAvoid(data.nightmareAvoid);
+    Global.setNightmareDefeat(data.nightmareDefeat);
     Snd.setBgmNow(data.bgmprev);
     Snd.playMusic(data.bgmnow);
   }
