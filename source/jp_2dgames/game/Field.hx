@@ -231,12 +231,15 @@ class Field {
       p.put();
     }
     // ショップの配置
-    if(FlxRandom.chanceRoll(Global.getShopAppearCount())) {
-      var p = layer.searchRandom(NONE);
-      layer.setFromFlxPoint(p, SHOP);
-      p.put();
-      // ショップ出現カウンタを初期化
-      Global.resetShopAppearCount();
+    if(layer.exists(SHOP) == false) {
+      // ショップがなければ生成チェック
+      if(FlxRandom.chanceRoll(Global.getShopAppearCount())) {
+        var p = layer.searchRandom(NONE);
+        layer.setFromFlxPoint(p, SHOP);
+        p.put();
+        // ショップ出現カウンタを初期化
+        Global.resetShopAppearCount();
+      }
     }
     // 敵を配置
     if(Global.isMapExtra() == false)
