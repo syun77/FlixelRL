@@ -628,6 +628,7 @@ class Inventory extends FlxGroup {
     else {
       // 通常表示に戻しておく
       _menumode = MenuMode.Carry;
+      _execMode = EXECMODE_NORMAL;
       _updateText();
 
       // カーソル位置を記憶しておく
@@ -894,6 +895,23 @@ class Inventory extends FlxGroup {
     else {
       // サブコマンド
     _cursor.alpha = 0.4;
+    }
+
+    if(_execMode == EXECMODE_SELL) {
+      // 売却モード時のみページ切り替えカーソルチェック
+      var page = _pageMax;
+      if(isEmpty()) {
+        // 所持アイテムがなければページ数を減らす
+        page -= 1;
+      }
+      if(page > 1) {
+        // ページ切り替えカーソル表示
+        _setDispPageArrow(true);
+      }
+      else {
+        // ページ切り替えカーソル非表示
+        _setDispPageArrow(false);
+      }
     }
   }
 
