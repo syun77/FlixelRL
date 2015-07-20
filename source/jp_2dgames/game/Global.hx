@@ -38,8 +38,8 @@ class Global {
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 100;
-    _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareLv = 1;
+    _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareAvoid = 0;
     _nightmareDefeat = false;
   }

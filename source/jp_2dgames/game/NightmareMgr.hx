@@ -297,7 +297,6 @@ class NightmareMgr {
 
     if(Global.isMapExtra()) {
       // 特殊フロアをクリアしたら通常フロアに戻す
-      trace("mapID", Global.getMapID());
       Global.setNightmareDefeat(false);
     }
   }
