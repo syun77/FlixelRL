@@ -67,7 +67,7 @@ class Calc {
     if(val <= 0) {
       // 0ダメージはランダムで1〜3ダメージ
       val = FlxRandom.intRanged(1, 3);
-    }
+
     else {
       // ランダムで±10%変動
       var d = val * FlxRandom.floatRanged(-0.1, 0.1);
