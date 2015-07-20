@@ -16,6 +16,8 @@ import jp_2dgames.lib.TextUtil;
  **/
 class Global {
 
+  // ゲーム開始フロア数
+  public static inline var FLOOR_FIRST:Int = 1;
   // 特殊マップ開始番号
   public static inline var MAP_ID_EXTRA_FIRST:Int = 500;
   // ゲーム開始時の所持金
@@ -27,7 +29,7 @@ class Global {
    * 初期化
    **/
   public static function init():Void {
-    _floor = 1;
+    _floor = FLOOR_FIRST;
     _mapid = 0;
     _money = MONEY_FIRST;
     _items = new Array<ItemData>();
