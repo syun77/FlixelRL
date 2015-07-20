@@ -74,7 +74,7 @@ class Inventory extends FlxGroup {
 
   // アイテム所持の最大
   // 初期状態
-  public static inline var ITEM_MAX_FIRST:Int = 8;
+  public static inline var ITEM_MAX_FIRST:Int = 16;
   // 最大
   private static inline var ITEM_MAX_LAST:Int = 24;
 

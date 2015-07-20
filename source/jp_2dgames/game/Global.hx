@@ -18,6 +18,10 @@ class Global {
 
   // 特殊マップ開始番号
   public static inline var MAP_ID_EXTRA_FIRST:Int = 500;
+  // ゲーム開始時の所持金
+  private static inline var MONEY_FIRST:Int = 300;
+  // ショップ出現開始フロア数
+  private static inline var SHOP_APPEAR_FIRST:Int = 3;
 
   /**
    * 初期化
@@ -25,13 +29,13 @@ class Global {
   public static function init():Void {
     _floor = 1;
     _mapid = 0;
-    _money = 0;
+    _money = MONEY_FIRST;
     _items = new Array<ItemData>();
     _nCursorInventory = 0;
     _itemMaxInventory = Inventory.ITEM_MAX_FIRST;
     _bInitPlayer = true;
     _params = new Params();
-    _shopAppearCount = 0;
+    _shopAppearCount = 100;
     _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareLv = 1;
     _nightmareAvoid = 0;
@@ -264,7 +268,7 @@ class Global {
   // ショップ出現カウント
   private static var _shopAppearCount:Int = 0;
   public static function getShopAppearCount():Int {
-    if(getFloor() < 5) {
+    if(getFloor() < SHOP_APPEAR_FIRST) {
       // 序盤のフロアでは出現しない
       return 0;
     }

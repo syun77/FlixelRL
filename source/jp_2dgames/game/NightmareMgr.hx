@@ -33,7 +33,7 @@ enum NightmareSkill {
 class NightmareMgr {
 
   // ナイトメア出現開始フロア数
-  public static inline var FLOOR_APPEAR_START:Int = 1;
+  public static inline var FLOOR_APPEAR_START:Int = 4;
 
   public static var instance:NightmareMgr = null;
 

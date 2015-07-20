@@ -239,6 +239,7 @@ class Field {
       Global.resetShopAppearCount();
     }
     // 敵を配置
+    if(Global.isMapExtra() == false)
     {
       // 参照するデータ番号を調べる
       var id = csv.getEnemyAppearId(floor);

@@ -114,14 +114,14 @@ class GenerateInfo {
 
         // 付加威力値
         var func = function() {
-          var rnd = FlxRandom.intRanged(0, 99);
-          if(rnd < 50) { return 0; } // 50%
-          else if(rnd < 75) { return 1; } // 25%
-          else if(rnd < 87) { return 2; } // 12%
-          else if(rnd < 92) { return 3; } // 5%
-          else if(rnd < 96) { return -1;} // 4%
-          else if(rnd < 98) { return 4; } // 2%
-          else { return 5;} // 1%
+          var rnd = FlxRandom.intRanged(0, 999);
+          if(rnd < 550) { return 0; } // 55%
+          else if(rnd < 800) { return 1; } // 25%
+          else if(rnd < 920) { return 2; } // 12%
+          else if(rnd < 955) { return 3; } // 3.5%
+          else if(rnd < 990) { return -1;} // 3.5%
+          else if(rnd < 998) { return 4; } // 0.8%
+          else { return 5;} // 0.2%
         }
         param.value = func();
       case IType.Wand:

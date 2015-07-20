@@ -1,7 +1,7 @@
 id,enemy_id,turn,add,skill
 int,int,int,int,str
-1,137,120,10,auto_recover
-2,141,150,10,hungry
+1,137,30,10,auto_recover
+2,141,150,10,unknown
 3,142,160,10,weapon_break
 4,143,165,10,wand
 5,144,170,10,ring

@@ -259,8 +259,8 @@ class Actor extends FlxSprite {
       // 30%以下は危険状態
       return true;
     }
-    if(params.hp <= 7) {
-      // 7以下になっても危険
+    if(params.hp <= 15) {
+      // 15以下になっても危険
       return true;
     }
 
@@ -274,6 +274,11 @@ class Actor extends FlxSprite {
     // 満腹度は100倍
     // 端数切り上げ
     return Std.int(Math.ceil(_params.food / 100));
+  }
+
+  // 空腹状態かどうか
+  public function isHunger():Bool {
+    return _params.food <= 0;
   }
 
   public function addFood(ratio:Float):Void {

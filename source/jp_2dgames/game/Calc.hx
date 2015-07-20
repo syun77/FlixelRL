@@ -50,13 +50,15 @@ class Calc {
     }
 
     // 威力
-    var power = str + atk + BASE_ATK;
+    var power = str + (atk * 0.5) + BASE_ATK;
+    // 防具でダメージ軽減
+    power -= (def * 0.7);
 
     // 力係数 (基礎体力の差)
     var str_rate = Math.pow(1.02, str - vit);
 
     // 威力係数 (装備アイテムの差)
-    var power_rate = Math.pow(1.05, atk - def);
+    var power_rate = Math.pow(1.015, atk - def);
 
 //    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 
@@ -67,8 +69,8 @@ class Calc {
       val = FlxRandom.intRanged(1, 3);
     }
     else {
-      // ランダムで+5%変動
-      var d = val * FlxRandom.floatRanged(0, 0.05);
+      // ランダムで±10%変動
+      var d = val * FlxRandom.floatRanged(-0.1, 0.1);
       if(Math.abs(d) < 3) {
         // 3より小さい場合は+1〜3する
         val += FlxRandom.intRanged(1, 3);
@@ -82,7 +84,7 @@ class Calc {
       }
     }
 
-    return Std.int(val);
+    return Math.ceil(val);
   }
 
   /**

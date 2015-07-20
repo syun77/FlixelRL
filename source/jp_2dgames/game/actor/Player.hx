@@ -525,6 +525,11 @@ class Player extends Actor {
    **/
   private function _checkFoot():Bool {
     if(Key.on.A) {
+      if(isHunger()) {
+        // 空腹状態時は足踏み無効
+        return false;
+      }
+
       if(hpratio < 100) {
         _tFoot++;
         if(_tFoot > 24) {
