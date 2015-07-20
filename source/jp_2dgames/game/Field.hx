@@ -330,7 +330,7 @@ class Field {
    **/
   public static function startFadeBackground():Void {
     FlxTween.color(_sprWave, 1, FlxColor.WHITE, FlxColor.GRAY, 1, 1, {ease:FlxEase.sineOut});
-    FlxTween.tween(_sprWave, {strength:2, speed:10}, 5, {ease:FlxEase.sineOut});
+    FlxTween.tween(_sprWave, {strength:2, speed:5}, 1, {ease:FlxEase.sineOut});
   }
   public static function resetFadeBackGround():Void {
     FlxTween.color(_sprWave, 0.3, FlxColor.GRAY, FlxColor.WHITE, 1, 1, {ease:FlxEase.sineOut});

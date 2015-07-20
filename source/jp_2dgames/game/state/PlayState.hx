@@ -132,6 +132,7 @@ class PlayState extends FlxState {
       _sprStarts.push(spr);
     }
 
+    // ネコ
     xspr -= Field.GRID_SIZE;
     for(itemid in ItemConst.ORB1...(ItemConst.ORB4+1)) {
       if(Global.hasItem(itemid)) {
@@ -153,7 +154,7 @@ class PlayState extends FlxState {
     _txtFloor.color = FlxColor.WHITE;
     this.add(_txtFloor);
     FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
-      FlxG.camera.shake(0, 1.5, function() {
+      FlxG.camera.shake(0, 0.5, function() {
         _floorStart();
       });
     });

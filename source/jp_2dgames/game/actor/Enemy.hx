@@ -235,7 +235,7 @@ class Enemy extends Actor {
 
             // ナイトメアスキル反映
             if(NightmareMgr.getSkill() == NightmareSkill.WeaponBreak) {
-              if(id == NightmareMgr.getEnemyID()) {
+              if(_bNightmare) {
                 // 武器破壊
                 if(Inventory.degradeEquipment(IType.Weapon, 9999)) {
                   // 破壊エフェクト
@@ -808,9 +808,24 @@ class Enemy extends Actor {
    * ドロップアイテムの出現チェック
    **/
   override public function checkDropItem():Void {
-    var ratio = FlxRandom.intRanged(0, 999);
-    var sum:Int = 0;
 
+    var total:Int = 0;
+    for(i in 1...4) {
+      var itemid = _getCsvParamInt('drop${i}');
+      var val = _getCsvParamInt('dropval${i}');
+      if(val <= 0) {
+        // チェック不要
+        continue;
+      }
+      total += val;
+    }
+
+    if(total == 0) {
+      // チェック不要
+    }
+
+    var ratio = FlxRandom.intRanged(0, total);
+    var valSum:Int = 0;
     for(i in 1...4) {
       var itemid = _getCsvParamInt('drop${i}');
       var val = _getCsvParamInt('dropval${i}');
@@ -819,26 +834,27 @@ class Enemy extends Actor {
         continue;
       }
 
-      if(itemid == ItemConst.MONEY) {
-        // お金の場合は100%ドロップする
-        var pt = FlxPoint.get();
-        if(DropItem.checkDrop(pt, xchip, ychip)) {
-          // 90%〜110%金額が変化する
-          var money = Std.int(val * FlxRandom.floatRanged(0.9, 1.1));
-          DropItem.addMoney(Std.int(pt.x), Std.int(pt.y), money);
-        }
-        break;
-      }
-
-      sum += val;
-      if(ratio < sum) {
+      valSum += val;
+      if(ratio < valSum) {
         // 出現
         // 場所チェック
         var pt = FlxPoint.get();
         if(DropItem.checkDrop(pt, xchip, ychip)) {
           // 出現可能
-          var param = GenerateInfo.generateItemParam(itemid);
-          DropItem.add(Std.int(pt.x), Std.int(pt.y), itemid, param);
+          if(itemid == ItemConst.MONEY) {
+            // お金の場合は (100 + 10*フロア数) * (0.9〜1.1)
+            var money = 100 + (10 * Global.getFloor());
+            if(_bNightmare) {
+              // ナイトメアボーナス
+              money += 300;
+            }
+            money = Std.int(money * FlxRandom.floatRanged(0.9, 1.1));
+            DropItem.addMoney(Std.int(pt.x), Std.int(pt.y), money);
+          }
+          else {
+            var param = GenerateInfo.generateItemParam(itemid);
+            DropItem.add(Std.int(pt.x), Std.int(pt.y), itemid, param);
+          }
         }
         break;
       }
