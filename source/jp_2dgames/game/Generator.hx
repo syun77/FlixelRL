@@ -220,6 +220,12 @@ class Generator {
    * @param layer フィールドLayer
    **/
   public static function checkRandomEnemy(csv:Csv, layer:Layer2D):Void {
+
+    if(Global.isMapExtra()) {
+      // 特殊ステージでは敵は出現しない
+      return;
+    }
+
     var id = csv.getEnemyAppearId(Global.getFloor());
     var turn = csv.enemy_appear.getInt(id, "turn");
     if(turn == 0) {
