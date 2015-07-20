@@ -620,10 +620,12 @@ class Actor extends FlxSprite {
   public function damage(val:Int):Bool {
     _tShake = TIMER_DAMAGE;
 
+    var px = Field.toWorldX(xchip);
+    var py = Field.toWorldY(ychip);
     if(_badstatus == BadStatus.Star) {
       // 無敵状態なのでダメージを受けない
-      Particle.start(PType.Circle, x, y, FlxColor.RED);
-      ParticleDamage.start(x, y, 0);
+      Particle.start(PType.Circle, px, py, FlxColor.RED);
+      ParticleDamage.start(px, py, 0);
       return false;
     }
 
@@ -645,8 +647,9 @@ class Actor extends FlxSprite {
       _change(Actor.State.TurnEnd);
     }
 
-    Particle.start(PType.Circle, x, y, FlxColor.RED);
-    ParticleDamage.start(x, y, val);
+    Particle.start(PType.Circle, px, py, FlxColor.RED);
+    var p = ParticleDamage.start(px, py, val);
+    p.color = 0xFFFFC0C0;
 
     if(subHp(val)) {
       // 死亡
@@ -791,14 +794,14 @@ class Actor extends FlxSprite {
    **/
   public function effectDestroyEnemy():Void {
     Message.push2(Msg.ENEMY_DEFEAT, [name]);
+    // ドロップアイテム
+    checkDropItem();
     kill();
     FlxG.sound.play("destroy");
     // 経験値獲得
     ExpMgr.add(params.xp);
     // エフェクト再生
     Particle.start(PType.Ring, x, y, FlxColor.YELLOW);
-    // ドロップアイテム
-    checkDropItem();
   }
 
   /**

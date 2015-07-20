@@ -300,6 +300,10 @@ class Enemy extends Actor {
     }
     return Std.parseInt(str);
   }
+  // 特殊パラメータ取得
+  public function getExtra():String {
+    return _getCsvParam("extra");
+  }
 
   /**
 	 * 初期化
@@ -822,6 +826,7 @@ class Enemy extends Actor {
 
     if(total == 0) {
       // チェック不要
+      return;
     }
 
     var ratio = FlxRandom.intRanged(0, total);
@@ -835,7 +840,7 @@ class Enemy extends Actor {
       }
 
       valSum += val;
-      if(ratio < valSum) {
+      if(ratio <= valSum) {
         // 出現
         // 場所チェック
         var pt = FlxPoint.get();

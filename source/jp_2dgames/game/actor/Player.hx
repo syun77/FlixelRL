@@ -305,6 +305,13 @@ class Player extends Actor {
               // 敵を倒した
               _target.effectDestroyEnemy();
             }
+            else {
+              switch(_target.getExtra()) {
+                case "reflect":
+                  // ダメージ反射
+                  damage(val);
+              }
+            }
           }
           else {
             // 攻撃を外した

@@ -36,9 +36,10 @@ class ParticleDamage extends FlxSprite {
   // パーティクル管理
   public static var parent:FlxTypedGroup<ParticleDamage>;
 
-  public static function start(X:Float, Y:Float, val:Int):Void {
+  public static function start(X:Float, Y:Float, val:Int):ParticleDamage{
     var p:ParticleDamage = parent.recycle();
     p.init(X, Y, val);
+    return p;
   }
 
   // 開始座標
