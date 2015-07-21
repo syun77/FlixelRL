@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import flash.events.Event;
 import jp_2dgames.game.util.DirUtil;
 import flixel.FlxG;
 import flixel.group.FlxTypedGroup;
@@ -11,6 +12,7 @@ import flixel.FlxState;
 class OpeningState extends FlxState {
 
   var playerID:Int = 0;
+  var catID:Int = 0;
 
   /**
    * 生成
@@ -21,12 +23,17 @@ class OpeningState extends FlxState {
     EventNpc.parent = new FlxTypedGroup<EventNpc>(32);
     for(i in 0...EventNpc.parent.maxSize) {
       var npc = new EventNpc();
+      npc.ID = i;
       this.add(npc);
       EventNpc.parent.add(npc);
     }
 
     // TODO:
     playerID = EventNpc.add("player", 8, 1, Dir.Up);
+    catID = EventNpc.add("cat", 4, 4, Dir.Down);
+    EventNpc.forEach(catID, function(npc:EventNpc) {
+      npc.requestRandomWalk(true);
+    });
   }
 
   /**

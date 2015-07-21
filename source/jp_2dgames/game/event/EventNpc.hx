@@ -1,4 +1,5 @@
 package jp_2dgames.game.event;
+import flixel.util.FlxRandom;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.util.DirUtil;
@@ -55,6 +56,10 @@ class EventNpc extends FlxSprite {
   private var _state:State = State.Standby;
   // 歩きタイマー
   private var _tWalk:Int = 0;
+  // ランダム歩きフラグ
+  private var _bRandomWalk:Bool = false;
+  // ランダム歩きタイマー
+  private var _tRandomWalk:Float = 0;
 
   // プロパティ
   // チップ座標(X)
@@ -93,6 +98,7 @@ class EventNpc extends FlxSprite {
     _dir   = dir;
     x = Field.toWorldX(xc);
     y = Field.toWorldY(yc);
+    _bRandomWalk = false;
 
     var res = "";
     switch(type) {
@@ -110,12 +116,6 @@ class EventNpc extends FlxSprite {
     _changeAnim(true);
 
     FlxG.watch.add(this, "_state");
-    FlxG.watch.add(this, "_tWalk");
-    FlxG.watch.add(this, "_xprev");
-    FlxG.watch.add(this, "_yprev");
-    FlxG.watch.add(this, "_xnext");
-    FlxG.watch.add(this, "_ynext");
-
     FlxG.debugger.visible = true;
   }
 
@@ -144,6 +144,7 @@ class EventNpc extends FlxSprite {
 
     switch(_state) {
       case State.Standby:
+        _updateStandby();
       case State.Walk:
         if(_updateWalk()) {
           // 移動完了
@@ -153,9 +154,25 @@ class EventNpc extends FlxSprite {
   }
 
   /**
+   * 更新・待機
+   **/
+  private function _updateStandby():Void {
+    if(_bRandomWalk) {
+      // ランダム歩き有効
+      _tRandomWalk -= FlxG.elapsed;
+      if(_tRandomWalk < 0) {
+        // ランダムな方向に歩く
+        requestWalk(DirUtil.random());
+        // タイマー初期化
+        _tRandomWalk = FlxRandom.floatRanged(3, 7);
+      }
+    }
+  }
+
+  /**
    * 更新・歩き
    **/
-  public function _updateWalk():Bool {
+  private function _updateWalk():Bool {
     var tWait:Int = 24;
     _tWalk++;
     var t = _tWalk / tWait;
@@ -256,5 +273,11 @@ class EventNpc extends FlxSprite {
 
     // 歩き要求成功
     return true;
+  }
+
+  // ランダム歩きフラグを設定する
+  public function requestRandomWalk(b:Bool):Void {
+    _bRandomWalk = b;
+    _tRandomWalk = FlxRandom.floatRanged(3, 8);
   }
 }
