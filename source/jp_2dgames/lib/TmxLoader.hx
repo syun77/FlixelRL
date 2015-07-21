@@ -1,20 +1,57 @@
 package jp_2dgames.lib;
 
+import flash.display.BitmapData;
 import flixel.FlxG;
 import openfl.Assets;
 
+/**
+ * タイルセット情報
+ **/
+class TmxTileset {
+  // 開始チップ番号
+  private var _firstGID:Int = 0;
+  // 保持しているチップの数
+  private var _lastGID:Int = 0;
+  // 画像を格納するスプライト
+  private var _bmp:BitmapData;
+  public var bmp(get, never):BitmapData;
+  private function get_bmp() {
+    return _bmp;
+  }
+
+  /**
+   * コンストラクタ
+   **/
+  public function new(directory:String, image:String, firstGID:Int, tileWidth:Int, tileHeight:Int, imgWidth:Int, imgHeight:Int) {
+    // 開始チップ番号
+    _firstGID = firstGID;
+
+    // 終端のチップ番号を求める
+    var w = Std.int(imgWidth / tileWidth);
+    var h = Std.int(imgHeight / tileHeight);
+    _lastGID = _firstGID + (w * h) - 1;
+
+    // チップ画像を読み込んでおく
+    _bmp = FlxG.bitmap.add(directory + image).bitmap;
+  }
+}
+
+/**
+ * *.tmxファイル読み込みクラス
+ **/
 class TmxLoader {
   private var _layers:Array<Layer2D>;
   private var _tmpLayer:Layer2D;
   private var _properties:Map<String, String>;
+  private var _tilesets:Array<TmxTileset>;
   private var _width:Int = 0;
   private var _height:Int = 0;
   private var _tileWidth:Int = 0;
   private var _tileHeight:Int = 0;
-  public var width(get_width, null):Int;
-  public var height(get_height, null):Int;
-  public var tileWidth(get_tileWidth, null):Int;
-  public var tileHeight(get_tileHeight, null):Int;
+  public var width(get_width, never):Int;
+  public var height(get_height, never):Int;
+  public var tileWidth(get_tileWidth, never):Int;
+  public var tileHeight(get_tileHeight, never):Int;
 
   public function new() {
     // 読み込み失敗時のテンポラリ
@@ -22,15 +59,17 @@ class TmxLoader {
   }
 
   /**
-     * Tiled Map Editorファイルをロードする
-     * @param filepath *.tmxファイルのパス
-     * @return Layer2D
-     **/
+   * Tiled Map Editorファイルをロードする
+   * @param filepath *.tmxファイルのパス
+   * @param dirTileset タイルセットのフォルダ（指定するとタイルセット情報を読み込む）
+   * @return Layer2D
+   **/
 
-  public function load(filepath:String):Void {
+  public function load(filepath:String, dirTileset:String=""):Void {
 
-    _layers = new Array<Layer2D>();
+    _layers     = new Array<Layer2D>();
     _properties = new Map<String, String>();
+    _tilesets   = new Array<TmxTileset>();
 
     var tmx:String = Assets.getText(filepath);
     if(tmx == null) {
@@ -47,43 +86,64 @@ class TmxLoader {
     _tileHeight = Std.parseInt(map.get("tileheight"));
 
     for(child in map.elements()) {
-      if(child.nodeName != "layer") { continue; }
-      // layerノード
-      var layer:Layer2D = new Layer2D();
-      var width = Std.parseInt(child.get("width"));
-      var height = Std.parseInt(child.get("height"));
-      layer.initialize(width, height);
-      for(gchild in child.elements()) {
-
-        switch(gchild.nodeName) {
-          case "properties":
-            for(prop in gchild.elements()) {
-              var name = prop.get("name");
-              var value = prop.get("value");
-              _properties.set(name, value);
-            }
-          case "data":
-            var data:Xml = gchild;
-            // CSVノード
-            var csv:Xml = data.firstChild();
-
-            var text:String = csv.nodeValue;
-            var y:Int = 0;
-            for(line in text.split("\n")) {
-              if(line == "") { continue; }
-              var x:Int = 0;
-              for(str in line.split(",")) {
-                var val = Std.parseInt(str);
-                if(val > 0) {
-                  layer.set(x, y, val);
-                }
-                x += 1;
+      switch(child.nodeName) {
+        case "tileset":
+          // tilesetノード
+          if(dirTileset != "") {
+            var firstgid = Std.parseInt(child.get("firstgid"));
+            var name = child.get("name");
+            var tilewidth = Std.parseInt(child.get("tilewidth"));
+            var tileheight = Std.parseInt(child.get("tileheight"));
+            for(gchild in child.elements()) {
+              switch(gchild.nodeName) {
+                case "image":
+                  var source    = gchild.get("source");
+                  var imgwidth  = Std.parseInt(gchild.get("width"));
+                  var imgheight = Std.parseInt(gchild.get("height"));
+                  var tileset = new TmxTileset(dirTileset, source, firstgid, tilewidth, tileheight, imgwidth, imgheight);
+                  _tilesets.push(tileset);
               }
-              y += 1;
             }
-        }
+          }
+
+        case "layer":
+          // layerノード
+          var layer:Layer2D = new Layer2D();
+          var width = Std.parseInt(child.get("width"));
+          var height = Std.parseInt(child.get("height"));
+          layer.initialize(width, height);
+          for(gchild in child.elements()) {
+
+            switch(gchild.nodeName) {
+              case "properties":
+                for(prop in gchild.elements()) {
+                  var name = prop.get("name");
+                  var value = prop.get("value");
+                  _properties.set(name, value);
+                }
+              case "data":
+                var data:Xml = gchild;
+                // CSVノード
+                var csv:Xml = data.firstChild();
+
+                var text:String = csv.nodeValue;
+                var y:Int = 0;
+                for(line in text.split("\n")) {
+                  if(line == "") { continue; }
+                  var x:Int = 0;
+                  for(str in line.split(",")) {
+                    var val = Std.parseInt(str);
+                    if(val > 0) {
+                      layer.set(x, y, val);
+                    }
+                    x += 1;
+                  }
+                  y += 1;
+                }
+            }
+          }
+          _layers.push(layer);
       }
-      _layers.push(layer);
     }
   }
 

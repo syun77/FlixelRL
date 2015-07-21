@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.TmxLoader;
+import jp_2dgames.lib.Layer2D;
 import flash.events.Event;
 import jp_2dgames.game.util.DirUtil;
 import flixel.FlxG;
@@ -19,6 +21,9 @@ class OpeningState extends FlxState {
    **/
   override public function create():Void {
     super.create();
+
+    var tmx = new TmxLoader();
+    tmx.load("assets/events/001.tmx", "assets/events/");
 
     EventNpc.parent = new FlxTypedGroup<EventNpc>(32);
     for(i in 0...EventNpc.parent.maxSize) {
