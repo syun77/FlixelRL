@@ -314,6 +314,6 @@ class EventNpc extends FlxSprite {
   // ランダム歩きフラグを設定する
   public function requestRandomWalk(b:Bool):Void {
     _bRandomWalk = b;
-    _tRandomWalk = FlxRandom.floatRanged(3, 8);
+    _tRandomWalk = FlxRandom.floatRanged(2, 8);
   }
 }

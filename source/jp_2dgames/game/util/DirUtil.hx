@@ -49,6 +49,8 @@ class DirUtil {
         return Dir.Right;
       case "down":
         return Dir.Down;
+      case "random":
+        return random();
       default:
         return Dir.Down;
     }
