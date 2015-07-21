@@ -31,7 +31,6 @@ class OpeningState extends FlxState {
       this.add(npc);
       EventNpc.parent.add(npc);
     }
-    _script.proc();
   }
 
   /**
@@ -48,6 +47,11 @@ class OpeningState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    _script.proc();
+    if(_script.isEnd()) {
+      FlxG.switchState(new OpeningState());
+    }
 
     // デバッグ処理
     updateDebug();

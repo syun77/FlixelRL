@@ -19,3 +19,7 @@ NPC_RANDOM,3
 NPC_RANDOM,4
 // メッセージ表示
 MSG,1
+MSG,2
+MSG,3
+MSG,4
+MSG,5

@@ -1,5 +1,7 @@
 package jp_2dgames.game.event;
 
+import flixel.util.FlxColorUtil;
+import jp_2dgames.game.util.Key;
 import StringTools;
 import jp_2dgames.lib.CsvLoader;
 import flixel.text.FlxText;
@@ -40,6 +42,8 @@ class EventScript extends FlxSpriteGroup {
   private static inline var WINDOW_Y:Int = 400-16;
   private static inline var MSG_X:Int = 128;
   private static inline var MSG_Y:Int = 400;
+  private static inline var CURSOR_X:Int = 640;
+  private static inline var CURSOR_Y:Int = 448;
 
   // 基準ディレクトリ
   private var _directory:String;
@@ -62,6 +66,11 @@ class EventScript extends FlxSpriteGroup {
   private var _csvMessage:CsvLoader;
   // メッセージウィンドウ
   private var _sprWindow:FlxSprite;
+  // カーソル
+  private var _sprCursor:FlxSprite;
+
+  // アニメーション用タイマー
+  private var _tAnim:Float = 0;
 
   /**
    * コンストラクタ
@@ -100,6 +109,11 @@ class EventScript extends FlxSpriteGroup {
     _txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     this.add(_txt);
 
+    // カーソル生成
+    _sprCursor = new FlxSprite(CURSOR_X, CURSOR_Y, directory + "cursor.png");
+    _sprCursor.visible = false;
+    this.add(_sprCursor);
+
     // メッセージCSV読み込み
     _csvMessage = new CsvLoader(directory + "message.csv");
   }
@@ -109,11 +123,23 @@ class EventScript extends FlxSpriteGroup {
    **/
   override public function update():Void {
     super.update();
+
+    _tAnim += FlxG.elapsed;
+    _sprCursor.y = CURSOR_Y + 1 * Math.sin(_tAnim*8);
+    var currentStep = Std.int(_tAnim*8);
+    var steps = 8;
+    if(Std.int(_tAnim*2)%2 < 1) {
+      _sprCursor.color = FlxColor.WHITE;
+    }
+    else {
+      _sprCursor.color = FlxColor.GOLDEN;
+    }
   }
 
   public function proc():Void {
     switch(_state) {
       case State.Exec:
+        // スクリプト実行中
         while(true) {
           var bExit = _procExec();
           if(bExit) {
@@ -122,8 +148,22 @@ class EventScript extends FlxSpriteGroup {
         }
 
       case State.Message:
+        // キー入力待ち
+        if(Key.press.A) {
+          // スクリプト実行に戻る
+          _state = State.Exec;
+          _sprCursor.visible = false;
+          _tAnim = 0;
+        }
       case State.End:
     }
+  }
+
+  /**
+   * 終了チェック
+   **/
+  public function isEnd():Bool {
+    return _state == State.End;
   }
 
   public function _procExec():Bool {
@@ -133,18 +173,35 @@ class EventScript extends FlxSpriteGroup {
       _state = State.End;
       return true;
     }
+
+    // 行テキスト取得
     var line = _script[_pc];
+    // 実行カウンタを進める
+    _pc++;
+
     if(_isSkip(line)) {
       // この行はパースしない
-      _pc++;
       return false;
     }
     trace(line);
-    var data = line.split(",");
-    _cmdTbl.get(data[0])(data.slice(1));
 
-    _pc++;
-    return false;
+    // コマンド実行
+    var data = line.split(",");
+    var ret = _cmdTbl.get(data[0])(data.slice(1));
+    switch(ret) {
+      case RET_CONTINUE:
+        // 継続する
+        return false;
+      case RET_MESSAGE:
+        // キー入力待ち
+        _state = State.Message;
+        _sprCursor.visible = true;
+        return true;
+      default:
+        // 継続する
+        return false;
+    }
+
   }
 
   /**
@@ -220,7 +277,7 @@ class EventScript extends FlxSpriteGroup {
     var text = _csvMessage.getString(id, "msg");
     // 改行タグを置き換え
     _txt.text = StringTools.replace(text, "<br>", "\n");
-    return RET_CONTINUE;
+    return RET_MESSAGE;
   }
 
   private function _registCommand():Void {
