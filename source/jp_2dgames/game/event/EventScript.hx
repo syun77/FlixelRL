@@ -36,7 +36,9 @@ class EventScript extends FlxSpriteGroup {
   private static inline var NPC_MAX:Int = 32;
 
   // メッセージウィンドウ
-  private static inline var MSG_X:Int = 32;
+  private static inline var WINDOW_X:Int = 0;
+  private static inline var WINDOW_Y:Int = 400-16;
+  private static inline var MSG_X:Int = 128;
   private static inline var MSG_Y:Int = 400;
 
   // 基準ディレクトリ
@@ -58,6 +60,8 @@ class EventScript extends FlxSpriteGroup {
   private var _txt:FlxText;
   // メッセージCSV
   private var _csvMessage:CsvLoader;
+  // メッセージウィンドウ
+  private var _sprWindow:FlxSprite;
 
   /**
    * コンストラクタ
@@ -86,6 +90,10 @@ class EventScript extends FlxSpriteGroup {
     for(i in 0...NPC_MAX) {
       _npcList.push(-1);
     }
+
+    // メッセージウィンドウ作成
+    _sprWindow = new FlxSprite(WINDOW_X, WINDOW_Y, directory + "window.png");
+    this.add(_sprWindow);
 
     // メッセージテキスト生成
     _txt = new FlxText(MSG_X, MSG_Y, FlxG.width);
