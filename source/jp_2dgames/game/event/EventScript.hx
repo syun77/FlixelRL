@@ -153,6 +153,7 @@ class EventScript extends FlxSpriteGroup {
         // キー入力待ち
         if(Key.press.A) {
           // スクリプト実行に戻る
+          _txt.text = "";
           _state = State.Exec;
           _sprCursor.visible = false;
           _tAnim = 0;
@@ -299,10 +300,18 @@ class EventScript extends FlxSpriteGroup {
   }
   private function _FADE_OUT(args:Array<String>):Int {
     var color = _strToColor(args[0]);
-    FlxG.camera.fade(color, 0.5, false, function() {
+    FlxG.camera.fade(color, 1, false, function() {
       // 完了したらスクリプト実行に戻る
       _state = State.Exec;
-    });
+    }, true);
+    return RET_EFFECT;
+  }
+  private function _FADE_IN(args:Array<String>):Int {
+    var color = _strToColor(args[0]);
+    FlxG.camera.fade(color, 1, true, function() {
+      // 完了したらスクリプト実行に戻る
+      _state = State.Exec;
+    }, true);
     return RET_EFFECT;
   }
 
@@ -313,6 +322,7 @@ class EventScript extends FlxSpriteGroup {
       "NPC_COLOR"  => _NPC_COLOR,
       "NPC_RANDOM" => _NPC_RANDOM,
       "MSG"        => _MSG,
+      "FADE_IN"    => _FADE_IN,
       "FADE_OUT"   => _FADE_OUT,
     ];
   }
