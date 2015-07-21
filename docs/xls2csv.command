@@ -12,6 +12,8 @@ python xls2csv.py player.xlsx ../assets/levels
 python xls2csv.py message.xlsx ../assets/data
 # アイテム
 python xls2csv.py item.xlsx ../assets/levels header_item.txt
+# イベントメッセージ
+python xls2csv.py event.xlsx ../assets/events
 
 # 定数ヘッダ出力
 python export_const.py header_item.txt ../source/jp_2dgames/game/item
