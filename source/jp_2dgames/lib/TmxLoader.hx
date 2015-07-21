@@ -1,5 +1,6 @@
 package jp_2dgames.lib;
 
+import flash.geom.Rectangle;
 import flash.display.BitmapData;
 import flixel.FlxG;
 import openfl.Assets;
@@ -12,6 +13,12 @@ class TmxTileset {
   private var _firstGID:Int = 0;
   // 保持しているチップの数
   private var _lastGID:Int = 0;
+  // 1つのタイルのサイズ
+  private var _tileWidth:Int = 0;
+  private var _tileHeight:Int = 0;
+  // タイルの数
+  private var _width:Int = 0;
+  private var _height:Int = 0;
   // 画像を格納するスプライト
   private var _bmp:BitmapData;
   public var bmp(get, never):BitmapData;
@@ -24,15 +31,46 @@ class TmxTileset {
    **/
   public function new(directory:String, image:String, firstGID:Int, tileWidth:Int, tileHeight:Int, imgWidth:Int, imgHeight:Int) {
     // 開始チップ番号
-    _firstGID = firstGID;
+    _firstGID   = firstGID;
+    _tileWidth  = tileWidth;
+    _tileHeight = tileHeight;
 
     // 終端のチップ番号を求める
-    var w = Std.int(imgWidth / tileWidth);
-    var h = Std.int(imgHeight / tileHeight);
-    _lastGID = _firstGID + (w * h) - 1;
+    _width   = Std.int(imgWidth / tileWidth);
+    _height  = Std.int(imgHeight / tileHeight);
+    _lastGID = _firstGID + (_width * _height) - 1;
 
     // チップ画像を読み込んでおく
     _bmp = FlxG.bitmap.add(directory + image).bitmap;
+  }
+
+  /**
+   * 指定のチップ番号がタイルセットに含まれるかどうか
+   **/
+  public function hasGID(GID:Int):Bool {
+    if(_firstGID <= GID && GID <= _lastGID) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 指定のチップIDから描画矩形を取得する
+   **/
+  public function toRectangle(GID:Int, rect:Rectangle):Rectangle {
+    if(hasGID(GID) == false) {
+      // GIDが含まれないので何もしない
+      return rect;
+    }
+    var gid = GID - _firstGID;
+    var ox = gid % _width;
+    var oy = Std.int(gid / _width);
+    rect.left   = ox * _tileWidth;
+    rect.top    = oy * _tileHeight;
+    rect.right  = rect.left + _tileWidth;
+    rect.bottom = rect.top + _tileHeight;
+
+    return rect;
   }
 }
 
@@ -64,7 +102,6 @@ class TmxLoader {
    * @param dirTileset タイルセットのフォルダ（指定するとタイルセット情報を読み込む）
    * @return Layer2D
    **/
-
   public function load(filepath:String, dirTileset:String=""):Void {
 
     _layers     = new Array<Layer2D>();
@@ -160,6 +197,22 @@ class TmxLoader {
     }
 
     return _layers[idx];
+  }
+
+  /**
+   * 指定のチップIDに対応するタイルセット取得する
+   * @return 見つからなかった場合は null
+   **/
+  public function getTileset(GID:Int):TmxTileset {
+    for(tileset in _tilesets) {
+      if(tileset.hasGID(GID)) {
+        // 見つかった
+        return tileset;
+      }
+    }
+
+    // 見つからなかった
+    return null;
   }
 
   private function get_width() {

@@ -19,6 +19,9 @@ class EventNpc extends FlxSprite {
 
   // 管理クラス
   public static var parent:FlxTypedGroup<EventNpc> = null;
+  // コリジョンチェック
+  public static var isCollision:Int->Int->Bool;
+
   // 追加
   public static function add(type:String, xc:Int, yc:Int, dir:Dir):Int {
     var npc:EventNpc = parent.recycle();
@@ -41,6 +44,29 @@ class EventNpc extends FlxSprite {
         func(npc);
       }
     });
+  }
+
+  /**
+   * 指定の座標に移動可能かどうか
+   **/
+  public static function isMove(xc:Int, yc:Int):Bool {
+    if(isCollision(xc, yc)) {
+      // 壁があるので移動できない
+      return false;
+    }
+    var bHit = false;
+    parent.forEachAlive(function(npc:EventNpc) {
+      if(npc.existsPosition(xc, yc)) {
+        bHit = true;
+      }
+    });
+    if(bHit) {
+      // 他のNPCがいる
+      return false;
+    }
+
+    // 移動可能
+    return true;
   }
 
   // 種別
@@ -109,14 +135,17 @@ class EventNpc extends FlxSprite {
     // リソース読み込み
     loadGraphic(res, true);
 
+    // 中心を基準に描画する
+    offset.set(width / 2, height / 2);
+
     // アニメーション設定
     _registAnim(type);
 
     // アニメーション再生
     _changeAnim(true);
 
-    FlxG.watch.add(this, "_state");
-    FlxG.debugger.visible = true;
+//    FlxG.watch.add(this, "_state");
+//    FlxG.debugger.visible = true;
   }
 
   /**
@@ -255,18 +284,25 @@ class EventNpc extends FlxSprite {
       return false;
     }
 
+    // 向きを反映
+    _dir = dir;
+
     var pt = FlxPoint.get();
     DirUtil.move(dir, pt);
 
     var xnext = Std.int(_xprev + pt.x);
     var ynext = Std.int(_yprev + pt.y);
     pt.put();
-    // TODO: 移動可能かどうかをチェックする
+    // 移動可能かどうかをチェックする
+    if(isMove(xnext, ynext) == false) {
+      // 移動できない
+      return false;
+    }
+
+    // 移動可能
     _xnext = xnext;
     _ynext = ynext;
 
-    // 移動可能
-    _dir = dir;
     _state = State.Walk;
     _tWalk = 0;
     _changeAnim(false);
