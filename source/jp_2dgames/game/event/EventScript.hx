@@ -1,5 +1,6 @@
 package jp_2dgames.game.event;
 
+import StringTools;
 import jp_2dgames.lib.CsvLoader;
 import flixel.text.FlxText;
 import jp_2dgames.game.util.DirUtil;
@@ -208,7 +209,9 @@ class EventScript extends FlxSpriteGroup {
   }
   private function _MSG(args:Array<String>):Int {
     var id = Std.parseInt(args[0]);
-    _txt.text = _csvMessage.getString(id, "msg");
+    var text = _csvMessage.getString(id, "msg");
+    // 改行タグを置き換え
+    _txt.text = StringTools.replace(text, "<br>", "\n");
     return RET_CONTINUE;
   }
 

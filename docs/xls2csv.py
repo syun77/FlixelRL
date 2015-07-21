@@ -54,6 +54,9 @@ def conv(sheet, outFile, const):
 				if val in const:
 					# 定数に置き換え
 					val = str(const[val])
+				else:
+					# 改行文字を取り除く
+					val = val.replace("\n", "")
 				ret += val
 				#print val
 			col += 1
