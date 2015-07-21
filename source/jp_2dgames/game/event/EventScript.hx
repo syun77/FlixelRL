@@ -1,5 +1,7 @@
 package jp_2dgames.game.event;
 
+import jp_2dgames.lib.CsvLoader;
+import flixel.text.FlxText;
 import jp_2dgames.game.util.DirUtil;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -32,6 +34,10 @@ class EventScript extends FlxSpriteGroup {
   // NPC番号の最大数
   private static inline var NPC_MAX:Int = 32;
 
+  // メッセージウィンドウ
+  private static inline var MSG_X:Int = 32;
+  private static inline var MSG_Y:Int = 400;
+
   // 基準ディレクトリ
   private var _directory:String;
   private var _script:Array<String>;
@@ -47,6 +53,10 @@ class EventScript extends FlxSpriteGroup {
   private var _back:FlxSprite;
   // NPC番号
   private var _npcList:Array<Int>;
+  // メッセージテキスト
+  private var _txt:FlxText;
+  // メッセージCSV
+  private var _csvMessage:CsvLoader;
 
   /**
    * コンストラクタ
@@ -71,7 +81,18 @@ class EventScript extends FlxSpriteGroup {
     this.add(_back);
 
     // NPC番号生成
-    _npcList = [for(i in 0...NPC_MAX) -1];
+    _npcList = new Array<Int>();
+    for(i in 0...NPC_MAX) {
+      _npcList.push(-1);
+    }
+
+    // メッセージテキスト生成
+    _txt = new FlxText(MSG_X, MSG_Y, FlxG.width);
+    _txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    this.add(_txt);
+
+    // メッセージCSV読み込み
+    _csvMessage = new CsvLoader(directory + "message.csv");
   }
 
   /**
@@ -186,6 +207,8 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _MSG(args:Array<String>):Int {
+    var id = Std.parseInt(args[0]);
+    _txt.text = _csvMessage.getString(id, "msg");
     return RET_CONTINUE;
   }
 
