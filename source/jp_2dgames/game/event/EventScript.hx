@@ -20,9 +20,10 @@ import flixel.group.FlxSpriteGroup;
  * 状態
  **/
 private enum State {
-  Exec; // スクリプト実行中
+  Exec;    // スクリプト実行中
   Message; // メッセージ表示中
-  End; // おしまい
+  Effect;  // 演出中
+  End;     // おしまい
 }
 
 /**
@@ -33,6 +34,7 @@ class EventScript extends FlxSpriteGroup {
   // 返却値コード
   private static inline var RET_CONTINUE:Int = 1;
   private static inline var RET_MESSAGE:Int = 2;
+  private static inline var RET_EFFECT:Int = 3;
 
   // NPC番号の最大数
   private static inline var NPC_MAX:Int = 32;
@@ -155,6 +157,10 @@ class EventScript extends FlxSpriteGroup {
           _sprCursor.visible = false;
           _tAnim = 0;
         }
+
+      case State.Effect:
+        // 演出中
+
       case State.End:
     }
   }
@@ -197,6 +203,10 @@ class EventScript extends FlxSpriteGroup {
         _state = State.Message;
         _sprCursor.visible = true;
         return true;
+      case RET_EFFECT:
+        // 演出開始
+        _state = State.Effect;
+        return true;
       default:
         // 継続する
         return false;
@@ -234,6 +244,14 @@ class EventScript extends FlxSpriteGroup {
 
   private function _strToID(str:String):Int {
     return _npcList[Std.parseInt(str)];
+  }
+  private function _strToColor(str:String):Int {
+    switch(str) {
+      case "black": return FlxColor.BLACK;
+      case "white": return FlxColor.WHITE;
+      default:
+        return FlxColor.BLACK;
+    }
   }
 
   private function _MAP_LOAD(args:Array<String>):Int {
@@ -279,6 +297,14 @@ class EventScript extends FlxSpriteGroup {
     _txt.text = StringTools.replace(text, "<br>", "\n");
     return RET_MESSAGE;
   }
+  private function _FADE_OUT(args:Array<String>):Int {
+    var color = _strToColor(args[0]);
+    FlxG.camera.fade(color, 0.5, false, function() {
+      // 完了したらスクリプト実行に戻る
+      _state = State.Exec;
+    });
+    return RET_EFFECT;
+  }
 
   private function _registCommand():Void {
     _cmdTbl = [
@@ -287,6 +313,7 @@ class EventScript extends FlxSpriteGroup {
       "NPC_COLOR"  => _NPC_COLOR,
       "NPC_RANDOM" => _NPC_RANDOM,
       "MSG"        => _MSG,
+      "FADE_OUT"   => _FADE_OUT,
     ];
   }
 
