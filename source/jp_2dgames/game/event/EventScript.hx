@@ -1,5 +1,6 @@
 package jp_2dgames.game.event;
 
+import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.util.Key;
@@ -277,6 +278,21 @@ class EventScript extends FlxSpriteGroup {
     _npcList[id] = EventNpc.add(type, xc, yc, dir);
     return RET_CONTINUE;
   }
+  private function _NPC_DESTROY(args:Array<String>):Int {
+    var id = _strToID(args[0]);
+    var type = args[1];
+    EventNpc.forEach(id, function(npc:EventNpc) {
+      switch(type) {
+        case "fade":
+          FlxTween.tween(npc, {alpha:0}, 1, {complete:function(tween:FlxTween) {
+            npc.kill();
+          }});
+        default:
+          npc.kill();
+      }
+    });
+    return RET_CONTINUE;
+  }
   private function _NPC_COLOR(args:Array<String>):Int {
     var id = _strToID(args[0]);
     var color = Std.parseInt(args[1]);
@@ -326,14 +342,15 @@ class EventScript extends FlxSpriteGroup {
 
   private function _registCommand():Void {
     _cmdTbl = [
-      "MAP_LOAD"   => _MAP_LOAD,
-      "NPC_CREATE" => _NPC_CREATE,
-      "NPC_COLOR"  => _NPC_COLOR,
-      "NPC_RANDOM" => _NPC_RANDOM,
-      "MSG"        => _MSG,
-      "FADE_IN"    => _FADE_IN,
-      "FADE_OUT"   => _FADE_OUT,
-      "WAIT"       => _WAIT,
+      "MAP_LOAD"    => _MAP_LOAD,
+      "NPC_CREATE"  => _NPC_CREATE,
+      "NPC_DESTROY" => _NPC_DESTROY,
+      "NPC_COLOR"   => _NPC_COLOR,
+      "NPC_RANDOM"  => _NPC_RANDOM,
+      "MSG"         => _MSG,
+      "FADE_IN"     => _FADE_IN,
+      "FADE_OUT"    => _FADE_OUT,
+      "WAIT"        => _WAIT,
     ];
   }
 

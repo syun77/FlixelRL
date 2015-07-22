@@ -1,4 +1,5 @@
 package jp_2dgames.game.event;
+import flixel.util.FlxColor;
 import flixel.util.FlxRandom;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
@@ -125,6 +126,8 @@ class EventNpc extends FlxSprite {
     x = Field.toWorldX(xc);
     y = Field.toWorldY(yc);
     _bRandomWalk = false;
+    color = FlxColor.WHITE;
+    alpha = 1;
 
     var res = "";
     switch(type) {
