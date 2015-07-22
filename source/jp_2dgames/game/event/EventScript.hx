@@ -196,6 +196,9 @@ class EventScript extends FlxSpriteGroup {
 
     // コマンド実行
     var data = line.split(",");
+    if(_cmdTbl.exists(data[0]) == false) {
+      throw 'Error: Not found command. ${data[0]}';
+    }
     var ret = _cmdTbl.get(data[0])(data.slice(1));
     switch(ret) {
       case RET_CONTINUE:
@@ -316,6 +319,15 @@ class EventScript extends FlxSpriteGroup {
     });
     return RET_CONTINUE;
   }
+  private function _NPC_MOVE(args:Array<String>):Int {
+    var id  = _strToID(args[0]);
+    var dir = DirUtil.fromString(args[1]);
+    var cnt = Std.parseInt(args[2]);
+    EventNpc.forEach(id, function(npc:EventNpc) {
+      npc.requestMove(dir, cnt);
+    });
+    return RET_CONTINUE;
+  }
   private function _MSG(args:Array<String>):Int {
     var id = Std.parseInt(args[0]);
     var text = _csvMessage.getString(id, "msg");
@@ -356,6 +368,7 @@ class EventScript extends FlxSpriteGroup {
       "NPC_COLOR"   => _NPC_COLOR,
       "NPC_RANDOM"  => _NPC_RANDOM,
       "NPC_DIR"     => _NPC_DIR,
+      "NPC_MOVE"    => _NPC_MOVE,
       "MSG"         => _MSG,
       "FADE_IN"     => _FADE_IN,
       "FADE_OUT"    => _FADE_OUT,

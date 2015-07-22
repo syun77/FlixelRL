@@ -77,6 +77,11 @@ class EventNpc extends FlxSprite {
   private var _yprev:Float = 0;
   private var _xnext:Float = 0;
   private var _ynext:Float = 0;
+  // MOVEコマンドによる移動先
+  private var _xtarget:Int = 0;
+  private var _ytarget:Int = 0;
+  private var _bRequstMove:Bool = false;
+
   // 方向
   private var _dir:Dir = Dir.Down;
   // 状態
@@ -126,6 +131,7 @@ class EventNpc extends FlxSprite {
     x = Field.toWorldX(xc);
     y = Field.toWorldY(yc);
     _bRandomWalk = false;
+    _bRequstMove = false;
     color = FlxColor.WHITE;
     alpha = 1;
 
@@ -148,6 +154,10 @@ class EventNpc extends FlxSprite {
     _changeAnim(true);
 
 //    FlxG.watch.add(this, "_state");
+//    FlxG.watch.add(this, "xchip");
+//    FlxG.watch.add(this, "ychip");
+//    FlxG.watch.add(this, "_xtarget");
+//    FlxG.watch.add(this, "_ytarget");
 //    FlxG.debugger.visible = true;
   }
 
@@ -168,6 +178,27 @@ class EventNpc extends FlxSprite {
     return _state == State.Standby;
   }
 
+  private function _checkRequestMove():Bool {
+    if(_bRequstMove == false) {
+      // 移動完了
+      return false;
+    }
+
+    if(existsPosition(_xtarget, _ytarget)) {
+      // 移動完了
+      _bRequstMove = false;
+      return false;
+    }
+    // まだ歩く
+    if(requestWalk(dir) == false) {
+      // 移動できなかった
+      _bRequstMove = false;
+      return false;
+    }
+
+    // 歩く
+    return true;
+  }
   /**
    * 更新
    **/
@@ -181,6 +212,8 @@ class EventNpc extends FlxSprite {
         if(_updateWalk()) {
           // 移動完了
           _state = State.Standby;
+          // まだ歩くかどうかチェック
+          _checkRequestMove();
         }
     }
   }
@@ -331,5 +364,31 @@ class EventNpc extends FlxSprite {
   public function requestRandomWalk(b:Bool):Void {
     _bRandomWalk = b;
     _tRandomWalk = FlxRandom.floatRanged(2, 8);
+  }
+
+  // 指定した方向に歩く
+  public function requestMove(dir:Dir, cnt:Int):Bool {
+    if(_state != State.Standby) {
+      return false;
+    }
+
+    // 移動先を求める
+    var pt = FlxPoint.get();
+    for(i in 0...cnt) {
+      pt = DirUtil.move(dir, pt);
+    }
+    _xtarget = Std.int(pt.x) + xchip;
+    _ytarget = Std.int(pt.y) + ychip;
+    pt.put();
+
+    if(requestWalk(dir) == false) {
+      // 移動できない
+      return false;
+    }
+
+    // 移動要求開始
+    _bRequstMove = true;
+
+    return true;
   }
 }

@@ -2,6 +2,7 @@
 MAP_LOAD,001.tmx
 // プレイヤー生成
 NPC_CREATE,0,player,12,5,down
+
 // ネコ生成
 NPC_CREATE,1,cat,6,4,random
 NPC_CREATE,2,cat,18,5,random
@@ -33,6 +34,8 @@ NPC_DIR,0,left
 WAIT,1
 NPC_DIR,0,right
 WAIT,1
+NPC_MOVE,0,down,8
+FADE_OUT,black
 MSG,3
 MSG,4
 MSG,5
