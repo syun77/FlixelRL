@@ -1,7 +1,7 @@
 // マップ読み込み
 MAP_LOAD,001.tmx
 // プレイヤー生成
-NPC_CREATE,0,player,12,5,down
+NPC_CREATE,0,player,13,5,down
 
 // ネコ生成
 NPC_CREATE,1,cat,6,4,random
@@ -38,9 +38,12 @@ NPC_MOVE,0,down,8
 FADE_OUT,black
 NPC_DESTROY,0
 MAP_CLEAR
-FADE_IN,black
 
 // ダンジョン前
+FADE_IN,black
 MSG,3
+FADE_OUT,black
+MAP_LOAD,002.tmx
+FADE_IN,black
 MSG,4
 MSG,5
