@@ -308,6 +308,14 @@ class EventScript extends FlxSpriteGroup {
     });
     return RET_CONTINUE;
   }
+  private function _NPC_DIR(args:Array<String>):Int {
+    var id  = _strToID(args[0]);
+    var dir = DirUtil.fromString(args[1]);
+    EventNpc.forEach(id, function(npc:EventNpc) {
+      npc.requestDir(dir);
+    });
+    return RET_CONTINUE;
+  }
   private function _MSG(args:Array<String>):Int {
     var id = Std.parseInt(args[0]);
     var text = _csvMessage.getString(id, "msg");
@@ -347,6 +355,7 @@ class EventScript extends FlxSpriteGroup {
       "NPC_DESTROY" => _NPC_DESTROY,
       "NPC_COLOR"   => _NPC_COLOR,
       "NPC_RANDOM"  => _NPC_RANDOM,
+      "NPC_DIR"     => _NPC_DIR,
       "MSG"         => _MSG,
       "FADE_IN"     => _FADE_IN,
       "FADE_OUT"    => _FADE_OUT,

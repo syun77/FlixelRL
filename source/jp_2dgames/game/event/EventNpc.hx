@@ -280,6 +280,19 @@ class EventNpc extends FlxSprite {
     animation.play(getAnimName(bStop, dir));
   }
 
+  // 指定方向を向く
+  public function requestDir(dir:Dir):Bool {
+    if(_state != State.Standby) {
+      // 振り向けない
+      return false;
+    }
+    // 向きを反映
+    _dir = dir;
+    _changeAnim(true);
+
+    return true;
+  }
+
   // 歩き要求
   public function requestWalk(dir:Dir):Bool {
     if(_state != State.Standby) {
