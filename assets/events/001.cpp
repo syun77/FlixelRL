@@ -36,6 +36,11 @@ NPC_DIR,0,right
 WAIT,1
 NPC_MOVE,0,down,8
 FADE_OUT,black
+NPC_DESTROY,0
+MAP_CLEAR
+FADE_IN,black
+
+// ダンジョン前
 MSG,3
 MSG,4
 MSG,5

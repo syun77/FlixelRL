@@ -272,6 +272,11 @@ class EventScript extends FlxSpriteGroup {
     }
     return RET_CONTINUE;
   }
+  private function _MAP_CLEAR(args:Array<String>):Int {
+    var rect = new Rectangle(0, 0, _back.width, _back.height);
+    _back.pixels.fillRect(rect, FlxColor.BLACK);
+    return RET_CONTINUE;
+  }
   private function _NPC_CREATE(args:Array<String>):Int {
     var id = Std.parseInt(args[0]);
     var type = args[1];
@@ -363,6 +368,7 @@ class EventScript extends FlxSpriteGroup {
   private function _registCommand():Void {
     _cmdTbl = [
       "MAP_LOAD"    => _MAP_LOAD,
+      "MAP_CLEAR"   => _MAP_CLEAR,
       "NPC_CREATE"  => _NPC_CREATE,
       "NPC_DESTROY" => _NPC_DESTROY,
       "NPC_COLOR"   => _NPC_COLOR,
