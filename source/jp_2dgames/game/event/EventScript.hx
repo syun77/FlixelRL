@@ -1,5 +1,6 @@
 package jp_2dgames.game.event;
 
+import flixel.util.FlxTimer;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.util.Key;
 import StringTools;
@@ -22,7 +23,7 @@ import flixel.group.FlxSpriteGroup;
 private enum State {
   Exec;    // スクリプト実行中
   Message; // メッセージ表示中
-  Effect;  // 演出中
+  Wait;    // 一時停止中
   End;     // おしまい
 }
 
@@ -34,7 +35,7 @@ class EventScript extends FlxSpriteGroup {
   // 返却値コード
   private static inline var RET_CONTINUE:Int = 1;
   private static inline var RET_MESSAGE:Int = 2;
-  private static inline var RET_EFFECT:Int = 3;
+  private static inline var RET_WAIT:Int = 3;
 
   // NPC番号の最大数
   private static inline var NPC_MAX:Int = 32;
@@ -159,7 +160,7 @@ class EventScript extends FlxSpriteGroup {
           _tAnim = 0;
         }
 
-      case State.Effect:
+      case State.Wait:
         // 演出中
 
       case State.End:
@@ -204,9 +205,9 @@ class EventScript extends FlxSpriteGroup {
         _state = State.Message;
         _sprCursor.visible = true;
         return true;
-      case RET_EFFECT:
+      case RET_WAIT:
         // 演出開始
-        _state = State.Effect;
+        _state = State.Wait;
         return true;
       default:
         // 継続する
@@ -304,7 +305,7 @@ class EventScript extends FlxSpriteGroup {
       // 完了したらスクリプト実行に戻る
       _state = State.Exec;
     }, true);
-    return RET_EFFECT;
+    return RET_WAIT;
   }
   private function _FADE_IN(args:Array<String>):Int {
     var color = _strToColor(args[0]);
@@ -312,7 +313,15 @@ class EventScript extends FlxSpriteGroup {
       // 完了したらスクリプト実行に戻る
       _state = State.Exec;
     }, true);
-    return RET_EFFECT;
+    return RET_WAIT;
+  }
+  private function _WAIT(args:Array<String>):Int {
+    var time = Std.parseFloat(args[0]);
+    new FlxTimer(time, function(t:FlxTimer) {
+      // 完了したらスクリプト実行に戻る
+      _state = State.Exec;
+    });
+    return RET_WAIT;
   }
 
   private function _registCommand():Void {
@@ -324,6 +333,7 @@ class EventScript extends FlxSpriteGroup {
       "MSG"        => _MSG,
       "FADE_IN"    => _FADE_IN,
       "FADE_OUT"   => _FADE_OUT,
+      "WAIT"       => _WAIT,
     ];
   }
 

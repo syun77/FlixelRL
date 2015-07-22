@@ -21,6 +21,7 @@ FADE_IN,black
 // メッセージ表示
 MSG,1
 FADE_OUT,white
+WAIT,0.5
 FADE_IN,white
 MSG,2
 MSG,3
