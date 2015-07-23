@@ -114,6 +114,15 @@ class Snd {
   }
 
   /**
+   * BGMを停止する
+   **/
+  public static function stopMusic():Void {
+    if(FlxG.sound.music != null) {
+      FlxG.sound.music.stop();
+    }
+  }
+
+  /**
    * 1つ前に再生したBGMを再生する
    **/
   public static function playMusicPrev():Void {

@@ -34,7 +34,7 @@ private enum State {
  **/
 class EventScript extends FlxSpriteGroup {
 
-  // 返却値コード
+  // コマンド返却値
   private static inline var RET_CONTINUE:Int = 1;
   private static inline var RET_MESSAGE:Int = 2;
   private static inline var RET_WAIT:Int = 3;
@@ -87,13 +87,17 @@ class EventScript extends FlxSpriteGroup {
 
   /**
    * コンストラクタ
+   * @param directory イベントリソースのルートディレクトリ
+   * @param script スクリプトファイル名
    **/
   public function new(directory:String, script:String) {
     super();
+    _directory = directory;
 
+    // コマンド登録
     _registCommand();
 
-    _directory = directory;
+    // スクリプトファイル読み込み
     var path = _directory + script;
     var text:String = Assets.getText(path);
     if(text == null) {
@@ -144,6 +148,7 @@ class EventScript extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
+    // カーソルアニメーション更新
     _tAnim += FlxG.elapsed;
     _sprCursor.y = CURSOR_Y + 1 * Math.sin(_tAnim*8);
     var currentStep = Std.int(_tAnim*8);
@@ -156,6 +161,9 @@ class EventScript extends FlxSpriteGroup {
     }
   }
 
+  /**
+   * 更新
+   **/
   public function proc():Void {
     switch(_state) {
       case State.Exec:
@@ -193,6 +201,7 @@ class EventScript extends FlxSpriteGroup {
 
   public function _procExec():Bool {
 
+    // スクリプト終了チェック
     if(_pc >= _script.length) {
       // おしまい
       _state = State.End;
@@ -204,6 +213,7 @@ class EventScript extends FlxSpriteGroup {
     // 実行カウンタを進める
     _pc++;
 
+    // 解析スキップチェック
     if(_isSkip(line)) {
       // この行はパースしない
       return false;
@@ -233,7 +243,6 @@ class EventScript extends FlxSpriteGroup {
         // 継続する
         return false;
     }
-
   }
 
   /**
@@ -264,10 +273,12 @@ class EventScript extends FlxSpriteGroup {
     return false;
   }
 
-  private function _strToID(str:String):Int {
+  // 引数文字列をNPC番号に変換する
+  private function _toNpcID(str:String):Int {
     return _npcList[Std.parseInt(str)];
   }
-  private function _strToColor(str:String):Int {
+  // 引数文字列を色に変換する
+  private function _toColor(str:String):Int {
     switch(str) {
       case "black": return FlxColor.BLACK;
       case "white": return FlxColor.WHITE;
@@ -276,6 +287,12 @@ class EventScript extends FlxSpriteGroup {
     }
   }
 
+  // =================================================
+  // ★ここからコマンド定義
+  // =================================================
+  // -------------------------------------------------
+  // ■マップ関連
+  // -------------------------------------------------
   private function _MAP_LOAD(args:Array<String>):Int {
     var tmx = new TmxLoader();
     var path = _directory + args[0];
@@ -297,6 +314,10 @@ class EventScript extends FlxSpriteGroup {
     _back.updateFrameData();
     return RET_CONTINUE;
   }
+
+  // -------------------------------------------------
+  // ■NPC関連
+  // -------------------------------------------------
   private function _NPC_CREATE(args:Array<String>):Int {
     var id = Std.parseInt(args[0]);
     var type = args[1];
@@ -307,7 +328,7 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _NPC_DESTROY(args:Array<String>):Int {
-    var id = _strToID(args[0]);
+    var id = _toNpcID(args[0]);
     var type = args[1];
     var time = Std.parseFloat(args[2]);
     EventNpc.forEach(id, function(npc:EventNpc) {
@@ -322,7 +343,7 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _NPC_COLOR(args:Array<String>):Int {
-    var id = _strToID(args[0]);
+    var id = _toNpcID(args[0]);
     var color = Std.parseInt(args[1]);
     EventNpc.forEach(id, function(npc:EventNpc) {
       npc.color = color;
@@ -330,7 +351,7 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _NPC_WAIT(args:Array<String>):Int {
-    var id = _strToID(args[0]);
+    var id = _toNpcID(args[0]);
     var time = Std.parseFloat(args[1]);
     EventNpc.forEach(id, function(npc:EventNpc) {
       npc.requestWait(time);
@@ -338,14 +359,14 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _NPC_RANDOM(args:Array<String>):Int {
-    var id = _strToID(args[0]);
+    var id = _toNpcID(args[0]);
     EventNpc.forEach(id, function(npc:EventNpc) {
       npc.requestRandomWalk(true);
     });
     return RET_CONTINUE;
   }
   private function _NPC_DIR(args:Array<String>):Int {
-    var id  = _strToID(args[0]);
+    var id  = _toNpcID(args[0]);
     var dir = DirUtil.fromString(args[1]);
     EventNpc.forEach(id, function(npc:EventNpc) {
       npc.requestDir(dir);
@@ -353,7 +374,7 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _NPC_MOVE(args:Array<String>):Int {
-    var id  = _strToID(args[0]);
+    var id  = _toNpcID(args[0]);
     var dir = DirUtil.fromString(args[1]);
     var cnt = Std.parseInt(args[2]);
     EventNpc.forEach(id, function(npc:EventNpc) {
@@ -361,6 +382,10 @@ class EventScript extends FlxSpriteGroup {
     });
     return RET_CONTINUE;
   }
+
+  // -------------------------------------------------
+  // ■メッセージ関連
+  // -------------------------------------------------
   private function _MSG(args:Array<String>):Int {
     var id = Std.parseInt(args[0]);
     var text = _csvMessage.getString(id, "msg");
@@ -368,6 +393,10 @@ class EventScript extends FlxSpriteGroup {
     _txt.text = StringTools.replace(text, "<br>", "\n");
     return RET_MESSAGE;
   }
+
+  // -------------------------------------------------
+  // ■画像関連
+  // -------------------------------------------------
   private function _IMAGE(args:Array<String>):Int {
     var image = _directory + args[0];
     _sprEvent.revive();
@@ -390,8 +419,12 @@ class EventScript extends FlxSpriteGroup {
     }});
     return RET_WAIT;
   }
+
+  // -------------------------------------------------
+  // ■フェード関連
+  // -------------------------------------------------
   private function _FADE_OUT(args:Array<String>):Int {
-    var color = _strToColor(args[0]);
+    var color = _toColor(args[0]);
     FlxG.camera.fade(color, 1, false, function() {
       // 完了したらスクリプト実行に戻る
       _state = State.Exec;
@@ -399,24 +432,24 @@ class EventScript extends FlxSpriteGroup {
     return RET_WAIT;
   }
   private function _FADE_IN(args:Array<String>):Int {
-    var color = _strToColor(args[0]);
+    var color = _toColor(args[0]);
     FlxG.camera.fade(color, 1, true, function() {
       // 完了したらスクリプト実行に戻る
       _state = State.Exec;
     }, true);
     return RET_WAIT;
   }
-  private function _WAIT(args:Array<String>):Int {
-    var time = Std.parseFloat(args[0]);
-    new FlxTimer(time, function(t:FlxTimer) {
-      // 完了したらスクリプト実行に戻る
-      _state = State.Exec;
-    });
-    return RET_WAIT;
-  }
+
+  // -------------------------------------------------
+  // ■サウンド関連
+  // -------------------------------------------------
   private function _BGM(args:Array<String>):Int {
     var bgm = args[0];
     Snd.playMusic(bgm);
+    return RET_CONTINUE;
+  }
+  private function _BGM_OFF(args:Array<String>):Int {
+    Snd.stopMusic();
     return RET_CONTINUE;
   }
   private function _SE(args:Array<String>):Int {
@@ -425,6 +458,21 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
 
+  // -------------------------------------------------
+  // ■その他
+  // -------------------------------------------------
+  private function _WAIT(args:Array<String>):Int {
+    var time = Std.parseFloat(args[0]);
+    new FlxTimer(time, function(t:FlxTimer) {
+      // 完了したらスクリプト実行に戻る
+      _state = State.Exec;
+    });
+    return RET_WAIT;
+  }
+
+  /**
+   * コマンドの登録
+   **/
   private function _registCommand():Void {
     _cmdTbl = [
       "MAP_LOAD"        => _MAP_LOAD,
@@ -442,15 +490,15 @@ class EventScript extends FlxSpriteGroup {
       "IMAGE_OFF"       => _IMAGE_OFF,
       "FADE_IN"         => _FADE_IN,
       "FADE_OUT"        => _FADE_OUT,
-      "WAIT"            => _WAIT,
       "BGM"             => _BGM,
+      "BGM_OFF"         => _BGM_OFF,
       "SE"              => _SE,
+      "WAIT"            => _WAIT,
     ];
   }
 
-
   /**
-   * 背景画像の作成
+   * *.tmxファイルをもとに背景画像を作成
    **/
   private function _createBackground(tmx:TmxLoader) {
     var w = tmx.width * tmx.tileWidth;

@@ -1,13 +1,14 @@
 package jp_2dgames.game.event;
-import flixel.util.FlxTimer;
+
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.group.FlxTypedGroup;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import flixel.util.FlxRandom;
-import flixel.FlxG;
 import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
+import flixel.util.FlxTimer;
 import jp_2dgames.game.util.DirUtil;
-import flixel.group.FlxTypedGroup;
-import flixel.FlxSprite;
 
 /**
  * NPCコマンド
@@ -42,27 +43,38 @@ private enum State {
  **/
 class EventNpc extends FlxSprite {
 
+  // ■定数
+  // 歩く速さ
+  private static inline var TIMER_WALK:Int = 24;
+
+  // ■static関数
   // 管理クラス
   public static var parent:FlxTypedGroup<EventNpc> = null;
-  // コリジョンチェック
+  // コリジョンチェック(コールバック関数を登録する)
   public static var isCollision:Int->Int->Bool;
 
-  // 追加
+  /**
+   * NPC追加
+   **/
   public static function add(type:String, xc:Int, yc:Int, dir:Dir):Int {
     var npc:EventNpc = parent.recycle();
     npc.init(type, xc, yc, dir);
     return npc.ID;
   }
   // 指定のIDを持つオブジェクトを取得
-  public static function get(ID:Int):EventNpc {
-    var npc:EventNpc = null;
-    parent.forEachAlive(function(npc2:EventNpc) {
-      if(npc2.ID == ID) {
-        npc = npc2;
+  public static function get(ID:Int):List<EventNpc> {
+    var ret = new List<EventNpc>();
+    parent.forEachAlive(function(npc:EventNpc) {
+      if(npc.ID == ID) {
+        ret.add(npc);
       }
     });
-    return npc;
+    return ret;
   }
+
+  /**
+   * 指定のIDに合致するNPCをイテレートする
+   **/
   public static function forEach(ID:Int, func:EventNpc->Void):Void {
     parent.forEachAlive(function(npc:EventNpc) {
       if(npc.ID == ID) {
@@ -141,6 +153,7 @@ class EventNpc extends FlxSprite {
    **/
   public function new() {
     super();
+    // 消しておく
     kill();
   }
 
@@ -148,6 +161,7 @@ class EventNpc extends FlxSprite {
    * 初期化
    **/
   public function init(type:String, xc:Int, yc:Int, dir:Dir):Void {
+    // 座標を設定
     _xprev = xc;
     _yprev = yc;
     _xnext = xc;
@@ -156,30 +170,27 @@ class EventNpc extends FlxSprite {
     _dir   = dir;
     x = Field.toWorldX(xc);
     y = Field.toWorldY(yc);
+
+    // 変数初期化
     _bRandomWalk = false;
     _bRequstMove = false;
     color = FlxColor.WHITE;
     alpha = 1;
 
-    var res = "";
-    switch(type) {
-      case "player": res = "assets/images/player.png";
-      case "cat":    res = "assets/images/cat.png";
-    }
-
     // リソース読み込み
+    var res = EventNpcAnim.getResource(type);
     loadGraphic(res, true);
 
     // 中心を基準に描画する
     offset.set(width / 2, height / 2);
 
     // アニメーション設定
-    _registAnim(type);
+    EventNpcAnim.registAnim(animation, type);
 
     // アニメーション再生
     _changeAnim(true);
 
-    // コマンドキュー作成
+    // リクエストコマンドキュー作成
     _cmdQueue = new List<_Cmd>();
 
 //    FlxG.watch.add(this, "_state");
@@ -207,6 +218,10 @@ class EventNpc extends FlxSprite {
     return _state == State.Standby;
   }
 
+  /**
+   * さらに移動するかどうか
+   * @return さらに移動するならば true
+   **/
   private function _checkRequestMove():Bool {
     if(_bRequstMove == false) {
       // 移動完了
@@ -218,8 +233,9 @@ class EventNpc extends FlxSprite {
       _bRequstMove = false;
       return false;
     }
+
     // まだ歩く
-    if(requestWalk(dir) == false) {
+    if(_execWalk(dir) == false) {
       // 移動できなかった
       _bRequstMove = false;
       return false;
@@ -228,6 +244,7 @@ class EventNpc extends FlxSprite {
     // 歩く
     return true;
   }
+
   /**
    * 更新
    **/
@@ -253,20 +270,9 @@ class EventNpc extends FlxSprite {
    * 更新・待機
    **/
   private function _updateStandby():Void {
-    if(_cmdQueue.length > 0) {
-      // キューを処理する
-      var cmd = _cmdQueue.pop();
-      switch(cmd.type) {
-        case _Cmd.TYPE_WAIT:
-          _execWait(cmd);
-        case _Cmd.TYPE_MOVE:
-          _execMove(cmd);
-        case _Cmd.TYPE_DIR:
-          _execDir(cmd);
-        case _Cmd.TYPE_DESTROY:
-          _execKill(cmd);
-      }
-    }
+
+    // コマンド実行
+    _execCommand();
 
     if(_state != State.Standby) {
       // 待機中でなくなった
@@ -278,19 +284,18 @@ class EventNpc extends FlxSprite {
       _tRandomWalk -= FlxG.elapsed;
       if(_tRandomWalk < 0) {
         // ランダムな方向に歩く
-        requestWalk(DirUtil.random());
+        _execWalk(DirUtil.random());
         // タイマー初期化
         _tRandomWalk = FlxRandom.floatRanged(3, 7);
       }
     }
-
   }
 
   /**
    * 更新・歩き
    **/
   private function _updateWalk():Bool {
-    var tWait:Int = 24;
+    var tWait:Int = TIMER_WALK;
     _tWalk++;
     var t = _tWalk / tWait;
     // 移動方向を求める
@@ -315,49 +320,9 @@ class EventNpc extends FlxSprite {
     }
   }
 
-  /**
-   * アニメーションを登録
-   **/
-  private function _registAnim(type):Void {
-    switch(type) {
-      case "player":
-        // アニメーションを登録
-        // 待機アニメ
-        // アニメーション速度
-        var speed = 2;
-        animation.add(getAnimName(true, Dir.Left), [0, 1], speed);
-        animation.add(getAnimName(true, Dir.Up), [4, 5], speed);
-        animation.add(getAnimName(true, Dir.Right), [8, 9], speed);
-        animation.add(getAnimName(true, Dir.Down), [12, 13], speed);
-
-        // 歩きアニメ
-        speed = 6;
-        animation.add(getAnimName(false, Dir.Left), [2, 3], speed);
-        animation.add(getAnimName(false, Dir.Up), [6, 7], speed);
-        animation.add(getAnimName(false, Dir.Right), [10, 11], speed);
-        animation.add(getAnimName(false, Dir.Down), [14, 15], speed);
-      default:
-        // アニメーションを登録
-        var speed = 6;
-        animation.add(DirUtil.toString(Dir.Left),  [0, 1, 2, 1], speed); // 左
-        animation.add(DirUtil.toString(Dir.Up),    [3, 4, 5, 4], speed); // 上
-        animation.add(DirUtil.toString(Dir.Right), [6, 7, 8, 7], speed); // 右
-        animation.add(DirUtil.toString(Dir.Down),  [9, 10, 11, 10], speed); // 下
-    }
-  }
-
   // アニメーション名を取得する
   private function getAnimName(bStop:Bool, dir:Dir):String {
-    if(_type == "player") {
-      var pre = bStop ? "stop" : "walk";
-      var suf = DirUtil.toString(dir);
-
-      return pre + "-" + suf;
-    }
-    else {
-      return DirUtil.toString(_dir);
-    }
-
+    return EventNpcAnim.getAnimName(_type, bStop, dir);
   }
 
   // アニメ変更
@@ -365,7 +330,30 @@ class EventNpc extends FlxSprite {
     animation.play(getAnimName(bStop, dir));
   }
 
-  // 一時停止
+  /**
+   * コマンド実行
+   **/
+  private function _execCommand():Void {
+    if(_cmdQueue.length > 0) {
+      // キューを処理する
+      var cmd = _cmdQueue.pop();
+      switch(cmd.type) {
+        case _Cmd.TYPE_WAIT:
+          _execWait(cmd);
+        case _Cmd.TYPE_MOVE:
+          _execMove(cmd);
+        case _Cmd.TYPE_DIR:
+          _execDir(cmd);
+        case _Cmd.TYPE_DESTROY:
+          _execKill(cmd);
+      }
+    }
+  }
+
+  /**
+   * 一時停止要求
+   * @param time 停止時間(秒)
+   **/
   public function requestWait(time:Float):Void {
 
     var cmd = new _Cmd();
@@ -381,7 +369,10 @@ class EventNpc extends FlxSprite {
     });
   }
 
-  // 指定方向を向く
+  /**
+   * 指定方向を向く要求
+   * @param dir 振り向く方向
+   **/
   public function requestDir(dir:Dir):Void {
 
     var cmd = new _Cmd();
@@ -401,8 +392,12 @@ class EventNpc extends FlxSprite {
     return true;
   }
 
-  // 歩き要求
-  public function requestWalk(dir:Dir):Bool {
+  /**
+   * 歩き開始
+   * @param dir 歩く方向
+   * @return 歩けなかった場合は false
+   **/
+  private function _execWalk(dir:Dir):Bool {
 
     if(_state != State.Standby) {
       // 歩けない
@@ -436,13 +431,19 @@ class EventNpc extends FlxSprite {
     return true;
   }
 
-  // ランダム歩きフラグを設定する
+  /**
+   * ランダム歩きを開始する
+   **/
   public function requestRandomWalk(b:Bool):Void {
     _bRandomWalk = b;
     _tRandomWalk = FlxRandom.floatRanged(2, 8);
   }
 
-  // 指定した方向に歩く
+  /**
+   * 指定した方向に歩く
+   * @param dir 歩く方向
+   * @param cnt 歩く歩数
+   **/
   public function requestMove(dir:Dir, cnt:Int):Void {
 
     var cmd = new _Cmd();
@@ -468,7 +469,7 @@ class EventNpc extends FlxSprite {
     _ytarget = Std.int(pt.y) + ychip;
     pt.put();
 
-    if(requestWalk(dir) == false) {
+    if(_execWalk(dir) == false) {
       // 移動できない
       return false;
     }
@@ -479,10 +480,15 @@ class EventNpc extends FlxSprite {
     return true;
   }
 
+  /**
+   * 消滅要求
+   * @param type 消す方法("fade" : フェードアウトで消す)
+   * @param time フェードで消す時間
+   **/
   public function requestKill(type:String, time:Float):Void {
     var cmd = new _Cmd();
-    cmd.type = _Cmd.TYPE_DESTROY;
-    cmd.paramStr = type;
+    cmd.type       = _Cmd.TYPE_DESTROY;
+    cmd.paramStr   = type;
     cmd.paramFloat = time;
 
     _cmdQueue.add(cmd);
@@ -490,10 +496,12 @@ class EventNpc extends FlxSprite {
   private function _execKill(cmd:_Cmd):Bool {
     switch(cmd.paramStr) {
       case "fade":
+        // フェードで消す
         FlxTween.tween(this, {alpha:0}, cmd.paramFloat, {complete:function(tween:FlxTween) {
           kill();
         }});
       default:
+        // すぐに消す
         kill();
     }
 

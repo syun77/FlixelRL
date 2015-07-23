@@ -1,8 +1,6 @@
 package jp_2dgames.game.state;
-import jp_2dgames.game.event.EventScript;
+import jp_2dgames.game.event.EventMgr;
 import flixel.FlxG;
-import flixel.group.FlxTypedGroup;
-import jp_2dgames.game.event.EventNpc;
 import flixel.FlxState;
 
 /**
@@ -10,7 +8,8 @@ import flixel.FlxState;
  **/
 class OpeningState extends FlxState {
 
-  var _script:EventScript;
+  // イベント管理
+  var _event:EventMgr;
 
   /**
    * 生成
@@ -18,28 +17,9 @@ class OpeningState extends FlxState {
   override public function create():Void {
     super.create();
 
-    // スクリプト生成
-    _script = new EventScript("assets/events/", "opening.cpp");
-    this.add(_script);
-    // NPC生成
-    EventNpc.parent = new FlxTypedGroup<EventNpc>(32);
-    for(i in 0...EventNpc.parent.maxSize) {
-      var npc = new EventNpc();
-      npc.ID = 1000 + i;
-      this.add(npc);
-      EventNpc.parent.add(npc);
-    }
-    // UI登録
-    this.add(_script.ui);
-  }
-
-  /**
-   * 破棄
-   **/
-  override public function destroy():Void {
-    EventNpc.parent = null;
-    EventNpc.isCollision = null;
-    super.destroy();
+    // イベント開始
+    _event = new EventMgr("assets/events/", "opening.cpp");
+    this.add(_event);
   }
 
   /**
@@ -48,8 +28,7 @@ class OpeningState extends FlxState {
   override public function update():Void {
     super.update();
 
-    _script.proc();
-    if(_script.isEnd()) {
+    if(_event.isEnd()) {
       FlxG.switchState(new PlayInitState());
     }
 
