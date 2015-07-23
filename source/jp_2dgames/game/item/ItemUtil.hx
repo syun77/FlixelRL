@@ -547,6 +547,15 @@ class ItemUtil {
         var target_ychip = actor.ychip;
         useActor.warp(target_xchip, target_ychip);
         actor.warp(use_xchip, use_ychip);
+
+      case "hpswap":
+        // HP交換
+        var self_hp  = actor.params.hp;
+        var other_hp = useActor.params.hp;
+        useActor.params.hp = self_hp;
+        actor.params.hp = other_hp;
+        useActor.trancateHp();
+        actor.trancateHp();
     }
   }
 
