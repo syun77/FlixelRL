@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.util.MyColor;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
@@ -601,7 +602,8 @@ class Inventory extends FlxGroup {
 
       // 足下にあるアイテムを取得する
       var feet = DropItem.getFromPosition(_player.xchip, _player.ychip);
-      if(feet != null) {
+      trace(feet);
+      if(feet != null && feet.id != ItemConst.MONEY) {
         // 足下にアイテムがある
         _feetItem = [feet];
       }

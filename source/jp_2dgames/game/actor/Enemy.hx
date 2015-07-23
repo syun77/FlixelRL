@@ -825,7 +825,14 @@ class Enemy extends Actor {
     }
 
     if(total == 0) {
-      // チェック不要
+      // 何もドロップしない場合は小銭を落とす
+      var pt = FlxPoint.get();
+      if(DropItem.checkDrop(pt, xchip, ychip)) {
+        var money = 10 + Global.getFloor();
+        money = Std.int(money * FlxRandom.floatRanged(0.9, 1.1));
+        DropItem.addMoney(Std.int(pt.x), Std.int(pt.y), money);
+      }
+      pt.put();
       return;
     }
 
@@ -861,6 +868,7 @@ class Enemy extends Actor {
             DropItem.add(Std.int(pt.x), Std.int(pt.y), itemid, param);
           }
         }
+        pt.put();
         break;
       }
     }

@@ -55,7 +55,7 @@ class DropItem extends FlxSprite {
     }
     var param = new ItemExtraParam();
     param.value = value;
-    item.init(i, j, IType.Money, 0, param);
+    item.init(i, j, IType.Money, ItemConst.MONEY, param);
     return item;
   }
 
