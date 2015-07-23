@@ -1,7 +1,5 @@
 package jp_2dgames.game.state;
 import jp_2dgames.game.event.EventScript;
-import flixel.FlxSprite;
-import jp_2dgames.game.util.DirUtil;
 import flixel.FlxG;
 import flixel.group.FlxTypedGroup;
 import jp_2dgames.game.event.EventNpc;
@@ -21,7 +19,7 @@ class OpeningState extends FlxState {
     super.create();
 
     // スクリプト生成
-    _script = new EventScript("assets/events/", "001.cpp");
+    _script = new EventScript("assets/events/", "opening.cpp");
     this.add(_script);
     // NPC生成
     EventNpc.parent = new FlxTypedGroup<EventNpc>(32);
