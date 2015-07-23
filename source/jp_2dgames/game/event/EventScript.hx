@@ -1,6 +1,6 @@
 package jp_2dgames.game.event;
 
-import haxe.ds.ArraySort;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import jp_2dgames.game.util.Key;
@@ -64,6 +64,8 @@ class EventScript extends FlxSpriteGroup {
   private var _back:FlxSprite;
   // NPC番号
   private var _npcList:Array<Int>;
+  // イベント画像
+  private var _sprEvent:FlxSprite;
   // メッセージテキスト
   private var _txt:FlxText;
   // メッセージCSV
@@ -112,6 +114,10 @@ class EventScript extends FlxSpriteGroup {
 
     // UIグループ作成
     _ui = new FlxSpriteGroup();
+    // イベント画像
+    _sprEvent = new FlxSprite();
+    _ui.add(_sprEvent);
+
     // メッセージウィンドウ作成
     _sprWindow = new FlxSprite(WINDOW_X, WINDOW_Y, directory + "window.png");
     _ui.add(_sprWindow);
@@ -360,6 +366,28 @@ class EventScript extends FlxSpriteGroup {
     _txt.text = StringTools.replace(text, "<br>", "\n");
     return RET_MESSAGE;
   }
+  private function _IMAGE(args:Array<String>):Int {
+    var image = _directory + args[0];
+    _sprEvent.revive();
+    _sprEvent.alpha = 1;
+    _sprEvent.loadGraphic(image);
+    var cx = FlxG.width/2 - _sprEvent.width/2;
+    var cy = FlxG.height/2 - _sprEvent.height/2;
+    _sprEvent.x = cx;
+    _sprEvent.y = FlxG.height;
+    FlxTween.tween(_sprEvent, {y:cy}, 1, {ease:FlxEase.expoOut, complete:function(tween:FlxTween) {
+      _state = State.Exec;
+    }});
+
+    return RET_WAIT;
+  }
+  private function _IMAGE_OFF(args:Array<String>):Int {
+    FlxTween.tween(_sprEvent, {alpha:0}, 1, {ease:FlxEase.expoOut, complete:function(tween:FlxTween) {
+      _sprEvent.kill();
+      _state = State.Exec;
+    }});
+    return RET_WAIT;
+  }
   private function _FADE_OUT(args:Array<String>):Int {
     var color = _strToColor(args[0]);
     FlxG.camera.fade(color, 1, false, function() {
@@ -398,6 +426,8 @@ class EventScript extends FlxSpriteGroup {
       "NPC_DIR"         => _NPC_DIR,
       "NPC_MOVE"        => _NPC_MOVE,
       "MSG"             => _MSG,
+      "IMAGE"           => _IMAGE,
+      "IMAGE_OFF"       => _IMAGE_OFF,
       "FADE_IN"         => _FADE_IN,
       "FADE_OUT"        => _FADE_OUT,
       "WAIT"            => _WAIT,

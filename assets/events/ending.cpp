@@ -38,12 +38,16 @@ FADE_IN,black
 MSG,21
 MSG,22
 MSG,23
+// マタタビ画像表示
+IMAGE,matatabi.png
+MSG,24
+IMAGE_OFF
 // 女の子がっかり
 NPC_MOVE,0,down,1
-MSG,24
+MSG,25
 // 女の子帰る
 NPC_MOVE,0,down,10
-MSG,25
+MSG,26
 // ネコも帰る
 NPC_MOVE,1,down,10
 NPC_MOVE,2,down,10
@@ -52,13 +56,16 @@ NPC_MOVE,4,down,10
 FADE_OUT,black
 MAP_CLEAR
 NPC_DESTROY_ALL
-FADE_IN,black
 // ダンジョン終わり
 
 // 伝説のマタタビの説明
-MSG,26
+// マタタビ画像表示
+IMAGE,matatabi.png
+FADE_IN,black
 MSG,27
 MSG,28
+IMAGE_OFF
+MSG,29
 
 // 再び女の子の家
 FADE_OUT,black
@@ -117,6 +124,6 @@ NPC_RANDOM,14
 NPC_RANDOM,15
 NPC_RANDOM,16
 FADE_IN,black
-MSG,29
 MSG,30
+MSG,31
 // スタッフロールへ
