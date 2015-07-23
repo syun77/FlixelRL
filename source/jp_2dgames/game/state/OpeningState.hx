@@ -54,7 +54,9 @@ class OpeningState extends FlxState {
     }
 
     // デバッグ処理
+#if debug
     updateDebug();
+#end
   }
 
   private function updateDebug():Void {

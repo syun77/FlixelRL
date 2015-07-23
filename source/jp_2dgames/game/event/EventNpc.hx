@@ -253,17 +253,6 @@ class EventNpc extends FlxSprite {
    * 更新・待機
    **/
   private function _updateStandby():Void {
-    if(_bRandomWalk) {
-      // ランダム歩き有効
-      _tRandomWalk -= FlxG.elapsed;
-      if(_tRandomWalk < 0) {
-        // ランダムな方向に歩く
-        requestWalk(DirUtil.random());
-        // タイマー初期化
-        _tRandomWalk = FlxRandom.floatRanged(3, 7);
-      }
-    }
-
     if(_cmdQueue.length > 0) {
       // キューを処理する
       var cmd = _cmdQueue.pop();
@@ -278,6 +267,23 @@ class EventNpc extends FlxSprite {
           _execKill(cmd);
       }
     }
+
+    if(_state != State.Standby) {
+      // 待機中でなくなった
+      return;
+    }
+
+    if(_bRandomWalk) {
+      // ランダム歩き有効
+      _tRandomWalk -= FlxG.elapsed;
+      if(_tRandomWalk < 0) {
+        // ランダムな方向に歩く
+        requestWalk(DirUtil.random());
+        // タイマー初期化
+        _tRandomWalk = FlxRandom.floatRanged(3, 7);
+      }
+    }
+
   }
 
   /**
