@@ -1,6 +1,5 @@
 package jp_2dgames.game.state;
 import jp_2dgames.game.util.Key;
-import jp_2dgames.game.state.PlayState;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
@@ -38,7 +37,7 @@ class TitleState extends FlxState{
 
     if(Key.press.A) {
       // メインゲーム画面に進む
-      FlxG.switchState(new PlayState());
+      FlxG.switchState(new PlayInitState());
     }
   }
 }

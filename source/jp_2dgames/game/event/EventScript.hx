@@ -117,6 +117,7 @@ class EventScript extends FlxSpriteGroup {
     _ui = new FlxSpriteGroup();
     // イベント画像
     _sprEvent = new FlxSprite();
+    _sprEvent.kill();
     _ui.add(_sprEvent);
 
     // メッセージウィンドウ作成
