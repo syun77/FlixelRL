@@ -49,7 +49,7 @@ class EndingState extends FlxState{
 
     _script.proc();
     if(_script.isEnd()) {
-      FlxG.switchState(new EndingState());
+      FlxG.switchState(new TitleState());
     }
 
     // デバッグ処理

@@ -1,6 +1,9 @@
+// ネコを4匹集めた
 MSG,18
 MSG,19
 MSG,20
+SE,foot
+
 FADE_OUT,black
 MAP_LOAD,010.tmx
 // プレイヤー生成
@@ -38,6 +41,7 @@ FADE_IN,black
 MSG,21
 MSG,22
 MSG,23
+SE,pickup
 // マタタビ画像表示
 IMAGE,matatabi.png
 MSG,24

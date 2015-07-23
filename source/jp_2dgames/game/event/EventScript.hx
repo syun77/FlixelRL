@@ -1,5 +1,6 @@
 package jp_2dgames.game.event;
 
+import jp_2dgames.lib.Snd;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
@@ -412,6 +413,16 @@ class EventScript extends FlxSpriteGroup {
     });
     return RET_WAIT;
   }
+  private function _BGM(args:Array<String>):Int {
+    var bgm = args[0];
+    Snd.playMusic(bgm);
+    return RET_CONTINUE;
+  }
+  private function _SE(args:Array<String>):Int {
+    var se = args[0];
+    Snd.playSe(se, true);
+    return RET_CONTINUE;
+  }
 
   private function _registCommand():Void {
     _cmdTbl = [
@@ -431,6 +442,8 @@ class EventScript extends FlxSpriteGroup {
       "FADE_IN"         => _FADE_IN,
       "FADE_OUT"        => _FADE_OUT,
       "WAIT"            => _WAIT,
+      "BGM"             => _BGM,
+      "SE"              => _SE,
     ];
   }
 

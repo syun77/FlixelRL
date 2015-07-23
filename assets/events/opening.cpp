@@ -87,4 +87,5 @@ MSG,9
 NPC_MOVE,0,up,3
 NPC_DESTROY,0,fade,0.5
 FADE_OUT,black
-
+SE,foot
+WAIT,1
