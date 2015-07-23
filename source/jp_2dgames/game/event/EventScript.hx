@@ -200,7 +200,7 @@ class EventScript extends FlxSpriteGroup {
       // この行はパースしない
       return false;
     }
-    trace(line);
+//    trace(line);
 
     // コマンド実行
     var data = line.split(",");
@@ -283,6 +283,10 @@ class EventScript extends FlxSpriteGroup {
   private function _MAP_CLEAR(args:Array<String>):Int {
     var rect = new Rectangle(0, 0, _back.width, _back.height);
     _back.pixels.fillRect(rect, FlxColor.BLACK);
+
+    // 描画内容を反映
+    _back.dirty = true;
+    _back.updateFrameData();
     return RET_CONTINUE;
   }
   private function _NPC_CREATE(args:Array<String>):Int {
@@ -407,8 +411,7 @@ class EventScript extends FlxSpriteGroup {
   private function _createBackground(tmx:TmxLoader) {
     var w = tmx.width * tmx.tileWidth;
     var h = tmx.height * tmx.tileHeight;
-    var spr = _back;
-    spr.makeGraphic(w, h, FlxColor.BLACK);
+    _back.makeGraphic(w, h, FlxColor.BLACK);
 
     var pt = new Point();
     var rect = new Rectangle();
@@ -430,9 +433,13 @@ class EventScript extends FlxSpriteGroup {
           }
           rect = tileset.toRectangle(v, rect);
           var bmp = tileset.bmp;
-          spr.pixels.copyPixels(bmp, rect, pt, true);
+          _back.pixels.copyPixels(bmp, rect, pt, true);
         }
       });
     }
+
+    // 描画内容を反映
+    _back.dirty = true;
+    _back.updateFrameData();
   }
 }

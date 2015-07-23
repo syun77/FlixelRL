@@ -72,8 +72,8 @@ FADE_OUT,black
 NPC_DESTROY_ALL
 
 // プレイヤー移動
-NPC_CREATE,0,player,13,7,up
-NPC_MOVE,0,up,4
+NPC_CREATE,0,player,13,10,up
+NPC_MOVE,0,up,7
 NPC_DIR,0,left
 NPC_WAIT,0,1
 NPC_DIR,0,right
