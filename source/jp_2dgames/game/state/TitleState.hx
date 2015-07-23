@@ -1,10 +1,20 @@
 package jp_2dgames.game.state;
-import flixel.ui.FlxButton;
-import flixel.addons.weapon.FlxBullet;
-import jp_2dgames.game.util.Key;
+import flixel.addons.ui.FlxButtonPlus;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
+
+class MyButton extends FlxButtonPlus {
+
+  public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void) {
+    var w = 200; // ボタンの幅
+    var h = 40;  // ボタンの高さ
+    var s = 20;  // フォントのサイズ
+    super(X, Y, OnClick, Text, w, h);
+    textNormal.size = s;
+    textHighlight.size = s;
+  }
+}
 
 /**
  * タイトル画面
@@ -25,11 +35,11 @@ class TitleState extends FlxState{
 
     var px = FlxG.width/2 - 100;
     var py = 200;
-    this.add(new FlxButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
+    this.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
     py += 64;
-    this.add(new FlxButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+    this.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
     py += 64;
-    this.add(new FlxButton(px, py, "ENDING", function(){ FlxG.switchState(new EndingState()); }));
+    this.add(new MyButton(px, py, "ENDING", function(){ FlxG.switchState(new EndingState()); }));
   }
 
   /**
@@ -45,9 +55,10 @@ class TitleState extends FlxState{
   override public function update():Void {
     super.update();
 
-    if(Key.press.A) {
-      // メインゲーム画面に進む
-      FlxG.switchState(new PlayInitState());
+  #if debug
+    if(FlxG.keys.justPressed.ESCAPE) {
+      throw "Terminaite.";
     }
+  #end
   }
 }
