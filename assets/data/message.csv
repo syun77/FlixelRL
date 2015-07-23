@@ -48,7 +48,7 @@ int,str,str
 46,アイテム所持上限が<val1>増えた（最大<val2>）,blue
 47,武器を強化して<val1>になった,blue
 48,装備を強化して<val1>になった,blue
-49,ダミー,white
+49,<val1>とHPを交換した,blue
 50,ダミー,white
 51,ダミー,white
 52,ダミー,white

@@ -550,12 +550,13 @@ class ItemUtil {
 
       case "hpswap":
         // HP交換
-        var self_hp  = actor.params.hp;
-        var other_hp = useActor.params.hp;
-        useActor.params.hp = self_hp;
-        actor.params.hp = other_hp;
+        var self_hp  = useActor.params.hp;
+        var other_hp = actor.params.hp;
+        actor.params.hp    = self_hp;
+        useActor.params.hp = other_hp;
         useActor.trancateHp();
         actor.trancateHp();
+        Message.push2(Msg.HP_SWAP, [actor.name]);
     }
   }
 
