@@ -1,8 +1,8 @@
 package jp_2dgames.game.event;
 
+import haxe.ds.ArraySort;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-import flixel.util.FlxColorUtil;
 import jp_2dgames.game.util.Key;
 import StringTools;
 import jp_2dgames.lib.CsvLoader;
@@ -72,6 +72,12 @@ class EventScript extends FlxSpriteGroup {
   private var _sprWindow:FlxSprite;
   // カーソル
   private var _sprCursor:FlxSprite;
+  // UIグループ
+  private var _ui:FlxSpriteGroup;
+  public var ui(get, never):FlxSpriteGroup;
+  private function get_ui() {
+    return _ui;
+  }
 
   // アニメーション用タイマー
   private var _tAnim:Float = 0;
@@ -104,19 +110,21 @@ class EventScript extends FlxSpriteGroup {
       _npcList.push(-1);
     }
 
+    // UIグループ作成
+    _ui = new FlxSpriteGroup();
     // メッセージウィンドウ作成
     _sprWindow = new FlxSprite(WINDOW_X, WINDOW_Y, directory + "window.png");
-    this.add(_sprWindow);
+    _ui.add(_sprWindow);
 
     // メッセージテキスト生成
     _txt = new FlxText(MSG_X, MSG_Y, FlxG.width);
     _txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-    this.add(_txt);
+    _ui.add(_txt);
 
     // カーソル生成
     _sprCursor = new FlxSprite(CURSOR_X, CURSOR_Y, directory + "cursor.png");
     _sprCursor.visible = false;
-    this.add(_sprCursor);
+    _ui.add(_sprCursor);
 
     // メッセージCSV読み込み
     _csvMessage = new CsvLoader(directory + "message.csv");
@@ -289,15 +297,15 @@ class EventScript extends FlxSpriteGroup {
   private function _NPC_DESTROY(args:Array<String>):Int {
     var id = _strToID(args[0]);
     var type = args[1];
+    var time = Std.parseFloat(args[2]);
     EventNpc.forEach(id, function(npc:EventNpc) {
-      switch(type) {
-        case "fade":
-          FlxTween.tween(npc, {alpha:0}, 1, {complete:function(tween:FlxTween) {
-            npc.kill();
-          }});
-        default:
-          npc.kill();
-      }
+      npc.requestKill(type, time);
+    });
+    return RET_CONTINUE;
+  }
+  private function _NPC_DESTROY_ALL(args:Array<String>):Int {
+    EventNpc.parent.forEachAlive(function(npc:EventNpc) {
+      npc.kill();
     });
     return RET_CONTINUE;
   }
@@ -306,6 +314,14 @@ class EventScript extends FlxSpriteGroup {
     var color = Std.parseInt(args[1]);
     EventNpc.forEach(id, function(npc:EventNpc) {
       npc.color = color;
+    });
+    return RET_CONTINUE;
+  }
+  private function _NPC_WAIT(args:Array<String>):Int {
+    var id = _strToID(args[0]);
+    var time = Std.parseFloat(args[1]);
+    EventNpc.forEach(id, function(npc:EventNpc) {
+      npc.requestWait(time);
     });
     return RET_CONTINUE;
   }
@@ -367,18 +383,20 @@ class EventScript extends FlxSpriteGroup {
 
   private function _registCommand():Void {
     _cmdTbl = [
-      "MAP_LOAD"    => _MAP_LOAD,
-      "MAP_CLEAR"   => _MAP_CLEAR,
-      "NPC_CREATE"  => _NPC_CREATE,
-      "NPC_DESTROY" => _NPC_DESTROY,
-      "NPC_COLOR"   => _NPC_COLOR,
-      "NPC_RANDOM"  => _NPC_RANDOM,
-      "NPC_DIR"     => _NPC_DIR,
-      "NPC_MOVE"    => _NPC_MOVE,
-      "MSG"         => _MSG,
-      "FADE_IN"     => _FADE_IN,
-      "FADE_OUT"    => _FADE_OUT,
-      "WAIT"        => _WAIT,
+      "MAP_LOAD"        => _MAP_LOAD,
+      "MAP_CLEAR"       => _MAP_CLEAR,
+      "NPC_CREATE"      => _NPC_CREATE,
+      "NPC_DESTROY"     => _NPC_DESTROY,
+      "NPC_DESTROY_ALL" => _NPC_DESTROY_ALL,
+      "NPC_COLOR"       => _NPC_COLOR,
+      "NPC_WAIT"        => _NPC_WAIT,
+      "NPC_RANDOM"      => _NPC_RANDOM,
+      "NPC_DIR"         => _NPC_DIR,
+      "NPC_MOVE"        => _NPC_MOVE,
+      "MSG"             => _MSG,
+      "FADE_IN"         => _FADE_IN,
+      "FADE_OUT"        => _FADE_OUT,
+      "WAIT"            => _WAIT,
     ];
   }
 

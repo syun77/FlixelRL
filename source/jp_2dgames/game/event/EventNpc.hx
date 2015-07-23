@@ -1,4 +1,6 @@
 package jp_2dgames.game.event;
+import flixel.util.FlxTimer;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxRandom;
 import flixel.FlxG;
@@ -7,10 +9,32 @@ import jp_2dgames.game.util.DirUtil;
 import flixel.group.FlxTypedGroup;
 import flixel.FlxSprite;
 
+/**
+ * NPCコマンド
+ **/
+private class _Cmd {
+  public static inline var TYPE_MOVE:Int    = 0;  // 移動する
+  public static inline var TYPE_DIR:Int     = 1;  // 向きを変える
+  public static inline var TYPE_WAIT:Int    = 2;  // 一時停止する
+  public static inline var TYPE_DESTROY:Int = 99; // 消滅する
+
+  public var type:Int = 0;         // コマンド種別
+  public var dir:Dir  = Dir.None;  // 方向
+  public var params:Array<Int>;    // 汎用パラメータ
+  public var paramStr:String = ""; // 汎用パラメータ
+  public var paramFloat:Float = 0; // 汎用パラメータ
+
+  public function new() {
+    params = new Array<Int>();
+  }
+}
+
+
 // 状態
 private enum State {
   Standby; // 待機中
   Walk;    // 移動中
+  Wait;    // 実行停止中
 }
 
 /**
@@ -92,6 +116,8 @@ class EventNpc extends FlxSprite {
   private var _bRandomWalk:Bool = false;
   // ランダム歩きタイマー
   private var _tRandomWalk:Float = 0;
+  // コマンドキュー
+  private var _cmdQueue:List<_Cmd>;
 
   // プロパティ
   // チップ座標(X)
@@ -152,6 +178,9 @@ class EventNpc extends FlxSprite {
 
     // アニメーション再生
     _changeAnim(true);
+
+    // コマンドキュー作成
+    _cmdQueue = new List<_Cmd>();
 
 //    FlxG.watch.add(this, "_state");
 //    FlxG.watch.add(this, "xchip");
@@ -215,6 +244,8 @@ class EventNpc extends FlxSprite {
           // まだ歩くかどうかチェック
           _checkRequestMove();
         }
+      case State.Wait:
+        // 何もしない
     }
   }
 
@@ -230,6 +261,21 @@ class EventNpc extends FlxSprite {
         requestWalk(DirUtil.random());
         // タイマー初期化
         _tRandomWalk = FlxRandom.floatRanged(3, 7);
+      }
+    }
+
+    if(_cmdQueue.length > 0) {
+      // キューを処理する
+      var cmd = _cmdQueue.pop();
+      switch(cmd.type) {
+        case _Cmd.TYPE_WAIT:
+          _execWait(cmd);
+        case _Cmd.TYPE_MOVE:
+          _execMove(cmd);
+        case _Cmd.TYPE_DIR:
+          _execDir(cmd);
+        case _Cmd.TYPE_DESTROY:
+          _execKill(cmd);
       }
     }
   }
@@ -253,7 +299,7 @@ class EventNpc extends FlxSprite {
       _yprev = _ynext;
       if(_type == "player") {
         // 待機アニメに戻る
-        _changeAnim(false);
+        _changeAnim(true);
       }
       return true;
     }
@@ -313,14 +359,37 @@ class EventNpc extends FlxSprite {
     animation.play(getAnimName(bStop, dir));
   }
 
+  // 一時停止
+  public function requestWait(time:Float):Void {
+
+    var cmd = new _Cmd();
+    cmd.type = _Cmd.TYPE_WAIT;
+    cmd.paramFloat = time;
+    _cmdQueue.add(cmd);
+  }
+  private function _execWait(cmd:_Cmd):Void {
+
+    _state = State.Wait;
+    new FlxTimer(cmd.paramFloat, function(t:FlxTimer) {
+      _state = State.Standby;
+    });
+  }
+
   // 指定方向を向く
-  public function requestDir(dir:Dir):Bool {
+  public function requestDir(dir:Dir):Void {
+
+    var cmd = new _Cmd();
+    cmd.type = _Cmd.TYPE_DIR;
+    cmd.dir  = dir;
+    _cmdQueue.add(cmd);
+  }
+  public function _execDir(cmd:_Cmd):Bool {
     if(_state != State.Standby) {
       // 振り向けない
       return false;
     }
-    // 向きを反映
-    _dir = dir;
+
+    _dir = cmd.dir;
     _changeAnim(true);
 
     return true;
@@ -328,6 +397,7 @@ class EventNpc extends FlxSprite {
 
   // 歩き要求
   public function requestWalk(dir:Dir):Bool {
+
     if(_state != State.Standby) {
       // 歩けない
       return false;
@@ -367,10 +437,21 @@ class EventNpc extends FlxSprite {
   }
 
   // 指定した方向に歩く
-  public function requestMove(dir:Dir, cnt:Int):Bool {
+  public function requestMove(dir:Dir, cnt:Int):Void {
+
+    var cmd = new _Cmd();
+    cmd.type = _Cmd.TYPE_MOVE;
+    cmd.dir  = dir;
+    cmd.params.push(cnt);
+    _cmdQueue.add(cmd);
+  }
+  private function _execMove(cmd:_Cmd):Bool {
     if(_state != State.Standby) {
       return false;
     }
+
+    _dir = cmd.dir;
+    var cnt = cmd.params[0];
 
     // 移動先を求める
     var pt = FlxPoint.get();
@@ -388,6 +469,27 @@ class EventNpc extends FlxSprite {
 
     // 移動要求開始
     _bRequstMove = true;
+
+    return true;
+  }
+
+  public function requestKill(type:String, time:Float):Void {
+    var cmd = new _Cmd();
+    cmd.type = _Cmd.TYPE_DESTROY;
+    cmd.paramStr = type;
+    cmd.paramFloat = time;
+
+    _cmdQueue.add(cmd);
+  }
+  private function _execKill(cmd:_Cmd):Bool {
+    switch(cmd.paramStr) {
+      case "fade":
+        FlxTween.tween(this, {alpha:0}, cmd.paramFloat, {complete:function(tween:FlxTween) {
+          kill();
+        }});
+      default:
+        kill();
+    }
 
     return true;
   }

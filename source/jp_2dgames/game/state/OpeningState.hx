@@ -31,6 +31,8 @@ class OpeningState extends FlxState {
       this.add(npc);
       EventNpc.parent.add(npc);
     }
+    // UI登録
+    this.add(_script.ui);
   }
 
   /**
@@ -50,7 +52,7 @@ class OpeningState extends FlxState {
 
     _script.proc();
     if(_script.isEnd()) {
-      FlxG.switchState(new OpeningState());
+      FlxG.switchState(new PlayInitState());
     }
 
     // デバッグ処理
