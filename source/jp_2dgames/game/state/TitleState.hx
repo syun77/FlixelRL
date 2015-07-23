@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import flixel.ui.FlxButton;
+import flixel.addons.weapon.FlxBullet;
 import jp_2dgames.game.util.Key;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -20,6 +22,14 @@ class TitleState extends FlxState{
     _txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     _txt.text = "タイトル画面";
     this.add(_txt);
+
+    var px = FlxG.width/2 - 100;
+    var py = 200;
+    this.add(new FlxButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
+    py += 64;
+    this.add(new FlxButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+    py += 64;
+    this.add(new FlxButton(px, py, "ENDING", function(){ FlxG.switchState(new EndingState()); }));
   }
 
   /**

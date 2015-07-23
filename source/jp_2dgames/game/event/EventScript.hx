@@ -109,6 +109,7 @@ class EventScript extends FlxSpriteGroup {
 
     // 背景画像作成
     _back = new FlxSprite();
+    _back.visible = false;
     this.add(_back);
 
     // NPC番号生成
@@ -121,6 +122,7 @@ class EventScript extends FlxSpriteGroup {
     _ui = new FlxSpriteGroup();
     // イベント画像
     _sprEvent = new FlxSprite();
+    _sprEvent.makeGraphic(1, 1, FlxColor.BLACK);
     _sprEvent.kill();
     _ui.add(_sprEvent);
 
@@ -294,6 +296,7 @@ class EventScript extends FlxSpriteGroup {
   // ■マップ関連
   // -------------------------------------------------
   private function _MAP_LOAD(args:Array<String>):Int {
+    _back.visible = true;
     var tmx = new TmxLoader();
     var path = _directory + args[0];
     tmx.load(path, _directory);
@@ -306,6 +309,7 @@ class EventScript extends FlxSpriteGroup {
     return RET_CONTINUE;
   }
   private function _MAP_CLEAR(args:Array<String>):Int {
+    _back.visible = true;
     var rect = new Rectangle(0, 0, _back.width, _back.height);
     _back.pixels.fillRect(rect, FlxColor.BLACK);
 

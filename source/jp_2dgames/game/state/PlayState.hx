@@ -496,10 +496,12 @@ class PlayState extends FlxState {
         }
     }
 
+#if debug
     if(_state == State.Main) {
       // デバッグ処理
       updateDebug();
     }
+#end
   }
 
   /**
