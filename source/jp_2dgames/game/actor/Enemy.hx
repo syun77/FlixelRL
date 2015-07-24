@@ -173,8 +173,8 @@ class Enemy extends Actor {
   }
 
   /**
-	 * 攻撃開始
-	 **/
+   * 攻撃開始
+   **/
   override public function beginAction():Void {
     if(_state == Actor.State.ActBegin) {
       // 攻撃アニメーション開始
@@ -287,6 +287,17 @@ class Enemy extends Actor {
     super.beginAction();
   }
 
+  /**
+   * 移動開始
+   **/
+  override public function beginMove():Void {
+    var fly = _getCsvParam("fly");
+    if(fly == "break") {
+      // 移動先の壁を壊す
+      Field.breakWall(Std.int(_xnext), Std.int(_ynext));
+    }
+    super.beginMove();
+  }
   /**
    * CSVから値を取得する
    **/
@@ -559,6 +570,9 @@ class Enemy extends Actor {
         }
       case "wall":
         // どんな壁も抜けられる
+
+      case "break":
+        // 壁破壊
 
       default:
         // 通常

@@ -1,6 +1,6 @@
 id,race,name_old,name,image,rank,hp,xp,str,vit,atk,def,fly,move,range,extra,ratio,extval,firearm,drop1,dropval1,drop2,dropval2,drop3,dropval3,detail
 int,str,str,str,str,str,int,int,int,int,int,int,str,str,str,str,int,int,int,int,int,int,int,int,int,str
-86,動物,コウモリ,コウモリ,bat,1,25,3,5,10,,,fly,,,,,,,,,,,,,飛行属性
+86,動物,コウモリ,コウモリ,bat,1,25,3,5,10,,,break,,,,,,,,,,,,,飛行属性
 111,昆虫,アント,アント,worker_ant,1,30,5,7,15,,,,stay,,,,,,,,,,,,その場から動かない
 110,昆虫,キラービー,キラービー,bee,1,5,1,3,3,,,fly,,,,,,,,,,,,,耐久力は低い。飛行属性
 137,悪魔,ナイトメア,ナイトメアLv1,nightmare,4,45,30,8,10,,,,,,,,,,203,100,204,50,1300,10,特徴なし
