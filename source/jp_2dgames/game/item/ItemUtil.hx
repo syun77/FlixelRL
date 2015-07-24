@@ -440,6 +440,11 @@ class ItemUtil {
       case IType.Orb:
         // オーブ
         switch(item.id) {
+          case ItemConst.ORB2:
+            // 青オーブ
+            // 次のフロアへワープ
+            actor.warp(-1, -1);
+            actor.visible = false;
           case ItemConst.ORB4:
             // 緑オーブ
             actor.changeBadStatus(BadStatus.Star);
