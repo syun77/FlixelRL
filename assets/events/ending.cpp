@@ -131,11 +131,11 @@ FADE_IN,black
 MSG,30
 MSG,31
 MSG,32
-// TODO:女の子を画像を作る
-// MSG,33
-// IMAGE,"end.png"
-// MSG,34
-// MSG,35
-// MSG,36
+// 女の子を画像表示
+MSG,33
+IMAGE,ending.png
+MSG,34
+MSG,35
+MSG,36
 FADE_OUT,white
 // スタッフロールへ
