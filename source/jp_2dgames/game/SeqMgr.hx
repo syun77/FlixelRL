@@ -41,6 +41,7 @@ private enum State {
   TurnEnd;        // ターン終了
   NextFloor;      // 次のフロアに進むかどうか
   NextFloorWait;  // 次のフロアに進む（完了待ち）
+  NextFloorWarp;  // 次のフロアへワープ
   ShopOpen;       // ショップメニューを開く
   ShopRoot;       // ショップルートメニュー
   ShopSell;       // ショップ(売却)
@@ -115,6 +116,7 @@ class SeqMgr {
       case State.NextFloor:
         help = GuiStatus.HELP_DIALOG_YN;
       case State.NextFloorWait:
+      case State.NextFloorWarp:
       case State.ShopOpen:
         help = GuiStatus.HELP_DIALOG_YN;
       case State.ShopRoot:
@@ -346,7 +348,14 @@ class SeqMgr {
           // 経験値獲得＆レベルアップ
           _player.addExp(ExpMgr.get());
         }
-        _change(State.EnemyRequestAI);
+
+        if(_player.xchip == -1 && _player.ychip == -1) {
+          // 次のフロアへワープ
+          _change(State.NextFloorWarp);
+        }
+        else {
+          _change(State.EnemyRequestAI);
+        }
 
       case State.EnemyRequestAI:
         // 敵に行動を要求する
@@ -480,6 +489,17 @@ class SeqMgr {
       case State.NextFloorWait:
         // ■次のフロアに進む（完了待ち）
         // 何もしない
+
+      case State.NextFloorWarp:
+        // ■次のフロアへワープ
+        // 次のフロアに進む
+        FlxG.sound.play("foot");
+        FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function() {
+          // フェードが完了したら次のフロアへ進む
+          _nextFloor();
+          FlxG.switchState(new PlayState());
+        });
+        _change(State.NextFloorWait);
 
       case State.ShopOpen:
         // ■ショップメニュー表示

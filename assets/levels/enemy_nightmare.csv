@@ -1,10 +1,10 @@
 id,enemy_id,turn,add,skill
 int,int,int,int,str
 1,137,30,10,auto_recover
-2,141,150,10,unknown
-3,142,160,10,weapon_break
-4,143,165,10,wand
-5,144,170,10,ring
+2,141,200,10,unknown
+3,142,200,10,weapon_break
+4,143,200,10,wand
+5,144,200,10,ring
 6,145,50,10,attack
 7,146,120,10,potion
 8,147,140,10,scroll
