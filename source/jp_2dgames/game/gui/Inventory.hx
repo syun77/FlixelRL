@@ -602,7 +602,6 @@ class Inventory extends FlxGroup {
 
       // 足下にあるアイテムを取得する
       var feet = DropItem.getFromPosition(_player.xchip, _player.ychip);
-      trace(feet);
       if(feet != null && feet.id != ItemConst.MONEY) {
         // 足下にアイテムがある
         _feetItem = [feet];
