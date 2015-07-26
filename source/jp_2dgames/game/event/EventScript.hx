@@ -61,6 +61,12 @@ class EventScript extends FlxSpriteGroup {
   private var _bCommentBlock:Bool = false;
   // コマンドテーブル
   private var _cmdTbl:Map<String,Array<String>->Int>;
+  // IFジャンプフラグ
+  private var _bJumpLabel:Bool = false;
+  // ジャンプするラベル
+  private var _jumpLabel:String = "";
+
+  // ■リソース
   // 背景
   private var _back:FlxSprite;
   // NPC番号
@@ -222,11 +228,22 @@ class EventScript extends FlxSpriteGroup {
     }
 //    trace(line);
 
-    // コマンド実行
+    // コマンド取り出し
     var data = line.split(",");
     if(_cmdTbl.exists(data[0]) == false) {
       throw 'Error: Not found command. ${data[0]}';
     }
+
+    // ラベルジャンプチェック
+    if(_bJumpLabel) {
+      // ラベルジャンプ中
+      if(data[0] != "LABEL") {
+        // ラベルコマンド以外は実行しない
+        return false;
+      }
+    }
+
+    // コマンド実行
     var ret = _cmdTbl.get(data[0])(data.slice(1));
     switch(ret) {
       case RET_CONTINUE:
@@ -474,6 +491,29 @@ class EventScript extends FlxSpriteGroup {
     return RET_WAIT;
   }
 
+  // If文
+  private function _BIT_CHK(args:Array<String>):Int {
+    var idx = Std.parseInt(args[0]);
+    var label = args[1];
+    if(Global.bitChk(idx)) {
+      // ラベルジャンプ実行
+      _bJumpLabel= true;
+      _jumpLabel = label;
+    }
+    return RET_CONTINUE;
+  }
+  // ラベル定義
+  private function _LABEL(args:Array<String>):Int {
+    var label = args[0];
+    if(_bJumpLabel) {
+      if(label == _jumpLabel) {
+        // ラベルが一致したのでジャンプ終了
+        _bJumpLabel = false;
+      }
+    }
+    return RET_CONTINUE;
+  }
+
   /**
    * コマンドの登録
    **/
@@ -498,6 +538,8 @@ class EventScript extends FlxSpriteGroup {
       "BGM_OFF"         => _BGM_OFF,
       "SE"              => _SE,
       "WAIT"            => _WAIT,
+      "BIT_CHK"         => _BIT_CHK,
+      "LABEL"           => _LABEL,
     ];
   }
 

@@ -1,6 +1,8 @@
 // ネコを4匹集めた
+BIT_CHK,0,NORMAL
 MSG,18
 MSG,19
+LABEL,NORMAL
 MSG,20
 SE,foot
 

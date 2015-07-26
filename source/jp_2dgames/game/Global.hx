@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.FlxG;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxRandom;
@@ -24,6 +25,8 @@ class Global {
   private static inline var MONEY_FIRST:Int = 300;
   // ショップ出現開始フロア数
   private static inline var SHOP_APPEAR_FIRST:Int = 3;
+  // フラグの最大数
+  public static inline var BIT_MAX:Int = 32;
 
   /**
    * 初期化
@@ -42,6 +45,7 @@ class Global {
     _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareAvoid = 0;
     _nightmareDefeat = false;
+    _bitsInit();
   }
 
   // フロア数
@@ -287,5 +291,41 @@ class Global {
   }
   public static function resetShopAppearCount():Void {
     _shopAppearCount = 0;
+  }
+
+  // ビットフラグ
+  private static var _bits:Array<Bool> = null;
+  private static function _bitsInit():Void {
+    _bits = [for(i in 0...BIT_MAX) false];
+  }
+  public static function bitOn(idx:Int):Void {
+    if(_bits == null) {
+      return;
+    }
+    if(idx < 0 || BIT_MAX <= idx) {
+      FlxG.log.warn('Invalid bit idx=${idx}');
+      return;
+    }
+    _bits[idx] = true;
+  }
+  public static function bitOff(idx:Int):Void {
+    if(_bits == null) {
+      return;
+    }
+    if(idx < 0 || BIT_MAX <= idx) {
+      FlxG.log.warn('Invalid bit idx=${idx}');
+      return;
+    }
+    _bits[idx] = false;
+  }
+  public static function bitChk(idx:Int):Bool {
+    if(_bits == null) {
+      return false;
+    }
+    if(idx < 0 || BIT_MAX <= idx) {
+      FlxG.log.warn('Invalid bit idx=${idx}');
+      return false;
+    }
+    return _bits[idx];
   }
 }

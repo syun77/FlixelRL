@@ -35,6 +35,7 @@ private class _Global {
   public var nightmareDefeat:Bool = false;
   public var bgmnow:String        = "";
   public var bgmprev:String       = "";
+  public var bits:Array<Bool>     = new Array<Bool>();
   public function new() {}
   // セーブ
   public function save() {
@@ -50,6 +51,9 @@ private class _Global {
     nightmareDefeat = Global.isNightmareDefeat();
     bgmnow          = Snd.getBgmNow();
     bgmprev         = Snd.getBgmPrev();
+    for(i in 0...Global.BIT_MAX) {
+      bits.push(Global.bitChk(i));
+    }
   }
   // ロード
   public function load(data:Dynamic) {
@@ -65,6 +69,17 @@ private class _Global {
     Global.setNightmareDefeat(data.nightmareDefeat);
     Snd.setBgmNow(data.bgmprev);
     Snd.playMusic(data.bgmnow);
+    var idx = 0;
+    var bits:Array<Bool> = data.bits;
+    for(b in bits) {
+      if(b) {
+        Global.bitOn(idx);
+      }
+      else {
+        Global.bitOff(idx);
+      }
+      idx++;
+    }
   }
 }
 
