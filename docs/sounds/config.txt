@@ -17,3 +17,4 @@
 - levelup: levelup
 - badstatus: badstatus
 - warp: warp
+- error: error

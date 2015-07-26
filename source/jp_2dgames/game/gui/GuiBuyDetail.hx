@@ -275,6 +275,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
               FlxG.state.remove(this);
             }
           }
+          else {
+            // 購入できない
+            Snd.playSe("error", true);
+          }
         }
         else if(Key.press.B) {
           // キャンセル
