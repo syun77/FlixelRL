@@ -51,7 +51,10 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
    * 命中処理
    **/
   public static function hitTarget(target:Actor, item:ItemData):Void {
-    var val = Calc.damageItem(target, item, null);
+    var val    = Calc.damageItem(target, item, null);
+    var extra  = ItemUtil.getExtra(item.id);
+    var extval = ItemUtil.getExtVal(item.id);
+    trace(extra);
     if(target.damage(val)) {
       // 目標を倒した
       Message.push2(Msg.ENEMY_DEFEAT, [target.name]);
@@ -61,6 +64,10 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
       ExpMgr.add(target.params.xp);
       // エフェクト再生
       Particle.start(PType.Ring, target.x, target.y, FlxColor.YELLOW);
+    }
+    else if(extra != "") {
+      // 特殊効果あり
+      ItemUtil.useExtra(target, extra, extval, null);
     }
   }
 }
