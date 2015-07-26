@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.util.MyColor;
 import jp_2dgames.game.util.Key;
 import flixel.util.FlxAngle;
@@ -264,6 +265,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
             delItem(_nCursor);
             // メッセージ表示
             Message.push2(Msg.SHOP_BUY, [name, price]);
+            Snd.playSe("coin", true);
 
             if(_itemList.length <= 0) {
               // すべて購入したので閉じる
