@@ -287,6 +287,8 @@ class PlayState extends FlxState {
     for(i in 0...MagicShot.parent.maxSize) {
       var ms = new MagicShot();
       MagicShot.parent.add(ms);
+      // トレイルエフェクト登録
+      this.add(ms.trail);
     }
     this.add(MagicShot.parent);
 

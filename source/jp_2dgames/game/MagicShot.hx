@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import flixel.addons.effects.FlxTrail;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.item.ItemUtil.IType;
@@ -57,6 +58,12 @@ class MagicShot extends FlxSprite {
   public function setEndCallback(func:Void->Void):Void {
     _cbEnd = func;
   }
+  // トレイルエフェクト
+  private var _trail:FlxTrail;
+  public var trail(get, never):FlxTrail;
+  private function get_trail() {
+    return _trail;
+  }
 
   /**
    * コンストラクタ
@@ -83,6 +90,9 @@ class MagicShot extends FlxSprite {
 
     // コールバック関数初期化
     _cbEnd = null;
+
+    // トレイルエフェクト作成
+    _trail = new FlxTrail(this, null, 3, 1);
 
     // いったん消す
     kill();
@@ -134,6 +144,10 @@ class MagicShot extends FlxSprite {
         velocity.y = v.y * speed;
         v.put();
     }
+
+    // トレイルエフェクト初期化
+    _trail.revive();
+    _trail.resetTrail();
   }
 
   /**
@@ -144,6 +158,7 @@ class MagicShot extends FlxSprite {
       _cbEnd();
     }
 
+    _trail.kill();
     super.kill();
   }
 
