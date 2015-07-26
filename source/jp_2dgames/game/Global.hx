@@ -27,6 +27,8 @@ class Global {
   private static inline var SHOP_APPEAR_FIRST:Int = 3;
   // フラグの最大数
   public static inline var BIT_MAX:Int = 32;
+  // フロアの最大数
+  public static inline var FLOOR_MAX:Int = 30;
 
   /**
    * 初期化

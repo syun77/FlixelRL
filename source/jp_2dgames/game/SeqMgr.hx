@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.state.EndingState;
 import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.state.PlayState;
@@ -474,7 +475,16 @@ class SeqMgr {
             FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function() {
               // フェードが完了したら次のフロアへ進む
               _nextFloor();
-              FlxG.switchState(new PlayState());
+              if(Global.getFloor() >  Global.FLOOR_MAX) {
+                // ゲームクリア
+                // 全踏破フラグを立てる
+                Global.bitOn(0);
+                FlxG.switchState(new EndingState());
+              }
+              else {
+                // 次のフロアに進む
+                FlxG.switchState(new PlayState());
+              }
             });
             _change(State.NextFloorWait);
           }
