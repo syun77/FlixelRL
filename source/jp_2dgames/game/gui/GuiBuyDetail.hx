@@ -41,6 +41,10 @@ class GuiBuyDetail extends FlxSpriteGroup {
   private static inline var ITEMDETAIL_X = BG_WIDTH + 16;
   private static inline var ITEMDETAIL_Y = 0;
 
+  // 詳細の座標
+  private static inline var DETAIL_EQUIP_X = BG_WIDTH + 16;
+  private static inline var DETAIL_EQUIP_Y = ITEMDETAIL_Y - 108;
+
   // インスタンス
   private static var _instance:GuiBuyDetail = null;
 
@@ -64,7 +68,11 @@ class GuiBuyDetail extends FlxSpriteGroup {
   // 状態
   private var _state:State = State.Main;
 
-  private var _itemDetail:GuiItemDetail;
+  // アイテム詳細
+  private var _detailItem:GuiItemDetail;
+
+  // ステータス詳細
+  private var _detailEquip:GuiStatusDetail;
 
   /**
    * 閉じたかどうか
@@ -97,7 +105,7 @@ class GuiBuyDetail extends FlxSpriteGroup {
       return aKey - bKey;
     });
     _nCursor = 0;
-    _itemDetail.show(_itemList[_nCursor]);
+    _detailItem.show(_itemList[_nCursor]);
     _updateText();
     _updateCursor();
   }
@@ -188,8 +196,12 @@ class GuiBuyDetail extends FlxSpriteGroup {
     _nCursor = 0;
 
     // アイテム詳細
-    _itemDetail = new GuiItemDetail(ITEMDETAIL_X, ITEMDETAIL_Y);
-    this.add(_itemDetail);
+    _detailItem = new GuiItemDetail(ITEMDETAIL_X, ITEMDETAIL_Y);
+    this.add(_detailItem);
+
+    // 詳細ステータス
+    _detailEquip = new GuiStatusDetail(DETAIL_EQUIP_X, DETAIL_EQUIP_Y);
+    this.add(_detailEquip);
   }
 
   /**
@@ -279,7 +291,8 @@ class GuiBuyDetail extends FlxSpriteGroup {
     _cursor.alpha = 0.3 + 0.1 * Math.sin(_tCursor * FlxAngle.TO_RAD);
     var item = _itemList[_nCursor];
     if(item != null) {
-      _itemDetail.setSelectedItem(item);
+      _detailItem.setSelectedItem(item);
+      _detailEquip.setSelectedItem(item);
     }
   }
 
