@@ -348,8 +348,13 @@ class Actor extends FlxSprite {
   private function get_badstatus() {
     return _badstatus;
   }
-  // バッドステータスを設定する
-  public function changeBadStatus(stt:BadStatus):Bool {
+
+  /**
+   * バッドステータスを設定する
+   * @param stt 変化するステータス
+   * @param bSilent 変化してもメッセージやSEを再生しない
+   **/
+  public function changeBadStatus(stt:BadStatus, bSilent:Bool=false):Bool {
 
     if(_badstatus == BadStatus.Star) {
       if(_params.badstatus_turn > 0) {
@@ -410,7 +415,7 @@ class Actor extends FlxSprite {
         }
       case BadStatus.None:
     }
-    if(msgid > 0) {
+    if(msgid > 0 && bSilent == false) {
       // バッドステータスになった
       Message.push2(msgid, [name]);
       Snd.playSe("badstatus", true);

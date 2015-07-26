@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.util.DirUtil;
@@ -142,6 +143,19 @@ class Generator {
   }
 
   /**
+   * 出現した敵を眠り状態にするかどうか
+   **/
+  public static function checkEnemySleep(enemy:Enemy):Bool {
+    // 遠くに出現した敵ほど眠りやすくなる
+    var player = cast(FlxG.state, PlayState).player;
+    var dx = player.xchip - enemy.xchip;
+    var dy = player.ychip - enemy.ychip;
+    var ratio:Int = 100;
+    ratio -= (dx*10) + (dy*10);
+    return FlxRandom.chanceRoll(ratio);
+  }
+
+  /**
    * フィールド情報からアイテムや敵を自動配置
    **/
   public static function exec(csv:Csv, layer:Layer2D):Void {
@@ -153,13 +167,22 @@ class Generator {
       switch(v) {
         case Field.ENEMY:
           // 敵を生成
+          // 出現演出を抑制
+          Enemy.bEffectStart = false;
           var eid = gEnemy.generate();
           if(eid > 0) {
             var e:Enemy = Enemy.parent.recycle();
             var params = new Params();
             params.id = eid;
             e.init(i, j, DirUtil.random(), params, true);
+            if(checkEnemySleep(e)) {
+              // 眠り状態にする
+              e.changeBadStatus(BadStatus.Sleep, true);
+            }
           }
+          // 出現演出を有効化
+          Enemy.bEffectStart = true;
+
         case Field.ITEM:
           // アイテムを生成
           var itemid = gItem.generate();

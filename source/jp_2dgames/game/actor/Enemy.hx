@@ -47,6 +47,8 @@ class Enemy extends Actor {
   public static var target:Player = null;
   // 敵パラメータ
   public static var csv:CsvLoader = null;
+  // 出現演出を抑制するかどうか
+  public static var bEffectStart:Bool = false;
 
   /**
    * 敵IDを指定して敵の名前を取得する
@@ -353,9 +355,11 @@ class Enemy extends Actor {
     // アニメーション変更
     _changeAnime();
 
-    // 出現演出
-    ParticleSmoke.start("enemy", x, y+height/4);
-    Snd.playSe("enemy", true);
+    if(bEffectStart) {
+      // 出現演出
+      ParticleSmoke.start("enemy", x, y+height/4);
+      Snd.playSe("enemy", true);
+    }
 
     // ナイトメアかどうかをチェック
     if(NightmareMgr.getEnemyID() == params.id) {
