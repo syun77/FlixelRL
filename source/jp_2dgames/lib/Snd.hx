@@ -55,7 +55,7 @@ class Snd {
   }
 
 
-  public static function playSe(key:String, bOneShot:Bool = false, tWait:Float = 0.1):FlxSound {
+  public static function playSe(key:String, bOneShot:Bool = false, tWait:Float = 0.01):FlxSound {
 
     if(bOneShot) {
 

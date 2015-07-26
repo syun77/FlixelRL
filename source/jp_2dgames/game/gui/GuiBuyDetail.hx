@@ -240,12 +240,14 @@ class GuiBuyDetail extends FlxSpriteGroup {
           if(_nCursor < 0) {
             _nCursor = _itemList.length - 1;
           }
+          Snd.playSe("pi", true);
         }
         else if(Key.press.DOWN) {
           _nCursor++;
           if(_nCursor >= _itemList.length) {
             _nCursor = 0;
           }
+          Snd.playSe("pi", true);
         }
 
         // カーソル更新
