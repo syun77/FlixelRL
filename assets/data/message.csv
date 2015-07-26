@@ -49,7 +49,7 @@ int,str,str
 47,武器を強化して<val1>になった,blue
 48,装備を強化して<val1>になった,blue
 49,<val1>とHPを交換した,blue
-50,ダミー,white
+50,<val1>を手に入れた,green
 51,ダミー,white
 52,ダミー,white
 53,ダミー,white

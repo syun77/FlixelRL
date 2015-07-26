@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
-import jp_2dgames.game.item.ItemData.ItemExtraParam;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.gui.Message;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.DropItem;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.item.ItemConst;
@@ -177,6 +179,9 @@ class Npc extends Actor {
     else {
       // オーブ獲得
       Inventory.instance.addItem(itemid, param);
+      var item = new ItemData(itemid, param);
+      var name = ItemUtil.getName(item);
+      Message.push2(Msg.ITEM_GET, [name]);
     }
 
     return bOrb;

@@ -64,6 +64,7 @@ class Msg {
   public static inline var WEAPON_ADD:Int = 47; // 武器を強化
   public static inline var ARMOR_ADD:Int = 48; // 防具を強化
   public static inline var HP_SWAP:Int = 49; // HPを交換
+  public static inline var ITEM_GET:Int = 50; // アイテム獲得
 
 }
 
