@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
 import jp_2dgames.game.actor.Enemy;
@@ -388,6 +389,7 @@ class ItemUtil {
             if(addval > 0) {
               // 増えた
               var max = Inventory.instance.getItemMax();
+              Snd.playSe("recover");
               Message.push2(Msg.ITEM_LIMIT_ADD, [addval, max]);
             }
             else {

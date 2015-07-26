@@ -1,4 +1,6 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.lib.Snd;
+import flixel.FlxG;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.gui.Message;
 import jp_2dgames.game.item.ItemData;
@@ -181,6 +183,8 @@ class Npc extends Actor {
       Inventory.instance.addItem(itemid, param);
       var item = new ItemData(itemid, param);
       var name = ItemUtil.getName(item);
+      FlxG.camera.flash();
+      Snd.playSe("levelup");
       Message.push2(Msg.ITEM_GET, [name]);
     }
 
