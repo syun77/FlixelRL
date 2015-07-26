@@ -590,6 +590,7 @@ class PlayState extends FlxState {
           }
           else {
             params.condition = FlxRandom.intRanged(5, 15);
+            params.value = FlxRandom.intRanged(-1, 5);
             DropItem.add(i, j, itemid, params);
           }
         }
