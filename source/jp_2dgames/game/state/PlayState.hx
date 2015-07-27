@@ -485,6 +485,9 @@ class PlayState extends FlxState {
             _timer = TIMER_GAMEOVER;
             _state = State.GameoverWait;
 
+            // セーブデータを消す
+            Save.erase();
+
             // ゲームオーバーの表示
             var spr = new FlxSprite(0, 240-32).makeGraphic(640, 64, FlxColor.BLACK);
             spr.alpha = 0.5;
@@ -511,8 +514,8 @@ class PlayState extends FlxState {
 
       case State.Gameover:
         if(Key.press.A) {
-          // ゲームデータを初期化
-          FlxG.switchState(new PlayInitState());
+          // タイトル画面に戻る
+          FlxG.switchState(new TitleState());
         }
     }
 

@@ -37,15 +37,23 @@ class TitleState extends FlxState{
     var py = 128;
     this.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
     py += 64;
-    this.add(new MyButton(px, py, "CONTINUE", function() {
+    var btnContinue = new MyButton(px, py, "CONTINUE", function() {
       // セーブデータから読み込み
       Global.SetLoadGame(true);
       FlxG.switchState(new PlayState());
-    }));
-    py += 64;
+    });
+    if(Save.isContinue()) {
+      py += 64;
+      this.add(btnContinue);
+    }
     this.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
     py += 64;
     this.add(new MyButton(px, py, "ENDING", function(){ FlxG.switchState(new EndingState()); }));
+    py += 64;
+    this.add(new MyButton(px, py, "RESET", function(){
+      Save.erase();
+      btnContinue.kill();
+    }));
   }
 
   /**

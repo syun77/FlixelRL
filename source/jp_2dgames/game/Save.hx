@@ -482,13 +482,38 @@ class Save {
       s.load(type, data);
     }
     else {
-      if(saveutil.data != null && saveutil.data.playdata != null) {
+      if(isContinue()) {
         // ロード実行
         var data = Json.parse(saveutil.data.playdata);
         var s = new SaveData();
         s.load(type, data);
       }
     }
+  }
 
+  /**
+   * セーブデータを消去する
+   **/
+  public static function erase():Void {
+    var saveutil = new FlxSave();
+    saveutil.bind("SAVEDATA");
+    saveutil.erase();
+  }
+
+  /**
+   * コンティニューを選べるかどうか
+   **/
+  public static function isContinue():Bool {
+
+    var saveutil = new FlxSave();
+    saveutil.bind("SAVEDATA");
+    if(saveutil.data == null) {
+      return false;
+    }
+    if(saveutil.data.playdata == null) {
+      return false;
+    }
+
+    return true;
   }
 }
