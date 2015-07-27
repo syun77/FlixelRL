@@ -34,8 +34,14 @@ class TitleState extends FlxState{
     this.add(_txt);
 
     var px = FlxG.width/2 - 100;
-    var py = 200;
+    var py = 128;
     this.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
+    py += 64;
+    this.add(new MyButton(px, py, "CONTINUE", function() {
+      // セーブデータから読み込み
+      Global.SetLoadGame(true);
+      FlxG.switchState(new PlayState());
+    }));
     py += 64;
     this.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
     py += 64;

@@ -34,6 +34,7 @@ class Global {
    * 初期化
    **/
   public static function init():Void {
+    _bLoadGame = false;
     _floor = FLOOR_FIRST;
     _mapid = 0;
     _money = MONEY_FIRST;
@@ -48,6 +49,15 @@ class Global {
     _nightmareAvoid = 0;
     _nightmareDefeat = false;
     _bitsInit();
+  }
+
+  // セーブデータをロードしてゲームを開始する
+  private static var _bLoadGame:Bool = false;
+  public static function SetLoadGame(b:Bool):Void {
+    _bLoadGame = b;
+  }
+  public static function isLoadGame():Bool {
+    return _bLoadGame;
   }
 
   // フロア数

@@ -3,6 +3,8 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import flixel.util.FlxSave;
+import jp_2dgames.game.Save.LoadType;
 import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.lib.Snd;
@@ -18,6 +20,14 @@ import jp_2dgames.lib.Layer2D;
 import jp_2dgames.game.util.DirUtil.Dir;
 import flixel.FlxG;
 import haxe.Json;
+
+/**
+ * ロード種別
+ **/
+enum LoadType {
+  All;  // すべてロードする
+  Glob; // グローバルデータのみ
+}
 
 /**
  * グローバルデータ
@@ -205,7 +215,10 @@ private class _Enemies {
     for(e2 in arr) {
       var e:Enemy = enemies.recycle();
       var dir = DirUtil.fromString(e2.dir);
+      // エフェクト無効
+      Enemy.bEffectStart = false;
       e.init(e2.x, e2.y, dir, e2.params);
+      Enemy.bEffectStart = true;
     }
   }
 }
@@ -379,15 +392,23 @@ private class SaveData {
   }
 
   // ロード
-  public function load(data:Dynamic):Void {
-    global.load(data.global);
-    player.load(data.player);
-    inventory.load(data.inventory);
-    shop.load(data.shop);
-    enemies.load(data.enemies);
-    items.load(data.items);
-    npcs.load(data.npcs);
-    map.load(data.map);
+  public function load(type:LoadType, data:Dynamic):Void {
+    switch(type) {
+      case LoadType.All:
+        // すべてのデータをロードする
+        global.load(data.global);
+        player.load(data.player);
+        inventory.load(data.inventory);
+        shop.load(data.shop);
+        enemies.load(data.enemies);
+        items.load(data.items);
+        npcs.load(data.npcs);
+        map.load(data.map);
+
+      case LoadType.Glob:
+        // グローバルデータのみロードする
+        global.load(data.global);
+    }
   }
 }
 
@@ -404,31 +425,58 @@ class Save {
   /**
    * セーブする
    **/
-  public static function save():Void {
+  public static function save(bShowLog:Bool):Void {
 
     var data = new SaveData();
     data.save();
 
     var str = Json.stringify(data);
-    #if neko
-		sys.io.File.saveContent(PATH_SAVE, str);
-		trace("save -------------------");
-		trace(data);
+
+    var saveutil = new FlxSave();
+    saveutil.bind("SAVEDATA");
+    saveutil.data.playdata = str;
+    saveutil.flush();
+
+#if neko
+    sys.io.File.saveContent(PATH_SAVE, str);
+    if(bShowLog) {
+      trace("save -------------------");
+      trace(data);
+    }
 #end
   }
 
   /**
 	 * ロードする
+	 * @param type ロード種別
+	 * @param bFromText テキストから読み込む
+	 * @param bShowLog ログを表示する
 	 **/
-  public static function load():Void {
+  public static function load(type:LoadType, bFromText:Bool, bShowLog:Bool):Void {
     var str = "";
-    #if neko
-		str = sys.io.File.getContent(PATH_SAVE);
-		trace("load -------------------");
-		trace(str);
+#if neko
+    str = sys.io.File.getContent(PATH_SAVE);
+    if(bShowLog) {
+      trace("load -------------------");
+      trace(str);
+    }
 #end
-    var data = Json.parse(str);
-    var s = new SaveData();
-    s.load(data);
+    var saveutil = new FlxSave();
+    saveutil.bind("SAVEDATA");
+    if(bFromText) {
+      // テキストファイルからロードする
+      var data = Json.parse(str);
+      var s = new SaveData();
+      s.load(type, data);
+    }
+    else {
+      if(saveutil.data != null && saveutil.data.playdata != null) {
+        // ロード実行
+        var data = Json.parse(saveutil.data.playdata);
+        var s = new SaveData();
+        s.load(type, data);
+      }
+    }
+
   }
 }

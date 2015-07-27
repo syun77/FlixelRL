@@ -115,6 +115,12 @@ class PlayState extends FlxState {
   override public function create():Void {
     super.create();
 
+    if(Global.isLoadGame()) {
+      // セーブデータをロード
+      // グローバルデータのみ
+      Save.load(LoadType.Glob, false, false);
+    }
+
     // 状態を設定
     _state = State.FloorStart;
     _timer = 0;
@@ -373,6 +379,16 @@ class PlayState extends FlxState {
     // シーケンス管理
     _seq = new SeqMgr(this, _csv);
 
+    // セーブデータからロードする
+    if(Global.isLoadGame()) {
+      // ロード実行
+      Save.load(LoadType.All, false, false);
+      Global.SetLoadGame(false);
+    }
+    else {
+      Save.save(false);
+    }
+
     // デバッグ用アイテム
     _debugItem = new DropItem();
     _debugItem.alpha = 0.5;
@@ -511,10 +527,10 @@ class PlayState extends FlxState {
    **/
   private function updateDebug():Void {
 #if neko
-		if(FlxG.keys.justPressed.ESCAPE) {
-			// ESCキーで終了する
-			throw "Terminate.";
-		}
+    if(FlxG.keys.justPressed.ESCAPE) {
+      // ESCキーで終了する
+      throw "Terminate.";
+    }
 #end
 
     // ターン数を保持
@@ -522,11 +538,11 @@ class PlayState extends FlxState {
 
     if(FlxG.keys.justPressed.S) {
       // セーブ
-      Save.save();
+      Save.save(true);
     }
     if(FlxG.keys.justPressed.A) {
       // ロード
-      Save.load();
+      Save.load(LoadType.All, true, true);
     }
     if(FlxG.keys.justPressed.R) {
       // リスタート

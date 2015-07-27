@@ -474,7 +474,8 @@ class Actor extends FlxSprite {
     // ID
     _id = params.id;
     // バッドステータス設定
-    changeBadStatus(BadStatusUtil.fromString(_params.badstatus));
+    var bSilent = true;
+    changeBadStatus(BadStatusUtil.fromString(_params.badstatus), bSilent);
   }
 
   /**
