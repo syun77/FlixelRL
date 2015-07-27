@@ -64,6 +64,9 @@ class Player extends Actor {
   // 足踏みタイマー
   private var _tFoot:Int = 0;
 
+  // キーフリーになったフレーム数
+  private var _tKeyFree:Int = 0;
+
   // 攻撃力
   public var atk(get, never):Int;
   private function get_atk() {
@@ -387,6 +390,9 @@ class Player extends Actor {
       damage(v);
     }
 
+    // キーフリーのフレーム数初期化
+    _tKeyFree = 0;
+
     super.turnEnd();
   }
 
@@ -584,6 +590,11 @@ class Player extends Actor {
 
     if(_isKeyInput() == false) {
       // キー入力をしていない
+      _tKeyFree++;
+      if(_tKeyFree == 2) {
+        // 毎ターンセーブしないためにここでセーブする
+        Save.save(false);
+      }
       return;
     }
 

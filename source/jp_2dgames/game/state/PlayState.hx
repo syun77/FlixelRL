@@ -362,8 +362,10 @@ class PlayState extends FlxState {
     // ショップ購入メニュー生成
     GuiBuyDetail.create(640/2 - GuiBuyDetail.BG_WIDTH/2 - 80, FlxG.height/2 - GuiBuyDetail.BG_HEIGHT/2);
 
-    // 敵やアイテムを自動配置
-    Generator.exec(_csv, layer);
+    if(Global.isLoadGame() == false) {
+      // 敵やアイテムを自動配置
+      Generator.exec(_csv, layer);
+    }
 
     // メッセージを描画に登録
     this.add(message);
@@ -379,6 +381,17 @@ class PlayState extends FlxState {
     // シーケンス管理
     _seq = new SeqMgr(this, _csv);
 
+    // デバッグ情報設定
+    FlxG.watch.add(player, "_state");
+    FlxG.watch.add(player, "_stateprev");
+    FlxG.watch.add(_seq, "_state");
+    FlxG.watch.add(_seq, "_stateprev");
+    FlxG.watch.add(this, "_state");
+
+//    FlxG.debugger.visible = true;
+    FlxG.debugger.toggleKeys = ["ALT"];
+//    FlxG.debugger.drawDebug = true;
+
     // セーブデータからロードする
     if(Global.isLoadGame()) {
       // ロード実行
@@ -393,17 +406,6 @@ class PlayState extends FlxState {
     _debugItem = new DropItem();
     _debugItem.alpha = 0.5;
     this.add(_debugItem);
-
-    // デバッグ情報設定
-    FlxG.watch.add(player, "_state");
-    FlxG.watch.add(player, "_stateprev");
-    FlxG.watch.add(_seq, "_state");
-    FlxG.watch.add(_seq, "_stateprev");
-    FlxG.watch.add(this, "_state");
-
-    //		FlxG.debugger.visible = true;
-    FlxG.debugger.toggleKeys = ["ALT"];
-    //		FlxG.debugger.drawDebug = true;
   }
 
   /**

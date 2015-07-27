@@ -639,9 +639,6 @@ class SeqMgr {
         // キー入力に戻る
         _player.turnEnd();
 
-        // セーブ
-        Save.save(false);
-
         _change(State.KeyInput);
     }
   }

@@ -24,6 +24,11 @@ class ItemExtraParam {
     dst.value = src.value;
     dst.condition = src.condition;
   }
+
+  public function copyFromDynamic(data:Dynamic):Void {
+    value = data.value;
+    condition = data.condition;
+  }
 }
 
 /**

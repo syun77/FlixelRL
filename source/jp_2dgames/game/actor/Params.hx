@@ -19,6 +19,20 @@ class Params {
 
   public function new() {
   }
+  public function copyFromDynamic(data:Dynamic):Void {
+    id = data.id;
+    lv = data.lv;
+    exp = data.exp;
+    xp = data.xp;
+    hp = data.hp;
+    hpmax = data.hpmax;
+    str = data.str;
+    vit = data.vit;
+    food = data.food;
+    foodmax = data.foodmax;
+    badstatus = data.badstatus;
+    badstatus_turn = data.badstatus_turn;
+  }
 }
 
 /**

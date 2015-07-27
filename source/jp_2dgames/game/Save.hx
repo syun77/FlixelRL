@@ -117,7 +117,9 @@ private class _Player {
   public function load(data:Dynamic) {
     var p = cast(FlxG.state, PlayState).player;
     var dir = DirUtil.fromString(data.dir);
-    Global.initPlayer(p, data.x, data.y, dir, data.params);
+    var prms:Params = new Params();
+    prms.copyFromDynamic(data.params);
+    Global.initPlayer(p, data.x, data.y, dir, prms);
   }
 }
 
@@ -138,7 +140,9 @@ private class _Inventory {
     var array = new Array<ItemData>();
     for(idx in 0...data.array.length) {
       var item = data.array[idx];
-      var i = new ItemData(item.id, item.param);
+      var prms = new ItemExtraParam();
+      prms.copyFromDynamic(item.param);
+      var i = new ItemData(item.id, prms);
       i.isEquip = item.isEquip;
       array.push(i);
     }
@@ -164,7 +168,9 @@ private class _Shop {
     GuiBuyDetail.delItemAll();
     for(idx in 0...data.array.length) {
       var item = data.array[idx];
-      var i = new ItemData(item.id, item.param);
+      var prms = new ItemExtraParam();
+      prms.copyFromDynamic(item.param);
+      var i = new ItemData(item.id, prms);
       GuiBuyDetail.addItem(i);
     }
   }
@@ -210,14 +216,16 @@ private class _Enemies {
     // 敵を全部消す
     enemies.kill();
     enemies.revive();
-    var arr:Array<_Enemy> = data.array;
+    var arr:Array<Dynamic> = data.array;
     // 作り直し
     for(e2 in arr) {
       var e:Enemy = enemies.recycle();
       var dir = DirUtil.fromString(e2.dir);
       // エフェクト無効
       Enemy.bEffectStart = false;
-      e.init(e2.x, e2.y, dir, e2.params);
+      var prms:Params = new Params();
+      prms.copyFromDynamic(e2.params);
+      e.init(e2.x, e2.y, dir, prms);
       Enemy.bEffectStart = true;
     }
   }
@@ -266,12 +274,14 @@ private class _Items {
     // アイテムを全部消す
     items.kill();
     items.revive();
-    var arr:Array<_Item> = data.array;
+    var arr:Array<Dynamic> = data.array;
     // 作り直し
     for(i in arr) {
       var item:DropItem = items.recycle();
       var type = ItemUtil.fromString(i.type);
-      item.init(i.x, i.y, type, i.id, i.param);
+      var prm:ItemExtraParam = new ItemExtraParam();
+
+      item.init(i.x, i.y, type, i.id, prm);
     }
   }
 }
@@ -315,12 +325,14 @@ private class _NPCs {
     // NPCを全部消す
     Npc.parent.kill();
     Npc.parent.revive();
-    var arr:Array<_NPC> = data.array;
+    var arr:Array<Dynamic> = data.array;
     // 作り直し
     for(npc2 in arr) {
       var npc:Npc = Npc.parent.recycle();
       var dir = DirUtil.fromString(npc2.dir);
-      npc.init(npc2.x, npc2.y, dir, npc2.params);
+      var prms = new Params();
+      prms.copyFromDynamic(npc2.params);
+      npc.init(npc2.x, npc2.y, dir, prms);
     }
   }
 }
