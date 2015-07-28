@@ -19,6 +19,8 @@ class ExpMgr {
    **/
   public static function add(val:Int):Void {
     _val += val;
+    // スコアを増やす
+    Global.addScore(val);
   }
 
   /**
