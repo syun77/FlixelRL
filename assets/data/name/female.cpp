@@ -96,6 +96,7 @@ shina
 shion
 shigure
 shizu
+shizuka
 shinku
 shiki
 shikibu
@@ -117,6 +118,7 @@ sora
 souko
 sonomi
 sonoko
+tae
 taeko
 takumi
 tama

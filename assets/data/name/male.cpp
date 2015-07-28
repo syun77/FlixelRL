@@ -93,7 +93,6 @@ shigeo
 shigeki
 shigeya
 shigeru
-shizuka
 junichi
 jun
 syuhei
@@ -118,7 +117,6 @@ sousuke
 souta
 souto
 sora
-tae
 taka
 taku
 takumi
