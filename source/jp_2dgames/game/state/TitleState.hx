@@ -54,6 +54,8 @@ class TitleState extends FlxState{
       Save.erase();
       btnContinue.kill();
     }));
+    py += 64;
+    this.add(new MyButton(px, py, "NAME ENTRY", function(){ FlxG.switchState(new NameEntryState()); }));
   }
 
   /**
