@@ -39,8 +39,6 @@ enum StompChip {
  */
 class Player extends Actor {
 
-  // プレイヤーの名前
-  private static inline var NAME:String = "プレイヤー";
   // 1ターンの自動回復HP割合
   private static inline var AUTOHEAL_RATIO:Int = 2;
 
@@ -148,7 +146,7 @@ class Player extends Actor {
     // 初期化
     Global.initPlayer(this, X, Y, Dir.Down, null);
     // 名前を設定
-    _name = NAME;
+    _name = GameData.getName();
 
     // アニメーションを登録
     _registAnim();
