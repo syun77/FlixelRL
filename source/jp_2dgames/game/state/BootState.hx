@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import haxe.Http;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -11,6 +12,16 @@ class BootState extends FlxState {
    **/
   override public function create():Void {
     super.create();
+
+    /*
+//    var h = new Http("http://2dgames.jp/myphp/FlixelRL/post.php");
+    var h = new Http("post.php");
+    var post = "id=hoge&pass=123";
+    h.setHeader( "Content-Type", "application/x-www-form-urlencoded" );
+    h.setPostData(post);
+    h.request(true);
+    trace(h.responseData);
+    */
 
     // セーブデータのロード
     GameData.init();
