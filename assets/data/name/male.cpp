@@ -153,6 +153,7 @@ manzo
 manta
 musashi
 muneo
+meguru
 meneatsu
 murasame
 maguru

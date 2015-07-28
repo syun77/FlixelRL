@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
 
-class MyButton extends FlxButtonPlus {
+private class MyButton extends FlxButtonPlus {
 
   public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void) {
     var w = 200; // ボタンの幅
