@@ -53,7 +53,7 @@ class GuiStatus extends FlxGroup {
   private static inline var LVTEXT_X = FLOORTEXT_X + 32;
   private static inline var LVTEXT_Y = 0;
   // 所持金
-  private static inline var MONEYTEXT_X = FOODTEXT_X + 160;
+  private static inline var MONEYTEXT_X = FOODTEXT_X + 80;
   private static inline var MONEYTEXT_Y = 0;
   // HPテキスト
   private static inline var HPTEXT_X = LVTEXT_X + 64;
@@ -64,6 +64,9 @@ class GuiStatus extends FlxGroup {
   // 満腹度
   private static inline var FOODTEXT_X = HPBAR_X + 192;
   private static inline var FOODTEXT_Y = 0;
+  // スコア
+  private static inline var SCORE_X = MONEYTEXT_X + 96;
+  private static inline var SCORE_Y = 0;
   // ヘルプテキスト
   private static inline var HELP_X = 16;
   private static inline var HELP_DY = 24;
@@ -83,6 +86,7 @@ class GuiStatus extends FlxGroup {
   private var _hpBar:FlxBar;
   private var _txtFood:FlxText;
   private var _txtMoney:FlxText;
+  private var _txtScore:FlxText;
 
   // 敵情報
   private var _enemyInfo:GuiEnemy;
@@ -139,14 +143,21 @@ class GuiStatus extends FlxGroup {
     // 満腹度テキスト
     _txtFood = new FlxText(FOODTEXT_X, FOODTEXT_Y, 160);
     _txtFood.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    // Y調整
     _group.add(_txtFood);
 
     // 所持金テキスト
     _txtMoney = new FlxText(MONEYTEXT_X, MONEYTEXT_Y, 128);
-    // Y調整
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    _txtMoney.alignment = "right";
     _group.add(_txtMoney);
+
+    // スコアテキスト
+    _txtScore = new FlxText(SCORE_X, SCORE_Y, 128);
+    _txtScore.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    _txtScore.alignment = "right";
+    _group.add(_txtScore);
+
+    // 画面上のグループ登録
     this.add(_group);
 
     // ■敵情報
@@ -205,6 +216,10 @@ class GuiStatus extends FlxGroup {
     // 所持金
     var money = Global.getMoney();
     _txtMoney.text = '${money}G';
+
+    // スコア
+    var score = Global.getScore();
+    _txtScore.text = '${score}pt';
 
     // 表示アニメーション
     _groupOfsY *= 0.8;
