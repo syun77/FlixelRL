@@ -591,7 +591,7 @@ class Player extends Actor {
       _tKeyFree++;
       if(_tKeyFree == 2) {
         // 毎ターンセーブしないためにここでセーブする
-        Save.save(false);
+        Save.save(false, false);
       }
       return;
     }

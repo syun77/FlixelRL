@@ -1,6 +1,4 @@
 package jp_2dgames.game.state;
-import haxe.Json;
-import haxe.Http;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -13,24 +11,6 @@ class BootState extends FlxState {
    **/
   override public function create():Void {
     super.create();
-
-
-    /*
-    var param = Json.parse('{"score":100}');
-    trace(param);
-    var ret = flash.external.ExternalInterface.call("SendScore", param);
-    trace(ret);
-    */
-
-    /*
-//    var h = new Http("http://2dgames.jp/myphp/FlixelRL/post.php");
-    var h = new Http("post.php");
-    var post = "id=hoge&pass=123";
-    h.setHeader( "Content-Type", "application/x-www-form-urlencoded" );
-    h.setPostData(post);
-    h.request(true);
-    trace(h.responseData);
-    */
 
     // セーブデータのロード
     GameData.init();
@@ -51,8 +31,8 @@ class BootState extends FlxState {
   #if flash
     FlxG.switchState(new TitleState());
   #else
-    FlxG.switchState(new NameEntryState());
-//    FlxG.switchState(new PlayInitState());
+//    FlxG.switchState(new NameEntryState());
+    FlxG.switchState(new PlayInitState());
 //    FlxG.switchState(new TitleState());
   #end
 

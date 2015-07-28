@@ -33,6 +33,7 @@ enum LoadType {
  * グローバルデータ
  **/
 private class _Global {
+  public var score:Int            = 0;
   public var floor:Int            = 0;
   public var mapid:Int            = 0;
   public var money:Int            = 0;
@@ -49,6 +50,7 @@ private class _Global {
   public function new() {}
   // セーブ
   public function save() {
+    score           = Global.getScore();
     floor           = Global.getFloor();
     mapid           = Global.getMapID();
     money           = Global.getMoney();
@@ -67,6 +69,7 @@ private class _Global {
   }
   // ロード
   public function load(data:Dynamic) {
+    Global.setScore(data.score);
     Global.setFloor(data.floor);
     Global.setMapID(data.mapid);
     Global.setMoney(data.money);
@@ -437,18 +440,15 @@ class Save {
   /**
    * セーブする
    **/
-  public static function save(bShowLog:Bool):Void {
+  public static function save(bFromText:Bool, bShowLog:Bool):Void {
 
     var data = new SaveData();
     data.save();
 
     var str = Json.stringify(data);
 
-    var saveutil = new FlxSave();
-    saveutil.bind("SAVEDATA");
-    saveutil.data.playdata = str;
-    saveutil.flush();
-
+    if(bFromText) {
+      // テキストへセーブ
 #if neko
     sys.io.File.saveContent(PATH_SAVE, str);
     if(bShowLog) {
@@ -456,6 +456,14 @@ class Save {
       trace(data);
     }
 #end
+    }
+    else {
+      // セーブデータ領域へ書き込み
+      var saveutil = new FlxSave();
+      saveutil.bind("SAVEDATA");
+      saveutil.data.playdata = str;
+      saveutil.flush();
+    }
   }
 
   /**

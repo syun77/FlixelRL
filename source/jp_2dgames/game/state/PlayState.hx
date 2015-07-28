@@ -399,7 +399,8 @@ class PlayState extends FlxState {
       Global.SetLoadGame(false);
     }
     else {
-      Save.save(false);
+      // フロア開始時のセーブ
+      Save.save(false, false);
     }
 
     // デバッグ用アイテム
@@ -546,7 +547,7 @@ class PlayState extends FlxState {
 
     if(FlxG.keys.justPressed.S) {
       // セーブ
-      Save.save(true);
+      Save.save(true, true);
     }
     if(FlxG.keys.justPressed.A) {
       // ロード
