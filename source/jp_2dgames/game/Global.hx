@@ -35,6 +35,7 @@ class Global {
    **/
   public static function init():Void {
     _bLoadGame = false;
+    _score = 0;
     _floor = FLOOR_FIRST;
     _mapid = 0;
     _money = MONEY_FIRST;
@@ -49,6 +50,7 @@ class Global {
     _nightmareAvoid = 0;
     _nightmareDefeat = false;
     _bitsInit();
+    _bGameClear = false;
   }
 
   // セーブデータをロードしてゲームを開始する
@@ -58,6 +60,18 @@ class Global {
   }
   public static function isLoadGame():Bool {
     return _bLoadGame;
+  }
+
+  // スコア
+  private static var _score:Int = 0;
+  public static function getScore():Int {
+    return _score;
+  }
+  public static function setScore(v:Int):Void {
+    _score = v;
+  }
+  public static function addScore(v:Int):Void {
+    _score += v;
   }
 
   // フロア数
@@ -339,5 +353,14 @@ class Global {
       return false;
     }
     return _bits[idx];
+  }
+
+  // ゲームクリアフラグ
+  private static var _bGameClear = false;
+  public static function gameClear():Void {
+    _bGameClear = true;
+  }
+  public static function isGameClear():Bool {
+    return _bGameClear;
   }
 }

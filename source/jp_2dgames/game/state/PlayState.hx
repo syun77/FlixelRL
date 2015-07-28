@@ -485,6 +485,9 @@ class PlayState extends FlxState {
             _timer = TIMER_GAMEOVER;
             _state = State.GameoverWait;
 
+            // スコア送信
+            GameData.sendScore();
+
             // セーブデータを消す
             Save.erase();
 

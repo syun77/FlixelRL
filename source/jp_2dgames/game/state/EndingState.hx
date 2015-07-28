@@ -15,6 +15,9 @@ class EndingState extends FlxState{
   override public function create():Void {
     super.create();
 
+    // スコア送信
+    GameData.sendScore();
+
     // スクリプト生成
     _event = new EventMgr("assets/events/", "ending.cpp");
     this.add(_event);

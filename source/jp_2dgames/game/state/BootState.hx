@@ -1,6 +1,5 @@
 package jp_2dgames.game.state;
 import haxe.Json;
-import flash.external.ExternalInterface;
 import haxe.Http;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -14,6 +13,7 @@ class BootState extends FlxState {
    **/
   override public function create():Void {
     super.create();
+
 
     /*
     var param = Json.parse('{"score":100}');

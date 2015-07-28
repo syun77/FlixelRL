@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import flash.external.ExternalInterface;
 import jp_2dgames.game.util.NameGenerator;
 import flixel.util.FlxSave;
 
@@ -30,7 +31,6 @@ class GameData {
   public static function setName(s:String):Void {
     _name = s;
   }
-
 
   /**
    * セーブデータが存在するかどうか
@@ -79,4 +79,15 @@ class GameData {
       _name = saveutil.data.name;
     }
   }
+
+  // スコア送信
+  public static function sendScore() {
+    var user = GameData.getName();
+    var score = Global.getScore();
+    var floor = Global.getFloor();
+    var gameclear = Global.isGameClear() ? 1: 0;
+    var data = 'user_name=${user}&score=${score}&floor=${floor}&gameclear=${gameclear}';
+    flash.external.ExternalInterface.call("SendScore", data);
+  }
+
 }
