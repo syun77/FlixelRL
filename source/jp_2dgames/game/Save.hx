@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxSave;
 import jp_2dgames.game.Save.LoadType;
 import jp_2dgames.game.actor.Npc;
@@ -280,11 +281,16 @@ private class _Items {
     var arr:Array<Dynamic> = data.array;
     // 作り直し
     for(i in arr) {
-      var item:DropItem = items.recycle();
-      var type = ItemUtil.fromString(i.type);
       var prm:ItemExtraParam = new ItemExtraParam();
-
-      item.init(i.x, i.y, type, i.id, prm);
+      prm.copyFromDynamic(i.param);
+      if(i.id == ItemConst.MONEY) {
+        // お金
+        DropItem.addMoney(i.x, i.y, prm.value);
+      }
+      else {
+        // 通常アイテム
+        DropItem.add(i.x, i.y, i.id, prm);
+      }
     }
   }
 }
