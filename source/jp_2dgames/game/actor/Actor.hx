@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.util.Calc;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.util.DirUtil;
@@ -703,6 +704,8 @@ class Actor extends FlxSprite {
    **/
   public function hitItemEffect(actor:Actor, item:ItemData, bPlayer:Bool, armor:ItemData):Bool {
 
+    CauseOfDeathMgr.set(DeathType.EnemyAtk, actor.id);
+
     // 拡張パラメータ
     var extra = ItemUtil.getParamString(item.id, "extra");
     var extval = ItemUtil.getParam(item.id, "extval");
@@ -793,6 +796,7 @@ class Actor extends FlxSprite {
     if(v < 1) {
       v = 1;
     }
+    CauseOfDeathMgr.set(DeathType.Spike, 0);
     return damage(v);
   }
 

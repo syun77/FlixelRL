@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.CauseOfDeathMgr.DeathType;
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.util.Calc;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.util.DirUtil;
@@ -310,7 +312,8 @@ class Player extends Actor {
             else {
               switch(_target.getExtra()) {
                 case "reflect":
-                  // ダメージ反射
+                  // 敵のダメージ反射
+                  CauseOfDeathMgr.set(DeathType.Reflect, _target.id);
                   damage(val);
               }
             }
@@ -346,6 +349,7 @@ class Player extends Actor {
       if(v <= 0) {
         v = 1;
       }
+      CauseOfDeathMgr.set(DeathType.Hunger, 0);
       damage(v);
     }
 
@@ -386,6 +390,7 @@ class Player extends Actor {
     // 毒ダメージ
     if(badstatus == BadStatus.Poison) {
       var v = getPoisonDamage();
+      CauseOfDeathMgr.set(DeathType.Poison, 0);
       damage(v);
     }
 

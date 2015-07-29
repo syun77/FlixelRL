@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import flixel.addons.effects.FlxTrail;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.actor.Enemy;
@@ -180,6 +181,7 @@ class MagicShot extends FlxSprite {
         var dy = _target.y - y;
         if(16*16 > dx*dx + dy*dy) {
           // 衝突
+          CauseOfDeathMgr.set(DeathType.EnemyAtk, _actor.id);
           MagicShotMgr.hitTarget(_target, _item);
           kill();
           return;

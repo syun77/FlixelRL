@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.util.Calc;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.util.DirUtil;
@@ -233,6 +234,7 @@ class Enemy extends Actor {
           }
           if(checkSkill() == false) {
             // 通常攻撃
+            CauseOfDeathMgr.set(DeathType.EnemyAtk, this.id);
             var val = Calc.damage(this, target, null, Inventory.getArmorData());
             target.damage(val);
 

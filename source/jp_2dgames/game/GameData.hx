@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import flash.external.ExternalInterface;
 import jp_2dgames.game.util.NameGenerator;
 import flixel.util.FlxSave;
@@ -85,8 +86,8 @@ class GameData {
     var user = GameData.getName();
     var score = Global.getScore();
     var floor = Global.getFloor();
-    var gameclear = Global.isGameClear() ? 1: 0;
-    var data = 'user_name=${user}&score=${score}&floor=${floor}&gameclear=${gameclear}';
+    var death = CauseOfDeathMgr.getMessage();
+    var data = 'user_name=${user}&score=${score}&floor=${floor}&death=${death}';
     flash.external.ExternalInterface.call("SendScore", data);
   }
 

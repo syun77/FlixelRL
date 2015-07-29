@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxSave;
 import jp_2dgames.game.Save.LoadType;
@@ -430,6 +431,8 @@ private class SaveData {
         // グローバルデータのみロードする
         global.load(data.global);
     }
+
+    CauseOfDeathMgr.init();
   }
 }
 

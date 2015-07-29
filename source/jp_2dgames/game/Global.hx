@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import flixel.FlxG;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.item.ItemConst;
@@ -51,6 +52,7 @@ class Global {
     _nightmareDefeat = false;
     _bitsInit();
     _bGameClear = false;
+    CauseOfDeathMgr.init();
   }
 
   // セーブデータをロードしてゲームを開始する

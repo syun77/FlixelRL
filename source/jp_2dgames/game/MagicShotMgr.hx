@@ -55,7 +55,6 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
     var val    = Calc.damageItem(target, item, null);
     var extra  = ItemUtil.getExtra(item.id);
     var extval = ItemUtil.getExtVal(item.id);
-    trace(extra);
     if(target.damage(val)) {
       // 目標を倒した
       Message.push2(Msg.ENEMY_DEFEAT, [target.name]);
