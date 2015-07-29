@@ -483,6 +483,7 @@ class PlayState extends FlxState {
           case SeqMgr.RET_GAMEOVER:
             // ゲームオーバー
             Snd.playSe("gameover");
+            Snd.stopMusic();
             _timer = TIMER_GAMEOVER;
             _state = State.GameoverWait;
 

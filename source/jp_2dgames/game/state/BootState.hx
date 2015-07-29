@@ -29,7 +29,7 @@ class BootState extends FlxState {
    **/
   override public function update():Void {
   #if flash
-    FlxG.switchState(new TitleState());
+    FlxG.switchState(new NameEntryState());
   #else
 //    FlxG.switchState(new NameEntryState());
     FlxG.switchState(new PlayInitState());
