@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.util;
 
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import Math;

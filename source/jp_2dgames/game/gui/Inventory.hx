@@ -160,6 +160,21 @@ class Inventory extends FlxGroup {
     return _itemMax - prev;
   }
 
+  // スコア
+  private var _score:Int = 0;
+  public static function getScore():Int {
+    return instance._score;
+  }
+  // スコア計算
+  private function _calcScore():Void {
+    _score = 0;
+    for(item in _itemList) {
+      // 売却金額
+      var money = ItemUtil.getSell(item);
+      _score += money;
+    }
+  }
+
   // カーソル
   private var _cursor:FlxSprite;
   private var _nCursor:Int = 0;
@@ -1357,6 +1372,9 @@ class Inventory extends FlxGroup {
 
     // ページ数の更新
     _changePage();
+
+    // 売却金額更新
+    _calcScore();
   }
 
   /**

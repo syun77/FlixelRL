@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.util.CalcScore;
 import jp_2dgames.game.state.EndingState;
 import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.gimmick.Pit;
@@ -224,6 +225,9 @@ class SeqMgr {
     _enemies.forEachAlive(function(e:Enemy) e.proc());
     Npc.parent.forEachAlive(function(n:Npc) n.proc());
 
+    // スコア更新
+    CalcScore.proc();
+
     // ループフラグ
     var ret:Bool = false;
 
@@ -348,6 +352,7 @@ class SeqMgr {
         if(ExpMgr.get() > 0) {
           // 経験値獲得＆レベルアップ
           _player.addExp(ExpMgr.get());
+          ExpMgr.reset();
         }
 
         if(_player.xchip == -1 && _player.ychip == -1) {
@@ -458,6 +463,7 @@ class SeqMgr {
         if(ExpMgr.get() > 0) {
           // 経験値獲得＆レベルアップ
           _player.addExp(ExpMgr.get());
+          ExpMgr.reset();
         }
         _change(State.TurnEnd);
 
@@ -493,7 +499,6 @@ class SeqMgr {
             _change(State.KeyInput);
             // 踏みつけているチップをクリア
             _player.endStompChip();
-            _player.turnEnd();
           }
         }
       case State.NextFloorWait:
@@ -603,7 +608,7 @@ class SeqMgr {
     Pit.turnEnd();
 
     // 経験値管理
-    ExpMgr.turnEnd();
+    ExpMgr.reset();
 
     // 敵の行動終了
     _enemies.forEachAlive(function(e:Enemy) e.turnEnd());

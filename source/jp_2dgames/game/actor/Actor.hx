@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.util.Calc;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gui.InventoryUtil;

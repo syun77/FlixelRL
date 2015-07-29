@@ -8,9 +8,9 @@ class ExpMgr {
   private static var _val:Int = 0;
 
   /**
-   * ターン終了
+   * 経験値初期化
    **/
-  public static function turnEnd():Void {
+  public static function reset():Void {
     _val = 0;
   }
 
@@ -19,8 +19,6 @@ class ExpMgr {
    **/
   public static function add(val:Int):Void {
     _val += val;
-    // スコアを増やす
-    Global.addScore(val);
   }
 
   /**
