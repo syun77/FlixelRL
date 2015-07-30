@@ -1,5 +1,6 @@
 package jp_2dgames.game.util;
 
+import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.actor.Enemy;
 
 /**
@@ -19,8 +20,21 @@ enum DeathType {
  **/
 class CauseOfDeathMgr {
 
+  // メッセージ定数
+  private static inline var MSG_GAMECLEAR:Int = 1;
+  private static inline var MSG_ENEMYATK:Int  = 2;
+  private static inline var MSG_HUMGER:Int    = 3;
+  private static inline var MSG_PIT:Int       = 4;
+  private static inline var MSG_REFLECT:Int   = 5;
+  private static inline var MSG_POISON:Int    = 6;
+
   private static var _type:DeathType = DeathType.None;
   private static var _value:Int = 0;
+  private static var _csv:CsvLoader;
+
+  public static function create():Void {
+    _csv = new CsvLoader("assets/data/deathtype.csv");
+  }
 
   public static function init():Void {
     _type  = DeathType.None;
@@ -32,9 +46,14 @@ class CauseOfDeathMgr {
     _value = value;
   }
 
+  private static function _getMessage(msgid:Int, param:String=""):String {
+    var msg = _csv.getString(msgid, "msg");
+    return StringTools.replace(msg, "<val1>", param);
+  }
+
   public static function getMessage():String {
     if(Global.isGameClear()) {
-      return "ゲームクリア";
+      return _getMessage(MSG_GAMECLEAR);
     }
 
     switch(_type) {
@@ -42,22 +61,21 @@ class CauseOfDeathMgr {
         return "";
 
       case DeathType.EnemyAtk:
-        return Enemy.getNameFromID(_value) + "に倒された";
+        var name = Enemy.getNameFromID(_value);
+        return _getMessage(MSG_ENEMYATK, name);
 
       case DeathType.Hunger:
-        return "空腹で倒れた";
+        return _getMessage(MSG_HUMGER);
 
       case DeathType.Spike:
-        return "ダメージ床で力尽きた";
+        return _getMessage(MSG_PIT);
 
       case DeathType.Reflect:
-        return Enemy.getNameFromID(_value) + "のダメージ反射で倒された";
+        var name = Enemy.getNameFromID(_value);
+        return _getMessage(MSG_REFLECT, name);
 
       case DeathType.Poison:
-        return "毒のダメージで倒れた";
-
-      default:
-        return "";
+        return _getMessage(MSG_POISON);
     }
   }
 

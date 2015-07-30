@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -15,6 +16,9 @@ class BootState extends FlxState {
     // セーブデータのロード
     GameData.init();
     GameData.load();
+
+    // 死亡理由メッセージ読み込み
+    CauseOfDeathMgr.create();
   }
 
   /**
