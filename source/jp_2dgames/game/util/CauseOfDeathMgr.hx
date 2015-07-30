@@ -19,8 +19,8 @@ enum DeathType {
  **/
 class CauseOfDeathMgr {
 
-  private static var _type:DeathType;
-  private static var _value:Int;
+  private static var _type:DeathType = DeathType.None;
+  private static var _value:Int = 0;
 
   public static function init():Void {
     _type  = DeathType.None;

@@ -1,6 +1,5 @@
 package jp_2dgames.game.state;
 import flash.filters.BlurFilter;
-import flash.filters.BitmapFilter;
 import flixel.effects.FlxSpriteFilter;
 import flixel.util.FlxColor;
 import flixel.util.FlxColor;
@@ -95,13 +94,6 @@ class TitleState extends FlxState {
     }
     this.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
     py += 64;
-    this.add(new MyButton(px, py, "ENDING", function(){ FlxG.switchState(new EndingState()); }));
-    py += 64;
-    this.add(new MyButton(px, py, "RESET", function(){
-      Save.erase();
-      btnContinue.kill();
-    }));
-    py += 64;
     this.add(new MyButton(px, py, "NAME ENTRY", function(){ FlxG.switchState(new NameEntryState()); }));
 
     // ボタンを消しておく
@@ -121,7 +113,12 @@ class TitleState extends FlxState {
   override public function update():Void {
     super.update();
 
-  #if debug
+    if(FlxG.keys.pressed.D && FlxG.keys.pressed.SHIFT) {
+      // デバッグコマンド
+      FlxG.switchState(new DebugState());
+    }
+
+  #if neko
     if(FlxG.keys.justPressed.ESCAPE) {
       throw "Terminaite.";
     }
