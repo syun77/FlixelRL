@@ -19,6 +19,10 @@ class GameData {
     // 名前を自動設定
     var generator = new NameGenerator();
     _name = generator.get();
+    // フラグ作成
+    _bits = [for(i in 0...BIT_MAX) false];
+    // ハイスコア
+    _hiscore = 0;
 
     // いったんセーブ
     save();
@@ -32,6 +36,32 @@ class GameData {
   public static function setName(s:String):Void {
     _name = s;
   }
+
+  // 汎用フラグ
+  private static inline var BIT_MAX:Int = 32;
+
+  // フラグ番号
+  public static inline var FLG_FIRST:Int      = 0; // 初回起動フラグ
+  public static inline var FLG_FIRST_GAME:Int = 1; // 初回ゲームプレイ
+
+  private static var _bits:Array<Bool>;
+  public static function bitCheck(idx:Int):Bool {
+    if(idx < 0 || BIT_MAX <= idx) {
+      return false;
+    }
+    return _bits[idx];
+  }
+  public static function bitOn(idx:Int):Void {
+    if(idx < 0 || BIT_MAX <= idx) {
+      return;
+    }
+    _bits[idx] = true;
+    // セーブ
+    save();
+  }
+
+  // ハイスコア
+  private static var _hiscore:Int = 0;
 
   /**
    * セーブデータが存在するかどうか
@@ -64,7 +94,10 @@ class GameData {
   public static function save():Void {
     var saveutil = new FlxSave();
     saveutil.bind("GAMEDATA");
-    saveutil.data.name = _name;
+    saveutil.data.name    = _name;
+    saveutil.data.bits    = _bits;
+    saveutil.data.hiscore = _hiscore;
+
     // 書き込み
     saveutil.flush();
   }
@@ -78,6 +111,26 @@ class GameData {
       var saveutil = new FlxSave();
       saveutil.bind("GAMEDATA");
       _name = saveutil.data.name;
+      if(saveutil.data.bits == null) {
+        // フラグがない場合は作成
+        _bits = [for(i in 0...BIT_MAX) false];
+      }
+      else {
+        _bits = new Array<Bool>();
+        var idx:Int = 0;
+        var bits:Array<Bool> = saveutil.data.bits;
+        for(bit in bits) {
+          _bits[idx] = bit;
+          idx++;
+        }
+      }
+      if(saveutil.data.hiscore == null) {
+        // ハイスコアがない場合も作成
+        _hiscore = 0;
+      }
+      else {
+        _hiscore = saveutil.data.hiscore;
+      }
     }
   }
 

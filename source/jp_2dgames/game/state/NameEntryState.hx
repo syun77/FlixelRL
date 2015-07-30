@@ -26,8 +26,10 @@ private class MyButton extends FlxButtonPlus {
     enterCallback = OnEnter;
     leaveCallback = OnLeave;
 
+#if neko
     buttonNormal.color = FlxColor.GREEN;
     buttonHighlight.color = FlxColor.RED;
+#end
   }
 }
 
@@ -230,6 +232,12 @@ class NameEntryState extends FlxSubState {
     _sprTip.visible = _txtTip.visible;
 
     _updateInput();
+
+    if(FlxG.keys.justPressed.ENTER) {
+      // 閉じる
+      close();
+    }
+
 #if debug
     updateDebug();
 #end

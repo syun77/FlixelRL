@@ -50,6 +50,8 @@ class TitleState extends FlxState {
   // ■メンバ変数
   // PLEASE CLICK ボタン
   private var _btnClick:MyButton;
+  // プレイヤー名
+  private var _txtUserName:FlxText = null;
 
   /**
    * 生成
@@ -113,6 +115,12 @@ class TitleState extends FlxState {
       _appearMenu();
     });
     this.add(_btnClick);
+
+    if(GameData.bitCheck(GameData.FLG_FIRST) == false) {
+      // 初回起動時はネームエントリを表示
+      openSubState(new NameEntryState());
+      GameData.bitOn(GameData.FLG_FIRST);
+    }
   }
 
   /**
@@ -122,10 +130,9 @@ class TitleState extends FlxState {
 
     // ユーザー名
     var py = FlxG.height + USER_NAME_OFS_Y;
-    var txtUserName = new FlxText(-480, py, 480, "", 20);
-    txtUserName.text = "YOUR NAME: " + GameData.getName();
-    FlxTween.tween(txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
-    this.add(txtUserName);
+    _txtUserName = new FlxText(-480, py, 480, "", 20);
+    FlxTween.tween(_txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
+    this.add(_txtUserName);
 
     // プレイヤー表示
     var player = new EventNpc();
@@ -186,6 +193,11 @@ class TitleState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    if(_txtUserName != null) {
+      // ユーザ名更新
+      _txtUserName.text = "YOUR NAME: " + GameData.getName();
+    }
 
     if(FlxG.keys.pressed.D && FlxG.keys.pressed.SHIFT) {
       // デバッグコマンド
