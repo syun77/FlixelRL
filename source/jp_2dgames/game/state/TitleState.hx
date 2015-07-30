@@ -1,4 +1,9 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.event.EventNpc;
+import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.util.DirUtil;
+import jp_2dgames.game.actor.Player;
+import flash.display.BlendMode;
 import flash.filters.BlurFilter;
 import flixel.effects.FlxSpriteFilter;
 import flixel.util.FlxColor;
@@ -29,8 +34,20 @@ private class MyButton extends FlxButtonPlus {
 class TitleState extends FlxState {
 
   // ■定数
+
+  // ロゴ
+  private static inline var LOGO_Y = -160;
+  private static inline var LOGO_Y2 = 64;
+  private static inline var LOGO_SIZE = 64;
+
+  // ロゴ背景
+  private static inline var LOGO_BG_Y = LOGO_Y2 + LOGO_SIZE/2;
+
+  // ユーザ名
   private static inline var USER_NAME_POS_X = 8;
   private static inline var USER_NAME_OFS_Y = -60;
+
+
 
   // ■メンバ変数
   // PLEASE CLICK ボタン
@@ -46,20 +63,45 @@ class TitleState extends FlxState {
     var bg = new FlxSprite(0, 0, "assets/images/title.png");
     this.add(bg);
     // フェード表示
+    var a = 0.8; // アルファ値
     bg.alpha = 0;
-    FlxTween.tween(bg, {alpha:0.8}, 1, {ease:FlxEase.expoOut});
+    FlxTween.tween(bg, {alpha:a}, 1, {ease:FlxEase.expoOut});
+    // スクロール
+    bg.y = -bg.height + FlxG.height;
+    FlxTween.tween(bg, {y:0}, 30, {ease:FlxEase.sineOut});
+
+    // ロゴの背景
+    var bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 4, FlxColor.WHITE);
+    bgLogo.blend = BlendMode.ADD;
+    bgLogo.alpha = 0;
+    bgLogo.x = 0;
+    FlxTween.tween(bgLogo, {alpha:0.2}, 1, {ease:FlxEase.expoIn});
+    {
+      var filter = new FlxSpriteFilter(bgLogo);
+      var blur = new BlurFilter(0, 8);
+      filter.addFilter(blur);
+      filter.applyFilters();
+    }
+    this.add(bgLogo);
+
+    // タイトルロゴ
+    var txtLogo = new FlxText(FlxG.width/2, LOGO_Y, 320, "1 Rogue", LOGO_SIZE);
+    txtLogo.color = FlxColor.WHITE;
+    txtLogo.x -= txtLogo.width/2;
+    txtLogo.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.GOLDENROD, 8);
+    this.add(txtLogo);
+    FlxTween.tween(txtLogo, {y:LOGO_Y2}, 1, {ease:FlxEase.expoOut});
 
     // クリックボタン
     var px = FlxG.width/2 - 100;
     var py = FlxG.height/2;
     _btnClick = new MyButton(px, py, "PLEASE CLICK", function() {
       // 背景を暗くする
-      FlxTween.color(bg, 1, FlxColor.WHITE, FlxColor.CHARCOAL, 1, 1, {ease:FlxEase.expoOut});
-      // ブラーフィルタ適用
-      var filter = new FlxSpriteFilter(bg);
-      var blur = new BlurFilter(8, 8);
-      filter.addFilter(blur);
-      filter.applyFilters();
+      FlxTween.color(bg, 1, FlxColor.WHITE, FlxColor.GRAY, a, a, {ease:FlxEase.expoOut});
+      // ロゴを追い出す
+      FlxTween.tween(txtLogo, {y:LOGO_Y}, 1, {ease:FlxEase.expoOut});
+      // ロゴ背景を消す
+      FlxTween.tween(bgLogo, {alpha:0.0}, 1, {ease:FlxEase.expoOut});
       // メニュー表示
       _appearMenu();
     });
@@ -78,11 +120,20 @@ class TitleState extends FlxState {
     FlxTween.tween(txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
     this.add(txtUserName);
 
+    // プレイヤー表示
+    var player = new EventNpc();
+    player.revive();
+    player.init("player", 1, 12, Dir.Down);
+    this.add(player);
+
     // 各種ボタン
-    var px = FlxG.width/2 - 100;
-    var py = 128;
-    this.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
+    var btnList = new List<MyButton>();
+    var px = FlxG.width;
+    var py = 160;
+    // NEW GAME
+    btnList.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
     py += 64;
+    // CONTINUE
     var btnContinue = new MyButton(px, py, "CONTINUE", function() {
       // セーブデータから読み込み
       Global.SetLoadGame(true);
@@ -90,11 +141,22 @@ class TitleState extends FlxState {
     });
     if(Save.isContinue()) {
       py += 64;
-      this.add(btnContinue);
+      btnList.add(btnContinue);
     }
-    this.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+    // NAME ENTRY
+    btnList.add(new MyButton(px, py, "NAME ENTRY", function(){ FlxG.switchState(new NameEntryState()); }));
     py += 64;
-    this.add(new MyButton(px, py, "NAME ENTRY", function(){ FlxG.switchState(new NameEntryState()); }));
+    // TODO: オープニングをすでに見たときのみ表示
+    // OPENING
+    btnList.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+
+    var px2 = FlxG.width/2 - 100;
+    var idx:Int = 0;
+    for(btn in btnList) {
+      FlxTween.tween(btn, {x:px2}, 1, {ease:FlxEase.expoOut, startDelay:idx*0.1});
+      this.add(btn);
+      idx++;
+    }
 
     // ボタンを消しておく
     _btnClick.kill();
@@ -119,6 +181,9 @@ class TitleState extends FlxState {
     }
 
   #if neko
+    if(FlxG.keys.justPressed.R) {
+      FlxG.switchState(new TitleState());
+    }
     if(FlxG.keys.justPressed.ESCAPE) {
       throw "Terminaite.";
     }
