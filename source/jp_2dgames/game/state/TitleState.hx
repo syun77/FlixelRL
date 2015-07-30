@@ -1,4 +1,10 @@
 package jp_2dgames.game.state;
+import flash.filters.BlurFilter;
+import flash.filters.BitmapFilter;
+import flixel.effects.FlxSpriteFilter;
+import flixel.util.FlxColor;
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.addons.ui.FlxButtonPlus;
@@ -28,10 +34,8 @@ class TitleState extends FlxState {
   private static inline var USER_NAME_OFS_Y = -60;
 
   // ■メンバ変数
-  // キャプション（仮）
-  private var _txt:FlxText;
-  // ユーザ名
-  private var _txtUserName:FlxText;
+  // PLEASE CLICK ボタン
+  private var _btnClick:MyButton;
 
   /**
    * 生成
@@ -39,17 +43,41 @@ class TitleState extends FlxState {
   override public function create():Void {
     super.create();
 
-    _txt = new FlxText(32, 32, 128);
-    _txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-    _txt.text = "タイトル画面";
-    this.add(_txt);
+    // 背景画像
+    var bg = new FlxSprite(0, 0, "assets/images/title.png");
+    this.add(bg);
+    // フェード表示
+    bg.alpha = 0;
+    FlxTween.tween(bg, {alpha:0.8}, 1, {ease:FlxEase.expoOut});
+
+    // クリックボタン
+    var px = FlxG.width/2 - 100;
+    var py = FlxG.height/2;
+    _btnClick = new MyButton(px, py, "PLEASE CLICK", function() {
+      // 背景を暗くする
+      FlxTween.color(bg, 1, FlxColor.WHITE, FlxColor.CHARCOAL, {ease:FlxEase.expoOut});
+      // ブラーフィルタ適用
+      var filter = new FlxSpriteFilter(bg);
+      var blur = new BlurFilter(8, 8);
+      filter.addFilter(blur);
+      filter.applyFilters();
+      // メニュー表示
+      _appearMenu();
+    });
+    this.add(_btnClick);
+  }
+
+  /**
+   * メニュー表示
+   **/
+  private function _appearMenu():Void {
 
     // ユーザー名
     var py = FlxG.height + USER_NAME_OFS_Y;
-    _txtUserName = new FlxText(-480, py, 480, "", 20);
-    _txtUserName.text = "YOUR NAME: " + GameData.getName();
-    FlxTween.tween(_txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
-    this.add(_txtUserName);
+    var txtUserName = new FlxText(-480, py, 480, "", 20);
+    txtUserName.text = "YOUR NAME: " + GameData.getName();
+    FlxTween.tween(txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
+    this.add(txtUserName);
 
     // 各種ボタン
     var px = FlxG.width/2 - 100;
@@ -75,6 +103,9 @@ class TitleState extends FlxState {
     }));
     py += 64;
     this.add(new MyButton(px, py, "NAME ENTRY", function(){ FlxG.switchState(new NameEntryState()); }));
+
+    // ボタンを消しておく
+    _btnClick.kill();
   }
 
   /**
