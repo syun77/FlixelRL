@@ -41,8 +41,8 @@ class GameData {
   private static inline var BIT_MAX:Int = 32;
 
   // フラグ番号
-  public static inline var FLG_FIRST:Int      = 0; // 初回起動フラグ
-  public static inline var FLG_FIRST_GAME:Int = 1; // 初回ゲームプレイ
+  public static inline var FLG_FIRST_DONE:Int      = 0; // 初回起動フラグ
+  public static inline var FLG_FIRST_GAME_DONE:Int = 1; // 初回ゲームプレイ
 
   private static var _bits:Array<Bool>;
   public static function bitCheck(idx:Int):Bool {

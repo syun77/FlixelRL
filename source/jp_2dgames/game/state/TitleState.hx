@@ -116,10 +116,10 @@ class TitleState extends FlxState {
     });
     this.add(_btnClick);
 
-    if(GameData.bitCheck(GameData.FLG_FIRST) == false) {
+    if(GameData.bitCheck(GameData.FLG_FIRST_DONE) == false) {
       // 初回起動時はネームエントリを表示
       openSubState(new NameEntryState());
-      GameData.bitOn(GameData.FLG_FIRST);
+      GameData.bitOn(GameData.FLG_FIRST_DONE);
     }
   }
 
@@ -145,7 +145,17 @@ class TitleState extends FlxState {
     var px = FlxG.width;
     var py = 160;
     // NEW GAME
-    btnList.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
+    btnList.add(new MyButton(px, py, "NEW GAME", function() {
+      if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE) == false) {
+        // オープニングをまだ見ていない
+        GameData.bitOn(GameData.FLG_FIRST_GAME_DONE);
+        FlxG.switchState(new OpeningState());
+      }
+      else {
+        // すでに見た
+        FlxG.switchState(new PlayInitState());
+      }
+    }));
     py += 64;
     // CONTINUE
     var btnContinue = new MyButton(px, py, "CONTINUE", function() {
@@ -165,9 +175,12 @@ class TitleState extends FlxState {
       }
     }));
     py += 64;
-    // TODO: オープニングをすでに見たときのみ表示
-    // OPENING
-    btnList.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+
+    if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE)) {
+      // 初回ゲーム済みのみ表示
+      // OPENING
+      btnList.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+    }
 
     var px2 = FlxG.width/2 - 100;
     var idx:Int = 0;
