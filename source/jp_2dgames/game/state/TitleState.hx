@@ -54,7 +54,7 @@ class TitleState extends FlxState {
     var py = FlxG.height/2;
     _btnClick = new MyButton(px, py, "PLEASE CLICK", function() {
       // 背景を暗くする
-      FlxTween.color(bg, 1, FlxColor.WHITE, FlxColor.CHARCOAL, {ease:FlxEase.expoOut});
+      FlxTween.color(bg, 1, FlxColor.WHITE, FlxColor.CHARCOAL, 1, 1, {ease:FlxEase.expoOut});
       // ブラーフィルタ適用
       var filter = new FlxSpriteFilter(bg);
       var blur = new BlurFilter(8, 8);
