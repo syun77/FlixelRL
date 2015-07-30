@@ -53,6 +53,10 @@ class TitleState extends FlxState {
   // PLEASE CLICK ボタン
   private var _btnClick:MyButton;
 
+  // SubStateを開くフラグ
+  private var _requestOpen:Bool = false;
+
+
   /**
    * 生成
    **/
@@ -144,7 +148,15 @@ class TitleState extends FlxState {
       btnList.add(btnContinue);
     }
     // NAME ENTRY
-    btnList.add(new MyButton(px, py, "NAME ENTRY", function(){ FlxG.switchState(new NameEntryState()); }));
+    btnList.add(new MyButton(px, py, "NAME ENTRY", function() {
+      // HACK: SubStatから戻ってきたときに再び呼び出されてしまうため
+      if(_requestOpen == false) {
+        _requestOpen = true;
+      }
+      else {
+        _requestOpen = false;
+      }
+    }));
     py += 64;
     // TODO: オープニングをすでに見たときのみ表示
     // OPENING
@@ -174,6 +186,10 @@ class TitleState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    if(_requestOpen) {
+      openSubState(new NameEntryState());
+    }
 
     if(FlxG.keys.pressed.D && FlxG.keys.pressed.SHIFT) {
       // デバッグコマンド

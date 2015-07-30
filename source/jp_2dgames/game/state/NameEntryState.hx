@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.FlxSubState;
 import flash.geom.Rectangle;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
@@ -9,7 +12,6 @@ import flixel.addons.ui.FlxButtonPlus;
 import jp_2dgames.game.util.NameGenerator;
 import flixel.text.FlxText;
 import flixel.FlxG;
-import flixel.FlxState;
 
 private class MyButton extends FlxButtonPlus {
 
@@ -23,13 +25,16 @@ private class MyButton extends FlxButtonPlus {
 
     enterCallback = OnEnter;
     leaveCallback = OnLeave;
+
+    buttonNormal.color = FlxColor.GREEN;
+    buttonHighlight.color = FlxColor.RED;
   }
 }
 
 /**
  * 名前入力画面
  **/
-class NameEntryState extends FlxState {
+class NameEntryState extends FlxSubState {
 
   // 名前に設定可能な最大文字数
   private static inline var MAX_NAME:Int = 8;
@@ -77,6 +82,12 @@ class NameEntryState extends FlxState {
    **/
   override public function create():Void {
     super.create();
+
+    // 背景
+    var bg = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    bg.alpha = 0;
+    this.add(bg);
+    FlxTween.tween(bg, {alpha:0.8}, 1, {ease:FlxEase.expoOut});
 
     // CSVテキスト
     _csv = new CsvLoader("assets/data/nameentry.csv");
@@ -153,7 +164,8 @@ class NameEntryState extends FlxState {
 
     // 戻るボタン
     this.add(new MyButton(BACK_X, BACK_Y, "BACK", function() {
-      FlxG.switchState(new TitleState());
+      // 自身を閉じる
+      close();
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(5, "msg");
