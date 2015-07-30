@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.addons.ui.FlxButtonPlus;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -19,9 +21,18 @@ private class MyButton extends FlxButtonPlus {
 /**
  * タイトル画面
  **/
-class TitleState extends FlxState{
+class TitleState extends FlxState {
 
+  // ■定数
+  private static inline var USER_NAME_POS_X = 8;
+  private static inline var USER_NAME_OFS_Y = -60;
+
+  // ■メンバ変数
+  // キャプション（仮）
   private var _txt:FlxText;
+  // ユーザ名
+  private var _txtUserName:FlxText;
+
   /**
    * 生成
    **/
@@ -33,6 +44,14 @@ class TitleState extends FlxState{
     _txt.text = "タイトル画面";
     this.add(_txt);
 
+    // ユーザー名
+    var py = FlxG.height + USER_NAME_OFS_Y;
+    _txtUserName = new FlxText(-480, py, 480, "", 20);
+    _txtUserName.text = "YOUR NAME: " + GameData.getName();
+    FlxTween.tween(_txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
+    this.add(_txtUserName);
+
+    // 各種ボタン
     var px = FlxG.width/2 - 100;
     var py = 128;
     this.add(new MyButton(px, py, "NEW GAME", function(){ FlxG.switchState(new PlayInitState()); }));
