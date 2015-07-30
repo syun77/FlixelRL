@@ -1,8 +1,6 @@
 package jp_2dgames.game.state;
 import jp_2dgames.game.event.EventNpc;
-import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.util.DirUtil;
-import jp_2dgames.game.actor.Player;
 import flash.display.BlendMode;
 import flash.filters.BlurFilter;
 import flixel.effects.FlxSpriteFilter;
@@ -53,10 +51,6 @@ class TitleState extends FlxState {
   // PLEASE CLICK ボタン
   private var _btnClick:MyButton;
 
-  // SubStateを開くフラグ
-  private var _requestOpen:Bool = false;
-
-
   /**
    * 生成
    **/
@@ -96,6 +90,13 @@ class TitleState extends FlxState {
     this.add(txtLogo);
     FlxTween.tween(txtLogo, {y:LOGO_Y2}, 1, {ease:FlxEase.expoOut});
 
+    // コピーライト
+    var txtCopyright = new FlxText(FlxG.width/2, FlxG.height-32, 480);
+    txtCopyright.x = txtCopyright.width/2;
+    txtCopyright.text = "(c) 2015 2dgames.jp All right reserved.";
+    txtCopyright.setFormat(null, 16);
+    this.add(txtCopyright);
+
     // クリックボタン
     var px = FlxG.width/2 - 100;
     var py = FlxG.height/2;
@@ -106,6 +107,8 @@ class TitleState extends FlxState {
       FlxTween.tween(txtLogo, {y:LOGO_Y}, 1, {ease:FlxEase.expoOut});
       // ロゴ背景を消す
       FlxTween.tween(bgLogo, {alpha:0.0}, 1, {ease:FlxEase.expoOut});
+      // コピーライトを追い出す
+      FlxTween.tween(txtCopyright, {y:FlxG.height+32}, 1, {ease:FlxEase.expoOut});
       // メニュー表示
       _appearMenu();
     });
@@ -150,11 +153,8 @@ class TitleState extends FlxState {
     // NAME ENTRY
     btnList.add(new MyButton(px, py, "NAME ENTRY", function() {
       // HACK: SubStatから戻ってきたときに再び呼び出されてしまうため
-      if(_requestOpen == false) {
-        _requestOpen = true;
-      }
-      else {
-        _requestOpen = false;
+      if(subState == null) {
+        openSubState(new NameEntryState());
       }
     }));
     py += 64;
@@ -186,10 +186,6 @@ class TitleState extends FlxState {
    **/
   override public function update():Void {
     super.update();
-
-    if(_requestOpen) {
-      openSubState(new NameEntryState());
-    }
 
     if(FlxG.keys.pressed.D && FlxG.keys.pressed.SHIFT) {
       // デバッグコマンド

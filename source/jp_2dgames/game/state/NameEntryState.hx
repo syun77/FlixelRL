@@ -223,7 +223,7 @@ class NameEntryState extends FlxSubState {
   override public function update():Void {
     super.update();
 
-    _txtTip.x = FlxG.mouse.x;
+    _txtTip.x = FlxG.mouse.x+16;
     _txtTip.y = FlxG.mouse.y-24;
     _sprTip.x = _txtTip.x;
     _sprTip.y = _txtTip.y;
