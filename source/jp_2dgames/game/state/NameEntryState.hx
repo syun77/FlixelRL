@@ -139,6 +139,7 @@ class NameEntryState extends FlxSubState {
       _sprName.dirty = true;
       _sprName.updateFrameData();
     }
+    FlxTween.color(_sprName, 1, FlxColor.SILVER, FlxColor.WHITE, 1, 1, {type:FlxTween.PINGPONG, ease:FlxEase.sineInOut});
     _group.add(_sprName);
 
     // 名前入力

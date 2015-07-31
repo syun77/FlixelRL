@@ -52,6 +52,8 @@ class TitleState extends FlxState {
   private var _btnClick:MyButton;
   // プレイヤー名
   private var _txtUserName:FlxText = null;
+  // 背景ロゴアニメ
+  private var _tweenBgLog:FlxTween;
 
   /**
    * 生成
@@ -68,14 +70,13 @@ class TitleState extends FlxState {
     FlxTween.tween(bg, {alpha:a}, 1, {ease:FlxEase.expoOut});
     // スクロール
     bg.y = -bg.height + FlxG.height;
-    FlxTween.tween(bg, {y:0}, 30, {ease:FlxEase.sineOut});
+    FlxTween.tween(bg, {y:0}, 30, {type:FlxTween.PINGPONG, ease:FlxEase.sineOut});
 
     // ロゴの背景
-    var bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 4, FlxColor.WHITE);
+    var bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 8, FlxColor.WHITE);
     bgLogo.blend = BlendMode.ADD;
-    bgLogo.alpha = 0;
     bgLogo.x = 0;
-    FlxTween.tween(bgLogo, {alpha:0.2}, 1, {ease:FlxEase.expoIn});
+    _tweenBgLog = FlxTween.color(bgLogo, 2, FlxColor.BLACK, FlxColor.SILVER, 0.5, 0.5, {ease:FlxEase.sineInOut, type:FlxTween.PINGPONG});
     {
       var filter = new FlxSpriteFilter(bgLogo);
       var blur = new BlurFilter(0, 8);
@@ -109,6 +110,8 @@ class TitleState extends FlxState {
       FlxTween.tween(txtLogo, {y:LOGO_Y}, 1, {ease:FlxEase.expoOut});
       // ロゴ背景を消す
       FlxTween.tween(bgLogo, {alpha:0.0}, 1, {ease:FlxEase.expoOut});
+      // 点滅アニメ終了
+      _tweenBgLog.cancel();
       // コピーライトを追い出す
       FlxTween.tween(txtCopyright, {y:FlxG.height+32}, 1, {ease:FlxEase.expoOut});
       // メニュー表示
