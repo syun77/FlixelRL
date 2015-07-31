@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxSubState;
@@ -41,13 +42,17 @@ class NameEntryState extends FlxSubState {
   // 名前に設定可能な最大文字数
   private static inline var MAX_NAME:Int = 8;
 
+  // 基準座標
+  private static inline var BASE_X = 128;
+  private static inline var BASE_Y = 64;
+
   // ヘルプテキスト
-  private static inline var HELP_X = 200;
-  private static inline var HELP_Y = 60;
+  private static inline var HELP_OFS_X = 224;
+  private static inline var HELP_Y = 32;
 
   // 名前テキストの座標
-  private static inline var NAME_X = 256;
-  private static inline var NAME_Y = 128;
+  private static inline var NAME_X = 128;
+  private static inline var NAME_Y = HELP_Y+64;
   private static inline var NAME_W = 160;
 
   // 消去ボタン
@@ -55,17 +60,20 @@ class NameEntryState extends FlxSubState {
   private static inline var CLEAR_Y = NAME_Y;
 
   // 自動入力ボタン
-  private static inline var MALE_X = 240;
-  private static inline var MALE_Y = 260;
+  private static inline var MALE_X = 112;
+  private static inline var MALE_Y = NAME_Y+64;
   private static inline var FEMALE_X = MALE_X + 200;
   private static inline var FEMALE_Y = MALE_Y;
 
   // 戻る
-  private static inline var BACK_X = 320;
-  private static inline var BACK_Y = 400;
+  private static inline var BACK_X = 0;
+  private static inline var BACK_Y = MALE_Y+64;
 
   // 名前自動生成
   private var _generator:NameGenerator;
+
+  // 描画グループ
+  private var _group:FlxSpriteGroup;
   // 名前入力説明テキスト
   private var _txtHelp:FlxText;
   // 名前入力の枠
@@ -85,10 +93,25 @@ class NameEntryState extends FlxSubState {
   override public function create():Void {
     super.create();
 
+    // 画面サイズ
+    var width  = FlxG.width  - (BASE_X*2);
+    var height = 288;
+
+    _group = new FlxSpriteGroup(BASE_X, BASE_Y);
+
     // 背景
-    var bg = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    var bg = new FlxSprite(0, 0).makeGraphic(width, height, FlxColor.GRAY);
+    {
+      var w = bg.width;
+      var h = bg.height;
+      var fSize = 4; // 枠の幅
+      var rect = new Rectangle(fSize, fSize, w-fSize*2, h-fSize*2);
+      bg.pixels.fillRect(rect, FlxColor.BLACK);
+      bg.dirty = true;
+      bg.updateFrameData();
+    }
     bg.alpha = 0;
-    this.add(bg);
+    _group.add(bg);
     FlxTween.tween(bg, {alpha:0.8}, 1, {ease:FlxEase.expoOut});
 
     // CSVテキスト
@@ -97,9 +120,9 @@ class NameEntryState extends FlxSubState {
     // 名前説明
     {
       var msg = _csv.getString(1, "msg");
-      _txtHelp = new FlxText(HELP_X, HELP_Y, 480, msg);
+      _txtHelp = new FlxText(width/2-HELP_OFS_X, HELP_Y, 480, msg);
       _txtHelp.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-      this.add(_txtHelp);
+      _group.add(_txtHelp);
     }
 
     // 自動入力
@@ -116,11 +139,11 @@ class NameEntryState extends FlxSubState {
       _sprName.dirty = true;
       _sprName.updateFrameData();
     }
-    this.add(_sprName);
+    _group.add(_sprName);
 
     // 名前入力
     _txtName = new FlxText(NAME_X, NAME_Y, NAME_W, "", 24);
-    this.add(_txtName);
+    _group.add(_txtName);
 
     // ポップアップテキスト
     _txtTip = new FlxText(0, 0, 320, "");
@@ -135,7 +158,7 @@ class NameEntryState extends FlxSubState {
     _sprTip.visible = false;
 
     // 名前消去
-    this.add(new MyButton(CLEAR_X, CLEAR_Y, "CLEAR", function() {
+    _group.add(new MyButton(CLEAR_X, CLEAR_Y, "CLEAR", function() {
       _setName("");
     }, function() {
       _txtTip.visible = true;
@@ -145,7 +168,7 @@ class NameEntryState extends FlxSubState {
     }));
 
     // 自動入力（男性）
-    this.add(new MyButton(MALE_X, MALE_Y, "MALE", function() {
+    _group.add(new MyButton(MALE_X, MALE_Y, "MALE", function() {
       _setName(_generator.getMale());
     }, function() {
       _txtTip.visible = true;
@@ -155,7 +178,7 @@ class NameEntryState extends FlxSubState {
     }));
 
     // 自動入力（女性）
-    this.add(new MyButton(FEMALE_X, FEMALE_Y, "FEMALE", function() {
+    _group.add(new MyButton(FEMALE_X, FEMALE_Y, "FEMALE", function() {
       _setName(_generator.getFemale());
     }, function() {
       _txtTip.visible = true;
@@ -165,7 +188,7 @@ class NameEntryState extends FlxSubState {
     }));
 
     // 戻るボタン
-    this.add(new MyButton(BACK_X, BACK_Y, "BACK", function() {
+    _group.add(new MyButton(width/2-160/2, BACK_Y, "BACK", function() {
       // 自身を閉じる
       close();
     }, function() {
@@ -175,8 +198,13 @@ class NameEntryState extends FlxSubState {
       _txtTip.visible = false;
     }));
 
-    this.add(_sprTip);
-    this.add(_txtTip);
+    _group.add(_sprTip);
+    _group.add(_txtTip);
+
+    this.add(_group);
+    // スライド表示
+    _group.y -= FlxG.height;
+    FlxTween.tween(_group, {y:BASE_Y}, 1, {ease:FlxEase.expoOut});
 
     _setName(GameData.getName());
   }
