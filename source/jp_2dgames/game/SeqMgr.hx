@@ -256,6 +256,22 @@ class SeqMgr {
               _player.changeprev();
               Message.push2(Msg.INVENTORY_CANT_OPEN, null);
             }
+          case Action.FootMenu:
+            // 足下メニューを開く
+            switch(_player.stompChip) {
+              case StompChip.Stairs:
+                // 次のフロアに進む
+                _change(State.NextFloor);
+                _openFloorNext();
+
+              case StompChip.Shop:
+                // ショップ
+                _change(State.ShopOpen);
+
+              case StompChip.None:
+                // 開けないのでキー入力に戻る
+                _player.changeprev();
+            }
           case Action.TurnEnd:
             // 足踏み待機
             _change(State.PlayerActEnd);
@@ -584,6 +600,16 @@ class SeqMgr {
   }
 
   /**
+   * 次のフロアへ進むメニューを表示する
+   **/
+  private function _openFloorNext():Void {
+    var msg = UIText.getText(UIText.MENU_NEXTFLOOR_MSG);
+    var cmd1 = UIText.getText(UIText.MENU_NEXTFLOOR);
+    var cmd2 = UIText.getText(UIText.MENU_STAY);
+    Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
+  }
+
+  /**
    * 更新・ターン終了
    **/
   private function _procTurnEnd():Void {
@@ -620,10 +646,7 @@ class SeqMgr {
       case StompChip.Stairs:
         // 次のフロアに進む
         _change(State.NextFloor);
-        var msg = UIText.getText(UIText.MENU_NEXTFLOOR_MSG);
-        var cmd1 = UIText.getText(UIText.MENU_NEXTFLOOR);
-        var cmd2 = UIText.getText(UIText.MENU_STAY);
-        Dialog.open(Dialog.SELECT2, msg, [cmd1, cmd2]);
+        _openFloorNext();
 
       case StompChip.Shop:
         // ショップ

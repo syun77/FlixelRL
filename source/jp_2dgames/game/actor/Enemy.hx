@@ -453,6 +453,9 @@ class Enemy extends Actor {
       case Actor.State.InventoryOpen:
         // 何もしない
 
+      case Actor.State.FootMenu:
+        // 何もしない
+
       case Actor.State.Standby:
         // 何もしない
 

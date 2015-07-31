@@ -433,6 +433,32 @@ class Player extends Actor {
   }
 
   /**
+   * 足下チップを設定する
+   * @return 足下チップが有効なものであればtreu
+   **/
+  private function _setStompChip(bHint:Bool):Bool {
+    switch(Field.getChip(xchip, ychip)) {
+      case Field.GOAL:
+        // 移動先が階段
+        _stompChip = StompChip.Stairs;
+      case Field.SHOP:
+        // 移動先がお店
+        _stompChip = StompChip.Shop;
+      case Field.HINT:
+        if(bHint) {
+          // ヒント表示
+          Snd.playSe("hint", true);
+          Message.pushHint();
+        }
+        _stompChip = StompChip.None;
+      default:
+        _stompChip = StompChip.None;
+    }
+
+    return _stompChip != StompChip.None;
+  }
+
+  /**
    * 更新
    **/
   override public function proc():Void {
@@ -445,6 +471,9 @@ class Player extends Actor {
         _updateKeyInput();
 
       case Actor.State.InventoryOpen:
+        // 何もしない
+
+      case Actor.State.FootMenu:
         // 何もしない
 
       case Actor.State.Standby:
@@ -465,19 +494,7 @@ class Player extends Actor {
       case Actor.State.Move:
         if(_updateWalk()) {
           // 移動完了
-          switch(Field.getChip(xchip, ychip)) {
-            case Field.GOAL:
-              // 移動先が階段
-              _stompChip = StompChip.Stairs;
-            case Field.SHOP:
-              // 移動先がお店
-              _stompChip = StompChip.Shop;
-            case Field.HINT:
-              // ヒント表示
-              Snd.playSe("hint", true);
-              Message.pushHint();
-            default:
-          }
+          _setStompChip(true);
           // アイテムがあれば拾う
           DropItem.pickup(xchip, ychip);
           _change(Actor.State.TurnEnd);
@@ -587,9 +604,14 @@ class Player extends Actor {
     }
 
     if(Key.press.B) {
-      // メニューを開く
+      // インベントリを開く
       _change(Actor.State.InventoryOpen);
       return;
+    }
+    if(Key.press.Y) {
+      // 足下メニューを開く
+      _setStompChip(false);
+      _change(Actor.State.FootMenu);
     }
 
     if(_isKeyInput() == false) {

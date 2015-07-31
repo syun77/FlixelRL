@@ -26,35 +26,35 @@ import flixel.FlxSprite;
  * 状態
  **/
 enum State {
-  KeyInput; // キー入力待ち
+  KeyInput;      // キー入力待ち
   InventoryOpen; // イベントリを開く
-  Standby; // 待機中
+  FootMenu;      // 足下メニューを開く
+  Standby;       // 待機中
   // 行動
   ActBegin; // 行動開始
-  Act; // 行動中
-  ActEnd; // 行動終了
+  Act;      // 行動中
+  ActEnd;   // 行動終了
   // 移動
   MoveBegin; // 移動開始
-  Move; // 移動中
-  MoveEnd; // 移動終了
+  Move;      // 移動中
+  MoveEnd;   // 移動終了
   // ターン終了
-  TurnEnd;
-  // ターン終了
+  TurnEnd; // ターン終了
 }
 
 /**
  * 行動タイプ
  **/
 enum Action {
-  None; // なし
-  Standby; // 待機中
+  None;          // なし
+  Standby;       // 待機中
   InventoryOpen; // インベントリを開く
-  Act; // 攻撃
-  ActExec; // 攻撃実行中
-  Move; // 移動
-  MoveExec; // 移動実行中
-  TurnEnd;
-  // ターン終了
+  FootMenu;      // 足下メニュー
+  Act;           // 攻撃
+  ActExec;       // 攻撃実行中
+  Move;          // 移動
+  MoveExec;      // 移動実行中
+  TurnEnd;       // ターン終了
 }
 
 /**
@@ -159,6 +159,8 @@ class Actor extends FlxSprite {
         return Action.Standby; // 待機中
       case State.InventoryOpen:
         return Action.InventoryOpen; // イベントリを開く
+      case State.FootMenu:
+        return Action.FootMenu; // 足下メニューを開く
       case State.ActBegin:
         return Action.Act; // 攻撃開始
       case State.Act:
