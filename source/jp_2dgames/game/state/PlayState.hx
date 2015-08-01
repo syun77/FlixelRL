@@ -50,6 +50,7 @@ private enum State {
   GameoverWait; // ゲームオーバー待ち時間
   Gameover;     // ゲームオーバー
   Gameclear;    // ゲームクリア
+  End;          // 終了
 }
 
 /**
@@ -480,6 +481,9 @@ class PlayState extends FlxState {
             FlxG.camera.flash(FlxColor.WHITE, 1, function() {
               Snd.playSe("flash", true);
               FlxG.camera.fade(FlxColor.WHITE, 2, false, function() {
+
+                // スコア送信
+                GameData.sendScore();
                 // エンディングへ遷移
                 FlxG.switchState(new EndingState());
               });
@@ -525,12 +529,18 @@ class PlayState extends FlxState {
 
       case State.Gameover:
         if(Key.press.A) {
-          // タイトル画面に戻る
-          FlxG.switchState(new TitleState());
+          FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
+            // リザルトに進む
+            FlxG.switchState(new ResultState());
+          });
+          _state = State.End;
         }
 
       case State.Gameclear:
         // ゲームクリア
+
+      case State.End:
+        // おしまい
     }
 
 #if debug

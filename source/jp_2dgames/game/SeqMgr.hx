@@ -504,6 +504,10 @@ class SeqMgr {
                 // ゲームクリア
                 // 全踏破フラグを立てる
                 Global.bitOn(0);
+
+                // スコア送信
+                GameData.sendScore();
+
                 FlxG.switchState(new EndingState());
               }
               else {

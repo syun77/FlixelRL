@@ -18,16 +18,14 @@ class EndingState extends FlxState{
   override public function create():Void {
     super.create();
 
-    // スコア送信
-    GameData.sendScore();
-
     // スクリプト生成
     _event = new EventMgr("assets/events/", "ending.cpp");
     this.add(_event);
 
     // スキップボタン
     var btn = new FlxButton(FlxG.width-88, -32, "SKIP", function() {
-      FlxG.switchState(new TitleState());
+      // リザルトに進む
+      FlxG.switchState(new ResultState());
     });
     FlxTween.tween(btn, {y:8}, 2, {ease:FlxEase.expoOut});
     this.add(btn);
@@ -40,7 +38,8 @@ class EndingState extends FlxState{
     super.update();
 
     if(_event.isEnd()) {
-      FlxG.switchState(new TitleState());
+      // リザルトに進む
+      FlxG.switchState(new ResultState());
     }
 
     // デバッグ処理
