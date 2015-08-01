@@ -487,7 +487,7 @@ class PlayState extends FlxState {
                 // エンディングへ遷移
                 FlxG.switchState(new EndingState());
               });
-            });
+            }, true);
             _state = State.Gameclear;
 
           case SeqMgr.RET_GAMEOVER:
