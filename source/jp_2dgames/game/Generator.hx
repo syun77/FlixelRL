@@ -127,7 +127,7 @@ class GenerateInfo {
         param.value = func();
       case IType.Wand:
         // 使用回数
-        param.value = FlxRandom.intRanged(3, 6);
+        param.value = FlxRandom.intRanged(1, 3);
       default:
     }
 
