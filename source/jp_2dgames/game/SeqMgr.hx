@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxSave;
 import jp_2dgames.game.util.CalcScore;
 import jp_2dgames.game.state.EndingState;
 import jp_2dgames.game.actor.Npc;
@@ -614,12 +615,6 @@ class SeqMgr {
    **/
   private function _procTurnEnd():Void {
 
-    if(_checkGameClear()) {
-      // ゲームクリアした
-      _change(State.GameClear);
-      return;
-    }
-
     // ネコと重なっているかどうか
     Npc.parent.forEachAlive(function(npc:Npc) {
       if(npc.existsPosition(_player.xchip, _player.ychip)) {
@@ -629,6 +624,17 @@ class SeqMgr {
         }
       }
     });
+
+    if(_checkGameClear()) {
+      // ゲームクリアした
+      // ゲームクリアフラグを立てる
+      Global.gameClear();
+      // 中断セーブデータ消去
+      Save.erase();
+      _change(State.GameClear);
+      return;
+    }
+
 
     // トゲを切り替え
     Pit.turnEnd();

@@ -616,7 +616,11 @@ class PlayState extends FlxState {
           }
           else {
             params.condition = FlxRandom.intRanged(5, 15);
-            params.value = FlxRandom.intRanged(-1, 5);
+            switch(itemtype) {
+              case IType.Weapon, IType.Armor:
+                params.value = FlxRandom.intRanged(-1, 5);
+              default:
+            }
             DropItem.add(i, j, itemid, params);
           }
         }
