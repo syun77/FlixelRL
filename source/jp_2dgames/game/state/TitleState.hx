@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import flixel.util.FlxRandom;
+import flixel.addons.display.FlxBackdrop;
 import jp_2dgames.game.event.EventNpc;
 import jp_2dgames.game.util.DirUtil;
 import flash.display.BlendMode;
@@ -55,6 +57,9 @@ class TitleState extends FlxState {
   // 背景ロゴアニメ
   private var _tweenBgLog:FlxTween;
 
+  // 流れる雲
+  private var _clouds:Array<FlxSprite>;
+
   /**
    * 生成
    **/
@@ -62,7 +67,7 @@ class TitleState extends FlxState {
     super.create();
 
     // 背景画像
-    var bg = new FlxSprite(0, 0, "assets/images/title.png");
+    var bg = new FlxSprite(0, 0, "assets/images/title/bg.png");
     this.add(bg);
     // フェード表示
     var a = 0.8; // アルファ値
@@ -71,6 +76,23 @@ class TitleState extends FlxState {
     // スクロール
     bg.y = -bg.height + FlxG.height;
     FlxTween.tween(bg, {y:0}, 30, {type:FlxTween.PINGPONG, ease:FlxEase.sineOut});
+
+    // 雲
+    _clouds = new Array<FlxSprite>();
+    for(i in 0...16) {
+      var x = FlxRandom.floatRanged(-FlxG.width/5, FlxG.width);
+      var y = FlxRandom.floatRanged(-FlxG.height/5, FlxG.height);
+      var idx = FlxRandom.intRanged(1, 4);
+      var cloud = new FlxSprite(x, y, 'assets/images/title/cloud${idx}.png');
+      if(cloud.y > FlxG.height - cloud.height) {
+        cloud.y = FlxRandom.floatRanged(0, FlxG.height-cloud.height/2);
+      }
+      this.add(cloud);
+      _clouds.push(cloud);
+      var vx = -10 - 5 * i;
+      cloud.velocity.set(vx, 0);
+      cloud.alpha = FlxRandom.floatRanged(0.5, 1);
+    }
 
     // ロゴの背景
     var bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 8, FlxColor.WHITE);
@@ -209,6 +231,12 @@ class TitleState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    for(cloud in _clouds) {
+      if(cloud.x + cloud.width < 0) {
+        cloud.x = FlxG.width;
+      }
+    }
 
     if(_txtUserName != null) {
       // ユーザ名更新
