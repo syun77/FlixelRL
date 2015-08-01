@@ -18,3 +18,4 @@
 - badstatus: badstatus
 - warp: warp
 - error: error
+- flash: flash

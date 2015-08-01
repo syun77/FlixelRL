@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.Snd;
 import flixel.util.FlxSave;
 import jp_2dgames.game.util.CalcScore;
 import jp_2dgames.game.state.EndingState;
@@ -158,6 +159,7 @@ class SeqMgr {
         Message.push2(Msg.ITEM_REVIVE, [name]);
       }
       else {
+        // ゲームオーバー
         _player.kill();
         return RET_GAMEOVER;
       }
@@ -629,6 +631,8 @@ class SeqMgr {
       // ゲームクリアした
       // ゲームクリアフラグを立てる
       Global.gameClear();
+      // BGMを止める
+      Snd.stopMusic();
       // 中断セーブデータ消去
       Save.erase();
       _change(State.GameClear);
