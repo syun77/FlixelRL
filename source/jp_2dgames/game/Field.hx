@@ -281,6 +281,7 @@ class Field {
     var h = layer.height * GRID_SIZE;
     // チップ画像読み込み
     var chip = FlxG.bitmap.add("assets/levels/tileset.png");
+    var none = FlxG.bitmap.add("assets/levels/tilenone.png");
     // 透明なスプライトを作成
     var col = FlxColor.SILVER;// FlxColor.TRANSPARENT;
     spr.makeGraphic(w, h, col);
@@ -293,13 +294,24 @@ class Field {
     var func = function(i:Int, j:Int, v:Int) {
       pt.x = i * GRID_SIZE;
       pt.y = j * GRID_SIZE;
+
+      // 床チップ描画
+      {
+        rect.left   = 0;
+        rect.right  = rect.left + GRID_SIZE;
+        rect.top    = 0;
+        rect.bottom = rect.top + GRID_SIZE;
+        spr.pixels.copyPixels(none.bitmap, rect, pt, false);
+      }
+
       rect.left   = ((v - 1) % 8) * GRID_SIZE;
       rect.right  = rect.left + GRID_SIZE;
       rect.top    = Std.int((v - 1) / 8) * GRID_SIZE;
       rect.bottom = rect.top + GRID_SIZE;
+
+      // 床チップ描画
       switch(v) {
         case NONE, PLAYER, PASSAGE, ENEMY, ITEM, CAT:
-          // 何も描画しない
         case SPIKE:
           // トゲを配置
           Pit.start(i, j);
@@ -352,22 +364,33 @@ class Field {
 
     // チップ画像読み込み
     var chip = FlxG.bitmap.add("assets/levels/tileset.png");
-    // 透明なスプライトを作成
-    var col = FlxColor.SILVER;// FlxColor.TRANSPARENT;
+    // 床スプライトを作成
+    var none = FlxG.bitmap.add("assets/levels/tilenone.png");
+
     // 転送先の座標
     var pt = new Point();
     pt.x = i * GRID_SIZE;
     pt.y = j * GRID_SIZE;
     // 転送領域の作成
     var rect = new Rectangle(0, 0, GRID_SIZE, GRID_SIZE);
+    // 床で塗りつぶす
+    {
+      rect.left   = 0;
+      rect.right  = rect.left + GRID_SIZE;
+      rect.top    = 0;
+      rect.bottom = rect.top + GRID_SIZE;
+      spr.pixels.copyPixels(none.bitmap, rect, pt, false);
+    }
     // 描画関数
     switch(chipid) {
       case GOAL, WALL, HINT, SHOP, WALL2:
-        rect.left = (v - 1) * GRID_SIZE;
-        rect.right = rect.left + GRID_SIZE;
+        rect.left   = ((v - 1) % 8) * GRID_SIZE;
+        rect.right  = rect.left + GRID_SIZE;
+        rect.top    = Std.int((v - 1) / 8) * GRID_SIZE;
+        rect.bottom = rect.top + GRID_SIZE;
         spr.pixels.copyPixels(chip.bitmap, rect, pt, true);
       case NONE:
-        spr.pixels.fillRect(new Rectangle(pt.x, pt.y, GRID_SIZE, GRID_SIZE), col);
+        // 何も描画しない
       case SPIKE:
         // トゲを配置
         Pit.start(i, j);
