@@ -90,7 +90,8 @@ class TitleState extends FlxState {
       this.add(cloud);
       _clouds.push(cloud);
       var vx = -10 - 5 * i;
-      cloud.velocity.set(vx, 0);
+      var vy = FlxRandom.floatRanged(-10, 10);
+      cloud.velocity.set(vx, vy);
       cloud.alpha = FlxRandom.floatRanged(0.5, 1);
     }
 
@@ -98,7 +99,9 @@ class TitleState extends FlxState {
     var bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 8, FlxColor.WHITE);
     bgLogo.blend = BlendMode.ADD;
     bgLogo.x = 0;
-    _tweenBgLog = FlxTween.color(bgLogo, 2, FlxColor.BLACK, FlxColor.SILVER, 0.5, 0.5, {ease:FlxEase.sineInOut, type:FlxTween.PINGPONG});
+    bgLogo.scale.x = 0;
+    FlxTween.tween(bgLogo.scale, {x:1}, 1, {ease:FlxEase.expoIn});
+    _tweenBgLog = FlxTween.color(bgLogo, 2, FlxColor.CHARCOAL, FlxColor.GRAY, 0.5, 0.5, {ease:FlxEase.sineInOut, type:FlxTween.PINGPONG});
     {
       var filter = new FlxSpriteFilter(bgLogo);
       var blur = new BlurFilter(0, 8);
@@ -108,12 +111,12 @@ class TitleState extends FlxState {
     this.add(bgLogo);
 
     // タイトルロゴ
-    var txtLogo = new FlxText(FlxG.width/2, LOGO_Y, 320, "1 Rogue", LOGO_SIZE);
+    var txtLogo = new FlxText(FlxG.width/2, LOGO_Y2, 320, "1 Rogue", LOGO_SIZE);
     txtLogo.color = FlxColor.WHITE;
     txtLogo.x -= txtLogo.width/2;
     txtLogo.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.GOLDENROD, 8);
     this.add(txtLogo);
-    FlxTween.tween(txtLogo, {y:LOGO_Y2}, 1, {ease:FlxEase.expoOut});
+//    FlxTween.tween(txtLogo, {y:LOGO_Y2}, 1, {ease:FlxEase.expoOut});
 
     // コピーライト
     var txtCopyright = new FlxText(FlxG.width/2, FlxG.height-32, 480);
@@ -235,6 +238,12 @@ class TitleState extends FlxState {
     for(cloud in _clouds) {
       if(cloud.x + cloud.width < 0) {
         cloud.x = FlxG.width;
+      }
+      if(cloud.y < -cloud.height) {
+        cloud.y = FlxG.height;
+      }
+      if(cloud.y > FlxG.height) {
+        cloud.y = -cloud.height;
       }
     }
 

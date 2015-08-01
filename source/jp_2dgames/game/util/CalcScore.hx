@@ -6,6 +6,30 @@ import jp_2dgames.game.actor.Enemy;
  * スコア計算モジュール
  **/
 class CalcScore {
+
+  // リザルト用に保存
+  private static var _exp:Int = 0;       // 経験値のスコア
+  private static var _money:Int = 0;     // 所持金
+  private static var _inventory:Int = 0; // 所持アイテム
+
+  // 保存しているスコアを取得
+  // 経験値
+  public static function getExp():Int {
+    return _exp;
+  }
+  // 所持金
+  public static function getMoeny():Int {
+    return _money;
+  }
+  // 所持アイテム
+  public static function getInventory():Int {
+    return _inventory;
+  }
+  // トータルスコアを取得
+  public static function getTotal():Int {
+    return _exp + _money + _inventory;
+  }
+
   /**
    * 更新
    **/
@@ -18,15 +42,19 @@ class CalcScore {
     }
 
     // 経験値
-    score += player.params.exp * 10;
+    _exp = player.params.exp * 10;
+    score += _exp;
 
     // 所持金
-    score += Global.getMoney();
+    _money = Global.getMoney();
+    score += _money;
 
     // 所持アイテム
-    score += Inventory.getScore();
+    _inventory = Inventory.getScore();
+    score += _inventory;
 
     // スコアに反映
     Global.setScore(score);
   }
+
 }
