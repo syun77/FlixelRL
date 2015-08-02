@@ -204,6 +204,7 @@ class NightmareMgr {
               FlxG.camera.shake(0.01);
               _exists = true;
               Snd.playMusic("nightmare");
+              Snd.playSe("roar");
               // 背景演出
               Field.startFadeBackground();
             }

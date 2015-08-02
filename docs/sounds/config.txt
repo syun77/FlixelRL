@@ -19,3 +19,5 @@
 - warp: warp
 - error: error
 - flash: flash
+- break: break
+- roar: roar

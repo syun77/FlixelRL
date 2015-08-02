@@ -94,6 +94,8 @@
         <sound path="warp.mp3" id="warp" />
         <sound path="error.mp3" id="error" />
         <sound path="flash.mp3" id="flash" />
+        <sound path="break.mp3" id="break" />
+        <sound path="roar.mp3" id="roar" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="pickup2.ogg" id="pickup" />
@@ -116,6 +118,8 @@
         <sound path="badstatus.ogg" id="badstatus" />
         <sound path="warp.ogg" id="warp" />
         <sound path="flash.ogg" id="flash" />
+        <sound path="break.ogg" id="break" />
+        <sound path="roar.ogg" id="roar" />
     </assets>
     <!--------------------------------LIBRARIES------------------------------------->
 

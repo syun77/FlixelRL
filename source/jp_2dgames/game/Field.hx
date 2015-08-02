@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.Snd;
 import flixel.addons.effects.FlxWaveSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -444,6 +445,9 @@ class Field {
     var px = Field.toWorldX(i);
     var py = Field.toWorldY(j);
     ParticleSmoke.start("drill", px, py);
+
+    // 破壊SE
+    Snd.playSe("break", true);
 
     // 壊せた
     return true;
