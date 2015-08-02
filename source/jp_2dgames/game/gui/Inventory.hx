@@ -989,6 +989,8 @@ class Inventory extends FlxGroup {
               else {
                 // 表示アイテム更新
                 _detailSell.setSelectedItem(getSelectedItem());
+                // 説明文も更新
+                _updateDetail();
               }
           }
         }
