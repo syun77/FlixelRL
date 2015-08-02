@@ -31,9 +31,21 @@ class MagicShotMgr extends FlxTypedGroup<MagicShot> {
    **/
   public static function startAllEnemy(px:Float, py:Float, item:ItemData) {
     var player = cast(FlxG.state, PlayState).player;
+    var cnt = 0;
     Enemy.parent.forEachAlive(function(e:Enemy) {
       MagicShot.start(px, py, player, e, item);
+      cnt++;
     });
+
+    if(cnt > 0) {
+      // 発射SE
+      Snd.playSe("flash");
+    }
+    else {
+      // 敵がいないので何も起こらない
+      Message.push2(Msg.NOTHING_HAPPENED);
+      Snd.playSe("error");
+    }
   }
 
   /**

@@ -395,6 +395,7 @@ class ItemUtil {
             else {
               // 何も起きない
               Message.push2(Msg.NOTHING_HAPPENED);
+              Snd.playSe("error");
             }
 
           case "weapon":

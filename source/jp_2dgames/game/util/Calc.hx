@@ -108,7 +108,7 @@ class Calc {
     var str_rate = Math.pow(1.02, str - vit);
 
     // 威力係数 (装備アイテムの差)
-    var power_rate = Math.pow(1.15, atk - def);
+    var power_rate = Math.pow(1.015, atk - def);
 
     // ダメージ量を計算
     var val = (power * str_rate * power_rate);
