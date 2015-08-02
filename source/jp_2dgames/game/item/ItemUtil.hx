@@ -403,12 +403,14 @@ class ItemUtil {
             if(weapon == null) {
               // 何も起きない
               Message.push2(Msg.NOTHING_HAPPENED);
+              Snd.playSe("error");
             }
             else {
               // 武器を強化
               weapon.param.value += 1;
               var name = ItemUtil.getName(weapon);
               Message.push2(Msg.WEAPON_ADD, [name]);
+              Snd.playSe("powerup");
             }
 
           case "armor":
@@ -417,12 +419,14 @@ class ItemUtil {
             if(armor == null) {
               // 何も起きない
               Message.push2(Msg.NOTHING_HAPPENED);
+              Snd.playSe("error");
             }
             else {
               // 防具を強化
               armor.param.value += 1;
               var name = ItemUtil.getName(armor);
               Message.push2(Msg.ARMOR_ADD, [name]);
+              Snd.playSe("powerup");
             }
           default:
             // 何もしない

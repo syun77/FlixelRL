@@ -21,3 +21,4 @@
 - flash: flash
 - break: break
 - roar: roar
+- powerup: powerup

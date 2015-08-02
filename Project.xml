@@ -96,6 +96,7 @@
         <sound path="flash.mp3" id="flash" />
         <sound path="break.mp3" id="break" />
         <sound path="roar.mp3" id="roar" />
+        <sound path="powerup.mp3" id="powerup" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="pickup2.ogg" id="pickup" />
@@ -117,9 +118,11 @@
         <sound path="levelup.ogg" id="levelup" />
         <sound path="badstatus.ogg" id="badstatus" />
         <sound path="warp.ogg" id="warp" />
+        <sound path="error.ogg" id="error" />
         <sound path="flash.ogg" id="flash" />
         <sound path="break.ogg" id="break" />
         <sound path="roar.ogg" id="roar" />
+        <sound path="powerup.ogg" id="powerup" />
     </assets>
     <!--------------------------------LIBRARIES------------------------------------->
 
