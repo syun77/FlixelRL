@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import flixel.util.FlxRandom;
 import flixel.tile.FlxTile;
 import flixel.util.FlxTimer;
 import jp_2dgames.game.util.Key;
@@ -53,14 +54,18 @@ class ResultState extends FlxState {
   private static inline var FONT_SIZE_BIG:Int = 32;
 
   // 基準座標
-  private static inline var BASE_X:Int = 48;
+  private static inline var BASE_X:Int = 80;
   private static inline var BASE_Y:Int = 32;
-  private static inline var SCORE_X:Int = 128;
+  private static inline var SCORE_X:Int = BASE_X + 80;
 
   // 描画オフセット
   private static inline var OFS_DY_SCORE:Int = 24;
   private static inline var OFS_DY:Int = 48;
   private static inline var OFS_DY2:Int = 48;
+
+  // 目ぱち座標のオフセット
+  private static inline var OFS_EYE_X:Int = 143;
+  private static inline var OFS_EYE_Y:Int = 138;
 
   // スコアテキストの幅
   private static inline var SCORE_WIDTH:Int = 200;
@@ -76,6 +81,10 @@ class ResultState extends FlxState {
 
   // 女の子
   private var _girl:FlxSprite;
+  private var _eye:FlxSprite;
+  private var _eye2:FlxSprite;
+
+  private var _tEye:Int = 0;
 
   // 状態
   private var _state:State = State.Wait;
@@ -184,14 +193,25 @@ class ResultState extends FlxState {
     }
 
     // 女の子
-    var sprGirl = new FlxSprite(FlxG.width, 0, "assets/images/result.png");
+    var sprGirl = new FlxSprite(FlxG.width, 0, "assets/images/result/girl.png");
     this.add(sprGirl);
-    FlxTween.tween(sprGirl, {x:FlxG.width/2}, 1, {ease:FlxEase.expoOut});
+    var girlX = FlxG.width-sprGirl.width-80;
+    FlxTween.tween(sprGirl, {x:girlX}, 1, {ease:FlxEase.expoOut});
     _girl = sprGirl;
 
     new FlxTimer(1.5, function(timer:FlxTimer) {
       _state = State.Main;
     });
+
+    // 目ぱち
+    var sprEye = new FlxSprite(girlX + OFS_EYE_X, OFS_EYE_Y, "assets/images/result/girl2.png");
+    this.add(sprEye);
+    sprEye.visible = false;
+    _eye = sprEye;
+    var sprEye2 = new FlxSprite(girlX + OFS_EYE_X, OFS_EYE_Y, "assets/images/result/girl3.png");
+    this.add(sprEye2);
+    sprEye2.visible = false;
+    _eye2 = sprEye2;
   }
 
   /**
@@ -221,8 +241,25 @@ class ResultState extends FlxState {
       case State.Wait:
         // ちょっと待つ
       case State.Main:
+        // 目ぱち更新
+        _tEye += FlxRandom.intRanged(1, 5);
+        _eye.visible = false;
+        _eye2.visible = false;
+        if(_tEye%1000 < 16) {
+          _eye.visible = true;
+        }
+        else if(_tEye%1000 < 32) {
+          _eye2.visible = true;
+        }
+        else if(_tEye%1000 < 48) {
+          _eye.visible = true;
+        }
+
         if(Key.press.A) {
+          // フェードアウト開始
           _state = State.FadeOut;
+          _eye.visible = false;
+          _eye2.visible = false;
         }
       case State.FadeOut:
         // テキスト追い出し
