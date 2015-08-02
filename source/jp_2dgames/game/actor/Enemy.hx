@@ -1,5 +1,9 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxVector;
+import flixel.util.FlxVector;
+import flixel.util.FlxVelocity;
+import flixel.util.FlxMath;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.util.Calc;
 import jp_2dgames.game.util.Key;
@@ -157,11 +161,10 @@ class Enemy extends Actor {
   private function _checkShot():Bool {
     var dx = target.xchip - xchip;
     var dy = target.ychip - ychip;
-    var dir = Dir.None;
-    if(Math.abs(dx) > 1) {
+    if(Math.abs(dy) < FlxVector.EPSILON && Math.abs(dx) > 1) {
       return true;
     }
-    if(Math.abs(dy) > 1) {
+    if(Math.abs(dx) < FlxVector.EPSILON && Math.abs(dy) > 1) {
       return true;
     }
 
@@ -195,6 +198,13 @@ class Enemy extends Actor {
           _cbActionEnd();
         });
         super.beginAction();
+        return;
+      }
+
+      // 通常攻撃できるかどうか
+      if(_checkAttack() == false) {
+        // 攻撃できないので待機
+        standby();
         return;
       }
 

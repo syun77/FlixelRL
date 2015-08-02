@@ -434,7 +434,7 @@ class Player extends Actor {
 
   /**
    * 足下チップを設定する
-   * @return 足下チップが有効なものであればtreu
+   * @return 足下チップが有効なものであればtrue
    **/
   private function _setStompChip(bHint:Bool):Bool {
     switch(Field.getChip(xchip, ychip)) {
@@ -508,6 +508,15 @@ class Player extends Actor {
     }
 
     changeAnim();
+  }
+
+  /**
+   * ワープ実行
+   **/
+  override public function warp(X:Int, Y:Int):Void {
+    super.warp(X, Y);
+    // チップ座標を再更新
+    _setStompChip(false);
   }
 
   /**
