@@ -1,6 +1,9 @@
 package jp_2dgames.game.state;
+import flixel.addons.effects.FlxTrail;
+import flash.display.BlendMode;
+import flixel.util.FlxAngle;
+import flixel.group.FlxTypedGroup;
 import flixel.util.FlxRandom;
-import flixel.tile.FlxTile;
 import flixel.util.FlxTimer;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.game.util.CalcScore;
@@ -10,27 +13,60 @@ import flixel.tweens.FlxTween;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
-import flixel.addons.ui.FlxButtonPlus;
 import flixel.FlxG;
 
-private class MyButton extends FlxButtonPlus {
+/**
+ * きらきらエフェクト
+ **/
+private class Kira extends FlxSprite {
+  // パーティクル管理
+  public static var parent:FlxTypedGroup<Kira>;
 
-  public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void, ?OnEnter:Void->Void, ?OnLeave:Void->Void) {
-    var w = 160; // ボタンの幅
-    var h = 32;  // ボタンの高さ
-    var s = 16;  // フォントのサイズ
-    super(X, Y, OnClick, Text, w, h);
-    textNormal.size = s;
-    textHighlight.size = s;
-
-    enterCallback = OnEnter;
-    leaveCallback = OnLeave;
-
-    #if neko
-    buttonNormal.color = FlxColor.GREEN;
-    buttonHighlight.color = FlxColor.RED;
-#end
+  public static function start(X:Float, Y:Float):Void {
+    var k:Kira = parent.recycle();
+    k.init(X, Y);
   }
+
+  private var _timer:Int = 0;
+
+  // コンストラクタ
+  public function new() {
+    super(0, 0, "assets/images/result/kira.png");
+    blend = BlendMode.ADD;
+    kill();
+  }
+
+  // 初期化
+  public function init(X:Float, Y:Float):Void {
+    x = X;
+    y = Y;
+    var sc = FlxRandom.floatRanged(0.2, 1);
+    scale.set(sc, sc);
+    var deg = FlxRandom.floatRanged(70, 110);
+    var speed = FlxRandom.floatRanged(100, 400);
+    velocity.x = speed * Math.cos(deg * FlxAngle.TO_RAD);
+    velocity.y = speed * -Math.sin(deg * FlxAngle.TO_RAD);
+    acceleration.y = 100;
+    angularVelocity = FlxRandom.floatRanged(30, 100);
+    angularDrag = 0.9;
+
+    alpha = FlxRandom.floatRanged(0.3, 0.8);
+
+    _timer = FlxRandom.intRanged(90, 150);
+  }
+
+  override public function update():Void {
+    super.update();
+    _timer--;
+    visible = true;
+    if(_timer < 30 && (_timer%30)%4 >= 2) {
+      visible = false;
+    }
+    if(_timer < 1) {
+      kill();
+    }
+  }
+
 }
 
 /**
@@ -96,7 +132,6 @@ class ResultState extends FlxState {
     super.create();
 
     // 背景
-
     _bgList = new List<FlxSprite>();
     {
       var size = Field.GRID_SIZE * 2;
@@ -114,7 +149,7 @@ class ResultState extends FlxState {
           var speed = 64 / 60 * -50;
           bg.velocity.set(speed, speed);
           bg.scale.set(2, 2);
-          FlxTween.color(bg, 2, FlxColor.BLACK, FlxColor.SILVER, 1, 1, {ease:FlxEase.expoOut});
+          FlxTween.color(bg, 2, FlxColor.BLACK, FlxColor.GRAY, 1, 1, {ease:FlxEase.expoOut});
           this.add(bg);
           _bgList.add(bg);
         }
@@ -194,6 +229,8 @@ class ResultState extends FlxState {
 
     // 女の子
     var sprGirl = new FlxSprite(FlxG.width, 0, "assets/images/result/girl.png");
+    var trail = new FlxTrail(sprGirl);
+    this.add(trail);
     this.add(sprGirl);
     var girlX = FlxG.width-sprGirl.width-80;
     FlxTween.tween(sprGirl, {x:girlX}, 1, {ease:FlxEase.expoOut});
@@ -212,12 +249,22 @@ class ResultState extends FlxState {
     this.add(sprEye2);
     sprEye2.visible = false;
     _eye2 = sprEye2;
+
+    // 光エフェクト
+    Kira.parent = new FlxTypedGroup<Kira>(64);
+    for(i in 0...Kira.parent.maxSize) {
+      var k = new Kira();
+      Kira.parent.add(k);
+    }
+    this.add(Kira.parent);
   }
 
   /**
    * 破棄
    **/
   override public function destroy():Void {
+    Kira.parent = null;
+
     super.destroy();
   }
 
@@ -241,6 +288,13 @@ class ResultState extends FlxState {
       case State.Wait:
         // ちょっと待つ
       case State.Main:
+        // キラキラエフェクト出現
+        if(FlxRandom.chanceRoll(10)) {
+          var px = FlxRandom.floatRanged(FlxG.width/2, FlxG.width/2+256);
+          var py = FlxRandom.floatRanged(FlxG.height/3, FlxG.height/3+128);
+          Kira.start(px, py);
+        }
+
         // 目ぱち更新
         _tEye += FlxRandom.intRanged(1, 5);
         _eye.visible = false;
