@@ -49,6 +49,8 @@ class Field {
   public static inline var DOOR5:Int        = 23; // ドア(5)
   public static inline var DOOR7:Int        = 24; // ドア(7)
 
+  private static inline var NIGHTMARE_COLOR = 0xA0A0A0;
+
   // 座標変換
   public static function toWorldX(i:Float):Float {
     return i * GRID_SIZE + GRID_SIZE / 2;
@@ -77,6 +79,9 @@ class Field {
   private static var _sprBack:FlxSprite;
   // ゆらゆらエフェクト
   private static var _sprWave:FlxWaveSprite;
+  // Tweenエフェクト
+  private static var _tweenColor:FlxTween = null;
+  private static var _tweenWave:FlxTween = null;
 
   // コリジョンレイヤーの設定
   private static var _cLayer:Layer2D;
@@ -346,11 +351,26 @@ class Field {
    * 背景を暗くする
    **/
   public static function startFadeBackground():Void {
-    FlxTween.color(_sprWave, 1, FlxColor.WHITE, FlxColor.GRAY, 1, 1, {ease:FlxEase.sineOut});
-    FlxTween.tween(_sprWave, {strength:2, speed:5}, 1, {ease:FlxEase.sineOut});
+    _tweenColor = FlxTween.color(_sprWave, 5, FlxColor.WHITE, NIGHTMARE_COLOR, 1, 1, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+      _tweenColor = null; // 完了したら参照を消す
+    }});
+    _tweenWave = FlxTween.tween(_sprWave, {strength:3, speed:5}, 10, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+      _tweenWave = null; // 完了したら参照を消す
+    }});
   }
   public static function resetFadeBackGround():Void {
-    FlxTween.color(_sprWave, 0.3, FlxColor.GRAY, FlxColor.WHITE, 1, 1, {ease:FlxEase.sineOut});
+    if(_tweenColor != null) {
+      // 完了していなければ消す
+      _tweenColor.cancel();
+      _tweenColor = null;
+    }
+    if(_tweenWave != null) {
+      // 完了していなければ消す
+      _tweenWave.cancel();
+      _tweenWave = null;
+    }
+
+    FlxTween.color(_sprWave, 0.3, NIGHTMARE_COLOR, FlxColor.WHITE, 1, 1, {ease:FlxEase.sineOut});
     FlxTween.tween(_sprWave, {strength:0, speed:0}, 0.3, {ease:FlxEase.sineOut});
   }
 

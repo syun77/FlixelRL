@@ -148,11 +148,18 @@ class Enemy extends Actor {
    **/
   override public function kill():Void {
     _hpBar.visible = false;
+    if(_bNightmare) {
+      // ナイトメアを倒したら画面を揺らす
+      FlxG.camera.shake(0.01);
+      // SEも再生
+      Snd.playSe("roar", true);
+    }
     _bNightmare = false;
     super.kill();
 
     // 扉カウントダウン
     Door.countDown();
+
   }
 
   /**

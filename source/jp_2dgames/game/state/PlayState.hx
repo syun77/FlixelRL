@@ -400,6 +400,8 @@ class PlayState extends FlxState {
       // ロード実行
       Save.load(LoadType.All, false, false);
       Global.SetLoadGame(false);
+      // ナイトメア出現チェック
+      NightmareMgr.checkAndStartEffect();
     }
     else {
       // フロア開始時のセーブ

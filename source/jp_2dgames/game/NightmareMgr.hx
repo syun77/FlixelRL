@@ -167,6 +167,18 @@ class NightmareMgr {
   }
 
   /**
+   * ナイトメア出現演出チェック
+   **/
+  public static function checkAndStartEffect():Void {
+    if(instance._existsNightmare()) {
+      // すでに存在している
+      instance._exists = true;
+      // 背景演出
+      Field.startFadeBackground();
+    }
+  }
+
+  /**
    * 次のターンに進む
    **/
   public static function nextTurn(layer:Layer2D):Void {
