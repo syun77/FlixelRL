@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.util.Pad;
 import flixel.util.FlxRandom;
 import flixel.addons.display.FlxBackdrop;
 import jp_2dgames.game.event.EventNpc;
@@ -234,6 +235,9 @@ class TitleState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    // ゲームパッド更新
+    Pad.update();
 
     for(cloud in _clouds) {
       if(cloud.x + cloud.width < 0) {

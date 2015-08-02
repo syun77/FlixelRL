@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.util.Pad;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.actor.Npc;
 import flixel.addons.effects.FlxWaveSprite;
@@ -459,6 +460,9 @@ class PlayState extends FlxState {
 	 */
   override public function update():Void {
     super.update();
+
+    // ゲームパッド更新
+    Pad.update();
 
     switch(_state) {
       case State.FloorStart:
