@@ -94,6 +94,8 @@ class ResultState extends FlxState {
   private static inline var BASE_X:Int = 80;
   private static inline var BASE_Y:Int = 32;
   private static inline var SCORE_X:Int = BASE_X + 80;
+  private static inline var NEWSCORE_X:Int = SCORE_X - 32;
+  private static inline var NEWSCORE_OFS_Y:Int = 4;
 
   // 描画オフセット
   private static inline var OFS_DY_SCORE:Int = 24;
@@ -205,6 +207,19 @@ class ResultState extends FlxState {
       var txtScore = new FlxText(px, py, SCORE_WIDTH, '${score}pt', FONT_SIZE);
       txtScore.alignment = "right";
       _txtList.add(txtScore);
+
+      if(GameData.isNewHiscore()) {
+        // ハイスコア更新
+        var px2 = NEWSCORE_X;
+        var py2 = py + NEWSCORE_OFS_Y;
+        var txtNewScore = new FlxText(px2, py2, SCORE_WIDTH, "NEW!", FONT_SIZE_SCORE);
+        txtNewScore.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 4);
+
+        FlxTween.color(txtNewScore, 1, FlxColor.RED, FlxColor.GOLDENROD, 1, 1, {ease:FlxEase.expoInOut, type:FlxTween.PINGPONG});
+
+        _txtList.add(txtNewScore);
+      }
+
     }
 
     px = BASE_X;
@@ -294,6 +309,7 @@ class ResultState extends FlxState {
       case State.Wait:
         // ちょっと待つ
       case State.Main:
+
         // キラキラエフェクト出現
         if(FlxRandom.chanceRoll(10)) {
           var px = FlxRandom.floatRanged(FlxG.width/2, FlxG.width/2+256);

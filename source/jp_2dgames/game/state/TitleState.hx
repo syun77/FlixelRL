@@ -46,8 +46,10 @@ class TitleState extends FlxState {
 
   // ユーザ名
   private static inline var USER_NAME_POS_X = 8;
-  private static inline var USER_NAME_OFS_Y = -60;
-
+  private static inline var USER_NAME_OFS_Y = -92;
+  // ハイスコア
+  private static inline var HISCORE_POS_X = USER_NAME_POS_X;
+  private static inline var HISCORE_OFS_Y = USER_NAME_OFS_Y + 32;
 
 
   // ■メンバ変数
@@ -158,15 +160,27 @@ class TitleState extends FlxState {
   private function _appearMenu():Void {
 
     // ユーザー名
-    var py = FlxG.height + USER_NAME_OFS_Y;
-    _txtUserName = new FlxText(-480, py, 480, "", 20);
-    FlxTween.tween(_txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
-    this.add(_txtUserName);
+    {
+      var py = FlxG.height + USER_NAME_OFS_Y;
+      _txtUserName = new FlxText(-480, py, 480, "", 20);
+      FlxTween.tween(_txtUserName, {x:USER_NAME_POS_X}, 1, {ease:FlxEase.expoOut});
+      this.add(_txtUserName);
+    }
+
+    // ハイスコア
+    {
+      var py = FlxG.height + HISCORE_OFS_Y;
+      var txtHiscore = new FlxText(-480, py, 480, "", 20);
+      var hiscore = GameData.getHiscore();
+      txtHiscore.text = 'HI-SCORE: ${hiscore}';
+      FlxTween.tween(txtHiscore, {x:HISCORE_POS_X}, 1, {ease:FlxEase.expoOut, startDelay:0.1});
+      this.add(txtHiscore);
+    }
 
     // プレイヤー表示
     var player = new EventNpc();
     player.revive();
-    player.init("player", 1, 12, Dir.Down);
+    player.init("player", 1, 11, Dir.Down);
     this.add(player);
 
     // 各種ボタン

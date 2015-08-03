@@ -62,6 +62,30 @@ class GameData {
 
   // ハイスコア
   private static var _hiscore:Int = 0;
+  public static function getHiscore():Int {
+    return _hiscore;
+  }
+  // ハイスコアを更新
+  public static function updateHiscore(v:Int):Bool {
+    _bNewHiscore = false;
+
+    if(v > _hiscore) {
+      // ハイスコア更新
+      _bNewHiscore = true;
+      _hiscore = v;
+      // セーブする
+      save();
+      return true;
+    }
+
+    // 更新しない
+    return false;
+  }
+  // ハイスコアを更新したかどうか
+  private static var _bNewHiscore:Bool = false;
+  public static function isNewHiscore():Bool {
+    return _bNewHiscore;
+  }
 
   /**
    * セーブデータが存在するかどうか
@@ -142,6 +166,9 @@ class GameData {
     var death = CauseOfDeathMgr.getMessage();
     var data = 'user_name=${user}&score=${score}&floor=${floor}&death=${death}';
     flash.external.ExternalInterface.call("SendScore", data);
+
+    // ハイスコア更新
+    updateHiscore(score);
   }
 
 }

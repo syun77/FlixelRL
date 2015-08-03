@@ -29,8 +29,8 @@ class Calc {
     // 力
     var str = act1.getStr();
     if(act1.badstatus == BadStatus.Anger) {
-      // 怒り状態は攻撃力2倍
-      str *= 2;
+      // 怒り状態は攻撃力1.5倍
+      str = Std.int(str * 1.5);
     }
     // 耐久力
     var vit = act2.getVit();
