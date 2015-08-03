@@ -65,6 +65,10 @@ class GameData {
   public static function getHiscore():Int {
     return _hiscore;
   }
+  // 指定のスコアがハイスコアを超えているかどうか
+  public static function checkHiscore(v:Int):Bool {
+    return v > _hiscore;
+  }
   // ハイスコアを更新
   public static function updateHiscore(v:Int):Bool {
     if(v > _hiscore) {
@@ -158,6 +162,9 @@ class GameData {
     var death = CauseOfDeathMgr.getMessage();
     var data = 'user_name=${user}&score=${score}&floor=${floor}&death=${death}';
     flash.external.ExternalInterface.call("SendScore", data);
+
+    // ハイスコア更新
+    updateHiscore(score);
   }
 
 }
