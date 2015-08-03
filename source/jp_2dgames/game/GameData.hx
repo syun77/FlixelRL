@@ -65,14 +65,13 @@ class GameData {
   public static function getHiscore():Int {
     return _hiscore;
   }
-  // 指定のスコアがハイスコアを超えているかどうか
-  public static function checkHiscore(v:Int):Bool {
-    return v > _hiscore;
-  }
   // ハイスコアを更新
   public static function updateHiscore(v:Int):Bool {
+    _bNewHiscore = false;
+
     if(v > _hiscore) {
       // ハイスコア更新
+      _bNewHiscore = true;
       _hiscore = v;
       // セーブする
       save();
@@ -81,6 +80,11 @@ class GameData {
 
     // 更新しない
     return false;
+  }
+  // ハイスコアを更新したかどうか
+  private static var _bNewHiscore:Bool = false;
+  public static function isNewHiscore():Bool {
+    return _bNewHiscore;
   }
 
   /**
