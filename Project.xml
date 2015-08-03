@@ -51,6 +51,7 @@
         <sound path="015.mp3" id="015" />
         <sound path="016.mp3" id="016" />
         <sound path="nightmare.mp3" id="nightmare" />
+        <sound path="result.mp3" id="result" />
     </assets>
     <assets path="assets/music" unless="flash" include="*.ogg">
         <sound path="001.ogg" id="001" />
@@ -70,6 +71,7 @@
         <sound path="015.ogg" id="015" />
         <sound path="016.ogg" id="016" />
         <sound path="nightmare.ogg" id="nightmare" />
+        <sound path="result.ogg" id="result" />
     </assets>
     <!-- SE -->
     <assets path="assets/sounds" if="flash" include="*.mp3">
@@ -97,6 +99,7 @@
         <sound path="break.mp3" id="break" />
         <sound path="roar.mp3" id="roar" />
         <sound path="powerup.mp3" id="powerup" />
+        <sound path="chime.mp3" id="chime" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="pickup2.ogg" id="pickup" />
@@ -123,6 +126,7 @@
         <sound path="break.ogg" id="break" />
         <sound path="roar.ogg" id="roar" />
         <sound path="powerup.ogg" id="powerup" />
+        <sound path="chime.ogg" id="chime" />
     </assets>
     <!--------------------------------LIBRARIES------------------------------------->
 

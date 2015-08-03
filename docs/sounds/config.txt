@@ -22,3 +22,4 @@
 - break: break
 - roar: roar
 - powerup: powerup
+- chime: chime

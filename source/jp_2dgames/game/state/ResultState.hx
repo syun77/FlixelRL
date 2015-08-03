@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
 import flixel.addons.effects.FlxTrail;
 import flash.display.BlendMode;
 import flixel.util.FlxAngle;
@@ -237,6 +238,8 @@ class ResultState extends FlxState {
     _girl = sprGirl;
 
     new FlxTimer(1.5, function(timer:FlxTimer) {
+      // メイン処理へ
+      Snd.playMusic("result");
       _state = State.Main;
     });
 
@@ -257,6 +260,8 @@ class ResultState extends FlxState {
       Kira.parent.add(k);
     }
     this.add(Kira.parent);
+
+    Snd.playSe("chime");
   }
 
   /**
@@ -264,6 +269,7 @@ class ResultState extends FlxState {
    **/
   override public function destroy():Void {
     Kira.parent = null;
+    Snd.stopMusic();
 
     super.destroy();
   }

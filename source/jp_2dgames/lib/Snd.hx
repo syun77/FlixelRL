@@ -10,7 +10,7 @@ import flixel.FlxG;
 class Snd {
 
   // BGM無効フラグ
-#if flash
+#if !flash
   private static var _bBgmDisable = false;
 #else
   private static var _bBgmDisable = true;
