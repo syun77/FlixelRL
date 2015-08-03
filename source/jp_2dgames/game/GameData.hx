@@ -62,6 +62,22 @@ class GameData {
 
   // ハイスコア
   private static var _hiscore:Int = 0;
+  public static function getHiscore():Int {
+    return _hiscore;
+  }
+  // ハイスコアを更新
+  public static function updateHiscore(v:Int):Bool {
+    if(v > _hiscore) {
+      // ハイスコア更新
+      _hiscore = v;
+      // セーブする
+      save();
+      return true;
+    }
+
+    // 更新しない
+    return false;
+  }
 
   /**
    * セーブデータが存在するかどうか
