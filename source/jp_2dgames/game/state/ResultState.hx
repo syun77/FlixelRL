@@ -213,7 +213,7 @@ class ResultState extends FlxState {
         var px2 = NEWSCORE_X;
         var py2 = py + NEWSCORE_OFS_Y;
         var txtNewScore = new FlxText(px2, py2, SCORE_WIDTH, "NEW!", FONT_SIZE_SCORE);
-        txtNewScore.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 4);
+        txtNewScore.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.WHITE, 2);
 
         FlxTween.color(txtNewScore, 1, FlxColor.RED, FlxColor.GOLDENROD, 1, 1, {ease:FlxEase.expoInOut, type:FlxTween.PINGPONG});
 
@@ -284,7 +284,6 @@ class ResultState extends FlxState {
    **/
   override public function destroy():Void {
     Kira.parent = null;
-    Snd.stopMusic();
 
     super.destroy();
   }
@@ -333,6 +332,7 @@ class ResultState extends FlxState {
 
         if(Key.press.A) {
           // フェードアウト開始
+          Snd.stopMusic();
           _state = State.FadeOut;
           _eye.visible = false;
           _eye2.visible = false;
