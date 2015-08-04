@@ -269,6 +269,12 @@ class Field {
     {
       var id = csv.getEnemyAppearId(floor);
       var cnt = csv.enemy_appear.getInt(id, "item");
+      if(Global.isEscapeFromNightmare()) {
+        // ナイトメアからの逃走ボーナス
+        cnt += 3;
+        // 逃走フラグを下げておく
+        Global.setEscapeFromNightmare(false);
+      }
       for(i in 0...cnt) {
         var p = layer.searchRandom(NONE);
         if(p != null) {

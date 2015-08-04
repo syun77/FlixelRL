@@ -49,6 +49,7 @@ class Global {
     _nightmareLv = 1;
     _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareAvoid = 0;
+    _bEscapeFromNightmare = false;
     _nightmareDefeat = false;
     _bitsInit();
     _bGameClear = false;
@@ -297,6 +298,14 @@ class Global {
   }
   public static function setNightmareDefeat(v:Bool):Void {
     _nightmareDefeat = v;
+  }
+  // ナイトメアから逃走したかどうか
+  private static var _bEscapeFromNightmare:Bool = false;
+  public static function isEscapeFromNightmare():Bool {
+    return _bEscapeFromNightmare;
+  }
+  public static function setEscapeFromNightmare(b:Bool):Void {
+    _bEscapeFromNightmare = b;
   }
 
   // ショップ出現カウント

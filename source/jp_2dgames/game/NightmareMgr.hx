@@ -328,6 +328,8 @@ class NightmareMgr {
       if(_avoid > 1) {
         // 2回以上無視したのでナイトメアを消す
         _levelUp(false);
+        // 逃走成功
+        Global.setEscapeFromNightmare(true);
       }
     }
 
