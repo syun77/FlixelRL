@@ -162,7 +162,7 @@ class ItemUtil {
         }
       case IType.Wand:
         var d = price * 0.15;
-        price = (d * 0.2) + (d * item.param.value);
+        price = (price - d) + (d * item.param.value);
       default:
     }
 

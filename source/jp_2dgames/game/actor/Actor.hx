@@ -67,9 +67,10 @@ class Actor extends FlxSprite {
   // ダメージアニメーションのフレーム数
   private static inline var TIMER_DAMAGE:Int = 8;
   // バッドステータスが有効なターン数
-  private static inline var BADSTATUS_TURN:Int = 10;
-  private static inline var BADSTATUS_TURN_PARALYSIS:Int = 3; // 麻痺は3ターンのみ
-  private static inline var BADSTATUS_TURN_POISON:Int = 6; // 毒は6ターンのみ
+  private static inline var BADSTATUS_TURN:Int           = 10; // 基本は10ターン有効
+  private static inline var BADSTATUS_TURN_PARALYSIS:Int = 3; //  麻痺は3ターンのみ
+  private static inline var BADSTATUS_TURN_POISON:Int    = 6; //  毒は6ターンのみ
+  private static inline var BADSTATUS_TURN_CONFUSION:Int = 5; //  混乱は5ターンのみ
   // 毒で減るHPの割合
   private static inline var DAMAGE_POISON:Int = 5; // 5%
 
@@ -392,7 +393,8 @@ class Actor extends FlxSprite {
     switch(stt) {
       case BadStatus.None: turn = 0;
       case BadStatus.Paralysis: turn = BADSTATUS_TURN_PARALYSIS;
-      case BadStatus.Poison: turn = BADSTATUS_TURN_POISON;
+      case BadStatus.Poison:    turn = BADSTATUS_TURN_POISON;
+      case BadStatus.Confusion: turn = BADSTATUS_TURN_CONFUSION;
       default: turn = BADSTATUS_TURN;
     }
 

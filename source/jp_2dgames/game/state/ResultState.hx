@@ -277,6 +277,7 @@ class ResultState extends FlxState {
     this.add(Kira.parent);
 
     Snd.playSe("chime");
+
   }
 
   /**
@@ -338,6 +339,7 @@ class ResultState extends FlxState {
           _eye2.visible = false;
         }
       case State.FadeOut:
+
         // テキスト追い出し
         FlxTween.tween(_txtCaption, {y:-64}, 1, {ease:FlxEase.expoOut});
         for(txt in _txtList) {
@@ -345,7 +347,8 @@ class ResultState extends FlxState {
         }
         FlxTween.tween(_girl, {x:FlxG.width}, 1, {ease:FlxEase.expoOut});
 
-        FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
+        // 白フェード
+        FlxG.camera.fade(FlxColor.WHITE, 1, false, function() {
           // タイトル画面に戻る
           FlxG.switchState(new TitleState());
         });

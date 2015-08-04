@@ -151,6 +151,9 @@ class TitleState extends FlxState {
       openSubState(new NameEntryState());
       GameData.bitOn(GameData.FLG_FIRST_DONE);
     }
+
+    // 白フェードで開始
+    FlxG.camera.fade(FlxColor.WHITE, 1.5, true);
   }
 
   /**
