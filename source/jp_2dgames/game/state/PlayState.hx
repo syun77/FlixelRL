@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.particle.EffectCloud;
 import jp_2dgames.game.util.Pad;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.actor.Npc;
@@ -301,6 +302,14 @@ class PlayState extends FlxState {
     }
     this.add(MagicShot.parent);
 
+    // 雲エフェクト
+    EffectCloud.parent = new FlxTypedGroup<EffectCloud>(EffectCloud.MAX_CLOUD);
+    for(i in 0...EffectCloud.MAX_CLOUD) {
+      var c = new EffectCloud();
+      EffectCloud.parent.add(c);
+    }
+    this.add(EffectCloud.parent);
+
     // ナイトメア管理
     NightmareMgr.instance = new NightmareMgr(_csv.enemy_nightmare);
 
@@ -442,6 +451,7 @@ class PlayState extends FlxState {
     ParticleRecovery.parent = null;
     ParticleSmoke.parent = null;
     NightmareMgr.instance = null;
+    EffectCloud.parent = null;
     MagicShot.parent = null;
     DropItem.parent = null;
     Enemy.parent = null;

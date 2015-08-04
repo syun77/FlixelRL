@@ -1,7 +1,6 @@
 package jp_2dgames.game.state;
 import jp_2dgames.game.util.Pad;
 import flixel.util.FlxRandom;
-import flixel.addons.display.FlxBackdrop;
 import jp_2dgames.game.event.EventNpc;
 import jp_2dgames.game.util.DirUtil;
 import flash.display.BlendMode;

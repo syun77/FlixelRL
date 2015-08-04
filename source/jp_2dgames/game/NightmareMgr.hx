@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.EffectCloud;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
 import jp_2dgames.game.NightmareMgr.NightmareSkill;
@@ -34,6 +36,8 @@ class NightmareMgr {
 
   // ナイトメア出現開始フロア数
   public static inline var FLOOR_APPEAR_START:Int = 4;
+  // 雲エフェクト出現残りターン数
+  public static inline var TURN_CLOUD_START:Int = 30;
 
   public static var instance:NightmareMgr = null;
 
@@ -175,6 +179,17 @@ class NightmareMgr {
       instance._exists = true;
       // 背景演出
       Field.startFadeBackground();
+      // 雲エフェクトチェック
+      checkAndStartCloud();
+    }
+  }
+
+  private static function checkAndStartCloud():Void {
+    if(instance._turn <= TURN_CLOUD_START) {
+      // 雲エフェクト
+      if(EffectCloud.isAppear() == false) {
+        EffectCloud.start();
+      }
     }
   }
 
@@ -214,6 +229,8 @@ class NightmareMgr {
             if(e != null) {
               // 画面を揺らす
               FlxG.camera.shake(0.01);
+              // 画面をフラッシュ
+              FlxG.camera.flash(FlxColor.GRAY, 0.3);
               _exists = true;
               Snd.playMusic("nightmare");
               Snd.playSe("roar");
@@ -234,6 +251,9 @@ class NightmareMgr {
         }
       }
     }
+
+    // 雲エフェクトチェック
+    checkAndStartCloud();
 
     if(_exists) {
       // 倒したかどうかをチェック
@@ -271,6 +291,9 @@ class NightmareMgr {
 
     // 背景編出解除
     Field.resetFadeBackGround();
+
+    // 雲を消す
+    EffectCloud.killAll();
 
     // 生存フラグを下げる
     _exists = false;
