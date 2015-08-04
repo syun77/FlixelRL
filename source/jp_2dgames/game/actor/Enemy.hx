@@ -511,6 +511,17 @@ class Enemy extends Actor {
       return DirUtil.random();
     }
 
+    var path = Field.findPath(xchip, ychip, target.xchip, target.ychip);
+    if(path == null) {
+      // 移動できない
+      return DirUtil.random();
+    }
+    var x1 = path[0].x;
+    var y1 = path[0].y;
+    var x2 = path[1].x;
+    var y2 = path[1].y;
+    return DirUtil.look(x1, y1, x2, y2);
+
     // 移動方向判定
     var player = cast(FlxG.state, PlayState).player;
     var dx = player.xchip - xchip;

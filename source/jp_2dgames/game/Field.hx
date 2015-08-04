@@ -1,5 +1,8 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.AStar;
+import flixel.tile.FlxTilemap;
+import flixel.util.FlxTimer;
 import jp_2dgames.lib.Snd;
 import flixel.addons.effects.FlxWaveSprite;
 import flixel.tweens.FlxEase;
@@ -490,5 +493,58 @@ class Field {
       default:
         trace('Warning: Not door (${i},${j}) = ${v}');
     }
+  }
+
+  /**
+   * 移動可能なフィールドの情報を計算してCSVとして取得する
+   **/
+  private static function _computeMap():Layer2D {
+
+    var layer = new Layer2D(_cLayer.width, _cLayer.height);
+
+    _cLayer.forEach(function(i:Int, j:Int, v:Int) {
+      if(isCollision(i, j)) {
+        layer.set(i, j, 1);
+      }
+    });
+
+    return layer;
+  }
+
+  public static function findPath(xstart:Int, ystart:Int, xgoal:Int, ygoal:Int):Array<FlxPoint> {
+
+    // A*計算オブジェクト生成
+    var astar = new AStar(_computeMap(), xgoal, ygoal, false);
+    // スタート地点のノード作成
+    // スタート地点なのでコストは0
+    var node = astar.openNode(xstart, ystart, 0, null);
+    trace(node);
+    astar.addOpneList(node);
+
+    // 試行回数。1000回超えたら強制中断
+    var cnt = 0;
+    while(cnt < 1000) {
+      astar.removeOpenList(node);
+      // 周囲を開く
+      astar.openAround(node);
+      // 最小スコアのノードを探す
+      node = astar.searchMinScoreNodeFromOpenList();
+      if(node == null) {
+        // 袋小路なのでおしまい
+        return null;
+      }
+      if(node.x == xgoal && node.y == ygoal) {
+        // ゴールにたどり着いた
+        astar.removeOpenList(node);
+//        node.dumpRecursive();
+        // パスを取得する
+        var pList = node.getPath(new Array<FlxPoint>());
+        // 反転する
+        pList.reverse();
+        return pList;
+      }
+    }
+
+    return null;
   }
 }
