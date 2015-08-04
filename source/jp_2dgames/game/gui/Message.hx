@@ -65,6 +65,8 @@ class Msg {
   public static inline var ARMOR_ADD:Int = 48; // 防具を強化
   public static inline var HP_SWAP:Int = 49; // HPを交換
   public static inline var ITEM_GET:Int = 50; // アイテム獲得
+  public static inline var WARP:Int = 51; // ワープした
+  public static inline var POSITION_CHANGE:Int = 52; // お互いの位置を入れ替え
 
 }
 

@@ -50,8 +50,8 @@ int,str,str
 48,装備を強化して<val1>になった,blue
 49,<val1>とHPを交換した,blue
 50,<val1>を手に入れた,green
-51,ダミー,white
-52,ダミー,white
+51,<val1>はワープした,blue
+52,<val1>と<val2>の位置が入れ替わった,white
 53,ダミー,white
 54,ダミー,white
 55,ダミー,white

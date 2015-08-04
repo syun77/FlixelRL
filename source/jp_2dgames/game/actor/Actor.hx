@@ -785,11 +785,16 @@ class Actor extends FlxSprite {
   /**
    * ワープする
    **/
-  public function warp(X:Int, Y:Int):Void {
+  public function warp(X:Int, Y:Int, bMsg:Bool):Void {
     setPositionChip(X, Y);
     // ワープエフェクト再生
     ParticleSmoke.start("warp", x, y);
     Snd.playSe("warp", true);
+
+    if(bMsg) {
+      // ワープメッセージ表示
+      Message.push2(Msg.WARP, [name]);
+    }
   }
 
   /**

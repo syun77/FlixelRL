@@ -450,7 +450,7 @@ class ItemUtil {
           case ItemConst.ORB2:
             // 青オーブ
             // 次のフロアへワープ
-            actor.warp(-1, -1);
+            actor.warp(-1, -1, false);
             actor.visible = false;
           case ItemConst.ORB4:
             // 緑オーブ
@@ -546,7 +546,7 @@ class ItemUtil {
           if(Enemy.getFromPosition(px, py) == null) {
             // ワープ可能
             ParticleSmoke.start("warp", actor.x, actor.y);
-            actor.warp(px, py);
+            actor.warp(px, py, true);
             break;
           }
           pt.put();
@@ -557,8 +557,10 @@ class ItemUtil {
         var use_ychip = useActor.ychip;
         var target_xchip = actor.xchip;
         var target_ychip = actor.ychip;
-        useActor.warp(target_xchip, target_ychip);
-        actor.warp(use_xchip, use_ychip);
+        useActor.warp(target_xchip, target_ychip, false);
+        actor.warp(use_xchip, use_ychip, false);
+        // メッセージ表示
+        Message.push2(Msg.POSITION_CHANGE, [useActor.name, actor.name]);
 
       case "hpswap":
         // HP交換

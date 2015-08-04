@@ -513,8 +513,8 @@ class Player extends Actor {
   /**
    * ワープ実行
    **/
-  override public function warp(X:Int, Y:Int):Void {
-    super.warp(X, Y);
+  override public function warp(X:Int, Y:Int, bMsg:Bool):Void {
+    super.warp(X, Y, bMsg);
     // チップ座標を再更新
     _setStompChip(false);
   }
