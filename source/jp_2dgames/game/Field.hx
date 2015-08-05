@@ -518,7 +518,6 @@ class Field {
     // スタート地点のノード作成
     // スタート地点なのでコストは0
     var node = astar.openNode(xstart, ystart, 0, null);
-    trace(node);
     astar.addOpneList(node);
 
     // 試行回数。1000回超えたら強制中断

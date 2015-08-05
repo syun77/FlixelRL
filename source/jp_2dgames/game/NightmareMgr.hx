@@ -184,7 +184,15 @@ class NightmareMgr {
     }
   }
 
-  private static function checkAndStartCloud():Void {
+  /**
+   * 雲エフェクト開始チェック
+   **/
+  public static function checkAndStartCloud():Void {
+    if(isValid() == false) {
+      // ナイトメアは出現しない
+      return;
+    }
+
     if(instance._turn <= TURN_CLOUD_START) {
       // 雲エフェクト
       if(EffectCloud.isAppear() == false) {
@@ -230,7 +238,7 @@ class NightmareMgr {
               // 画面を揺らす
               FlxG.camera.shake(0.01);
               // 画面をフラッシュ
-              FlxG.camera.flash(FlxColor.GRAY, 0.3);
+              FlxG.camera.flash(FlxColor.PURPLE, 0.3);
               _exists = true;
               Snd.playMusic("nightmare");
               Snd.playSe("roar");

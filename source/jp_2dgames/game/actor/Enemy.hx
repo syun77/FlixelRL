@@ -502,26 +502,25 @@ class Enemy extends Actor {
   }
 
   /**
-	 * 移動方向を決める
-	 **/
-  private function _aiMoveDir():Dir {
-
-    if(_badstatus == BadStatus.Confusion) {
-      // 混乱しているのでランダム移動
-      return DirUtil.random();
-    }
-
+   * A*アルゴリズムにより移動方向を求める
+   **/
+  private function _aiMoveDirAStar():Dir {
     var path = Field.findPath(xchip, ychip, target.xchip, target.ychip);
     if(path == null) {
       // 移動できない
-      return DirUtil.random();
+      return Dir.None;
     }
     var x1 = path[0].x;
     var y1 = path[0].y;
     var x2 = path[1].x;
     var y2 = path[1].y;
     return DirUtil.look(x1, y1, x2, y2);
+  }
 
+  /**
+   * 頭の悪い方法により移動方向を求める
+   **/
+  private function _aiMoveDirStupid():Dir {
     // 移動方向判定
     var player = cast(FlxG.state, PlayState).player;
     var dx = player.xchip - xchip;
@@ -582,6 +581,34 @@ class Enemy extends Actor {
     }
 
     return dir;
+  }
+
+  /**
+	 * 移動方向を決める
+	 **/
+  private function _aiMoveDir():Dir {
+
+    if(_badstatus == BadStatus.Confusion) {
+      // 混乱しているのでランダム移動
+      return DirUtil.random();
+    }
+
+    var ai = _getCsvParam("ai");
+    switch(ai) {
+      case "":
+        // A*で移動方向を求める
+        var dir = _aiMoveDirAStar();
+        if(dir == Dir.None) {
+          // パスが見つからなかった
+          return _aiMoveDirStupid();
+        }
+        return dir;
+      case "stupid":
+        // 頭の悪い方法で移動方向を求める
+        return _aiMoveDirStupid();
+      default:
+        return DirUtil.random();
+    }
   }
 
   private function _isMove(xnext:Int, ynext:Int):Bool {

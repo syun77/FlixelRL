@@ -417,6 +417,9 @@ class PlayState extends FlxState {
       Save.save(false, false);
     }
 
+    // 雲エフェクト開始チェック
+    NightmareMgr.checkAndStartCloud();
+
     // デバッグ用アイテム
     _debugItem = new DropItem();
     _debugItem.alpha = 0.5;
