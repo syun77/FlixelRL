@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.util.Pad;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.event.EventNpc;
@@ -18,13 +19,16 @@ import flixel.FlxState;
 
 private class MyButton extends FlxButtonPlus {
 
-  public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void) {
+  public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void, ?OnEnter:Void->Void, ?OnLeave:Void->Void) {
     var w = 200; // ボタンの幅
     var h = 40;  // ボタンの高さ
     var s = 20;  // フォントのサイズ
     super(X, Y, OnClick, Text, w, h);
     textNormal.size = s;
     textHighlight.size = s;
+
+    enterCallback = OnEnter;
+    leaveCallback = OnLeave;
   }
 }
 
@@ -61,6 +65,13 @@ class TitleState extends FlxState {
 
   // 流れる雲
   private var _clouds:Array<FlxSprite>;
+
+  // CSVテキスト
+  private var _csv:CsvLoader;
+  // ポップアップテキスト
+  private var _txtTip:FlxText = null;
+  // ポップアップの枠
+  private var _sprTip:FlxSprite = null;
 
   /**
    * 生成
@@ -185,6 +196,23 @@ class TitleState extends FlxState {
     player.init("player", 1, 11, Dir.Down);
     this.add(player);
 
+    // CSV
+    _csv = new CsvLoader("assets/data/title.csv");
+
+    // ポップアップテキスト
+    {
+      _txtTip = new FlxText(0, 0, 400, "");
+      _txtTip.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+      _txtTip.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.GREEN);
+      _txtTip.color = FlxColor.WHITE;
+      _txtTip.visible = false;
+
+      _sprTip = new FlxSprite(0, 0);
+      _sprTip.makeGraphic(400, 24, FlxColor.BLACK);
+      _sprTip.alpha = 0.5;
+      _sprTip.visible = false;
+    }
+
     // 各種ボタン
     var btnList = new List<MyButton>();
     var px = FlxG.width;
@@ -200,13 +228,24 @@ class TitleState extends FlxState {
         // すでに見た
         FlxG.switchState(new PlayInitState());
       }
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(1, "msg");
+    }, function() {
+      _txtTip.visible = false;
     }));
+
     py += 64;
     // CONTINUE
     var btnContinue = new MyButton(px, py, "CONTINUE", function() {
       // セーブデータから読み込み
       Global.SetLoadGame(true);
       FlxG.switchState(new PlayState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(2, "msg");
+    }, function() {
+      _txtTip.visible = false;
     });
     if(Save.isContinue()) {
       py += 64;
@@ -218,13 +257,26 @@ class TitleState extends FlxState {
       if(subState == null) {
         openSubState(new NameEntryState());
       }
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(3, "msg");
+    }, function() {
+      _txtTip.visible = false;
     }));
     py += 64;
 
     if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE)) {
       // 初回ゲーム済みのみ表示
       // OPENING
-      btnList.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); }));
+      btnList.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); },
+        function() {
+          _txtTip.visible = true;
+          _txtTip.text = _csv.getString(4, "msg");
+        },
+        function() {
+          _txtTip.visible = false;
+        }
+      ));
     }
 
     var px2 = FlxG.width/2 - 100;
@@ -237,6 +289,10 @@ class TitleState extends FlxState {
 
     // ボタンを消しておく
     _btnClick.kill();
+
+    // ヘルプチップ登録
+    this.add(_sprTip);
+    this.add(_txtTip);
   }
 
   /**
@@ -254,6 +310,15 @@ class TitleState extends FlxState {
 
     // ゲームパッド更新
     Pad.update();
+
+    // ヘルプチップ更新
+    if(_txtTip != null) {
+      _txtTip.x = FlxG.mouse.x+16;
+      _txtTip.y = FlxG.mouse.y-24;
+      _sprTip.x = _txtTip.x;
+      _sprTip.y = _txtTip.y;
+      _sprTip.visible = _txtTip.visible;
+    }
 
     for(cloud in _clouds) {
       if(cloud.x + cloud.width < 0) {
