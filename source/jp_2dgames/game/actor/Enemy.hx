@@ -2,8 +2,6 @@ package jp_2dgames.game.actor;
 
 import flixel.util.FlxVector;
 import flixel.util.FlxVector;
-import flixel.util.FlxVelocity;
-import flixel.util.FlxMath;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.util.Calc;
 import jp_2dgames.game.util.Key;
@@ -514,7 +512,17 @@ class Enemy extends Actor {
     var y1 = path[0].y;
     var x2 = path[1].x;
     var y2 = path[1].y;
-    return DirUtil.look(x1, y1, x2, y2);
+    var dir = DirUtil.look(x1, y1, x2, y2);
+    var pt = FlxPoint.get(xchip, ychip);
+    pt = DirUtil.move(dir, pt);
+    var px = Std.int(pt.x);
+    var py = Std.int(pt.y);
+    pt.put();
+    if(_isMove(px, py) == false) {
+      // 敵がいて移動できない
+      return Dir.None;
+    }
+    return dir;
   }
 
   /**
