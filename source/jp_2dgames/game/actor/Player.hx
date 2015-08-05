@@ -250,6 +250,11 @@ class Player extends Actor {
       // レベルアップメッセージの表示
       Message.push2(Msg.LEVELUP, [name]);
       Message.push2(Msg.LEVELUP2, [name, params.lv]);
+
+      // HPを最大まで回復
+      var val = params.hpmax - params.hp;
+      addHp(val);
+      Message.push2(Msg.RECOVER_HPMAX, [name]);
     }
   }
 

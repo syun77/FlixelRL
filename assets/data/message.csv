@@ -52,7 +52,7 @@ int,str,str
 50,<val1>を手に入れた,green
 51,<val1>はワープした,blue
 52,<val1>と<val2>の位置が入れ替わった,white
-53,ダミー,white
+53,<val1>のHPが最大まで回復した,blue
 54,ダミー,white
 55,ダミー,white
 56,ダミー,white

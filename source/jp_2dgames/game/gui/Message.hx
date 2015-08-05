@@ -67,6 +67,7 @@ class Msg {
   public static inline var ITEM_GET:Int = 50; // アイテム獲得
   public static inline var WARP:Int = 51; // ワープした
   public static inline var POSITION_CHANGE:Int = 52; // お互いの位置を入れ替え
+  public static inline var RECOVER_HPMAX:Int = 53; // HPが最大まで回復
 
 }
 
