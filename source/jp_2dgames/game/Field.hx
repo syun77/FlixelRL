@@ -1,8 +1,9 @@
 package jp_2dgames.game;
 
-import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.AStar;
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Snd;
+import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.addons.effects.FlxWaveSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -10,7 +11,6 @@ import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.game.gimmick.Door;
 import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.util.DirUtil.Dir;
-import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxPoint;
 import jp_2dgames.lib.CsvLoader;
 import flash.Lib;
@@ -473,6 +473,34 @@ class Field {
         }
       });
     }
+
+    return true;
+  }
+
+  /**
+   * 一方通行を消す
+   * @return 破壊できたらtrue
+   **/
+  public static function breakOneWay(i:Int, j:Int):Bool {
+    switch(_cLayer.get(i, j)) {
+      case ONEWAY_LEFT, ONEWAY_UP, ONEWAY_RIGHT, ONEWAY_DOWN:
+      default:
+        // 何もしない
+        return false;
+    }
+
+    // レイヤー情報更新
+    _cLayer.set(i, j, NONE);
+
+    // 背景画像を更新
+    drawBackgroundChip(NONE, i, j);
+
+    // エフェクト再生
+    var px = toWorldX(i);
+    var py = toWorldY(j);
+    Particle.start(PType.Ring2, px, py, FlxColor.PINK);
+
+    Snd.playSe("break", true);
 
     return true;
   }

@@ -456,6 +456,9 @@ class Player extends Actor {
           Message.pushHint();
         }
         _stompChip = StompChip.None;
+      case Field.ONEWAY_LEFT, Field.ONEWAY_UP, Field.ONEWAY_RIGHT, Field.ONEWAY_DOWN:
+        // 一方通行を踏んだら消える
+        Field.breakOneWay(xchip, ychip);
       default:
         _stompChip = StompChip.None;
     }
