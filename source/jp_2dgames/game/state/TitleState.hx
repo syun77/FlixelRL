@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.util.Key;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.util.Pad;
 import flixel.util.FlxRandom;
@@ -33,6 +34,14 @@ private class MyButton extends FlxButtonPlus {
 }
 
 /**
+ * 状態
+ **/
+private enum State {
+  Logo; // ロゴ
+  Main; // メイン
+}
+
+/**
  * タイトル画面
  **/
 class TitleState extends FlxState {
@@ -56,6 +65,11 @@ class TitleState extends FlxState {
 
 
   // ■メンバ変数
+  private var _bg:FlxSprite;
+  private var _bgLogo:FlxSprite;
+  private var _txtLogo:FlxText;
+  private var _txtCopyright:FlxText;
+
   // PLEASE CLICK ボタン
   private var _btnClick:MyButton;
   // プレイヤー名
@@ -73,6 +87,9 @@ class TitleState extends FlxState {
   // ポップアップの枠
   private var _sprTip:FlxSprite = null;
 
+  // 状態
+  private var _state:State = State.Logo;
+
   /**
    * 生成
    **/
@@ -80,15 +97,15 @@ class TitleState extends FlxState {
     super.create();
 
     // 背景画像
-    var bg = new FlxSprite(0, 0, "assets/images/title/bg.png");
-    this.add(bg);
+    _bg = new FlxSprite(0, 0, "assets/images/title/bg.png");
+    this.add(_bg);
     // フェード表示
     var a = 0.8; // アルファ値
-    bg.alpha = 0;
-    FlxTween.tween(bg, {alpha:a}, 1, {ease:FlxEase.expoOut});
+    _bg.alpha = 0;
+    FlxTween.tween(_bg, {alpha:a}, 1, {ease:FlxEase.expoOut});
     // スクロール
-    bg.y = -bg.height + FlxG.height;
-    FlxTween.tween(bg, {y:0}, 30, {type:FlxTween.PINGPONG, ease:FlxEase.sineOut});
+    _bg.y = -_bg.height + FlxG.height;
+    FlxTween.tween(_bg, {y:0}, 30, {type:FlxTween.PINGPONG, ease:FlxEase.sineOut});
 
     // 雲
     _clouds = new Array<FlxSprite>();
@@ -109,51 +126,41 @@ class TitleState extends FlxState {
     }
 
     // ロゴの背景
-    var bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 8, FlxColor.WHITE);
-    bgLogo.blend = BlendMode.ADD;
-    bgLogo.x = 0;
-    bgLogo.scale.x = 0;
-    FlxTween.tween(bgLogo.scale, {x:1}, 1, {ease:FlxEase.expoIn});
-    _tweenBgLog = FlxTween.color(bgLogo, 2, FlxColor.CHARCOAL, FlxColor.GRAY, 0.5, 0.5, {ease:FlxEase.sineInOut, type:FlxTween.PINGPONG});
+    _bgLogo = new FlxSprite(FlxG.width/2, LOGO_BG_Y).makeGraphic(FlxG.width, 8, FlxColor.WHITE);
+    _bgLogo.blend = BlendMode.ADD;
+    _bgLogo.x = 0;
+    _bgLogo.scale.x = 0;
+    FlxTween.tween(_bgLogo.scale, {x:1}, 1, {ease:FlxEase.expoIn});
+    _tweenBgLog = FlxTween.color(_bgLogo, 2, FlxColor.CHARCOAL, FlxColor.GRAY, 0.5, 0.5, {ease:FlxEase.sineInOut, type:FlxTween.PINGPONG});
     {
-      var filter = new FlxSpriteFilter(bgLogo);
+      var filter = new FlxSpriteFilter(_bgLogo);
       var blur = new BlurFilter(0, 8);
       filter.addFilter(blur);
       filter.applyFilters();
     }
-    this.add(bgLogo);
+    this.add(_bgLogo);
 
     // タイトルロゴ
-    var txtLogo = new FlxText(FlxG.width/2, LOGO_Y2, 320, "1 Rogue", LOGO_SIZE);
-    txtLogo.color = FlxColor.WHITE;
-    txtLogo.x -= txtLogo.width/2;
-    txtLogo.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.GOLDENROD, 8);
-    this.add(txtLogo);
+    _txtLogo = new FlxText(FlxG.width/2, LOGO_Y2, 320, "1 Rogue", LOGO_SIZE);
+    _txtLogo.color = FlxColor.WHITE;
+    _txtLogo.x -= _txtLogo.width/2;
+    _txtLogo.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.GOLDENROD, 8);
+    this.add(_txtLogo);
 //    FlxTween.tween(txtLogo, {y:LOGO_Y2}, 1, {ease:FlxEase.expoOut});
 
     // コピーライト
-    var txtCopyright = new FlxText(FlxG.width/2, FlxG.height-32, 480);
-    txtCopyright.x = txtCopyright.width/2;
-    txtCopyright.text = "(c) 2015 2dgames.jp All right reserved.";
-    txtCopyright.setFormat(null, 16);
-    this.add(txtCopyright);
+    _txtCopyright = new FlxText(FlxG.width/2, FlxG.height-32, 480);
+    _txtCopyright.x = _txtCopyright.width/2;
+    _txtCopyright.text = "(c) 2015 2dgames.jp All right reserved.";
+    _txtCopyright.setFormat(null, 16);
+    this.add(_txtCopyright);
 
     // クリックボタン
     var px = FlxG.width/2 - 100;
     var py = FlxG.height/2;
     _btnClick = new MyButton(px, py, "PLEASE CLICK", function() {
-      // 背景を暗くする
-      FlxTween.color(bg, 1, FlxColor.WHITE, FlxColor.GRAY, a, a, {ease:FlxEase.expoOut});
-      // ロゴを追い出す
-      FlxTween.tween(txtLogo, {y:LOGO_Y}, 1, {ease:FlxEase.expoOut});
-      // ロゴ背景を消す
-      FlxTween.tween(bgLogo, {alpha:0.0}, 1, {ease:FlxEase.expoOut});
-      // 点滅アニメ終了
-      _tweenBgLog.cancel();
-      // コピーライトを追い出す
-      FlxTween.tween(txtCopyright, {y:FlxG.height+32}, 1, {ease:FlxEase.expoOut});
-      // メニュー表示
-      _appearMenu();
+      // メインメニューへ遷移
+      _changeMainMenu();
     });
     this.add(_btnClick);
 
@@ -165,6 +172,33 @@ class TitleState extends FlxState {
 
     // 白フェードで開始
     FlxG.camera.fade(FlxColor.WHITE, 1.5, true);
+
+    // マウスカーソル表示
+    FlxG.mouse.visible = true;
+  }
+
+  /**
+   * メインメニューに遷移
+   **/
+  private function _changeMainMenu():Void {
+    // ボタンを消しておく
+    _btnClick.kill();
+
+    // メイン状態へ
+    _state = State.Main;
+
+    // 背景を暗くする
+    FlxTween.color(_bg, 1, FlxColor.WHITE, FlxColor.GRAY, 0.8, 0.8, {ease:FlxEase.expoOut});
+    // ロゴを追い出す
+    FlxTween.tween(_txtLogo, {y:LOGO_Y}, 1, {ease:FlxEase.expoOut});
+    // ロゴ背景を消す
+    FlxTween.tween(_bgLogo, {alpha:0.0}, 1, {ease:FlxEase.expoOut});
+    // 点滅アニメ終了
+    _tweenBgLog.cancel();
+    // コピーライトを追い出す
+    FlxTween.tween(_txtCopyright, {y:FlxG.height+32}, 1, {ease:FlxEase.expoOut});
+    // メニュー表示
+    _appearMenu();
   }
 
   /**
@@ -219,15 +253,8 @@ class TitleState extends FlxState {
     var py = 160;
     // NEW GAME
     btnList.add(new MyButton(px, py, "NEW GAME", function() {
-      if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE) == false) {
-        // オープニングをまだ見ていない
-        GameData.bitOn(GameData.FLG_FIRST_GAME_DONE);
-        FlxG.switchState(new OpeningState());
-      }
-      else {
-        // すでに見た
-        FlxG.switchState(new PlayInitState());
-      }
+      // NEW GAMEで始める
+      _startNewGame();
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(1, "msg");
@@ -238,9 +265,8 @@ class TitleState extends FlxState {
     py += 64;
     // CONTINUE
     var btnContinue = new MyButton(px, py, "CONTINUE", function() {
-      // セーブデータから読み込み
-      Global.SetLoadGame(true);
-      FlxG.switchState(new PlayState());
+      // CONTINUEで始める
+      _startContinue();
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(2, "msg");
@@ -287,12 +313,33 @@ class TitleState extends FlxState {
       idx++;
     }
 
-    // ボタンを消しておく
-    _btnClick.kill();
-
     // ヘルプチップ登録
     this.add(_sprTip);
     this.add(_txtTip);
+  }
+
+  /**
+   * NEW GAMEを開始
+   **/
+  private function _startNewGame():Void {
+    if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE) == false) {
+      // オープニングをまだ見ていない
+      GameData.bitOn(GameData.FLG_FIRST_GAME_DONE);
+      FlxG.switchState(new OpeningState());
+    }
+    else {
+      // すでに見た
+      FlxG.switchState(new PlayInitState());
+    }
+  }
+
+  /**
+   * CONTINUEで開始
+   **/
+  private function _startContinue():Void {
+    // セーブデータから読み込み
+    Global.SetLoadGame(true);
+    FlxG.switchState(new PlayState());
   }
 
   /**
@@ -300,6 +347,9 @@ class TitleState extends FlxState {
    **/
   override public function destroy():Void {
     super.destroy();
+
+    // マウスカーソル非表示
+    FlxG.mouse.visible = false;
   }
 
   /**
@@ -310,6 +360,26 @@ class TitleState extends FlxState {
 
     // ゲームパッド更新
     Pad.update();
+
+    switch(_state) {
+      case State.Logo:
+        if(Key.press.A) {
+          // メインメニューへ遷移
+          _changeMainMenu();
+        }
+
+      case State.Main:
+        if(Key.press.A) {
+          if(Save.isContinue()) {
+            // セーブデータがあればCONTINUE
+            _startContinue();
+          }
+          else {
+            // そうでなければNEW GAME
+            _startNewGame();
+          }
+        }
+    }
 
     // ヘルプチップ更新
     if(_txtTip != null) {
