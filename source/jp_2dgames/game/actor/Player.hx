@@ -459,6 +459,9 @@ class Player extends Actor {
       case Field.ONEWAY_LEFT, Field.ONEWAY_UP, Field.ONEWAY_RIGHT, Field.ONEWAY_DOWN:
         // 一方通行を踏んだら消える
         Field.breakOneWay(xchip, ychip);
+      case Field.WALL2:
+        // 水たまりを踏んだら消える
+        Field.breakWall2(xchip, ychip);
       default:
         _stompChip = StompChip.None;
     }

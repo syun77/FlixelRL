@@ -506,6 +506,34 @@ class Field {
   }
 
   /**
+   * 水たまりを消す
+   * @return 消すことができたらtrue
+   **/
+  public static function breakWall2(i:Int, j:Int):Bool {
+    switch(_cLayer.get(i, j)) {
+      case WALL2:
+      default:
+        // 何もしない
+        return false;
+    }
+
+    // レイヤー情報更新
+    _cLayer.set(i, j, NONE);
+
+    // 背景画像を更新
+    drawBackgroundChip(NONE, i, j);
+
+    // エフェクト再生
+    var px = toWorldX(i);
+    var py = toWorldY(j);
+    Particle.start(PType.Ring2, px, py, FlxColor.AQUAMARINE);
+
+    Snd.playSe("break", true);
+
+    return true;
+  }
+
+  /**
    * 指定座標の壁を壊す
    * @return 破壊できたらtrue
    **/
