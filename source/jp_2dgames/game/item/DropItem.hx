@@ -1,4 +1,5 @@
 package jp_2dgames.game.item;
+import jp_2dgames.game.particle.ParticleKira;
 import jp_2dgames.game.util.DirUtil;
 import flixel.FlxG;
 import flixel.util.FlxRandom;
@@ -132,9 +133,9 @@ class DropItem extends FlxSprite {
   }
 
   /**
-	 * 指定座標にあるアイテムを拾う
-	 * @return アイテムを拾えたらtrue
-	 **/
+   * 指定座標にあるアイテムを拾う
+   * @return アイテムを拾えたらtrue
+   **/
   public static function pickup(xchip:Int, ychip:Int):Bool {
     var bFind = false;
     parent.forEachAlive(function(item:DropItem) {
@@ -174,10 +175,10 @@ class DropItem extends FlxSprite {
     // 拾えなかった
     return false;
   }
-  /**
-	 * コンストラクタ
-	 **/
 
+  /**
+   * コンストラクタ
+   **/
   public function new() {
     super();
 
@@ -198,9 +199,8 @@ class DropItem extends FlxSprite {
   }
 
   /**
-	 * 初期化
-	 **/
-
+   * 初期化
+   **/
   public function init(X:Int, Y:Int, type:IType, itemid:Int, param:ItemExtraParam) {
     id = itemid;
     this.type = type;
@@ -234,8 +234,23 @@ class DropItem extends FlxSprite {
   }
 
   /**
-	 * アニメーションを登録
-	 **/
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    if(FlxRandom.chanceRoll(3)) {
+      var w = width*0.3;
+      var h = height/2;
+      var px = x + FlxRandom.floatRanged(-w, w);
+      var py = y + FlxRandom.floatRanged(0, h);
+      ParticleKira.start(px, py);
+    }
+  }
+
+  /**
+   * アニメーションを登録
+   **/
 
   private function _registAnim():Void {
     animation.add(ItemUtil.toString(ItemUtil.IType.Weapon), [0], 1);

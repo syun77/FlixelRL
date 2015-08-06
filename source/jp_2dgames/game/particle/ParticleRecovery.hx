@@ -41,9 +41,8 @@ class ParticleRecovery extends FlxSprite {
   private var _timer:Int;
 
   /**
-	 * コンストラクタ
-	 **/
-
+   * コンストラクタ
+   **/
   public function new() {
     super();
 
@@ -55,9 +54,8 @@ class ParticleRecovery extends FlxSprite {
   }
 
   /**
-	 * 初期化
-	 **/
-
+   * 初期化
+   **/
   public function init(X:Float, Y:Float, val:Int) {
     x = X;
     y = Y;

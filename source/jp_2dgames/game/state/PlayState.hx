@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.particle.ParticleKira;
 import jp_2dgames.game.particle.EffectCloud;
 import jp_2dgames.game.util.Pad;
 import jp_2dgames.game.item.ItemConst;
@@ -371,6 +372,15 @@ class PlayState extends FlxState {
       ParticleSmoke.parent = part;
     }
 
+    // パーティクル（きらきら）
+    {
+      ParticleKira.parent = new FlxTypedGroup<ParticleKira>(32);
+      for(i in 0...ParticleKira.parent.maxSize) {
+        ParticleKira.parent.add(new ParticleKira());
+      }
+      this.add(ParticleKira.parent);
+    }
+
     // ショップ購入メニュー生成
     GuiBuyDetail.create(640/2 - GuiBuyDetail.BG_WIDTH/2 - 80, FlxG.height/2 - GuiBuyDetail.BG_HEIGHT/2);
 
@@ -453,6 +463,7 @@ class PlayState extends FlxState {
     ParticleDamage.parent = null;
     ParticleRecovery.parent = null;
     ParticleSmoke.parent = null;
+    ParticleKira.parent = null;
     NightmareMgr.instance = null;
     EffectCloud.parent = null;
     MagicShot.parent = null;
