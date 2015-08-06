@@ -269,8 +269,8 @@ class Player extends Actor {
   }
 
   /**
-	 * 攻撃開始
-	 **/
+   * 攻撃開始
+   **/
   override public function beginAction():Void {
     if(_state == Actor.State.ActBegin) {
       // 攻撃アニメーション開始

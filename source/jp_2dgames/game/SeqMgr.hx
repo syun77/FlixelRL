@@ -138,6 +138,7 @@ class SeqMgr {
 	 * 更新
 	 **/
   public function update():Int {
+    // シーケンス実行
     var cnt:Int = 0;
     var bLoop:Bool = true;
     while(bLoop) {

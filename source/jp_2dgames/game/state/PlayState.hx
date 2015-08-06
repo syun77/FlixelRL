@@ -109,6 +109,9 @@ class PlayState extends FlxState {
   // ターン数
   private var _turn:Int = 0;
 
+  // 階段エフェクトタイマー
+  private var _tStair:Int = 0;
+
   // デバッグ用アイテム
   private var _debugItem:DropItem;
   // デバッグ用敵
@@ -437,7 +440,7 @@ class PlayState extends FlxState {
   }
 
   /**
-	 * フィールド情報を設定する
+   * フィールド情報を設定する
    **/
   public function setFieldLayer(layer:Layer2D) {
     // フィールド情報をコピー
@@ -456,8 +459,8 @@ class PlayState extends FlxState {
   }
 
   /**
-	 * 破棄
-	 */
+   * 破棄
+   */
   override public function destroy():Void {
     Particle.parent = null;
     ParticleDamage.parent = null;
@@ -482,8 +485,8 @@ class PlayState extends FlxState {
   }
 
   /**
-	 * 更新
-	 */
+   * 更新
+   */
   override public function update():Void {
     super.update();
 
@@ -500,6 +503,12 @@ class PlayState extends FlxState {
       case State.FloorStart2:
 
       case State.Main:
+        // 階段エフェクト
+        _tStair++;
+        if(_tStair%120 == 1) {
+          Field.startStairEffect();
+        }
+
         // シーケンス更新
         switch(_seq.update()) {
           case SeqMgr.RET_NONE:

@@ -1,8 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.AStar;
-import flixel.tile.FlxTilemap;
-import flixel.util.FlxTimer;
 import jp_2dgames.lib.Snd;
 import flixel.addons.effects.FlxWaveSprite;
 import flixel.tweens.FlxEase;
@@ -496,7 +495,7 @@ class Field {
   }
 
   /**
-   * 移動可能なフィールドの情報を計算してCSVとして取得する
+   * 移動可能なフィールドの情報を計算してLayer2Dとして取得する
    **/
   private static function _computeMap():Layer2D {
 
@@ -511,6 +510,9 @@ class Field {
     return layer;
   }
 
+  /**
+   * A*による経路探索
+   **/
   public static function findPath(xstart:Int, ystart:Int, xgoal:Int, ygoal:Int):Array<FlxPoint> {
 
     // A*計算オブジェクト生成
@@ -545,5 +547,19 @@ class Field {
     }
 
     return null;
+  }
+
+  /**
+   * 階段からエフェクトを生成する
+   **/
+  public static function startStairEffect():Void {
+    var pt = _cLayer.search(GOAL);
+    if(pt == null) {
+      return;
+    }
+    var px = toWorldX(pt.x);
+    var py = toWorldY(pt.y);
+    Particle.start(PType.Ring2, px, py, FlxColor.YELLOW);
+    pt.put();
   }
 }
