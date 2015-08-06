@@ -55,6 +55,8 @@ class GuiStatus extends FlxGroup {
   // 所持金
   private static inline var MONEYTEXT_X = FOODTEXT_X + 80;
   private static inline var MONEYTEXT_Y = 0;
+  // 所持金（増分）
+  private static inline var MONEYTEXT_ADD_Y = 16;
   // HPテキスト
   private static inline var HPTEXT_X = LVTEXT_X + 64;
   private static inline var HPTEXT_Y = 0 - MERGIN_Y;
@@ -87,6 +89,11 @@ class GuiStatus extends FlxGroup {
   private var _txtFood:FlxText;
   private var _txtMoney:FlxText;
   private var _txtScore:FlxText;
+  private var _txtMoneyAdd:FlxText;
+
+  // お金増分演出用
+  private var _prevMoney:Int = 0; // 前回のお金
+  private var _tMoneyAdd:Int = 0; // 前回のお金との差分がなくなったフレーム数
 
   // 敵情報
   private var _enemyInfo:GuiEnemy;
@@ -150,6 +157,12 @@ class GuiStatus extends FlxGroup {
     _txtMoney.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _txtMoney.alignment = "right";
     _group.add(_txtMoney);
+
+    // 所持金テキスト（増分）
+    _txtMoneyAdd = new FlxText(MONEYTEXT_X, MONEYTEXT_ADD_Y, 128);
+    _txtMoneyAdd.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    _txtMoneyAdd.alignment = "right";
+    _group.add(_txtMoneyAdd);
 
     // スコアテキスト
     _txtScore = new FlxText(SCORE_X, SCORE_Y, 128);
@@ -216,6 +229,28 @@ class GuiStatus extends FlxGroup {
     // 所持金
     var money = Global.getMoney();
     _txtMoney.text = '${money}G';
+    var moneyadd = Global.getMoneyAdd();
+    if(_prevMoney != moneyadd) {
+      // 数値が変わった
+      // 差分を表示開始
+      var str = '(${moneyadd})';
+      if(moneyadd > 0) {
+        str = '(+${moneyadd})';
+      }
+      _txtMoneyAdd.text = str;
+      _tMoneyAdd = 120;
+    }
+    else {
+      if(_tMoneyAdd > 0) {
+        // 差分表示点滅中
+        _tMoneyAdd--;
+        _txtMoneyAdd.visible = true;
+        if(_tMoneyAdd < 30 && _tMoneyAdd%4 < 2) {
+          _txtMoneyAdd.visible = false;
+        }
+      }
+    }
+    _prevMoney = moneyadd;
 
     // スコア
     var score = Global.getScore();

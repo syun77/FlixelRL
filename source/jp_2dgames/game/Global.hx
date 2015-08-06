@@ -40,6 +40,7 @@ class Global {
     _floor = FLOOR_FIRST;
     _mapid = 0;
     _money = MONEY_FIRST;
+    _moneyadd = 0;
     _items = new Array<ItemData>();
     _nCursorInventory = 0;
     _itemMaxInventory = Inventory.ITEM_MAX_FIRST;
@@ -157,6 +158,7 @@ class Global {
   }
   public static function addMoney(v:Int):Int {
     _money += v;
+    _moneyadd = v;
     return _money;
   }
   public static function useMoney(v:Int):Int {
@@ -164,7 +166,15 @@ class Global {
     if(_money < 0) {
       _money = 0;
     }
+    _moneyadd = -v;
     return _money;
+  }
+  private static var _moneyadd:Int = 0;
+  public static function getMoneyAdd():Int {
+    return _moneyadd;
+  }
+  public static function resetMoneyAdd():Void {
+    _moneyadd = 0;
   }
 
   // アイテムデータ
