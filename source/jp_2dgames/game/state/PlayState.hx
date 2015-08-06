@@ -227,24 +227,26 @@ class PlayState extends FlxState {
     for(i in 0...Pit.parent.maxSize) {
       Pit.parent.add(new Pit());
     }
-    this.add(Pit.parent);
 
     // ドア生成
     Door.parent = new FlxTypedGroup<Door>(4);
     for(i in 0...Door.parent.maxSize) {
       Door.parent.add(new Door());
     }
-    this.add(Door.parent);
-    // ドアHPを登録
-    Door.parent.forEach(function(d:Door) {
-      this.add(d.hpText);
-    });
 
     // 階段の位置をランダムに配置する
     Field.randomize(layer, Global.getFloor(), _csv);
 
     // フィールドを登録
     setFieldLayer(layer);
+
+    // 各種登録
+    this.add(Pit.parent);
+    this.add(Door.parent);
+    // ドアHPを登録
+    Door.parent.forEach(function(d:Door) {
+      this.add(d.hpText);
+    });
 
     // アイテム管理生成
     var items = new FlxTypedGroup<DropItem>(128);
