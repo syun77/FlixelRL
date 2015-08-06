@@ -128,6 +128,14 @@ class Pit extends FlxSprite {
     }
   }
 
+  /**
+   * ピットを破壊する
+   **/
+  public function broken() {
+    Field.breakPit(xchip, ychip);
+    kill();
+  }
+
   public function _turnEnd():Void {
     var player = cast(FlxG.state, PlayState).player;
 
@@ -142,9 +150,14 @@ class Pit extends FlxSprite {
         // トゲダメージチェック
         if(player.existsPosition(xchip, ychip)) {
           player.damageSpike();
+          // 消滅
+          broken();
+          return;
         }
         Enemy.parent.forEachAlive(function(e:Enemy) {
           if(e.existsPosition(xchip, ychip)) {
+            // 消滅
+            broken();
             if(e.id == NightmareMgr.getEnemyID()) {
               // ナイトメアはダメージ床の影響を受けない
               e.damage(0);

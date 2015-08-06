@@ -452,6 +452,32 @@ class Field {
   }
 
   /**
+   * 指定座標のピットを破壊する
+   * @return 破壊できたらtrue
+   **/
+  public static function breakPit(i:Int, j:Int, bKill:Bool=false):Bool {
+    if(_cLayer.get(i, j) != SPIKE) {
+      // ピットでないので何もしない
+      return false;
+    }
+
+    // レイヤー情報更新
+    _cLayer.set(i, j, NONE);
+
+    if(bKill) {
+      // インスタンスも消す
+      Pit.parent.forEachAlive(function(p:Pit) {
+        if(p.xchip == i && p.ychip == j) {
+          // 消す
+          p.kill();
+        }
+      });
+    }
+
+    return true;
+  }
+
+  /**
    * 指定座標の壁を壊す
    * @return 破壊できたらtrue
    **/
