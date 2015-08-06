@@ -1,4 +1,7 @@
 package jp_2dgames.game.item;
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle.PType;
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.particle.ParticleKira;
 import jp_2dgames.game.util.DirUtil;
 import flixel.FlxG;
@@ -169,6 +172,9 @@ class DropItem extends FlxSprite {
 
     if(bFind) {
       // アイテムを拾った
+      var px = Field.toWorldX(xchip);
+      var py = Field.toWorldY(ychip);
+      Particle.start(PType.Ring2, px, py, FlxColor.LIME);
       return true;
     }
 
