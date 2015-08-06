@@ -183,7 +183,7 @@ class AStar {
   /**
    * ノードをオープンリストに追加する
    **/
-  public function addOpneList(node:ANode):Void {
+  public function addOpenList(node:ANode):Void {
     _openList.add(node);
   }
 
@@ -218,7 +218,7 @@ class AStar {
     // Openする
     node.open(parent, cost);
     // Openリストに追加
-    addOpneList(node);
+    addOpenList(node);
 
     return node;
   }

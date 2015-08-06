@@ -574,7 +574,11 @@ class Field {
     // スタート地点のノード作成
     // スタート地点なのでコストは0
     var node = astar.openNode(xstart, ystart, 0, null);
-    astar.addOpneList(node);
+    if(node == null) {
+      // スタート地点が不正
+      return null;
+    }
+    astar.addOpenList(node);
 
     // 試行回数。1000回超えたら強制中断
     var cnt = 0;
