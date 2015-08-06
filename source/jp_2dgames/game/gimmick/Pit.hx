@@ -10,9 +10,9 @@ import flixel.FlxSprite;
  * 状態
  **/
 private enum State {
-  Standby;
-  Almost;
-  Exec;
+  Standby; // 何も起きない
+  Almost;  // 次のターンでトゲ出現
+  Exec;    // トゲ出現
 }
 
 /**
@@ -55,6 +55,16 @@ class Pit extends FlxSprite {
       }
     });
     return ret;
+  }
+
+  /**
+   * ターン数に対応する状態に変更する
+   **/
+  public static function setStateFromTurn(turn:Int):Void {
+    var t = turn % (WAIT_TURN+1);
+    parent.forEachAlive(function(p:Pit) {
+      p._setStateFromTurn(t);
+    });
   }
 
   // ■メンバ変数
@@ -166,5 +176,18 @@ class Pit extends FlxSprite {
         _change(State.Standby);
       }
     }
+  }
+
+  private function _setStateFromTurn(turn:Int):Void {
+    if(turn == WAIT_TURN) {
+      _state = State.Almost;
+    }
+    else {
+      // 待機状態
+      _tWait = (WAIT_TURN - turn);
+      trace("standby", _tWait);
+      _state = State.Standby;
+    }
+    animation.play('${_state}');
   }
 }

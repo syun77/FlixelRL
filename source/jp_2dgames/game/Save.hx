@@ -3,6 +3,7 @@ package jp_2dgames.game;
 #if neko
 import sys.io.File;
 #end
+import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxSave;
@@ -374,6 +375,9 @@ private class _Map {
     var layer = new Layer2D();
     layer.setCsv(w, h, data.data);
     state.setFieldLayer(layer);
+
+    // ピットの状態反映
+    Pit.setStateFromTurn(Global.getTurn());
   }
 }
 
