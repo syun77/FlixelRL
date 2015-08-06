@@ -185,7 +185,6 @@ class Pit extends FlxSprite {
     else {
       // 待機状態
       _tWait = (WAIT_TURN - turn);
-      trace("standby", _tWait);
       _state = State.Standby;
     }
     animation.play('${_state}');
