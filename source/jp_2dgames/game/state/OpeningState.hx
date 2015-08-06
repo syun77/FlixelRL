@@ -1,7 +1,7 @@
 package jp_2dgames.game.state;
+import flixel.ui.FlxButton;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.ui.FlxButton;
 import jp_2dgames.game.event.EventMgr;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -20,6 +20,9 @@ class OpeningState extends FlxState {
   override public function create():Void {
     super.create();
 
+    // カーソル表示
+    FlxG.mouse.visible = true;
+
     // イベント開始
     _event = new EventMgr("assets/events/", "opening.cpp");
     this.add(_event);
@@ -30,6 +33,16 @@ class OpeningState extends FlxState {
     });
     FlxTween.tween(btn, {y:8}, 2, {ease:FlxEase.expoOut});
     this.add(btn);
+  }
+
+  /**
+   * 破棄
+   **/
+  override public function destroy():Void {
+    // カーソル非表示
+    FlxG.mouse.visible = false;
+
+    super.destroy();
   }
 
   /**

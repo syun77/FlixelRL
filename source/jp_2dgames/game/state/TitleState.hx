@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.util.Pad;
@@ -161,6 +162,8 @@ class TitleState extends FlxState {
     _btnClick = new MyButton(px, py, "PLEASE CLICK", function() {
       // メインメニューへ遷移
       _changeMainMenu();
+    }, function() {
+      Snd.playSe("pi", true);
     });
     this.add(_btnClick);
 
@@ -183,6 +186,9 @@ class TitleState extends FlxState {
   private function _changeMainMenu():Void {
     // ボタンを消しておく
     _btnClick.kill();
+
+    // 決定SE
+    Snd.playSe("equip", true);
 
     // メイン状態へ
     _state = State.Main;
@@ -258,6 +264,7 @@ class TitleState extends FlxState {
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(1, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     }));
@@ -270,6 +277,7 @@ class TitleState extends FlxState {
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(2, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     });
@@ -279,6 +287,7 @@ class TitleState extends FlxState {
     }
     // NAME ENTRY
     btnList.add(new MyButton(px, py, "NAME ENTRY", function() {
+      Snd.playSe("equip", true);
       // HACK: SubStatから戻ってきたときに再び呼び出されてしまうため
       if(subState == null) {
         openSubState(new NameEntryState());
@@ -286,6 +295,7 @@ class TitleState extends FlxState {
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(3, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     }));
@@ -294,10 +304,14 @@ class TitleState extends FlxState {
     if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE)) {
       // 初回ゲーム済みのみ表示
       // OPENING
-      btnList.add(new MyButton(px, py, "OPENING", function(){ FlxG.switchState(new OpeningState()); },
+      btnList.add(new MyButton(px, py, "OPENING", function() {
+        Snd.playSe("equip", true);
+        FlxG.switchState(new OpeningState());
+      },
         function() {
           _txtTip.visible = true;
           _txtTip.text = _csv.getString(4, "msg");
+          Snd.playSe("pi", true);
         },
         function() {
           _txtTip.visible = false;
@@ -322,6 +336,7 @@ class TitleState extends FlxState {
    * NEW GAMEを開始
    **/
   private function _startNewGame():Void {
+    Snd.playSe("equip", true);
     if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE) == false) {
       // オープニングをまだ見ていない
       GameData.bitOn(GameData.FLG_FIRST_GAME_DONE);
@@ -337,6 +352,7 @@ class TitleState extends FlxState {
    * CONTINUEで開始
    **/
   private function _startContinue():Void {
+    Snd.playSe("equip", true);
     // セーブデータから読み込み
     Global.SetLoadGame(true);
     FlxG.switchState(new PlayState());

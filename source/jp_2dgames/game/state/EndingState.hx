@@ -18,6 +18,9 @@ class EndingState extends FlxState{
   override public function create():Void {
     super.create();
 
+    // カーソル表示
+    FlxG.mouse.visible = true;
+
     // スクリプト生成
     _event = new EventMgr("assets/events/", "ending.cpp");
     this.add(_event);
@@ -29,6 +32,16 @@ class EndingState extends FlxState{
     });
     FlxTween.tween(btn, {y:8}, 2, {ease:FlxEase.expoOut});
     this.add(btn);
+  }
+
+  /**
+   * 破棄
+   **/
+  override public function destroy():Void {
+    // カーソル非表示
+    FlxG.mouse.visible = false;
+
+    super.destroy();
   }
 
   /**

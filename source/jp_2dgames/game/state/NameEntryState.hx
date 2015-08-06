@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
 import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -161,9 +162,11 @@ class NameEntryState extends FlxSubState {
     // 名前消去
     _group.add(new MyButton(CLEAR_X, CLEAR_Y, "CLEAR", function() {
       _setName("");
+      Snd.playSe("equip", true);
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(2, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     }));
@@ -171,9 +174,11 @@ class NameEntryState extends FlxSubState {
     // 自動入力（男性）
     _group.add(new MyButton(MALE_X, MALE_Y, "MALE", function() {
       _setName(_generator.getMale());
+      Snd.playSe("equip", true);
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(3, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     }));
@@ -181,20 +186,24 @@ class NameEntryState extends FlxSubState {
     // 自動入力（女性）
     _group.add(new MyButton(FEMALE_X, FEMALE_Y, "FEMALE", function() {
       _setName(_generator.getFemale());
+      Snd.playSe("equip", true);
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(4, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     }));
 
     // 戻るボタン
     _group.add(new MyButton(width/2-160/2, BACK_Y, "BACK", function() {
+      Snd.playSe("hint", true);
       // 自身を閉じる
       close();
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(5, "msg");
+      Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     }));
@@ -264,6 +273,7 @@ class NameEntryState extends FlxSubState {
 
     if(FlxG.keys.justPressed.ENTER) {
       // 閉じる
+      Snd.playSe("hint", true);
       close();
     }
 
