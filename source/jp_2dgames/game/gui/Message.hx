@@ -68,6 +68,7 @@ class Msg {
   public static inline var WARP:Int = 51; // ワープした
   public static inline var POSITION_CHANGE:Int = 52; // お互いの位置を入れ替え
   public static inline var RECOVER_HPMAX:Int = 53; // HPが最大まで回復
+  public static inline var NIGHTMARE_DELAY:Int = 54; // ナイトメアの出現を遅延させた
 
 }
 

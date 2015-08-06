@@ -429,6 +429,12 @@ class ItemUtil {
               Message.push2(Msg.ARMOR_ADD, [name]);
               Snd.playSe("powerup");
             }
+
+          case "nightmare":
+            // ナイトメアの残り出現ターン数が増える
+            NightmareMgr.delay(extval);
+            Message.push2(Msg.NIGHTMARE_DELAY, [extval]);
+
           default:
             // 何もしない
         }

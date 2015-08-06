@@ -53,7 +53,7 @@ int,str,str
 51,<val1>はワープした,blue
 52,<val1>と<val2>の位置が入れ替わった,white
 53,<val1>のHPが最大まで回復した,blue
-54,ダミー,white
+54,ナイトメアの出現を<val1>ターン遅らせた,white
 55,ダミー,white
 56,ダミー,white
 57,ダミー,white

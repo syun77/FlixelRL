@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.EffectCloud;
 import jp_2dgames.lib.Snd;
@@ -72,6 +73,38 @@ class NightmareMgr {
   }
   private function _getEnemyID():Int {
     return _csv.getInt(_lv, "enemy_id");
+  }
+
+  /**
+   * ナイトメアの出現を遅らせる
+   **/
+  public static function delay(turn:Int):Void {
+    instance._delay(turn);
+  }
+  private function _delay(turn:Int) {
+    if(Exists()) {
+      // 存在している場合はフラグを下げる
+      _exists = false;
+      Enemy.parent.forEachAlive(function(e:Enemy) {
+        if(e.id == _getEnemyID()) {
+          // ナイトメアであれば消滅させる
+          e.kill();
+
+          // 煙でごまかす
+          ParticleSmoke.start("enemy", e.x, e.y+e.height/4);
+
+          // 背景編出解除
+          Field.resetFadeBackGround();
+
+        }
+      });
+    }
+
+    // 雲を消す
+    EffectCloud.killAll();
+
+    // 残りターン数を増やす
+    _turn += turn;
   }
 
   /**
