@@ -108,6 +108,13 @@ class TitleState extends FlxState {
     _bg.y = -_bg.height + FlxG.height;
     FlxTween.tween(_bg, {y:0}, 30, {type:FlxTween.PINGPONG, ease:FlxEase.sineOut});
 
+    // 太陽の光
+    var sunbeam = new FlxSprite(0, 0, "assets/images/title/sunbeam.png");
+    this.add(sunbeam);
+    sunbeam.blend = BlendMode.ADD;
+    sunbeam.alpha = 0.3;
+    FlxTween.tween(sunbeam, {alpha:0.8}, 5, {ease:FlxEase.sineInOut, type:FlxTween.PINGPONG});
+
     // 雲
     _clouds = new Array<FlxSprite>();
     for(i in 0...16) {
