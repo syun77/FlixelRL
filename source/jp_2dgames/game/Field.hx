@@ -1,5 +1,8 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.util.Calc;
+import jp_2dgames.game.gui.Message;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.lib.AStar;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Snd;
@@ -42,6 +45,10 @@ class Field {
   public static inline var ENEMY:Int   = 9;  // ランダム敵
   public static inline var ITEM:Int    = 10; // ランダムアイテム
   public static inline var CAT:Int     = 11; // ネコ
+  public static inline var HEART_RED:Int    = 13; // ハート(赤)
+  public static inline var HEART_BLUE:Int   = 14; // ハート(青)
+  public static inline var HEART_GREEN:Int  = 15; // ハート(緑)
+  public static inline var HEART_YELLOW:Int = 16; // ハート(黄)
   public static inline var ONEWAY_LEFT:Int  = 17; // 一方通行(左)
   public static inline var ONEWAY_UP:Int    = 18; // 一方通行(上)
   public static inline var ONEWAY_RIGHT:Int = 19; // 一方通行(右)
@@ -285,6 +292,24 @@ class Field {
         }
       }
     }
+
+    // 回復チップ配置
+    if(Global.getFloor() > 4) {
+      if(FlxRandom.chanceRoll(20)) {
+        var p = layer.searchRandom(NONE);
+        if(p != null) {
+          if(FlxRandom.chanceRoll(70)) {
+            // 体力回復
+            layer.setFromFlxPoint(p, HEART_RED);
+          }
+          else {
+            // 満腹度回復
+            layer.setFromFlxPoint(p, HEART_BLUE);
+          }
+          p.put();
+        }
+      }
+    }
   }
 
   /**
@@ -512,6 +537,55 @@ class Field {
   public static function breakWall2(i:Int, j:Int):Bool {
     switch(_cLayer.get(i, j)) {
       case WALL2:
+      default:
+        // 何もしない
+        return false;
+    }
+
+    // レイヤー情報更新
+    _cLayer.set(i, j, NONE);
+
+    // 背景画像を更新
+    drawBackgroundChip(NONE, i, j);
+
+    // エフェクト再生
+    var px = toWorldX(i);
+    var py = toWorldY(j);
+    Particle.start(PType.Ring2, px, py, FlxColor.AQUAMARINE);
+
+    Snd.playSe("break", true);
+
+    return true;
+  }
+
+  /**
+   * ハートを消す
+   * @return 消すことができたらtrue
+   **/
+  public static function breakHeart(actor:Actor, i:Int, j:Int):Bool {
+    var chip = _cLayer.get(i, j);
+    switch(chip) {
+      case HEART_RED:
+        // 体力回復
+        var val = Calc.getHeartRecoveryRatio();
+        // 回復実行して回復した値を取得する
+        val = actor.addHp2(val);
+        Message.push2(Msg.RECOVER_HP, [actor.name, val]);
+        FlxG.sound.play("recover");
+      case HEART_BLUE:
+        // 満腹度回復
+        var val = Calc.getHeartRecoveryRatio();
+        actor.addFood2(val);
+        if(actor.isFoodMax()) {
+          // 満腹になった
+          Message.push2(Msg.RECOVER_FOOD_MAX);
+        }
+        else {
+          Message.push2(Msg.RECOVER_FOOD);
+        }
+        FlxG.sound.play("recover");
+      case HEART_GREEN:
+      case HEART_YELLOW:
       default:
         // 何もしない
         return false;

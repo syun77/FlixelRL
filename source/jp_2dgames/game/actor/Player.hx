@@ -462,6 +462,8 @@ class Player extends Actor {
       case Field.WALL2:
         // 水たまりを踏んだら消える
         Field.breakWall2(xchip, ychip);
+      case Field.HEART_RED, Field.HEART_BLUE, Field.HEART_GREEN, Field.HEART_YELLOW:
+        Field.breakHeart(this, xchip, ychip);
       default:
         _stompChip = StompChip.None;
     }

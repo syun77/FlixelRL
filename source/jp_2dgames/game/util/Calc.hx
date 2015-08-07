@@ -179,4 +179,23 @@ class Calc {
     // 87%の確率で当たる
     return FlxRandom.chanceRoll(87);
   }
+
+  /**
+   * ハートで回復する値を取得する
+   **/
+  public static function getHeartRecoveryRatio():Int {
+    var v = FlxRandom.intRanged(0, 99);
+    if(v < 30) {
+      return 25;
+    }
+    else if(v < 75) {
+      return 50;
+    }
+    else if(v < 90) {
+      return 75;
+    }
+    else {
+      return 100;
+    }
+  }
 }

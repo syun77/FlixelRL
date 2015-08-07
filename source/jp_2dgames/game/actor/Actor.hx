@@ -212,13 +212,14 @@ class Actor extends FlxSprite {
     }
   }
 
-  public function addHp2(val:Int, bEffect=true):Void {
+  public function addHp2(val:Int, bEffect=true):Int {
     // パーセンテージで回復
     var val2 = getHpMax() * val / 100;
     if(val2 < 1) {
       val2 = 1;
     }
     addHp(Std.int(val2), bEffect);
+    return Std.int(val2);
   }
 
   public function subHp(val:Int):Bool {
@@ -293,6 +294,11 @@ class Actor extends FlxSprite {
     if(_params.food > _params.foodmax) {
       _params.food = _params.foodmax;
     }
+  }
+  public function addFood2(ratio:Float):Int {
+    var val = Std.int(foodmax * ratio / 100);
+    addFood(val);
+    return val;
   }
 
   public function subFood(ratio:Float):Bool {
