@@ -163,9 +163,11 @@ class PlayState extends FlxState {
     }
 
     // フロア開始演出スタート
-    _txtFloor = new FlxText(FlxG.width/3.2, FlxG.height/2.5, 256, "", 48);
+    _txtFloor = new FlxText(FlxG.width/3, FlxG.height/2.5, 256, "", 48);
     _txtFloor.text = 'Floor ${Global.getFloor()}';
+    _txtFloor.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.OLIVE, 3);
     _txtFloor.color = FlxColor.WHITE;
+    FlxTween.tween(_txtFloor, {x:_txtFloor.x-32}, 1, {ease:FlxEase.expoOut});
     this.add(_txtFloor);
     FlxG.camera.fade(FlxColor.BLACK, 0.5, true, function() {
       FlxG.camera.shake(0, 0.5, function() {
