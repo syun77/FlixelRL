@@ -295,7 +295,7 @@ class Field {
 
     // 回復チップ配置
     if(Global.getFloor() > 4) {
-      if(FlxRandom.chanceRoll(20)) {
+      if(FlxRandom.chanceRoll(30)) {
         var p = layer.searchRandom(NONE);
         if(p != null) {
           if(FlxRandom.chanceRoll(70)) {
