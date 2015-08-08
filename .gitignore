@@ -10,3 +10,5 @@ upload.command
 
 /docs/sounds/list.txt
 docs/sounds/list_bgm.txt
+
+/source/jp_2dgames/game/util/Auth.hx

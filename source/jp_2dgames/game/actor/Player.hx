@@ -318,7 +318,7 @@ class Player extends Actor {
               switch(_target.getExtra()) {
                 case "reflect":
                   // 敵のダメージ反射
-                  CauseOfDeathMgr.set(DeathType.Reflect, _target.id);
+                  CauseOfDeathMgr.set(DeathType.ReflectAtk, _target.id);
                   damage(val);
               }
             }

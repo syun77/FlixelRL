@@ -7,12 +7,12 @@ import jp_2dgames.game.actor.Enemy;
  * 死因種別
  **/
 enum DeathType {
-  None;    // なし
-  EnemyAtk;// 敵の攻撃
-  Hunger;  // 餓死
-  Spike;   // スパイク
-  Reflect; // ダメージ反射
-  Poison;  // 毒
+  None;       // なし
+  EnemyAtk;   // 敵の攻撃
+  Hunger;     // 餓死
+  Spike;      // スパイク
+  ReflectAtk; // ダメージ反射
+  Poison;     // 毒
 }
 
 /**
@@ -70,7 +70,7 @@ class CauseOfDeathMgr {
       case DeathType.Spike:
         return _getMessage(MSG_PIT);
 
-      case DeathType.Reflect:
+      case DeathType.ReflectAtk:
         var name = Enemy.getNameFromID(_value);
         return _getMessage(MSG_REFLECT, name);
 
