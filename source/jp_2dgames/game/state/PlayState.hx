@@ -572,7 +572,7 @@ class PlayState extends FlxState {
 
       case State.Gameover:
         if(Key.press.A) {
-          FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
+          FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
             // リザルトに進む
             FlxG.switchState(new ResultState());
           });

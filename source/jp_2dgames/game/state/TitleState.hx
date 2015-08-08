@@ -185,6 +185,10 @@ class TitleState extends FlxState {
 
     // マウスカーソル表示
     FlxG.mouse.visible = true;
+
+    _txtPad = new FlxText();
+    _txtPad.color = FlxColor.GRAY;
+    this.add(_txtPad);
   }
 
   /**
@@ -213,6 +217,8 @@ class TitleState extends FlxState {
     // メニュー表示
     _appearMenu();
   }
+
+  private var _txtPad:FlxText;
 
   /**
    * メニュー表示
@@ -380,6 +386,8 @@ class TitleState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    _txtPad.text = 'Pad:${FlxG.gamepads.firstActive}';
 
     // ゲームパッド更新
     Pad.update();
