@@ -42,6 +42,8 @@ class DebugState extends FlxState {
     py += 64;
     this.add(new MyButton(px, py, "ENDING", function(){ FlxG.switchState(new EndingState()); }));
     py += 64;
+    this.add(new MyButton(px, py, "CREDIT", function(){ FlxG.switchState(new StaffrollState()); }));
+    py += 64;
     this.add(new MyButton(px, py, "RESET", function(){
       Save.erase();
       GameData.erase();

@@ -93,7 +93,7 @@ class StaffrollState extends FlxState {
     this.add(txt);
     // 生成カウンタアップ
     _cntText++;
-    FlxTween.tween(txt, {y:-24}, 16, {ease:function(t:Float) { return t; }, complete:function(tween:FlxTween) {
+    FlxTween.tween(txt, {y:-24}, 12, {ease:function(t:Float) { return t; }, complete:function(tween:FlxTween) {
       // 生成カウンタを下げる
       _cntText--;
       this.remove(txt);
