@@ -130,6 +130,11 @@ class EventNpc extends FlxSprite {
   private var _tRandomWalk:Float = 0;
   // コマンドキュー
   private var _cmdQueue:List<_Cmd>;
+  // あたり判定有効フラグ
+  private var _bHit:Bool = true;
+  public function setHit(b:Bool) {
+    _bHit = b;
+  }
 
   // プロパティ
   // チップ座標(X)
@@ -413,10 +418,13 @@ class EventNpc extends FlxSprite {
     var xnext = Std.int(_xprev + pt.x);
     var ynext = Std.int(_yprev + pt.y);
     pt.put();
-    // 移動可能かどうかをチェックする
-    if(isMove(xnext, ynext) == false) {
-      // 移動できない
-      return false;
+
+    if(_bHit) {
+      // 移動可能かどうかをチェックする
+      if(isMove(xnext, ynext) == false) {
+        // 移動できない
+        return false;
+      }
     }
 
     // 移動可能
