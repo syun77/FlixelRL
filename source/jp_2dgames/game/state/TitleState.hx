@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import flash.external.ExternalInterface;
+import openfl.display.StageDisplayState;
+import flixel.ui.FlxButton;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.util.Key;
 import jp_2dgames.lib.CsvLoader;
@@ -64,6 +67,9 @@ class TitleState extends FlxState {
   private static inline var HISCORE_POS_X = USER_NAME_POS_X;
   private static inline var HISCORE_OFS_Y = USER_NAME_OFS_Y + 32;
 
+  // ■static変数
+  // ビッグサイズかどうか
+  private static var _bBigSize:Bool = false;
 
   // ■メンバ変数
   private var _bg:FlxSprite;
@@ -90,6 +96,7 @@ class TitleState extends FlxState {
 
   // 状態
   private var _state:State = State.Logo;
+
 
   /**
    * 生成
@@ -179,6 +186,46 @@ class TitleState extends FlxState {
       openSubState(new NameEntryState());
       GameData.bitOn(GameData.FLG_FIRST_DONE);
     }
+
+    // フルスクリーン切り替えボタン
+    var btnFullScreen:FlxButton = null;
+#if flash
+    btnFullScreen = new FlxButton(FlxG.width, 32, "BIG SIZE", function() {
+      if(_bBigSize == false) {
+        // サイズを大きくする
+        flash.external.ExternalInterface.call("ResizeSwf", "FlixelRL", 1136, 640);
+        btnFullScreen.text = "NORMAL";
+        _bBigSize = true;
+      }
+      else {
+        // 通常に戻す
+        flash.external.ExternalInterface.call("ResizeSwf", "FlixelRL", 852, 480);
+        btnFullScreen.text = "BIG SIZE";
+        _bBigSize = false;
+      }
+    });
+    if(_bBigSize) {
+      btnFullScreen.text = "NORMAL";
+    }
+#else
+    btnFullScreen = new FlxButton(FlxG.width, 32, "FULL SCREEN", function() {
+      if(FlxG.stage.displayState == StageDisplayState.NORMAL) {
+        // フルスクリーン
+        FlxG.stage.displayState = StageDisplayState.FULL_SCREEN;
+        btnFullScreen.text = "NORMAL";
+      }
+      else {
+        // 通常に戻す
+        FlxG.stage.displayState = StageDisplayState.NORMAL;
+        btnFullScreen.text = "FULL SCREEN";
+      }
+    });
+    if(FlxG.stage.displayState == StageDisplayState.FULL_SCREEN) {
+      btnFullScreen.text = "NORMAL";
+    }
+#end
+    this.add(btnFullScreen);
+    FlxTween.tween(btnFullScreen, {x:btnFullScreen.x-88}, 1, {ease:FlxEase.expoOut, startDelay:1});
 
     // 白フェードで開始
     FlxG.camera.fade(FlxColor.WHITE, 1.5, true);
