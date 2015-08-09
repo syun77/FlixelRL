@@ -28,6 +28,9 @@ class DebugState extends FlxState {
   override public function create():Void {
     super.create();
 
+    // カーソル表示
+    FlxG.mouse.visible = true;
+
     var txt = new FlxText(8, 8, 256, "*DEBUG ROOM*", 20);
     this.add(txt);
 

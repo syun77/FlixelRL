@@ -1,3 +1,5 @@
+// BGM再生
+BGM,op1
 // マップ読み込み
 MAP_LOAD,001.tmx
 // プレイヤー生成
@@ -24,6 +26,7 @@ MSG,1
 MSG,2
 FADE_OUT,white
 WAIT,0.5
+BGM_OFF
 // ネコを消す
 NPC_DESTROY,1
 NPC_DESTROY,2
@@ -44,6 +47,7 @@ MAP_CLEAR
 FADE_IN,black
 MSG,4
 FADE_OUT,black
+BGM,op2
 MAP_LOAD,002.tmx
 // ネコ生成
 NPC_CREATE,1,cat,13,8,random

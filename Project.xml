@@ -53,6 +53,8 @@
         <sound path="016.mp3" id="016" />
         <sound path="nightmare.mp3" id="nightmare" />
         <sound path="result.mp3" id="result" />
+        <sound path="op1.mp3" id="op1" />
+        <sound path="op2.mp3" id="op2" />
     </assets>
     <assets path="assets/music" unless="flash" include="*.ogg">
         <sound path="001.ogg" id="001" />
@@ -73,6 +75,8 @@
         <sound path="016.ogg" id="016" />
         <sound path="nightmare.ogg" id="nightmare" />
         <sound path="result.ogg" id="result" />
+        <sound path="op1.ogg" id="op1" />
+        <sound path="op2.ogg" id="op2" />
     </assets>
     <!-- SE -->
     <assets path="assets/sounds" if="flash" include="*.mp3">

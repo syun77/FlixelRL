@@ -1,4 +1,5 @@
 // ネコを4匹集めた
+BGM,op2
 MSG,18
 MSG,19
 MSG,20
@@ -41,6 +42,7 @@ FADE_IN,black
 MSG,21
 MSG,22
 MSG,23
+BGM_OFF
 SE,pickup
 // マタタビ画像表示
 IMAGE,matatabi.png
@@ -57,22 +59,26 @@ NPC_MOVE,1,down,10
 NPC_MOVE,2,down,10
 NPC_MOVE,3,down,10
 NPC_MOVE,4,down,10
+SE,foot
 FADE_OUT,black
 MAP_CLEAR
 NPC_DESTROY_ALL
 // ダンジョン終わり
 
 // 伝説のマタタビの説明
+BGM,op2
 // マタタビ画像表示
 IMAGE,matatabi.png
 FADE_IN,black
 MSG,27
 MSG,28
 IMAGE_OFF
+BGM_OFF
 MSG,29
 
 // 再び女の子の家
 FADE_OUT,black
+BGM,op1
 MAP_LOAD,001.tmx
 // 女の子とネコを配置
 NPC_CREATE,0,player,13,5,down
@@ -131,11 +137,29 @@ FADE_IN,black
 MSG,30
 MSG,31
 MSG,32
-// 女の子を画像表示
+BGM_OFF
 MSG,33
+SE,hit
+SHAKE,0.01,0.5
+MSG,33
+// 女の子の画像表示
+SE,hit
+SHAKE,0.015,0.2
+WAIT,0.2
+SE,hit
+SE,critical
+SHAKE,0.02,0.5
+WAIT,0.2
+SE,hit
+SE,critical
+SE,destroy
+SHAKE,0.05,0.5
 IMAGE,ending.png
 MSG,34
 MSG,35
+IMAGE_OFF
+SE,hit
+SE,destroy
 MSG,36
 FADE_OUT,white
 // スタッフロールへ

@@ -462,6 +462,18 @@ class EventScript extends FlxSpriteGroup {
   }
 
   // -------------------------------------------------
+  // ■その他画面効果
+  // -------------------------------------------------
+  private function _SHAKE(args:Array<String>):Int {
+    var Intensity = Std.parseFloat(args[0]);
+    var Duration  = Std.parseFloat(args[1]);
+    FlxG.camera.shake(Intensity, Duration, function() {
+      _state = State.Exec;
+    });
+    return RET_WAIT;
+  }
+
+  // -------------------------------------------------
   // ■サウンド関連
   // -------------------------------------------------
   private function _BGM(args:Array<String>):Int {
@@ -534,6 +546,7 @@ class EventScript extends FlxSpriteGroup {
       "IMAGE_OFF"       => _IMAGE_OFF,
       "FADE_IN"         => _FADE_IN,
       "FADE_OUT"        => _FADE_OUT,
+      "SHAKE"           => _SHAKE,
       "BGM"             => _BGM,
       "BGM_OFF"         => _BGM_OFF,
       "SE"              => _SE,
