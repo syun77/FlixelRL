@@ -636,6 +636,8 @@ class SeqMgr {
       // ゲームクリアした
       // ゲームクリアフラグを立てる
       Global.gameClear();
+      GameData.bitOn(GameData.FLG_GAME_CLEAR);
+      GameData.save();
       // BGMを止める
       Snd.stopMusic();
       // 中断セーブデータ消去
