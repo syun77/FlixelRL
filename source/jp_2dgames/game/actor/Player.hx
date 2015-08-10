@@ -385,8 +385,8 @@ class Player extends Actor {
       // 自動回復可能
       var v = AUTOHEAL_RATIO;
       if(badstatus == BadStatus.Powerful) {
-        // 元気状態の場合は回復量2倍
-        v *= 2;
+        // 元気状態の場合は回復量5倍
+        v *= 5;
       }
       addHp2(v, false);
     }
