@@ -37,6 +37,7 @@ enum LoadType {
  **/
 private class _Global {
   public var score:Int            = 0;
+  public var playtime:Float       = 0;
   public var floor:Int            = 0;
   public var mapid:Int            = 0;
   public var money:Int            = 0;
@@ -54,6 +55,7 @@ private class _Global {
   // セーブ
   public function save() {
     score           = Global.getScore();
+    playtime        = Global.getPlayTime();
     floor           = Global.getFloor();
     mapid           = Global.getMapID();
     money           = Global.getMoney();
@@ -73,6 +75,7 @@ private class _Global {
   // ロード
   public function load(data:Dynamic) {
     Global.setScore(data.score);
+    Global.setPlayTime(data.playtime);
     Global.setFloor(data.floor);
     Global.setMapID(data.mapid);
     Global.setMoney(data.money);

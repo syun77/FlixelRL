@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import flash.external.ExternalInterface;
 import jp_2dgames.game.util.NameGenerator;
@@ -164,11 +165,16 @@ class GameData {
   }
 
   // スコア送信
-  public static function sendScore() {
-    var user = GameData.getName();
-    var score = Global.getScore();
-    var floor = Global.getFloor();
-    var death = CauseOfDeathMgr.getMessage();
+  public static function sendScore(lv:Int) {
+    var user     = GameData.getName();
+    var score    = Global.getScore();
+    var floor    = Global.getFloor();
+    var death    = CauseOfDeathMgr.getMessage();
+    var playtime = Std.int(Global.getPlayTime());
+    var weapon   = Inventory.getWeaponName();
+    var armor    = Inventory.getArmorName();
+    var ring     = Inventory.getRingName();
+
     // 認証キー取得
     var key = "none";
     {
@@ -178,7 +184,16 @@ class GameData {
         key = Reflect.callMethod(obj, Reflect.field(obj, "generate"), []);
       }
     }
-    var data = 'user_name=${user}&score=${score}&floor=${floor}&death=${death}&key=${key}';
+    var data = 'user_name=${user}';
+    data += '&score=${score}';
+    data += '&floor=${floor}';
+    data += '&death=${death}';
+    data += '&key=${key}';
+    data += '&playtime=${playtime}';
+    data += '&lv=${lv}';
+    data += '&weapon=${weapon}';
+    data += '&armor=${armor}';
+    data += '&ring=${ring}';
     flash.external.ExternalInterface.call("SendScore", data);
 
     // ハイスコア更新

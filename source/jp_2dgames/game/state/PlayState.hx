@@ -526,7 +526,7 @@ class PlayState extends FlxState {
               FlxG.camera.fade(FlxColor.WHITE, 2, false, function() {
 
                 // スコア送信
-                GameData.sendScore();
+                GameData.sendScore(_player.params.lv);
                 // エンディングへ遷移
                 FlxG.switchState(new EndingState());
               });
@@ -541,7 +541,7 @@ class PlayState extends FlxState {
             _state = State.GameoverWait;
 
             // スコア送信
-            GameData.sendScore();
+            GameData.sendScore(_player.params.lv);
 
             // セーブデータを消す
             Save.erase();

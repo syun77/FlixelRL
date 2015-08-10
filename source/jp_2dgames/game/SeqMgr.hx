@@ -138,6 +138,10 @@ class SeqMgr {
 	 * 更新
 	 **/
   public function update():Int {
+
+    // 経過時間を記録
+    Global.addPlayTime(FlxG.elapsed);
+
     // シーケンス実行
     var cnt:Int = 0;
     var bLoop:Bool = true;
@@ -507,7 +511,7 @@ class SeqMgr {
                 Global.bitOn(0);
 
                 // スコア送信
-                GameData.sendScore();
+                GameData.sendScore(_player.params.lv);
 
                 FlxG.switchState(new EndingState());
               }

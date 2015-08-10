@@ -37,6 +37,7 @@ class Global {
   public static function init():Void {
     _bLoadGame = false;
     _score = 0;
+    _playtime = 0;
     _floor = FLOOR_FIRST;
     _mapid = 0;
     _money = MONEY_FIRST;
@@ -76,6 +77,18 @@ class Global {
   }
   public static function addScore(v:Int):Void {
     _score += v;
+  }
+
+  // プレイ時間
+  private static var _playtime:Float = 0;
+  public static function getPlayTime():Float {
+    return _playtime;
+  }
+  public static function setPlayTime(sec:Float) {
+    _playtime = sec;
+  }
+  public static function addPlayTime(add_sec:Float) {
+    _playtime += add_sec;
   }
 
   // フロア数

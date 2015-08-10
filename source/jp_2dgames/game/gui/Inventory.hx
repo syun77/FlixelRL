@@ -319,6 +319,12 @@ class Inventory extends FlxGroup {
   public static function getWeaponData():ItemData {
     return instance._weapon;
   }
+  public static function getWeaponName():String {
+    if(instance._weapon == null) {
+      return "-";
+    }
+    return ItemUtil.getName(instance._weapon);
+  }
 
   public static function getArmor():Int {
     return instance.armor;
@@ -326,12 +332,24 @@ class Inventory extends FlxGroup {
   public static function getArmorData():ItemData {
     return instance._armor;
   }
+  public static function getArmorName():String {
+    if(instance._armor == null) {
+      return "-";
+    }
+    return ItemUtil.getName(instance._armor);
+  }
 
   public static function getRing():Int {
     return instance.ring;
   }
   public static function getRingData():ItemData {
     return instance._ring;
+  }
+  public static function getRingName():String {
+    if(instance._ring == null) {
+      return "-";
+    }
+    return ItemUtil.getName(instance._ring);
   }
 
   public static function setItemList(items:Array<ItemData>, nCursor:Int, itemmax:Int):Void {
