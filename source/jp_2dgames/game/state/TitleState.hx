@@ -1,6 +1,8 @@
 package jp_2dgames.game.state;
+#if flash
 import flash.external.ExternalInterface;
-import openfl.display.StageDisplayState;
+#end
+import flash.display.StageDisplayState;
 import flixel.ui.FlxButton;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.util.Key;
@@ -66,6 +68,9 @@ class TitleState extends FlxState {
   // ハイスコア
   private static inline var HISCORE_POS_X = USER_NAME_POS_X;
   private static inline var HISCORE_OFS_Y = USER_NAME_OFS_Y + 32;
+
+  // メインメニュー基準座標
+  private static inline var MENU_Y = 120;
 
   // ■static変数
   // ビッグサイズかどうか
@@ -310,7 +315,7 @@ class TitleState extends FlxState {
     // 各種ボタン
     var btnList = new List<MyButton>();
     var px = FlxG.width;
-    var py = 160;
+    var py = MENU_Y;
     // NEW GAME
     btnList.add(new MyButton(px, py, "NEW GAME", function() {
       // NEW GAMEで始める
@@ -365,6 +370,24 @@ class TitleState extends FlxState {
         function() {
           _txtTip.visible = true;
           _txtTip.text = _csv.getString(4, "msg");
+          Snd.playSe("pi", true);
+        },
+        function() {
+          _txtTip.visible = false;
+        }
+      ));
+    }
+    py += 64;
+
+    if(GameData.bitCheck(GameData.FLG_GAME_CLEAR)) {
+      // ゲームクリアしていたら表示
+      // CREDIT
+      btnList.add(new MyButton(px, py, "CREDIT", function() {
+        FlxG.switchState(new StaffrollState());
+      },
+        function() {
+          _txtTip.visible = true;
+          _txtTip.text = _csv.getString(5, "msg");
           Snd.playSe("pi", true);
         },
         function() {
