@@ -42,7 +42,7 @@ class CalcScore {
     }
 
     // 経験値
-    _exp = player.params.exp * 10;
+    _exp = player.params.exp * 3;
     score += _exp;
 
     // 所持金
