@@ -130,6 +130,9 @@ class Global {
     if(Assets.exists(path, TEXT) == false) {
       _floor = 1;
     }
+
+    // 所持金増加演出終わり
+    _moneyadd = 0;
   }
 
   /**
