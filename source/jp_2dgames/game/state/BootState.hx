@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.playlog.PlayLog;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -16,6 +17,9 @@ class BootState extends FlxState {
     // セーブデータのロード
     GameData.init();
     GameData.load();
+
+    // プレイログのロード
+    PlayLog.load();
 
     // 死亡理由メッセージ読み込み
     CauseOfDeathMgr.create();
@@ -35,8 +39,8 @@ class BootState extends FlxState {
   #if flash
     FlxG.switchState(new TitleState());
   #else
-    FlxG.switchState(new PlayInitState());
-//    FlxG.switchState(new TitleState());
+//    FlxG.switchState(new PlayInitState());
+    FlxG.switchState(new TitleState());
 //      FlxG.switchState(new ResultState());
   #end
 

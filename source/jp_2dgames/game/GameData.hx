@@ -1,4 +1,6 @@
 package jp_2dgames.game;
+import jp_2dgames.game.playlog.PlayLog;
+import jp_2dgames.game.playlog.PlayLogData;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import flash.external.ExternalInterface;
@@ -198,6 +200,17 @@ class GameData {
 
     // ハイスコア更新
     updateHiscore(score);
+
+    // プレイログ保存
+    var log = new PlayLogData();
+    log.user     = user;
+    log.score    = score;
+    log.lv       = lv;
+    log.floor    = floor;
+    log.death    = death;
+    log.playtime = playtime;
+    PlayLog.add(log);
+    PlayLog.save();
   }
 
 }
