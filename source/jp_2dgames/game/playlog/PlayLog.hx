@@ -17,6 +17,15 @@ class PlayLog {
   public static function getLogs():Array<PlayLogData> {
     return _logs;
   }
+  public static function getLogReverse(idx:Int):PlayLogData {
+    if(idx < 0 || count() <= idx) {
+      return null;
+    }
+
+    var i = count() - idx - 1;
+    return _logs[i];
+  }
+
   /**
    * ログの数を取得する
    **/

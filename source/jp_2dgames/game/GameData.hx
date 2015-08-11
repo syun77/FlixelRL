@@ -210,8 +210,8 @@ class GameData {
     log.floor    = floor;
     log.death    = death;
     log.playtime = playtime;
+    log.date     = Date.now().toString();
     PlayLog.add(log);
     PlayLog.save();
   }
-
 }

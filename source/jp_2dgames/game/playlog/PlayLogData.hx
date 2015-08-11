@@ -10,6 +10,7 @@ class PlayLogData {
   public var floor:Int;
   public var death:String;
   public var playtime:Int;
+  public var date:String;
   public function new() {
   }
   public function copyFromDynamic(data:Dynamic):Void {

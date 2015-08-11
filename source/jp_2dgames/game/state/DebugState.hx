@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.playlog.PlayLog;
 import flixel.text.FlxText;
 import jp_2dgames.game.state.TitleState;
 import flixel.addons.ui.FlxButtonPlus;
@@ -45,8 +46,10 @@ class DebugState extends FlxState {
     this.add(new MyButton(px, py, "CREDIT", function(){ FlxG.switchState(new StaffrollState()); }));
     py += 64;
     this.add(new MyButton(px, py, "RESET", function(){
+      // ゲームデータを消去
       Save.erase();
       GameData.erase();
+      PlayLog.erase();
       FlxG.resetGame();
     }));
     py += 64;

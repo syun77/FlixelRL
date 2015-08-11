@@ -2,6 +2,7 @@ package jp_2dgames.game.state;
 #if flash
 import flash.external.ExternalInterface;
 #end
+import jp_2dgames.game.playlog.PlayLog;
 import flash.display.StageDisplayState;
 import flixel.ui.FlxButton;
 import jp_2dgames.lib.Snd;
@@ -344,6 +345,23 @@ class TitleState extends FlxState {
       py += 64;
       btnList.add(btnContinue);
     }
+    // PLAY LOG
+    var btnPlaylog = new MyButton(px, py, "PLAYLOG", function() {
+      // プレイログ
+      FlxG.switchState(new PlayLogState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(2, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
+    });
+    if(PlayLog.exists()) {
+      // プレイログが存在している
+      py += 64;
+      btnList.add(btnPlaylog);
+    }
+
     // NAME ENTRY
     btnList.add(new MyButton(px, py, "NAME ENTRY", function() {
       Snd.playSe("equip", true);
