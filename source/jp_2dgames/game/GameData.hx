@@ -168,6 +168,7 @@ class GameData {
 
   // スコア送信
   public static function sendScore(lv:Int) {
+
     var user     = GameData.getName();
     var score    = Global.getScore();
     var floor    = Global.getFloor();
@@ -183,7 +184,7 @@ class GameData {
       var type = Type.resolveClass("jp_2dgames.game.util.Auth");
       if(type != null) {
         var obj = Type.createEmptyInstance(type);
-        key = Reflect.callMethod(obj, Reflect.field(obj, "generate"), []);
+        key = Reflect.callMethod(obj, Reflect.field(obj, "generate"), [lv]);
       }
     }
     var data = 'user_name=${user}';
