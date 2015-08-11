@@ -197,6 +197,8 @@ class GameData {
     data += '&weapon=${weapon}';
     data += '&armor=${armor}';
     data += '&ring=${ring}';
+
+    data = StringTools.replace(data, "+", "@");
     flash.external.ExternalInterface.call("SendScore", data);
 
     // ハイスコア更新
