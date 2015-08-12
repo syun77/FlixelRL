@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import flixel.addons.ui.FlxButtonPlus;
 import jp_2dgames.game.util.Key;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -9,6 +10,16 @@ import jp_2dgames.game.playlog.PlayLog;
 import flixel.text.FlxText;
 import flixel.FlxState;
 
+private class MyButton extends FlxButtonPlus {
+
+  public function new(X:Float = 0, Y:Float = 0, W:Int = 200, H:Int = 40, ?Text:String, ?OnClick:Void->Void) {
+    var s = 20;  // フォントのサイズ
+    super(X, Y, OnClick, Text, W, H);
+    textNormal.size = s;
+    textHighlight.size = s;
+  }
+}
+
 /**
  * プレイログ画面
  **/
@@ -16,11 +27,18 @@ class PlayLogState extends FlxState {
 
   private static inline var PAGE_DISP_MAX:Int = 12;
 
-  private static inline var PAGE_X:Int = 32;
-  private static inline var PAGE_Y:Int = 16;
-  private static inline var POS_X:Int = 32;
-  private static inline var POS_Y:Int = 64;
-  private static inline var POS_DY:Int = 32;
+  private static inline var PAGE_X = 32;
+  private static inline var PAGE_Y = 16;
+  private static inline var POS_X = 32;
+  private static inline var POS_Y = 64;
+  private static inline var POS_DY = 32;
+
+  private static inline var BTN_PREV_X = 256;
+  private static inline var BTN_PREV_Y = 16;
+  private static inline var BTN_NEXT_X = BTN_PREV_X + BTN_WIDTH + 16;
+  private static inline var BTN_NEXT_Y = BTN_PREV_Y;
+  private static inline var BTN_WIDTH:Int  = 40;
+  private static inline var BTN_HEIGHT:Int = 32;
 
   private var _txtList:List<FlxText>;
 
@@ -37,6 +55,9 @@ class PlayLogState extends FlxState {
   override public function create():Void {
     super.create();
 
+    // カーソル表示
+    FlxG.mouse.visible = true;
+
     _nPage = 0;
     _maxPage = Math.ceil(PlayLog.count() / PAGE_DISP_MAX);
 
@@ -45,6 +66,24 @@ class PlayLogState extends FlxState {
     this.add(_txtPage);
 
     _changePage(0);
+
+    // ページ切り替えボタン
+    // <<
+    var btnPrev = new MyButton(BTN_PREV_X, BTN_PREV_Y, BTN_WIDTH, BTN_HEIGHT, "<<", function() {
+      _changePage(-1);
+    });
+    this.add(btnPrev);
+    // >>
+    var btnNext = new MyButton(BTN_NEXT_X, BTN_NEXT_Y, BTN_WIDTH, BTN_HEIGHT, ">>", function() {
+      _changePage(1);
+    });
+    this.add(btnNext);
+
+    // 戻るボタン
+    var btnBack = new MyButton(FlxG.width/2 - 100, FlxG.height-64, 200, 40, "BACK", function() {
+      FlxG.switchState(new TitleState());
+    });
+    this.add(btnBack);
   }
 
   /**
