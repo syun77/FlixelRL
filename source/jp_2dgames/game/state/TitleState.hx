@@ -72,6 +72,7 @@ class TitleState extends FlxState {
 
   // メインメニュー基準座標
   private static inline var MENU_Y = 120;
+  private static inline var MENU_DY = 56;
 
   // ■static変数
   // ビッグサイズかどうか
@@ -329,7 +330,7 @@ class TitleState extends FlxState {
       _txtTip.visible = false;
     }));
 
-    py += 64;
+    py += MENU_DY;
     // CONTINUE
     var btnContinue = new MyButton(px, py, "CONTINUE", function() {
       // CONTINUEで始める
@@ -342,7 +343,7 @@ class TitleState extends FlxState {
       _txtTip.visible = false;
     });
     if(Save.isContinue()) {
-      py += 64;
+      py += MENU_DY;
       btnList.add(btnContinue);
     }
     // PLAY LOG
@@ -351,14 +352,14 @@ class TitleState extends FlxState {
       FlxG.switchState(new PlayLogState());
     }, function() {
       _txtTip.visible = true;
-      _txtTip.text = _csv.getString(2, "msg");
+      _txtTip.text = _csv.getString(6, "msg");
       Snd.playSe("pi", true);
     }, function() {
       _txtTip.visible = false;
     });
     if(PlayLog.exists()) {
       // プレイログが存在している
-      py += 64;
+      py += MENU_DY;
       btnList.add(btnPlaylog);
     }
 
@@ -376,7 +377,7 @@ class TitleState extends FlxState {
     }, function() {
       _txtTip.visible = false;
     }));
-    py += 64;
+    py += MENU_DY;
 
     if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE)) {
       // 初回ゲーム済みのみ表示
@@ -395,7 +396,7 @@ class TitleState extends FlxState {
         }
       ));
     }
-    py += 64;
+    py += MENU_DY;
 
     if(GameData.bitCheck(GameData.FLG_GAME_CLEAR)) {
       // ゲームクリアしていたら表示
