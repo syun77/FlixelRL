@@ -62,13 +62,14 @@ class Inventory extends FlxGroup {
   private static inline var EQUIP_MAX:Int = 3;
 
   // 消費アイテムメニュー
-  private static inline var MENU_CONSUME:Int = UIText.MENU_USE; // 使う
-  private static inline var MENU_EQUIP:Int = UIText.MENU_EQUIP; // 装備
-  private static inline var MENU_UNEQUIP:Int = UIText.MENU_UNEQUIP; // 外す
-  private static inline var MENU_THROW:Int = UIText.MENU_THROW; // 投げる
-  private static inline var MENU_PUT:Int = UIText.MENU_PUT; // 置く
-  private static inline var MENU_CHANGE:Int = UIText.MENU_CHANGE; // 交換
-  private static inline var MENU_PICKUP:Int = UIText.MENU_PICKUP; // 拾う
+  public static inline var MENU_NOCONSUME:Int  = UIText.MENU_NOUSE;   // 使えない
+  private static inline var MENU_CONSUME:Int   = UIText.MENU_USE;     // 使う
+  private static inline var MENU_EQUIP:Int     = UIText.MENU_EQUIP;   // 装備
+  private static inline var MENU_UNEQUIP:Int   = UIText.MENU_UNEQUIP; // 外す
+  private static inline var MENU_THROW:Int     = UIText.MENU_THROW;   // 投げる
+  private static inline var MENU_PUT:Int       = UIText.MENU_PUT;     // 置く
+  private static inline var MENU_CHANGE:Int    = UIText.MENU_CHANGE;  // 交換
+  private static inline var MENU_PICKUP:Int    = UIText.MENU_PICKUP;  // 拾う
 
   // 1ページあたりの最大表示数
   private static inline var PAGE_DISP:Int = 8;
@@ -759,6 +760,9 @@ class Inventory extends FlxGroup {
         // 消費アイテム
         if(_checkUse(item)) {
           p.push(MENU_CONSUME);
+        }
+        else {
+          p.push(MENU_NOCONSUME);
         }
       }
 

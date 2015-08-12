@@ -7,6 +7,7 @@ import jp_2dgames.lib.CsvLoader;
 class UIText {
 
   // メニュー
+  public static inline var MENU_NOUSE:Int = -1; // メニュー: 使えない
   public static inline var MENU_USE:Int = 1; // メニュー: 使う
   public static inline var MENU_EQUIP:Int = 2; // メニュー: 装備
   public static inline var MENU_UNEQUIP:Int = 3; // メニュー: 外す

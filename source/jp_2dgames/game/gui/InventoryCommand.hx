@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.Message.Msg;
 import jp_2dgames.game.util.MyColor;
 import jp_2dgames.game.util.Key;
 import flixel.util.FlxAngle;
@@ -69,6 +70,10 @@ class InventoryCommand extends FlxSpriteGroup {
     for(i in 0...items.length) {
       var bg = new FlxSprite(0, i * DY, "assets/images/ui/itemcommand.png");
       bg.color = MyColor.LISTITEM_ENABLE;
+      if(items[i] == UIText.MENU_NOUSE) {
+        // 使うことができない状態
+        bg.color = MyColor.LISTITEM_DISABLE;
+      }
       _bgList.push(bg);
       this.add(bg);
     }
@@ -86,6 +91,10 @@ class InventoryCommand extends FlxSpriteGroup {
       var py = 0 + (i * DY);
       var txt = new FlxText(px, py, 0, WIDTH);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+      if(item == UIText.MENU_NOUSE) {
+        // 使うことができない状態
+        item = UIText.MENU_USE;
+      }
       txt.text = UIText.getText(item);
       txt.color = MyColor.COMMAND_TEXT_UNSELECTED;
       _txtList.add(txt);
@@ -113,6 +122,15 @@ class InventoryCommand extends FlxSpriteGroup {
       i++;
     }
 
+    if(_items[_nCursor] == UIText.MENU_NOUSE) {
+      // 選べない項目
+      _cursor.color = MyColor.COMMAND_DISABLE;
+    }
+    else {
+      // 選べる
+      _cursor.color = MyColor.COMMAND_CURSOR;
+    }
+
     // カーソル更新
     _tCursor += 4;
     _cursor.alpha = 0.9 + 0.1 * Math.sin(_tCursor * FlxAngle.TO_RAD);
@@ -130,8 +148,17 @@ class InventoryCommand extends FlxSpriteGroup {
         _procCursor();
         if(Key.press.A) {
           // 項目を決定
-          _cbFunc(_items[_nCursor]);
-          _state = State.End;
+          var idx = _items[_nCursor];
+          if(idx == UIText.MENU_NOUSE) {
+            // 使えない
+            Snd.playSe("error", true);
+            Message.push2(Msg.ITEM_CANT_USE);
+          }
+          else {
+            // 実行可能
+            _cbFunc(idx);
+            _state = State.End;
+          }
         }
 
       case State.End:

@@ -54,7 +54,7 @@ int,str,str
 52,<val1>と<val2>の位置が入れ替わった,white
 53,<val1>のHPが最大まで回復した,blue
 54,ナイトメアの出現を<val1>ターン遅らせた,white
-55,ダミー,white
+55,封印されているのでアイテムが使えない,yellow
 56,ダミー,white
 57,ダミー,white
 58,ダミー,white
