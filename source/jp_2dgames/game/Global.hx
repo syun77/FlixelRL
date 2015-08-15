@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import flixel.FlxG;
 import jp_2dgames.game.util.DirUtil;
@@ -144,6 +145,11 @@ class Global {
       _floor = 1;
     }
 
+    // 到達最大フロア数を更新
+    if(GameData.getPlayData().maxFloor < _floor) {
+      GameData.getPlayData().maxFloor = _floor;
+    }
+
     // 所持金増加演出終わり
     _moneyadd = 0;
   }
@@ -175,6 +181,13 @@ class Global {
   public static function addMoney(v:Int):Int {
     _money += v;
     _moneyadd = v;
+
+    // 最大所持金チェック
+    if(GameData.getPlayData().maxMoney < _money) {
+      GameData.getPlayData().maxMoney = _money;
+      GameData.save();
+    }
+
     return _money;
   }
   public static function useMoney(v:Int):Int {

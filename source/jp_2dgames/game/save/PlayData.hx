@@ -1,5 +1,7 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.gui.Inventory;
+
 /**
  * ゲームプレイデータ
  **/
@@ -10,22 +12,22 @@ class PlayData {
   public var cntPlay:Int = 0;
   // ゲームクリア回数
   public var cntGameclear:Int = 0;
-  // 最大スコア
-  public var maxScore:Int = 0;
   // フロア最大到達数
   public var maxFloor:Int = 1;
   // 最大レベル
   public var maxLv:Int = 1;
   // 最大所持金
   public var maxMoney:Int = 0;
-  // 最大アイテム所持数
-  public var maxItem:Int = 0;
+  // 最大アイテム所持限度数
+  public var maxItem:Int = Inventory.ITEM_MAX_FIRST;
   // アイテム獲得フラグ
   public var flgItemFind:Array<Int>;
   // 敵の撃破数
   public var cntEnemyKill:Int = 0;
   // 敵の撃破フラグ
   public var flgEnemyKill:Array<Int>;
+  // ナイトメア撃破数
+  public var cntNightmareKill:Int = 0;
 
   /**
    * コンストラクタ
@@ -42,7 +44,6 @@ class PlayData {
     playtime     = data.playtime;
     cntPlay      = data.cntPlay;
     cntGameclear = data.cntGameclear;
-    maxScore     = data.maxScore;
     maxFloor     = data.maxFloor;
     maxLv        = data.maxLv;
     maxMoney     = data.maxMoney;
@@ -56,5 +57,6 @@ class PlayData {
     for(enemyid in enemyidList) {
       flgEnemyKill.push(enemyid);
     }
+    cntNightmareKill = data.cntNightmareKill;
   }
 }

@@ -1,4 +1,5 @@
 package jp_2dgames.game.save;
+import flixel.FlxG;
 import jp_2dgames.game.playlog.PlayLog;
 import jp_2dgames.game.playlog.PlayLogData;
 import jp_2dgames.game.gui.Inventory;

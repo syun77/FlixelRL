@@ -257,6 +257,12 @@ class Player extends Actor {
       var val = params.hpmax - params.hp;
       addHp(val);
       Message.push2(Msg.RECOVER_HPMAX, [name]);
+
+      // 最大レベル数更新
+      if(GameData.getPlayData().maxLv < params.lv) {
+        GameData.getPlayData().maxLv = params.lv;
+        GameData.save();
+      }
     }
   }
 

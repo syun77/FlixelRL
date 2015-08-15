@@ -412,13 +412,24 @@ class PlayState extends FlxState {
     _seq = new SeqMgr(this, _csv);
 
     // デバッグ情報設定
-    FlxG.watch.add(player, "_state");
-    FlxG.watch.add(player, "_stateprev");
-    FlxG.watch.add(_seq, "_state");
-    FlxG.watch.add(_seq, "_stateprev");
-    FlxG.watch.add(this, "_state");
+//    FlxG.watch.add(player, "_state");
+//    FlxG.watch.add(player, "_stateprev");
+//    FlxG.watch.add(_seq, "_state");
+//    FlxG.watch.add(_seq, "_stateprev");
+//    FlxG.watch.add(this, "_state");
 
-//    FlxG.debugger.visible = true;
+    var playdata = GameData.getPlayData();
+    FlxG.watch.add(playdata, "playtime");
+    FlxG.watch.add(playdata, "cntPlay");
+    FlxG.watch.add(playdata, "cntGameclear");
+    FlxG.watch.add(playdata, "maxFloor");
+    FlxG.watch.add(playdata, "maxLv");
+    FlxG.watch.add(playdata, "maxMoney");
+    FlxG.watch.add(playdata, "maxItem");
+    FlxG.watch.add(playdata, "cntEnemyKill");
+    FlxG.watch.add(playdata, "cntNightmareKill");
+
+    FlxG.debugger.visible = true;
     FlxG.debugger.toggleKeys = ["ALT"];
 //    FlxG.debugger.drawDebug = true;
 

@@ -143,6 +143,7 @@ class SeqMgr {
 
     // 経過時間を記録
     Global.addPlayTime(FlxG.elapsed);
+    GameData.getPlayData().playtime += FlxG.elapsed;
 
     // シーケンス実行
     var cnt:Int = 0;
@@ -643,6 +644,8 @@ class SeqMgr {
       // ゲームクリアフラグを立てる
       Global.gameClear();
       GameData.bitOn(GameData.FLG_GAME_CLEAR);
+      // ゲームクリア回数を増やす
+      GameData.getPlayData().cntGameclear++;
       GameData.save();
       // BGMを止める
       Snd.stopMusic();

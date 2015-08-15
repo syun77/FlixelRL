@@ -73,7 +73,7 @@ class StatisticsState extends FlxState {
     py += TEXT_DY;
     createFlxText(px, py, dat.cntGameclear);
     py += TEXT_DY;
-    createFlxText(px, py, dat.maxScore);
+    createFlxText(px, py, GameData.getHiscore());
     py += TEXT_DY;
     createFlxText(px, py, dat.maxFloor);
     py += TEXT_DY;
@@ -84,6 +84,8 @@ class StatisticsState extends FlxState {
     createFlxText(px, py, dat.maxItem);
     py += TEXT_DY;
     createFlxText(px, py, dat.cntEnemyKill);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.cntNightmareKill);
     py += TEXT_DY;
 
     // BACK

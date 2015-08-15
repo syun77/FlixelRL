@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.util.MyColor;
 import jp_2dgames.game.util.Key;
@@ -156,6 +157,11 @@ class Inventory extends FlxGroup {
     _itemMax += v;
     if(_itemMax > ITEM_MAX_LAST) {
       _itemMax = ITEM_MAX_LAST;
+    }
+
+    if(GameData.getPlayData().maxItem < _itemMax) {
+      GameData.getPlayData().maxItem = _itemMax;
+      GameData.save();
     }
 
     return _itemMax - prev;

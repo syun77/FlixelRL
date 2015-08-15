@@ -435,6 +435,8 @@ class TitleState extends FlxState {
    **/
   private function _startNewGame():Void {
     Snd.playSe("equip", true);
+    // ゲームプレイ回数を増やす
+    GameData.getPlayData().cntPlay++;
     if(GameData.bitCheck(GameData.FLG_FIRST_GAME_DONE) == false) {
       // オープニングをまだ見ていない
       GameData.bitOn(GameData.FLG_FIRST_GAME_DONE);

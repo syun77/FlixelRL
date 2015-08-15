@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.save.PlayData;
 import flixel.util.FlxVector;
 import flixel.util.FlxVector;
 import jp_2dgames.game.util.CauseOfDeathMgr;
@@ -151,7 +153,11 @@ class Enemy extends Actor {
       FlxG.camera.shake(0.01);
       // SEも再生
       Snd.playSe("roar", true);
+      GameData.getPlayData().cntNightmareKill++;
     }
+    GameData.getPlayData().cntEnemyKill++;
+    GameData.save();
+
     _bNightmare = false;
     super.kill();
 
