@@ -57,7 +57,7 @@ class PlayLogState extends FlxState {
     super.create();
 
     // 背景
-    this.add(new BgWrap());
+    this.add(new BgWrap(false));
 
     // カーソル表示
     FlxG.mouse.visible = true;
@@ -85,7 +85,7 @@ class PlayLogState extends FlxState {
 
     // 戻るボタン
     var btnBack = new MyButton(FlxG.width/2 - 100, FlxG.height-64, 200, 40, "BACK", function() {
-      FlxG.switchState(new TitleState());
+      FlxG.switchState(new StatsState());
     });
     this.add(btnBack);
   }

@@ -131,7 +131,7 @@ class ResultState extends FlxState {
     super.create();
 
     // 背景
-    this.add(new BgWrap());
+    this.add(new BgWrap(true));
 
     // キャプション
     var px = BASE_X;

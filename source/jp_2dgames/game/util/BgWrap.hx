@@ -21,7 +21,7 @@ class BgWrap extends FlxSpriteGroup {
   private var _cntX:Int;
   private var _cntY:Int;
 
-  public function new() {
+  public function new(bFade:Bool) {
     super();
 
     var cntX = Std.int(FlxG.width / SIZE) + 2;
@@ -40,8 +40,14 @@ class BgWrap extends FlxSpriteGroup {
         bg.velocity.set(speed, speed);
         // 画像のサイズが32x32なので、SIZE(=64)に合わせる)
         bg.scale.set(2, 2);
-        // 黒フェードイン
-        FlxTween.color(bg, 2, FlxColor.BLACK, FlxColor.GRAY, 1, 1, {ease:FlxEase.expoOut});
+        if(bFade) {
+          // 黒フェードイン
+          FlxTween.color(bg, 2, FlxColor.BLACK, FlxColor.GRAY, 1, 1, {ease:FlxEase.expoOut});
+        }
+        else {
+          // フェードなし
+          bg.color = FlxColor.GRAY;
+        }
         this.add(bg);
       }
     }

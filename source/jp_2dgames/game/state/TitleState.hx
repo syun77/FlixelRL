@@ -346,10 +346,10 @@ class TitleState extends FlxState {
       py += MENU_DY;
       btnList.add(btnContinue);
     }
-    // PLAY LOG
-    var btnPlaylog = new MyButton(px, py, "PLAYLOG", function() {
-      // プレイログ
-      FlxG.switchState(new PlayLogState());
+    // STATS
+    var btnStats = new MyButton(px, py, "STATS", function() {
+      // 統計情報
+      FlxG.switchState(new StatsState());
     }, function() {
       _txtTip.visible = true;
       _txtTip.text = _csv.getString(6, "msg");
@@ -360,7 +360,7 @@ class TitleState extends FlxState {
     if(PlayLog.exists()) {
       // プレイログが存在している
       py += MENU_DY;
-      btnList.add(btnPlaylog);
+      btnList.add(btnStats);
     }
 
     // NAME ENTRY
