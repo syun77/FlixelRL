@@ -32,5 +32,16 @@ class TextUtil {
     return StringTools.lpad(str, " ", digit);
   }
 
+  /**
+   * 秒を「HH:MM:SS」形式の文字列に変換して返す
+   **/
+  public static function secToHHMMSS(sec:Int):String {
+    var hour   = Std.int(sec / 60 / 60);
+    var minute = Std.int(sec / 60);
+    var second = sec % 60;
+
+    return fillZero(hour, 2) + ":" + fillZero(minute, 2) + ":" + fillZero(second, 2);
+  }
+
 }
 

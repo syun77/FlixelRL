@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.TextUtil;
+import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.save.PlayData;
 import jp_2dgames.game.save.GameData;
 import flixel.text.FlxText;
@@ -27,11 +29,25 @@ private class MyButton extends FlxButtonPlus {
  **/
 class StatisticsState extends FlxState {
 
-  private static inline var TEXT_X = 32;
-  private static inline var TEXT_Y = 32;
-  private static inline var TEXT_DY = 24;
+  // メッセージID
+  private static inline var MSG_PLAYTIME         = 1;
+  private static inline var MSG_PLAY_COUNT       = 2;
+  private static inline var MSG_GAMECLEAR_COUNT  = 3;
+  private static inline var MSG_HISCORE          = 4;
+  private static inline var MSG_MAX_FLOOR        = 5;
+  private static inline var MSG_MAX_LV           = 6;
+  private static inline var MSG_MAX_MONEY        = 7;
+  private static inline var MSG_MAX_ITEM         = 8;
+  private static inline var MSG_ENEMY_KILL       = 9;
+
+  // 座標
+  private static inline var TEXT_X = 320;
+  private static inline var TEXT_Y = 64;
+  private static inline var TEXT_DY = 32;
 
   private var _txtList:List<FlxText>;
+  private var _csv:CsvLoader;
+
   /**
    * 生成
    **/
@@ -41,15 +57,34 @@ class StatisticsState extends FlxState {
     // 背景
     this.add(new BgWrap(false));
 
+    // CSV読み込み
+    _csv = new CsvLoader("assets/data/statistics.csv");
+
     // 情報テキスト
     _txtList = new List<FlxText>();
     var dat:PlayData = GameData.getPlayData();
 
     var px = TEXT_X;
     var py = TEXT_Y;
-    createFlxText(px, py, Std.int(dat.playtime));
+    var playtime = TextUtil.secToHHMMSS(Std.int(dat.playtime));
+    createFlxText(px, py, playtime);
     py += TEXT_DY;
     createFlxText(px, py, dat.cntPlay);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.cntGameclear);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.maxScore);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.maxFloor);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.maxLv);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.maxMoney);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.maxItem);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.cntEnemyKill);
+    py += TEXT_DY;
 
     // BACK
     var BACK_X = FlxG.width/2 - 100;
@@ -66,7 +101,9 @@ class StatisticsState extends FlxState {
   private function createFlxText(px:Float, py:Float, info:Dynamic):FlxText {
     var txt = new FlxText(px, py, 640);
     txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    txt.text = '情報: ${info}';
+    var idx = _txtList.length + 1;
+    var caption = _csv.getString(idx, "msg");
+    txt.text = '${caption}: ${info}';
     _txtList.add(txt);
     this.add(txt);
     return txt;
