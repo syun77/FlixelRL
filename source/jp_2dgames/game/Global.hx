@@ -182,12 +182,14 @@ class Global {
     _money += v;
     _moneyadd = v;
 
+    // トータル金額に加算
+    GameData.getPlayData().totalMoney += v;
+
     // 最大所持金チェック
     if(GameData.getPlayData().maxMoney < _money) {
       GameData.getPlayData().maxMoney = _money;
       GameData.save();
     }
-
     return _money;
   }
   public static function useMoney(v:Int):Int {
