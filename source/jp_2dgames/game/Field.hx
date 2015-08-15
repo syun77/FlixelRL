@@ -602,8 +602,6 @@ class Field {
     var py = toWorldY(j);
     Particle.start(PType.Ring2, px, py, FlxColor.AQUAMARINE);
 
-    Snd.playSe("break", true);
-
     return true;
   }
 
