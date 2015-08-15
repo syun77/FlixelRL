@@ -1,4 +1,5 @@
 package jp_2dgames.game.item;
+import jp_2dgames.game.save.GameData;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle.PType;
 import jp_2dgames.game.particle.Particle;
@@ -149,6 +150,8 @@ class DropItem extends FlxSprite {
           // お金はインベントリに入れない
           Message.push2(Msg.ITEM_PICKUP, [item.name]);
           Global.addMoney(item.param.value);
+          // トータル金額に加算
+          GameData.getPlayData().totalMoney += item.param.value;
           item.kill();
           FlxG.sound.play("coin");
         }

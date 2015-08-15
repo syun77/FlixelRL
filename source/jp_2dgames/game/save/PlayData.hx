@@ -12,6 +12,14 @@ class PlayData {
   public var cntPlay:Int = 0;
   // ゲームクリア回数
   public var cntGameclear:Int = 0;
+  // 敵の撃破数
+  public var cntEnemyKill:Int = 0;
+  // ナイトメア撃破数
+  public var cntNightmareKill:Int = 0;
+  // 拾ったお金の総額
+  public var totalMoney:Int = 0;
+  // アイテム獲得数
+  public var totalItem:Int = 0;
   // フロア最大到達数
   public var maxFloor:Int = 1;
   // 最大レベル
@@ -22,12 +30,8 @@ class PlayData {
   public var maxItem:Int = Inventory.ITEM_MAX_FIRST;
   // アイテム獲得フラグ
   public var flgItemFind:Array<Int>;
-  // 敵の撃破数
-  public var cntEnemyKill:Int = 0;
   // 敵の撃破フラグ
   public var flgEnemyKill:Array<Int>;
-  // ナイトメア撃破数
-  public var cntNightmareKill:Int = 0;
 
   /**
    * コンストラクタ
@@ -44,6 +48,10 @@ class PlayData {
     playtime     = data.playtime;
     cntPlay      = data.cntPlay;
     cntGameclear = data.cntGameclear;
+    cntEnemyKill = data.cntEnemyKill;
+    totalMoney   = data.totalMoney;
+    totalItem    = data.totalItem;
+    cntNightmareKill = data.cntNightmareKill;
     maxFloor     = data.maxFloor;
     maxLv        = data.maxLv;
     maxMoney     = data.maxMoney;
@@ -52,11 +60,9 @@ class PlayData {
     for(itemid in itemidList) {
       flgItemFind.push(itemid);
     }
-    cntEnemyKill = data.cntEnemyKill;
     var enemyidList:Array<Int> = data.flgEnemyKill;
     for(enemyid in enemyidList) {
       flgEnemyKill.push(enemyid);
     }
-    cntNightmareKill = data.cntNightmareKill;
   }
 }

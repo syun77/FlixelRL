@@ -29,19 +29,9 @@ private class MyButton extends FlxButtonPlus {
  **/
 class StatisticsState extends FlxState {
 
-  // メッセージID
-  private static inline var MSG_PLAYTIME         = 1;
-  private static inline var MSG_PLAY_COUNT       = 2;
-  private static inline var MSG_GAMECLEAR_COUNT  = 3;
-  private static inline var MSG_HISCORE          = 4;
-  private static inline var MSG_MAX_FLOOR        = 5;
-  private static inline var MSG_MAX_LV           = 6;
-  private static inline var MSG_MAX_MONEY        = 7;
-  private static inline var MSG_MAX_ITEM         = 8;
-  private static inline var MSG_ENEMY_KILL       = 9;
-
   // 座標
-  private static inline var TEXT_X = 320;
+  private static inline var TEXT_X = 128;
+  private static inline var TEXT_X2 = 480;
   private static inline var TEXT_Y = 64;
   private static inline var TEXT_DY = 32;
 
@@ -66,6 +56,8 @@ class StatisticsState extends FlxState {
 
     var px = TEXT_X;
     var py = TEXT_Y;
+
+    // トータル
     var playtime = TextUtil.secToHHMMSS(Std.int(dat.playtime));
     createFlxText(px, py, playtime);
     py += TEXT_DY;
@@ -73,6 +65,16 @@ class StatisticsState extends FlxState {
     py += TEXT_DY;
     createFlxText(px, py, dat.cntGameclear);
     py += TEXT_DY;
+    createFlxText(px, py, dat.cntEnemyKill);
+    py += TEXT_DY;
+    createFlxText(px, py, dat.cntNightmareKill);
+    py += TEXT_DY;
+    createFlxText(px, py, '${dat.totalMoney}G');
+    py += TEXT_DY;
+
+    // 最大
+    px = TEXT_X2;
+    py = TEXT_Y;
     createFlxText(px, py, GameData.getHiscore());
     py += TEXT_DY;
     createFlxText(px, py, dat.maxFloor);
@@ -82,10 +84,6 @@ class StatisticsState extends FlxState {
     createFlxText(px, py, dat.maxMoney);
     py += TEXT_DY;
     createFlxText(px, py, dat.maxItem);
-    py += TEXT_DY;
-    createFlxText(px, py, dat.cntEnemyKill);
-    py += TEXT_DY;
-    createFlxText(px, py, dat.cntNightmareKill);
     py += TEXT_DY;
 
     // BACK
