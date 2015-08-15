@@ -433,6 +433,8 @@ class PlayState extends FlxState {
     else {
       // フロア開始時のセーブ
       Save.save(false, false);
+      // ゲームデータもセーブしておく
+      GameData.save();
     }
 
     // 雲エフェクト開始チェック

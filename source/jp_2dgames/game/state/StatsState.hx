@@ -45,6 +45,15 @@ class StatsState extends FlxState {
 
     var px = FlxG.width;
     var py = MENU_Y;
+
+    // STATISTICS
+    btnList.add(new MyButton(px, py, "STATISTICS", function() {
+      // プレイデータを見る
+      FlxG.switchState(new StatisticsState());
+    }));
+
+    py += MENU_DY;
+
     // PLAY LOG
     btnList.add(new MyButton(px, py, "PLAY LOG", function() {
       // PLAY LOGを見る

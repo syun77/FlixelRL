@@ -47,12 +47,12 @@ class PlayData {
     maxLv        = data.maxLv;
     maxMoney     = data.maxMoney;
     maxItem      = data.maxItem;
-    var itemidList = cast(data.flgItemFind, Array<Int>);
+    var itemidList:Array<Int> = data.flgItemFind;
     for(itemid in itemidList) {
       flgItemFind.push(itemid);
     }
     cntEnemyKill = data.cntEnemyKill;
-    var enemyidList = cast(data.flgEnemyKill, Array<Int>);
+    var enemyidList:Array<Int> = data.flgEnemyKill;
     for(enemyid in enemyidList) {
       flgEnemyKill.push(enemyid);
     }

@@ -223,6 +223,8 @@ class GameData {
 
     // ハイスコア更新
     updateHiscore(score);
+    // セーブしておく
+    save();
 
     // プレイログ保存
     var log = new PlayLogData();
