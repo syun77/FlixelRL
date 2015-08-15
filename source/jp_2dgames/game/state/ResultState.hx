@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.util.BgWrap;
 import jp_2dgames.lib.Snd;
 import flixel.addons.effects.FlxTrail;
 import flash.display.BlendMode;
@@ -109,11 +110,6 @@ class ResultState extends FlxState {
   // スコアテキストの幅
   private static inline var SCORE_WIDTH:Int = 200;
 
-  // 背景
-  private var _bgList:List<FlxSprite>;
-  private var _bgCntX:Int;
-  private var _bgCntY:Int;
-
   // テキスト
   private var _txtCaption:FlxText;
   private var _txtList:List<FlxText>;
@@ -135,29 +131,7 @@ class ResultState extends FlxState {
     super.create();
 
     // 背景
-    _bgList = new List<FlxSprite>();
-    {
-      var size = Field.GRID_SIZE * 2;
-      var cntX = Std.int(FlxG.width / size) + 2;
-      var cntY = Std.int(FlxG.height/ size) + 2;
-      _bgCntX = cntX - 1;
-      _bgCntY = cntY - 1;
-
-      // 転送領域の作成
-      for(j in 0...cntY) {
-        for(i in 0...cntX) {
-          var px = i * size;
-          var py = j * size;
-          var bg = new FlxSprite(px, py, "assets/levels/tilenone.png");
-          var speed = 64 / 60 * -50;
-          bg.velocity.set(speed, speed);
-          bg.scale.set(2, 2);
-          FlxTween.color(bg, 2, FlxColor.BLACK, FlxColor.GRAY, 1, 1, {ease:FlxEase.expoOut});
-          this.add(bg);
-          _bgList.add(bg);
-        }
-      }
-    }
+    this.add(new BgWrap());
 
     // キャプション
     var px = BASE_X;
@@ -294,16 +268,6 @@ class ResultState extends FlxState {
    **/
   override public function update():Void {
     super.update();
-
-    // 背景更新
-    for(bg in _bgList) {
-      if(bg.x < -bg.width*2) {
-        bg.x += bg.width*2 * (_bgCntX + 1);
-      }
-      if(bg.y < -bg.height*2) {
-        bg.y += bg.height*2 * (_bgCntY + 1);
-      }
-    }
 
     switch(_state) {
       case State.Wait:

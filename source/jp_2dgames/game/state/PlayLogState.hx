@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.util.BgWrap;
 import flixel.addons.ui.FlxButtonPlus;
 import jp_2dgames.game.util.Key;
 import flixel.tweens.FlxEase;
@@ -54,6 +55,9 @@ class PlayLogState extends FlxState {
    **/
   override public function create():Void {
     super.create();
+
+    // 背景
+    this.add(new BgWrap());
 
     // カーソル表示
     FlxG.mouse.visible = true;
