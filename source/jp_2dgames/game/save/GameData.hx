@@ -95,6 +95,12 @@ class GameData {
     return _bNewHiscore;
   }
 
+  // ゲームプレイデータ
+  private static var _playdata:PlayData;
+  public static function getPlayData():PlayData {
+    return _playdata;
+  }
+
   /**
    * セーブデータが存在するかどうか
    **/
@@ -126,9 +132,10 @@ class GameData {
   public static function save():Void {
     var saveutil = new FlxSave();
     saveutil.bind("GAMEDATA");
-    saveutil.data.name    = _name;
-    saveutil.data.bits    = _bits;
-    saveutil.data.hiscore = _hiscore;
+    saveutil.data.name     = _name;
+    saveutil.data.bits     = _bits;
+    saveutil.data.hiscore  = _hiscore;
+    saveutil.data.playdata = _playdata;
 
     // 書き込み
     saveutil.flush();
@@ -139,15 +146,19 @@ class GameData {
    **/
   public static function load():Void {
     if(exists()) {
-      // 名前を設定
+
+      // ■名前を設定
       var saveutil = new FlxSave();
       saveutil.bind("GAMEDATA");
       _name = saveutil.data.name;
+
+      // ■フラグ
       if(saveutil.data.bits == null) {
-        // フラグがない場合は作成
+        // フラグデータがない場合は作成
         _bits = [for(i in 0...BIT_MAX) false];
       }
       else {
+        // ある場合はセーブデータからコピー
         _bits = new Array<Bool>();
         var idx:Int = 0;
         var bits:Array<Bool> = saveutil.data.bits;
@@ -156,12 +167,21 @@ class GameData {
           idx++;
         }
       }
+
+      // ■ハイスコア
       if(saveutil.data.hiscore == null) {
         // ハイスコアがない場合も作成
         _hiscore = 0;
       }
       else {
         _hiscore = saveutil.data.hiscore;
+      }
+
+      // ■プレイデータ
+      _playdata = new PlayData();
+      if(saveutil.data.playdata != null) {
+        // セーブデータがあればコピー
+        _playdata.copyFromDynamic(saveutil.data.playdata);
       }
     }
   }
