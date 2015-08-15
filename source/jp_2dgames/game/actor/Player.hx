@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.save.Save;
 import jp_2dgames.game.util.CauseOfDeathMgr.DeathType;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.util.Calc;

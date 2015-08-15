@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.save;
 
 #if neko
 import sys.io.File;
@@ -7,7 +7,6 @@ import jp_2dgames.game.gimmick.Pit;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.item.ItemConst;
 import flixel.util.FlxSave;
-import jp_2dgames.game.Save.LoadType;
 import jp_2dgames.game.actor.Npc;
 import jp_2dgames.game.util.DirUtil;
 import jp_2dgames.lib.Snd;

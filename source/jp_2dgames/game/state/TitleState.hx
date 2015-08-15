@@ -2,6 +2,8 @@ package jp_2dgames.game.state;
 #if flash
 import flash.external.ExternalInterface;
 #end
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.save.Save;
 import jp_2dgames.game.playlog.PlayLog;
 import flash.display.StageDisplayState;
 import flixel.ui.FlxButton;

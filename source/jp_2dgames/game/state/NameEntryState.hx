@@ -8,7 +8,7 @@ import flash.geom.Rectangle;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import jp_2dgames.lib.CsvLoader;
-import jp_2dgames.game.GameData;
+import jp_2dgames.game.save.GameData;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.ui.FlxButtonPlus;
 import jp_2dgames.game.util.NameGenerator;

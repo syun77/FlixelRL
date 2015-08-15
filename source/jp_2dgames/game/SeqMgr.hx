@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.save.Save;
 import jp_2dgames.lib.Snd;
 import flixel.util.FlxSave;
 import jp_2dgames.game.util.CalcScore;

@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.util.BgWrap;
 import jp_2dgames.lib.Snd;
 import flixel.addons.effects.FlxTrail;

@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.save.Save;
 import jp_2dgames.game.playlog.PlayLog;
 import flixel.text.FlxText;
 import jp_2dgames.game.state.TitleState;

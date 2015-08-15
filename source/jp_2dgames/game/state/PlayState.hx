@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.particle.ParticleKira;
 import jp_2dgames.game.particle.EffectCloud;
 import jp_2dgames.game.util.Pad;
@@ -41,7 +42,7 @@ import flixel.FlxSprite;
 import jp_2dgames.lib.TmxLoader;
 import flixel.FlxG;
 import flixel.FlxState;
-import jp_2dgames.game.Save;
+import jp_2dgames.game.save.Save;
 
 /**
  * 状態
