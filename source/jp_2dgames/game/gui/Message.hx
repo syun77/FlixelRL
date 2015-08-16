@@ -70,6 +70,7 @@ class Msg {
   public static inline var RECOVER_HPMAX:Int = 53; // HPが最大まで回復
   public static inline var NIGHTMARE_DELAY:Int = 54; // ナイトメアの出現を遅延させた
   public static inline var ITEM_CANT_USE:Int = 55; // アイテムが使えない
+  public static inline var CANT_USE_ORB_BLUE:Int = 56; // 青オーブは使えない
 
 }
 

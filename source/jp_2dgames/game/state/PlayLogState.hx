@@ -28,7 +28,7 @@ private class MyButton extends FlxButtonPlus {
 class PlayLogState extends FlxState {
 
   // 1画面に表示するログの数
-  private static inline var PAGE_DISP_MAX:Int = 12;
+  private static inline var PAGE_DISP_MAX:Int = 10;
 
   // 座標関連
   private static inline var PAGE_X = 32;
@@ -39,7 +39,7 @@ class PlayLogState extends FlxState {
 
   // ボタン
   /// 1つ戻る
-  private static inline var BTN_PREV_X = 256; // X座標
+  private static inline var BTN_PREV_X = 320; // X座標
   private static inline var BTN_PREV_Y = 16;  // Y座標
   /// 1つ進む
   private static inline var BTN_NEXT_X = BTN_PREV_X + BTN_WIDTH + 16; // X座標

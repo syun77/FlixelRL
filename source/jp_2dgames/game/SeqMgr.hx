@@ -382,7 +382,7 @@ class SeqMgr {
           ExpMgr.reset();
         }
 
-        if(_player.xchip == -1 && _player.ychip == -1) {
+        if(_player.isWarpNextFloor()) {
           // 次のフロアへワープ
           _change(State.NextFloorWarp);
         }

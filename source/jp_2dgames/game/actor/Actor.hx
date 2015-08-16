@@ -74,6 +74,9 @@ class Actor extends FlxSprite {
   // 毒で減るHPの割合
   private static inline var DAMAGE_POISON:Int = 5; // 5%
 
+  // 次のフロアへワープすると判定する座標
+  public static inline var WARP_NEXT_FLOOR_POS:Int = -1; // (-1, -1)に存在したら次のフロアへワープ
+
   // 状態
   private var _state:State;
   private var _stateprev:State; // 1つ前の状態
@@ -801,6 +804,16 @@ class Actor extends FlxSprite {
       // ワープメッセージ表示
       Message.push2(Msg.WARP, [name]);
     }
+  }
+
+  // 次のフロアへワープする
+  public function warpNextFloor(bMsg:Bool):Void {
+    warp(WARP_NEXT_FLOOR_POS, WARP_NEXT_FLOOR_POS, bMsg);
+  }
+
+  // 次のフロアへワープするかどうか
+  public function isWarpNextFloor():Bool {
+    return xchip == WARP_NEXT_FLOOR_POS && ychip == WARP_NEXT_FLOOR_POS;
   }
 
   /**

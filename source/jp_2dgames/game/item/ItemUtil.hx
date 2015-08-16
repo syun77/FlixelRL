@@ -336,6 +336,19 @@ class ItemUtil {
   }
 
   /**
+   * 青オーブを使用できるかどうか
+   **/
+  public static function canUseBlueOrb():Bool {
+    if(Global.getFloor() >= 30) {
+      // 30F以降は使えない
+      return false;
+    }
+
+    // 使える
+    return true;
+  }
+
+  /**
    * 消費アイテムを使用する
    **/
   public static function use(actor:Actor, item:ItemData, bMsg=true):Void {
@@ -455,9 +468,16 @@ class ItemUtil {
         switch(item.id) {
           case ItemConst.ORB2:
             // 青オーブ
-            // 次のフロアへワープ
-            actor.warp(-1, -1, false);
-            actor.visible = false;
+            if(canUseBlueOrb()) {
+              // 次のフロアへワープ
+              actor.warpNextFloor(false);
+              actor.visible = false;
+            }
+            else {
+              // 青オーブは使えない
+              Message.push2(Msg.CANT_USE_ORB_BLUE);
+              Snd.playSe("error", true);
+            }
           case ItemConst.ORB4:
             // 緑オーブ
             actor.changeBadStatus(BadStatus.Star);
