@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import haxe.ds.ArraySort;
 import jp_2dgames.game.util.BgWrap;
 import flixel.addons.ui.FlxButtonPlus;
 import jp_2dgames.game.util.Key;
@@ -26,20 +27,37 @@ private class MyButton extends FlxButtonPlus {
  **/
 class PlayLogState extends FlxState {
 
+  // 1画面に表示するログの数
   private static inline var PAGE_DISP_MAX:Int = 12;
 
+  // 座標関連
   private static inline var PAGE_X = 32;
   private static inline var PAGE_Y = 16;
   private static inline var POS_X = 32;
   private static inline var POS_Y = 64;
   private static inline var POS_DY = 32;
 
-  private static inline var BTN_PREV_X = 256;
-  private static inline var BTN_PREV_Y = 16;
-  private static inline var BTN_NEXT_X = BTN_PREV_X + BTN_WIDTH + 16;
-  private static inline var BTN_NEXT_Y = BTN_PREV_Y;
+  // ボタン
+  /// 1つ戻る
+  private static inline var BTN_PREV_X = 256; // X座標
+  private static inline var BTN_PREV_Y = 16;  // Y座標
+  /// 1つ進む
+  private static inline var BTN_NEXT_X = BTN_PREV_X + BTN_WIDTH + 16; // X座標
+  private static inline var BTN_NEXT_Y = BTN_PREV_Y; // Y座標
+  // ボタンの幅
   private static inline var BTN_WIDTH:Int  = 40;
   private static inline var BTN_HEIGHT:Int = 32;
+
+  // ソートボタン
+  /// 日付ソート
+  private static inline var BTN_SORT_DATE_X = 480;
+  private static inline var BTN_SORT_DATE_Y = BTN_PREV_Y;
+
+  /// スコアソート
+  private static inline var bTN_SORT_SCORE_X = BTN_SORT_DATE_X + BTN_SORT_WIDTH + 16;
+  private static inline var bTN_SORT_SCORE_Y = BTN_SORT_DATE_Y;
+  private static inline var BTN_SORT_WIDTH:Int = 160;
+  private static inline var BTN_SORT_HEIGHT:Int = 32;
 
   private var _txtList:List<FlxText>;
 
@@ -50,11 +68,40 @@ class PlayLogState extends FlxState {
   // ページ情報
   private var _txtPage:FlxText;
 
+  // ログデータのコピー
+  private var _logList:Array<PlayLogData>;
+
+  // 日付ソート
+  private function _sortByDate():Void {
+    ArraySort.sort(_logList, function(a:PlayLogData, b:PlayLogData) {
+      if(a.date > b.date) {
+        return -1;
+      }
+      else {
+        return 1;
+      }
+    });
+  }
+  // スコアソート
+  private function _sortByScore():Void {
+    ArraySort.sort(_logList, function(a:PlayLogData, b:PlayLogData) {
+      return b.score - a.score;
+    });
+  }
+
   /**
    * 生成
    **/
   override public function create():Void {
     super.create();
+
+    // ログデータをコピーする
+    _logList = new Array<PlayLogData>();
+    for(log in PlayLog.getLogs()) {
+      _logList.push(log);
+    }
+    // 日付ソートする
+    _sortByDate();
 
     // 背景
     this.add(new BgWrap(false));
@@ -82,6 +129,22 @@ class PlayLogState extends FlxState {
       _changePage(1);
     });
     this.add(btnNext);
+
+    // ソートボタン
+    /// 日付ソート
+    var btnSortDate = new MyButton(BTN_SORT_DATE_X, BTN_SORT_DATE_Y, BTN_SORT_WIDTH, BTN_SORT_HEIGHT, "SORT:Date", function() {
+      _sortByDate();
+      _nPage = 0;
+      _changePage(0);
+    });
+    this.add(btnSortDate);
+    /// スコアソート
+    var btnSortScore = new MyButton(bTN_SORT_SCORE_X, bTN_SORT_SCORE_Y, BTN_SORT_WIDTH, BTN_SORT_HEIGHT, "SORT:Score", function() {
+      _sortByScore();
+      _nPage = 0;
+      _changePage(0);
+    });
+    this.add(btnSortScore);
 
     // 戻るボタン
     var btnBack = new MyButton(FlxG.width/2 - 100, FlxG.height-64, 200, 40, "BACK", function() {
@@ -120,10 +183,10 @@ class PlayLogState extends FlxState {
     for(i in 0...PAGE_DISP_MAX) {
 
       var idx = (i + PAGE_DISP_MAX * _nPage);
-      var log = PlayLog.getLogReverse(idx);
-      if(log == null) {
+      if(idx >= _logList.length) {
         break;
       }
+      var log = _logList[idx];
       var txt = _addLog(i, log);
       this.add(txt);
       _txtList.add(txt);
