@@ -20,5 +20,6 @@ class PlayLogData {
     floor    = data.floor;
     death    = data.death;
     playtime = data.playtime;
+    date     = data.date;
   }
 }
