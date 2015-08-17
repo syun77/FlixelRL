@@ -8,9 +8,3 @@ int,int,int,int,str
 6,145,200,10,wand
 7,146,200,10,potion
 8,147,200,10,attack
-9,131,200,10,hungry
-10,132,200,10,unknown
-11,133,200,10,wand
-12,134,200,10,ring
-13,135,200,10,attack
-14,136,200,10,potion

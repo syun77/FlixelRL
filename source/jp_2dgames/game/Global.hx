@@ -49,7 +49,7 @@ class Global {
     _bInitPlayer = true;
     _params = new Params();
     _shopAppearCount = 100;
-    _nightmareLv = 1;
+    _nightmareLv = 8;
     _turnLimitNightmare = NightmareMgr.getTurnLimit();
     _nightmareAvoid = 0;
     _bEscapeFromNightmare = false;
@@ -221,6 +221,8 @@ class Global {
         // りんごを持たせる
         var param = new ItemExtraParam();
         items.push(new ItemData(ItemConst.FOOD1, param));
+        items.push(new ItemData(ItemConst.ORB1, param));
+        items.push(new ItemData(ItemConst.ORB1, param));
       }
     }
     else {

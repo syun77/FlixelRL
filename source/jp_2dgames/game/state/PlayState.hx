@@ -418,18 +418,18 @@ class PlayState extends FlxState {
 //    FlxG.watch.add(_seq, "_stateprev");
 //    FlxG.watch.add(this, "_state");
 
-    var playdata = GameData.getPlayData();
-    FlxG.watch.add(playdata, "playtime");
-    FlxG.watch.add(playdata, "cntPlay");
-    FlxG.watch.add(playdata, "cntGameclear");
-    FlxG.watch.add(playdata, "maxFloor");
-    FlxG.watch.add(playdata, "maxLv");
-    FlxG.watch.add(playdata, "maxMoney");
-    FlxG.watch.add(playdata, "maxItem");
-    FlxG.watch.add(playdata, "cntEnemyKill");
-    FlxG.watch.add(playdata, "cntNightmareKill");
+//    var playdata = GameData.getPlayData();
+//    FlxG.watch.add(playdata, "playtime");
+//    FlxG.watch.add(playdata, "cntPlay");
+//    FlxG.watch.add(playdata, "cntGameclear");
+//    FlxG.watch.add(playdata, "maxFloor");
+//    FlxG.watch.add(playdata, "maxLv");
+//    FlxG.watch.add(playdata, "maxMoney");
+//    FlxG.watch.add(playdata, "maxItem");
+//    FlxG.watch.add(playdata, "cntEnemyKill");
+//    FlxG.watch.add(playdata, "cntNightmareKill");
 
-    FlxG.debugger.visible = true;
+//    FlxG.debugger.visible = true;
     FlxG.debugger.toggleKeys = ["ALT"];
 //    FlxG.debugger.drawDebug = true;
 
