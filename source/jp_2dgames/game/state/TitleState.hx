@@ -56,6 +56,7 @@ private enum State {
 class TitleState extends FlxState {
 
   // ■定数
+  private static inline var VERSION_GAME:String = "Ver. 1.0.0";
 
   // ロゴ
   private static inline var LOGO_Y = -160;
@@ -178,6 +179,11 @@ class TitleState extends FlxState {
     _txtCopyright.text = "(c) 2015 2dgames.jp All right reserved.";
     _txtCopyright.setFormat(null, 16);
     this.add(_txtCopyright);
+
+    // バージョン番号
+    var txtVersion = new FlxText(FlxG.width-64, FlxG.height-24, 64, VERSION_GAME);
+    txtVersion.setBorderStyle(FlxText.BORDER_OUTLINE);
+    this.add(txtVersion);
 
     // クリックボタン
     var px = FlxG.width/2 - 100;

@@ -207,6 +207,21 @@ class SeqMgr {
     Global.nextShopAppearCount();
     // ナイトメアターン数を回復
     NightmareMgr.nextFloor();
+
+    if(Global.getFloor() >  Global.FLOOR_MAX) {
+      // ゲームクリア
+      // 全踏破フラグを立てる
+      Global.bitOn(0);
+
+      // スコア送信
+      GameData.sendScore(_player.params.lv);
+
+      FlxG.switchState(new EndingState());
+    }
+    else {
+      // 次のフロアに進む
+      FlxG.switchState(new PlayState());
+    }
   }
 
   /**
@@ -508,20 +523,6 @@ class SeqMgr {
             FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function() {
               // フェードが完了したら次のフロアへ進む
               _nextFloor();
-              if(Global.getFloor() >  Global.FLOOR_MAX) {
-                // ゲームクリア
-                // 全踏破フラグを立てる
-                Global.bitOn(0);
-
-                // スコア送信
-                GameData.sendScore(_player.params.lv);
-
-                FlxG.switchState(new EndingState());
-              }
-              else {
-                // 次のフロアに進む
-                FlxG.switchState(new PlayState());
-              }
             });
             _change(State.NextFloorWait);
           }
@@ -530,6 +531,9 @@ class SeqMgr {
             _change(State.KeyInput);
             // 踏みつけているチップをクリア
             _player.endStompChip();
+
+            // ターン終了
+            _player.turnEnd();
           }
         }
       case State.NextFloorWait:
@@ -543,7 +547,6 @@ class SeqMgr {
         FlxG.camera.fade(FlxColor.BLACK, 0.5, false, function() {
           // フェードが完了したら次のフロアへ進む
           _nextFloor();
-          FlxG.switchState(new PlayState());
         });
         _change(State.NextFloorWait);
 

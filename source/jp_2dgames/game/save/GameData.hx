@@ -36,6 +36,9 @@ class GameData {
     save();
   }
 
+  // セーブデータのバージョン番号
+  public static var VERSION:String = "Ver 0.9.0";
+
   // プレイヤー名
   private static var _name:String = "player";
   public static function getName():String {
@@ -109,10 +112,20 @@ class GameData {
     var saveutil = new FlxSave();
     saveutil.bind("GAMEDATA");
     if(saveutil.data == null) {
+      // データがない
       return false;
     }
     if(saveutil.data.name == null) {
+      // ユーザ名が設定されていない
       return false;
+    }
+    if(saveutil.data.version == null) {
+      // バージョン番号がない
+      return false;
+    }
+    if(saveutil.data.version != VERSION) {
+      // バージョン番号が一致していない
+      return  false;
     }
 
     return true;
@@ -133,6 +146,7 @@ class GameData {
   public static function save():Void {
     var saveutil = new FlxSave();
     saveutil.bind("GAMEDATA");
+    saveutil.data.version  = VERSION;
     saveutil.data.name     = _name;
     saveutil.data.bits     = _bits;
     saveutil.data.hiscore  = _hiscore;

@@ -73,7 +73,7 @@ class EffectCloud extends FlxSprite {
     var vx = -10 - 5 * i;
     var vy = FlxRandom.floatRanged(-10, 10);
     velocity.set(vx, vy);
-    _alpha = FlxRandom.floatRanged(0.4, 0.8);
+    _alpha = FlxRandom.floatRanged(0.3, 0.6);
 
     // 出現開始
     _state = State.Appear;
