@@ -318,6 +318,8 @@ class Inventory extends FlxGroup {
   // アイテムの追加
   public static function push(itemid:Int, param:ItemExtraParam) {
     instance.addItem(itemid, param);
+    // ログに追加
+    GameData.addItemLog(itemid);
   }
   // 装備品の取得
   public static function getWeapon():Int {

@@ -105,6 +105,24 @@ class GameData {
     return _playdata;
   }
 
+  // アイテムログ追加
+  public static function addItemLog(itemID:Int):Void {
+    var itemFlg = _playdata.flgItemFind;
+    if(itemFlg.indexOf(itemID) == -1) {
+      // ログに存在しないので追加
+      itemFlg.push(itemID);
+    }
+  }
+
+  // 敵のログ追加
+  public static function addEnemyLog(enemyID:Int):Void {
+    var enemyFlg = _playdata.flgEnemyKill;
+    if(enemyFlg.indexOf(enemyID) == -1) {
+      // ログに存在しないので追加
+      enemyFlg.push(enemyID);
+    }
+  }
+
   /**
    * セーブデータが存在するかどうか
    **/

@@ -148,6 +148,10 @@ class Enemy extends Actor {
    **/
   override public function kill():Void {
     _hpBar.visible = false;
+
+    // 敵撃破ログに追加
+    GameData.addEnemyLog(_id);
+
     if(_bNightmare) {
       // ナイトメアを倒したら画面を揺らす
       FlxG.camera.shake(0.01);
