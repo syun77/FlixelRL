@@ -20,10 +20,9 @@ class CsvLoader {
   }
 
   /**
-     * CSVを読み込む
-     * @param filepath CSVのファイルパス
-     **/
-
+   * CSVを読み込む
+   * @param filepath CSVのファイルパス
+   **/
   public function load(filepath:String):Void {
     _datas = new Array<Map<String, String>>();
     var text:String = Assets.getText(filepath);
@@ -63,20 +62,18 @@ class CsvLoader {
   }
 
   /**
-     * データ数を取得する
-     * @return データ数
-     **/
-
+   * データ数を取得する
+   * @return データ数
+   **/
   public function size():Int {
     return _datas.length;
   }
 
   /**
-     * 指定のIDが存在するかどうかチェックする
-     * @param id id
-     * @return 存在すればtrue
-     **/
-
+   * 指定のIDが存在するかどうかチェックする
+   * @param id id
+   * @return 存在すればtrue
+   **/
   public function hasId(id:Int):Bool {
     if(id < 0 || _datas.length <= id) {
       return false;
@@ -85,12 +82,11 @@ class CsvLoader {
   }
 
   /**
-     * 値を文字列として取得する
-     * @param id id
-     * @param key キー文字列
-     * @return 値
-     **/
-
+   * 値を文字列として取得する
+   * @param id id
+   * @param key キー文字列
+   * @return 値
+   **/
   public function getString(id:Int, key:String):String {
     if(hasId(id) == false) {
       throw "Error: Not found id = " + id;
@@ -103,10 +99,9 @@ class CsvLoader {
   }
 
   /**
-     * 特定のキーを持つIDを検索する
-     * @return 見つからなかったら-1
-     **/
-
+   * 特定のキーを持つIDを検索する
+   * @return 見つからなかったら-1
+   **/
   public function searchID(key:String, value:String):Int {
     var i:Int = 0;
     for(data in _datas) {
@@ -120,10 +115,9 @@ class CsvLoader {
   }
 
   /**
-     * 特定のキーに対応する値を持つ値を取得する
-     * @return 見つからなかったらエラー
-     **/
-
+   * 特定のキーに対応する値を持つ値を取得する
+   * @return 見つからなかったらエラー
+   **/
   public function searchItem(key:String, name:String, item:String, bExcept=true):String {
     for(data in _datas) {
       if(data[key] == name) {
@@ -221,8 +215,8 @@ class CsvLoader {
     str = "";
     for(data in _datas) {
       str = "";
-      for(d in data) {
-        str += d + ",";
+      for(s in _header) {
+        str += '${data[s]},';
       }
       trace(str);
     }
