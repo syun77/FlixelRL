@@ -60,6 +60,15 @@ class StatsState extends FlxState {
       FlxG.switchState(new PlayLogState());
     }));
 
+    py += MENU_DY;
+
+    // ENEMY LOG
+    btnList.add(new MyButton(px, py, "ENEMY LOG", function() {
+      // ENEMY LOGを見る
+      FlxG.switchState(new EnemyLogState());
+    }));
+
+
     py += Std.int(MENU_DY * 1.3);
     // BACK
     btnList.add(new MyButton(px, py, "BACK", function() {
