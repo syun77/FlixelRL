@@ -68,6 +68,13 @@ class StatsState extends FlxState {
       FlxG.switchState(new EnemyLogState());
     }));
 
+    py += MENU_DY;
+
+    // ITEM LOG
+    btnList.add(new MyButton(px, py, "ITEM LOG", function() {
+      // ITEM LOGを見る
+      FlxG.switchState(new ItemLogState());
+    }));
 
     py += Std.int(MENU_DY * 1.3);
     // BACK
@@ -75,6 +82,7 @@ class StatsState extends FlxState {
       // タイトル画面に戻る
       FlxG.switchState(new TitleState());
     }));
+
 
     var px2 = FlxG.width/2 - 100;
     var idx:Int = 0;
