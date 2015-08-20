@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.Inventory;
 import jp_2dgames.game.particle.ParticleSmoke;
@@ -637,5 +638,35 @@ class ItemUtil {
     ParamsUtil.init(actor.extParams);
 
     actor.trancateHp();
+  }
+
+  public static function count(type:IType):Int {
+    switch(type) {
+      case IType.None:   return 0; // なし
+      case IType.Weapon: return 1 + ItemConst.WEAPON20 - ItemConst.WEAPON1; // 武器
+      case IType.Armor:  return 1 + ItemConst.ARMOR20  - ItemConst.ARMOR1;  // よろい
+      case IType.Scroll: return 1 + ItemConst.SCROLL16 - ItemConst.SCROLL1; // 巻物
+      case IType.Wand:   return 1 + ItemConst.WAND16   - ItemConst.WAND1;   // 杖
+      case IType.Potion: return 1 + ItemConst.POTION32 - ItemConst.POTION1; // ポーション
+      case IType.Ring:   return 1 + ItemConst.RING20   - ItemConst.RING1;   // 指輪
+      case IType.Money:  return 0; // お金
+      case IType.Food:   return 1 + ItemConst.FOOD16   - ItemConst.FOOD1; // 食べ物
+      case IType.Orb:    return 1 + ItemConst.ORB8     - ItemConst.ORB1;  // 宝珠
+    }
+  }
+
+  public static function firstID(type:IType):Int {
+    switch(type) {
+      case IType.None:   return 0; // なし
+      case IType.Weapon: return ItemConst.WEAPON1; // 武器
+      case IType.Armor:  return ItemConst.ARMOR1;  // よろい
+      case IType.Scroll: return ItemConst.SCROLL1; // 巻物
+      case IType.Wand:   return ItemConst.WAND1;   // 杖
+      case IType.Potion: return ItemConst.POTION1; // ポーション
+      case IType.Ring:   return ItemConst.RING1;   // 指輪
+      case IType.Money:  return 0; // お金
+      case IType.Food:   return ItemConst.FOOD1; // 食べ物
+      case IType.Orb:    return ItemConst.ORB1;  // 宝珠
+    }
   }
 }

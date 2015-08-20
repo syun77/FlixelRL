@@ -204,11 +204,11 @@ class ResultState extends FlxState {
     var txtFloor = new FlxText(px, py, 480, 'Floor: ${floor}', FONT_SIZE);
     _txtList.add(txtFloor);
 
-    py += OFS_DY;
+//    py += OFS_DY;
     // ランク
-    var rank = "Dragon Master";
-    var txtFloor = new FlxText(px, py, 480, 'Rank: ${rank}', FONT_SIZE);
-    _txtList.add(txtFloor);
+//    var rank = "Dragon Master";
+//    var txtFloor = new FlxText(px, py, 480, 'Rank: ${rank}', FONT_SIZE);
+//    _txtList.add(txtFloor);
 
     var idx = 0;
     for(txt in _txtList) {
