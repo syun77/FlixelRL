@@ -1,5 +1,12 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.util.BgWrap;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import flixel.util.FlxColor;
+import flixel.ui.FlxButton;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import jp_2dgames.lib.CsvLoader;
@@ -38,12 +45,16 @@ class ItemLogState extends FlxState {
   private static inline var CURSOR_OFS_X = -8;
   private static inline var CURSOR_OFS_Y = -4;
 
+  // カテゴリボタン
+  private static inline var CATEGORY_X = 80;
+  private static inline var CATEGORY_Y = 16;
+  private static inline var CATEGORY_DX = 40;
+
   // 詳細情報
   private static inline var INFO_X = 640;
   private static inline var INFO_Y = POS_Y;
 
   // 戻るボタン
-  private static inline var BACK_X = 600;
   private static inline var BACK_Y = 416;
 
   // 表示する行の最大
@@ -57,19 +68,57 @@ class ItemLogState extends FlxState {
   // カーソル
   private var _cursor:FlxSprite;
 
+  // カテゴリボタン
+  private var _btnList:List<FlxButton>;
+
   /**
    * 生成
    **/
   override public function create():Void {
     super.create();
 
+    // 背景
+    this.add(new BgWrap(false));
+
     // CSV読み込み
     ItemUtil.csvConsumable = new CsvLoader("assets/levels/item_consumable.csv");
     ItemUtil.csvEquipment  = new CsvLoader("assets/levels/item_equipment.csv");
 
     _txtList = new Array<FlxText>();
-//    _dispItem(IType.Scroll);
-    _dispItem(IType.Potion);
+    // カテゴリボタン
+    _btnList = new List<FlxButton>();
+    var btnX = CATEGORY_X;
+    var btnY = CATEGORY_Y;
+    var funcWeapon:Void->Void = null;
+    for(name in ["weapon", "armor", "ring", "food", "potion", "wand", "scroll", "orb"]) {
+      var btn:FlxButton = null;
+      var func = function() {
+        // ページ切り替え
+        for(b in _btnList) {
+          b.color = FlxColor.SILVER;
+        }
+        btn.color = FlxColor.WHITE;
+        _clickCategory(name);
+      }
+      btn = new FlxButton(btnX, btnY, "", func);
+      btn.loadGraphic('assets/images/ui/category/${name}.png', true);
+      this.add(btn);
+      _btnList.add(btn);
+
+      // アニメーション
+      var py = btn.y;
+      btn.y = -32;
+      FlxTween.tween(btn, {y:py}, 1, {ease:FlxEase.expoOut});
+
+      if(name == "weapon") {
+        funcWeapon = func;
+      }
+
+      btnX += CATEGORY_DX;
+    }
+
+    // 初期状態は武器
+    funcWeapon();
 
     // 詳細情報
     _txtInfo = new FlxText(INFO_X, INFO_Y, 192);
@@ -83,16 +132,37 @@ class ItemLogState extends FlxState {
     this.add(_cursor);
 
     // 戻るボタン
+    var BACK_X = FlxG.width/2 - 100;
     var btnBack = new MyButton(BACK_X, BACK_Y, "BACK", function() {
       FlxG.switchState(new StatsState());
     });
     this.add(btnBack);
   }
 
+  private function _clickCategory(name:String):Void {
+    var type = IType.Food;
+    switch(name) {
+      case "weapon": type = IType.Weapon;
+      case "armor":  type = IType.Armor;
+      case "ring":   type = IType.Ring;
+      case "food":   type = IType.Food;
+      case "potion": type = IType.Potion;
+      case "wand":   type = IType.Wand;
+      case "scroll": type = IType.Scroll;
+      case "orb":    type = IType.Orb;
+    }
+
+    _dispItem(type);
+  }
+
   /**
    * 指定のカテゴリのアイテムを表示
    **/
   private function _dispItem(type:IType):Void {
+
+    for(txt in _txtList) {
+      this.remove(txt);
+    }
     _itemList = new Array<Int>();
     var cnt = ItemUtil.count(type);
     for(i in 0...cnt) {
@@ -109,9 +179,18 @@ class ItemLogState extends FlxState {
     for(id in _itemList) {
       var txt = new FlxText(px, py, POS_DX);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-      txt.text = ItemUtil.getParamString(id, "name");
+      if(_isUnlock(id)) {
+        txt.text = ItemUtil.getParamString(id, "name");
+      }
+      else {
+        txt.text = "???";
+      }
       this.add(txt);
       _txtList.push(txt);
+      // アニメーション
+      txt.alpha = 0;
+      FlxTween.tween(txt, {alpha:1}, 1, {ease:FlxEase.expoOut, startDelay:idx*0.01});
+
       py += POS_DY;
       idx++;
       if(idx%MAX_ROW == 0) {
@@ -119,6 +198,17 @@ class ItemLogState extends FlxState {
         px += POS_DX;
       }
     }
+  }
+
+  private function _isUnlock(itemID:Int):Bool {
+    var logs = GameData.getPlayData().flgItemFind;
+    if(logs.indexOf(itemID) == -1) {
+      // 見つけていない
+      return false;
+    }
+
+    // 見つけている
+    return true;
   }
 
   /**
@@ -138,6 +228,10 @@ class ItemLogState extends FlxState {
     var xIdx = Std.int((FlxG.mouse.x - POS_X) / POS_DX);
     var yIdx = Std.int((FlxG.mouse.y - POS_Y) / POS_DY);
 
+    if(xIdx < 0 || yIdx < 0 || yIdx >= MAX_ROW) {
+      // 選択していない
+      return -1;
+    }
     // Yに進むのでこの方法で正しい
     var idx = (MAX_ROW * xIdx) + yIdx;
     if(idx < 0 ||idx >= _itemList.length) {
@@ -145,12 +239,13 @@ class ItemLogState extends FlxState {
       return -1;
     }
 
-    if(false) {
+    var itemID = _itemList[idx];
+    if(_isUnlock(itemID) == false) {
       // アンロックしていない
       return -2;
     }
 
-    return _itemList[idx];
+    return itemID;
   }
 
   /**
