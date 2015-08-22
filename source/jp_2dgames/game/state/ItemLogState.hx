@@ -37,7 +37,7 @@ class ItemLogState extends FlxState {
 
   // ■定数
   private static inline var POS_X = 80;
-  private static inline var POS_Y = 64;
+  private static inline var POS_Y = 80;
   private static inline var POS_DX = 184;
   private static inline var POS_DY = 32;
 
@@ -57,6 +57,12 @@ class ItemLogState extends FlxState {
   // 戻るボタン
   private static inline var BACK_Y = 416;
 
+  // 収集率
+  private static inline var TOTAL_RATIO_X = 432;
+  private static inline var TOTAL_RATIO_Y = 24;
+  private static inline var CATEGORY_RATIO_X = TOTAL_RATIO_X + 180;
+  private static inline var CATEGORY_RATIO_Y = TOTAL_RATIO_Y;
+
   // 表示する行の最大
   private static inline var MAX_ROW:Int = 10;
 
@@ -64,6 +70,10 @@ class ItemLogState extends FlxState {
   private var _itemList:Array<Int>;
 
   private var _txtInfo:FlxText;
+
+  // 収集率
+  private var _txtTotalRatio:FlxText;    // 全体
+  private var _txtCategoryRatio:FlxText; // カテゴリ内
 
   // カーソル
   private var _cursor:FlxSprite;
@@ -83,6 +93,10 @@ class ItemLogState extends FlxState {
     // CSV読み込み
     ItemUtil.csvConsumable = new CsvLoader("assets/levels/item_consumable.csv");
     ItemUtil.csvEquipment  = new CsvLoader("assets/levels/item_equipment.csv");
+
+    // 収集率
+    _txtCategoryRatio = new FlxText(CATEGORY_RATIO_X, CATEGORY_RATIO_Y, 180, "", 12);
+    this.add(_txtCategoryRatio);
 
     _txtList = new Array<FlxText>();
     // カテゴリボタン
@@ -137,6 +151,11 @@ class ItemLogState extends FlxState {
       FlxG.switchState(new StatsState());
     });
     this.add(btnBack);
+
+    // 収集率
+    _txtTotalRatio = new FlxText(TOTAL_RATIO_X, TOTAL_RATIO_Y, 180, "", 12);
+    _txtTotalRatio.text = 'Total: ${_calcTotalRatio()}%';
+    this.add(_txtTotalRatio);
   }
 
   private function _clickCategory(name:String):Void {
@@ -152,7 +171,75 @@ class ItemLogState extends FlxState {
       case "orb":    type = IType.Orb;
     }
 
+    // 項目表示
     _dispItem(type);
+
+    // 収集率表示
+    _txtCategoryRatio.text = 'Category: ${_calcCategoryRatio(type)}%';
+  }
+
+  /**
+   * 全体の収集率を計算する
+   **/
+  private function _calcTotalRatio():Float {
+    var tbl = [
+      IType.Weapon,
+      IType.Armor,
+      IType.Ring,
+      IType.Food,
+      IType.Potion,
+      IType.Wand,
+      IType.Scroll,
+      IType.Orb
+    ];
+    var list = new Array<Int>();
+    for(type in tbl) {
+      var l = _getCategoryList(type);
+      list = list.concat(l);
+    }
+
+    var cnt = 0;
+    var logs = GameData.getPlayData().flgItemFind;
+    for(itemID in list) {
+      if(logs.indexOf(itemID) != -1) {
+        cnt++;
+      }
+    }
+
+    trace(cnt, list.length);
+
+    var ret = Math.ffloor((cnt / list.length) * 10000);
+    return ret / 100;
+  }
+
+  /**
+   * カテゴリの収集率を取得する
+   **/
+  private function _calcCategoryRatio(type:IType):Float {
+    var cnt = 0;
+    var logs = GameData.getPlayData().flgItemFind;
+    var list = _getCategoryList(type);
+    for(itemID in list) {
+      if(logs.indexOf(itemID) != -1) {
+        cnt++;
+      }
+    }
+
+    var ret = Math.ffloor((cnt / list.length) * 10000);
+    return ret / 100;
+  }
+
+  private function _getCategoryList(type:IType):Array<Int> {
+    var list = new Array<Int>();
+    var cnt = ItemUtil.count(type);
+    for(i in 0...cnt) {
+      var id = ItemUtil.firstID(type) + i;
+      var bLog = ItemUtil.getParam(id, "log") == 1;
+      if(bLog) {
+        list.push(id);
+      }
+    }
+    return list;
   }
 
   /**
@@ -163,15 +250,7 @@ class ItemLogState extends FlxState {
     for(txt in _txtList) {
       this.remove(txt);
     }
-    _itemList = new Array<Int>();
-    var cnt = ItemUtil.count(type);
-    for(i in 0...cnt) {
-      var id = ItemUtil.firstID(type) + i;
-      var bLog = ItemUtil.getParam(id, "log") == 1;
-      if(bLog) {
-        _itemList.push(id);
-      }
-    }
+    _itemList = _getCategoryList(type);
 
     var idx = 0;
     var px = POS_X;
