@@ -20,7 +20,7 @@ import jp_2dgames.lib.TextUtil;
 class Global {
 
   // ゲーム開始フロア数
-  public static inline var FLOOR_FIRST:Int = 14;
+  public static inline var FLOOR_FIRST:Int = 1;
   // 特殊マップ開始番号
   public static inline var MAP_ID_EXTRA_FIRST:Int = 500;
   // ゲーム開始時の所持金
@@ -227,12 +227,6 @@ class Global {
       // 外部のデータを使う
       _items = items;
     }
-    var param = new ItemExtraParam();
-    items.push(new ItemData(ItemConst.ORB1, param));
-    items.push(new ItemData(ItemConst.ORB1, param));
-    items.push(new ItemData(ItemConst.ORB1, param));
-    items.push(new ItemData(ItemConst.ORB1, param));
-    items.push(new ItemData(ItemConst.ORB1, param));
     Inventory.setItemList(items, _nCursorInventory, _itemMaxInventory);
   }
 

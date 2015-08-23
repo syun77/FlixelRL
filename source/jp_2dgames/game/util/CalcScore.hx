@@ -53,6 +53,12 @@ class CalcScore {
     _inventory = Inventory.getScore();
     score += _inventory;
 
+    // ゲームクリア判定
+    if(Global.isGameClear()) {
+      // クリアしていたらスコアを1.5倍
+      score = Std.int(score * 1.5);
+    }
+
     // スコアに反映
     Global.setScore(score);
   }

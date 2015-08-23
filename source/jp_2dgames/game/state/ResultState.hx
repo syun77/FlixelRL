@@ -176,6 +176,15 @@ class ResultState extends FlxState {
       var txtScInventory = new FlxText(px, py, SCORE_WIDTH, '${scInventory}pt', FONT_SIZE_SCORE);
       txtScInventory.alignment = "right";
       _txtList.add(txtScInventory);
+      // ゲームクリア
+      if(Global.isGameClear()) {
+        py += OFS_DY_SCORE;
+        var txtGameClear = new FlxText(px, py, SCORE_WIDTH, "GameClear:", FONT_SIZE_SCORE);
+        _txtList.add(txtGameClear);
+        var txtScGameClear = new FlxText(px, py, SCORE_WIDTH, "x1.5", FONT_SIZE_SCORE);
+        txtScGameClear.alignment = "right";
+        _txtList.add(txtScGameClear);
+      }
       // トータル
       py += OFS_DY_SCORE;
       var score = Global.getScore();
