@@ -1,4 +1,5 @@
 package jp_2dgames.game.gimmick;
+import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.ParticleSmoke;
 import flixel.group.FlxTypedGroup;
@@ -95,12 +96,17 @@ class Door extends FlxSprite {
    * @return 壊れたらtrue
    **/
   private function _countDonw():Bool {
+
+    // エフェクト再生
+    Particle.start(PType.Ring, x, y, FlxColor.AQUAMARINE);
+
     _hp--;
     if(_hp <= 0) {
       // 壊れる
       kill();
       Field.eraseDoor(xchip, ychip);
       ParticleSmoke.start("drill", x, y);
+      Particle.start(PType.Circle, x, y, FlxColor.AQUAMARINE);
       return true;
     }
 

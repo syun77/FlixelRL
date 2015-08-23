@@ -100,7 +100,7 @@ class StatisticsState extends FlxState {
    **/
   private function createFlxText(px:Float, py:Float, info:Dynamic):FlxText {
     var txt = new FlxText(px, py, 640);
-    txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
     var idx = _txtList.length + 1;
     var caption = _csv.getString(idx, "msg");
     txt.text = '${caption}: ${info}';
