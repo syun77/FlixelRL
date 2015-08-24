@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import jp_2dgames.game.unlock.UnlockMgr;
 import jp_2dgames.game.util.BgWrap;
 import jp_2dgames.game.util.Key;
@@ -120,13 +122,25 @@ class AchievementState extends FlxState {
     _nPage += ofs;
 
     for(i in 0...PAGE_DISP_MAX) {
-      var idx = i + (PAGE_DISP_MAX * _nPage);
+      // 1始まりなので+1
+      var idx = i + (PAGE_DISP_MAX * _nPage) + 1;
       if(idx >= UnlockMgr.maxSize()) {
         break;
       }
       var txt = _addItem(i, idx);
       this.add(txt);
       _txtList.add(txt);
+
+      var px = txt.x;
+      if(ofs >= 0) {
+        // ページを進める
+        txt.x = FlxG.width;
+      }
+      else {
+        // ページ戻る
+        txt.x = -FlxG.width;
+      }
+      FlxTween.tween(txt, {x:px}, 1, {ease:FlxEase.expoOut, startDelay:0.05*i});
     }
 
     // ページ数更新
