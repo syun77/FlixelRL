@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.save.GameData;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
@@ -175,7 +176,12 @@ class AchievementState extends FlxState {
   private function _addItem(i:Int, idx:Int):FlxText {
     var txt = new FlxText(POS_X, POS_Y + (POS_DY*i), FlxG.width);
     txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-    txt.text = UnlockMgr.getParam(idx, "name");
+    if(_isUnlock(idx)) {
+      txt.text = UnlockMgr.getParam(idx, "name");
+    }
+    else {
+      txt.text = "???";
+    }
 
     return txt;
   }
@@ -206,6 +212,9 @@ class AchievementState extends FlxState {
   private function _getCursorIdx2():Int {
     return _getCursorIdx() + 1 + (_nPage * PAGE_DISP_MAX);
   }
+  private function _isUnlock(idx:Int):Bool {
+    return GameData.getPlayData().flgUnlock.indexOf(idx) != -1;
+  }
 
   /**
    * 更新
@@ -226,7 +235,9 @@ class AchievementState extends FlxState {
     // 詳細情報更新
     {
       var idx = _getCursorIdx2();
-      _txtDetail.text = "HINT: " + UnlockMgr.getParam(idx, "cond");
+      if(_isUnlock(idx) == false) {
+        _txtDetail.text = "HINT: " + UnlockMgr.getParam(idx, "cond");
+      }
     }
 
     if(Key.press.LEFT) {
