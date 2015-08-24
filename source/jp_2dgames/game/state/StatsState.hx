@@ -26,7 +26,7 @@ private class MyButton extends FlxButtonPlus {
  **/
 class StatsState extends FlxState {
 
-  private static inline var MENU_Y = 120;
+  private static inline var MENU_Y = 80;
   private static inline var MENU_DY = 64;
 
   /**
@@ -50,6 +50,14 @@ class StatsState extends FlxState {
     btnList.add(new MyButton(px, py, "STATISTICS", function() {
       // プレイデータを見る
       FlxG.switchState(new StatisticsState());
+    }));
+
+    py += MENU_DY;
+
+    // ACHIEVEMENT
+    btnList.add(new MyButton(px, py, "ACHIEVEMENT", function() {
+      // ACHIEVEMENTを見る
+      FlxG.switchState(new AchievementState());
     }));
 
     py += MENU_DY;

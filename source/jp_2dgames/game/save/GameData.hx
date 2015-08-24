@@ -37,7 +37,7 @@ class GameData {
   }
 
   // セーブデータのバージョン番号
-  public static var VERSION:String = "Ver 0.9.0";
+  public static var VERSION:String = "Ver 0.9.1";
 
   // プレイヤー名
   private static var _name:String = "player";

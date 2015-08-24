@@ -32,6 +32,8 @@ class PlayData {
   public var flgItemFind:Array<Int>;
   // 敵の撃破フラグ
   public var flgEnemyKill:Array<Int>;
+  // 実績解除フラグ
+  public var flgUnlock:Array<Int>;
 
   /**
    * コンストラクタ
@@ -39,6 +41,7 @@ class PlayData {
   public function new() {
     flgEnemyKill = new Array<Int>();
     flgItemFind  = new Array<Int>();
+    flgUnlock    = new Array<Int>();
   }
 
   /**
@@ -63,6 +66,10 @@ class PlayData {
     var enemyidList:Array<Int> = data.flgEnemyKill;
     for(enemyid in enemyidList) {
       flgEnemyKill.push(enemyid);
+    }
+    var unlockList:Array<Int> = data.flgUnlock;
+    for(unlock in unlockList) {
+      flgUnlock.push(unlock);
     }
   }
 }

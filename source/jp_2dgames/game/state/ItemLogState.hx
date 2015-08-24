@@ -206,8 +206,6 @@ class ItemLogState extends FlxState {
       }
     }
 
-    trace(cnt, list.length);
-
     var ret = Math.ffloor((cnt / list.length) * 10000);
     return ret / 100;
   }
