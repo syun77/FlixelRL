@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.unlock.UnlockMgr;
@@ -30,9 +33,12 @@ class AchievementState extends FlxState {
   // 座標関連
   private static inline var PAGE_X = 32;
   private static inline var PAGE_Y = 16;
-  private static inline var POS_X = 32;
+  private static inline var POS_X = 64;
   private static inline var POS_Y = 64;
   private static inline var POS_DY = 32;
+  // 詳細情報
+  private static inline var DETAIL_X = POS_X;
+  private static inline var DETAIL_Y = 416+8;
 
   // ボタン
   /// 1つ戻る
@@ -55,16 +61,29 @@ class AchievementState extends FlxState {
   // ページ情報
   private var _txtPage:FlxText;
 
+  // カーソル
+  private var _cursor:FlxSprite;
+
+  // 詳細呪法
+  private var _txtDetail:FlxText;
+
   /**
    * 生成
    **/
   override public function create():Void {
     super.create();
 
+    this.add(new BgWrap(false));
+
+    // カーソル
+    _cursor = new FlxSprite();
+    _cursor.makeGraphic(FlxG.width, 32, FlxColor.YELLOW);
+    _cursor.alpha = 0.1;
+    this.add(_cursor);
+    FlxTween.tween(_cursor, {alpha:0.3}, 2, {type:FlxTween.PINGPONG, ease:function(v:Float) return v });
+
     // アンロック管理生成
     UnlockMgr.createInstance();
-
-    this.add(new BgWrap(false));
 
     _nPage = 0;
     _maxPage = Math.ceil(UnlockMgr.maxSize() / PAGE_DISP_MAX);
@@ -88,10 +107,16 @@ class AchievementState extends FlxState {
     this.add(btnNext);
 
     // 戻るボタン
-    var btnBack = new MyButton(FlxG.width/2 - 100, FlxG.height-64, 200, 40, "BACK", function() {
+    var btnBack = new MyButton(FlxG.width/2 + 100, FlxG.height-64, 200, 40, "BACK", function() {
       FlxG.switchState(new StatsState());
     });
     this.add(btnBack);
+
+    // 詳細情報
+    _txtDetail = new FlxText(DETAIL_X, DETAIL_Y, 480);
+    _txtDetail.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+    this.add(_txtDetail);
+
   }
 
   /**
@@ -166,11 +191,43 @@ class AchievementState extends FlxState {
     super.destroy();
   }
 
+  private function _getCursorIdx():Int {
+    var Idx = Std.int((FlxG.mouse.y - POS_Y) / POS_DY);
+    if(Idx < 0) { Idx = 0; }
+    var max = PAGE_DISP_MAX-1;
+    var maxIdx = UnlockMgr.maxSize() - (_nPage * PAGE_DISP_MAX) - 2;
+    if(max > maxIdx) {
+      max = maxIdx;
+    }
+    if(Idx > max) { Idx = max; }
+
+    return Idx;
+  }
+  private function _getCursorIdx2():Int {
+    return _getCursorIdx() + 1 + (_nPage * PAGE_DISP_MAX);
+  }
+
   /**
    * 更新
    **/
   override public function update():Void {
     super.update();
+
+    // カーソル座標更新
+    {
+      var px = 0;//POS_X;
+      var py = POS_Y;
+      var Idx = _getCursorIdx();
+      py += Idx * POS_DY;
+      _cursor.x = px;
+      _cursor.y = py;
+    }
+
+    // 詳細情報更新
+    {
+      var idx = _getCursorIdx2();
+      _txtDetail.text = "HINT: " + UnlockMgr.getParam(idx, "cond");
+    }
 
     if(Key.press.LEFT) {
       // ページ戻る
