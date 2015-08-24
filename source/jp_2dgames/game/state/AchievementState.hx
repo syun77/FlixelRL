@@ -87,7 +87,7 @@ class AchievementState extends FlxState {
     UnlockMgr.createInstance();
 
     _nPage = 0;
-    _maxPage = Math.ceil(UnlockMgr.maxSize() / PAGE_DISP_MAX);
+    _maxPage = Math.ceil(UnlockMgr.maxDataSize() / PAGE_DISP_MAX);
 
     _txtList = new List<FlxText>();
     _txtPage = new FlxText(PAGE_X, PAGE_Y, 256, "", 24);
@@ -150,7 +150,7 @@ class AchievementState extends FlxState {
     for(i in 0...PAGE_DISP_MAX) {
       // 1始まりなので+1
       var idx = i + (PAGE_DISP_MAX * _nPage) + 1;
-      if(idx >= UnlockMgr.maxSize()) {
+      if(idx >= UnlockMgr.maxDataSize()) {
         break;
       }
       var txt = _addItem(i, idx);
@@ -201,7 +201,7 @@ class AchievementState extends FlxState {
     var Idx = Std.int((FlxG.mouse.y - POS_Y) / POS_DY);
     if(Idx < 0) { Idx = 0; }
     var max = PAGE_DISP_MAX-1;
-    var maxIdx = UnlockMgr.maxSize() - (_nPage * PAGE_DISP_MAX) - 2;
+    var maxIdx = UnlockMgr.maxDataSize() - (_nPage * PAGE_DISP_MAX) - 2;
     if(max > maxIdx) {
       max = maxIdx;
     }

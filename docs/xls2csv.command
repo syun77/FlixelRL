@@ -15,7 +15,7 @@ python xls2csv.py item.xlsx ../assets/levels header_item.txt
 # イベントメッセージ
 python xls2csv.py event.xlsx ../assets/events
 # 実績
-python xls2csv.py achievement.xlsx ../assets/data
+python xls2csv.py achievement.xlsx ../assets/data header_enemy.txt
 
 # 定数ヘッダ出力
 python export_const.py header_item.txt ../source/jp_2dgames/game/item

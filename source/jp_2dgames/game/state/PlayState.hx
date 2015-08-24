@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.unlock.UnlockMgr;
 import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.particle.ParticleKira;
 import jp_2dgames.game.particle.EffectCloud;
@@ -411,6 +412,9 @@ class PlayState extends FlxState {
     // シーケンス管理
     _seq = new SeqMgr(this, _csv);
 
+    // アンロック管理
+    this.add(UnlockMgr.createInstance());
+
     // デバッグ情報設定
 //    FlxG.watch.add(player, "_state");
 //    FlxG.watch.add(player, "_stateprev");
@@ -480,6 +484,7 @@ class PlayState extends FlxState {
    * 破棄
    */
   override public function destroy():Void {
+    UnlockMgr.destroyInstance();
     Particle.parent = null;
     ParticleDamage.parent = null;
     ParticleRecovery.parent = null;
