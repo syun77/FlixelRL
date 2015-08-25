@@ -210,8 +210,16 @@ class SeqMgr {
 
     if(Global.getFloor() >  Global.FLOOR_MAX) {
       // ゲームクリア
+      // ゲームクリアフラグを立てる
+      Global.gameClear();
       // 全踏破フラグを立てる
-      Global.bitOn(0);
+      Global.bitOn(GameData.FLG_FLOOR_ALL);
+
+      // ゲームクリア回数を増やす
+      GameData.getPlayData().cntGameclear++;
+
+      // 中断セーブデータ消去
+      Save.erase();
 
       // スコア送信
       GameData.sendScore(_player.params.lv);

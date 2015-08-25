@@ -171,10 +171,17 @@ class UnlockMgr extends FlxSpriteGroup{
           if(arg >= param) {
             bUnlock = true;
           }
+
         case "orb":
           // オーブを4つ集めた
+          if(arg >= param) {
+            bUnlock = true;
+          }
+
         case "floor_all":
           // 全フロア踏破
+          bUnlock = true;
+
         case "money":
           if(param >= Global.getMoney()) {
             bUnlock = true;

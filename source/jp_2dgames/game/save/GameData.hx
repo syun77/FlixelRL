@@ -55,6 +55,7 @@ class GameData {
   public static inline var FLG_FIRST_DONE:Int      = 0; // 初回起動フラグ
   public static inline var FLG_FIRST_GAME_DONE:Int = 1; // 初回ゲームプレイ
   public static inline var FLG_GAME_CLEAR:Int      = 2; // ゲームクリアフラグ
+  public static inline var FLG_FLOOR_ALL:Int       = 3; // 全フロア踏破フラグ
 
   private static var _bits:Array<Bool>;
   public static function bitCheck(idx:Int):Bool {

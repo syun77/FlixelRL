@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.save.GameData;
+import jp_2dgames.game.unlock.UnlockMgr;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
@@ -32,6 +34,20 @@ class EndingState extends FlxState{
     });
     FlxTween.tween(btn, {y:8}, 2, {ease:FlxEase.expoOut});
     this.add(btn);
+
+    // アンロックチェック
+    this.add(UnlockMgr.createInstance());
+    if(Global.isGameClear()) {
+      trace(Global.getFloor());
+      if(Global.getFloor() > Global.FLOOR_MAX) {
+        // 全踏破
+        UnlockMgr.check("floor_all", 0);
+      }
+      else {
+        // オーブを4つ集めた
+        UnlockMgr.check("orb", 4);
+      }
+    }
   }
 
   /**
@@ -40,6 +56,9 @@ class EndingState extends FlxState{
   override public function destroy():Void {
     // カーソル非表示
     FlxG.mouse.visible = false;
+
+    // アンロック管理を破棄
+    UnlockMgr.destroyInstance();
 
     super.destroy();
   }
