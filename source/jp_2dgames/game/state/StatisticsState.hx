@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.lib.TextUtil;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.save.PlayData;
@@ -19,7 +22,7 @@ private class MyButton extends FlxButtonPlus {
     textNormal.size = s;
     textHighlight.size = s;
 
-    enterCallback = OnEnter;
+    enterCallback = function() Snd.playSe("pi", true);
     leaveCallback = OnLeave;
   }
 }
@@ -85,6 +88,14 @@ class StatisticsState extends FlxState {
     py += TEXT_DY;
     createFlxText(px, py, dat.maxItem);
     py += TEXT_DY;
+
+    var idx = 0;
+    for(txt in _txtList) {
+      var px = txt.x;
+      txt.x = FlxG.width;
+      FlxTween.tween(txt, {x:px}, 1, {ease:FlxEase.expoOut, startDelay:idx*0.01});
+      idx++;
+    }
 
     // BACK
     var BACK_X = FlxG.width/2 - 100;

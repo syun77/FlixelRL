@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
 import haxe.ds.ArraySort;
 import jp_2dgames.game.util.BgWrap;
 import flixel.addons.ui.FlxButtonPlus;
@@ -19,6 +20,8 @@ private class MyButton extends FlxButtonPlus {
     super(X, Y, OnClick, Text, W, H);
     textNormal.size = s;
     textHighlight.size = s;
+
+    enterCallback = function() Snd.playSe("pi", true);
   }
 }
 
