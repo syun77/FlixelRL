@@ -183,7 +183,7 @@ class UnlockMgr extends FlxSpriteGroup{
           bUnlock = true;
 
         case "money":
-          if(param >= Global.getMoney()) {
+          if(arg >= param) {
             bUnlock = true;
           }
         case "item":

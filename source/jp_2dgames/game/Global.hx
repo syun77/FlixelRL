@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.unlock.UnlockMgr;
 import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.util.CauseOfDeathMgr;
 import flixel.FlxG;
@@ -181,6 +182,9 @@ class Global {
   public static function addMoney(v:Int):Int {
     _money += v;
     _moneyadd = v;
+
+    // 所持金アンロックのチェック
+    UnlockMgr.check("money", _money);
 
     // トータル金額に加算
     GameData.getPlayData().totalMoney += v;
