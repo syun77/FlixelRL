@@ -238,6 +238,9 @@ class AchievementState extends FlxState {
       if(_isUnlock(idx) == false) {
         _txtDetail.text = "HINT: " + UnlockMgr.getParam(idx, "cond");
       }
+      else {
+        _txtDetail.text = "";
+      }
     }
 
     if(Key.press.LEFT) {

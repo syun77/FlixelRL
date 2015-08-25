@@ -1,4 +1,5 @@
 package jp_2dgames.game.unlock;
+import jp_2dgames.game.save.GameData;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -21,12 +22,20 @@ class UnlockMgr extends FlxSpriteGroup{
   private static inline var HEIGHT = 32;
 
   private static var _instance:UnlockMgr = null;
+
+  /**
+   * インスタンス生成
+   **/
   public static function createInstance():UnlockMgr {
     if(_instance == null) {
       _instance = new UnlockMgr();
     }
     return _instance;
   }
+
+  /**
+   * インスタンス解放
+   **/
   public static function destroyInstance() {
     _instance = null;
   }
@@ -87,6 +96,12 @@ class UnlockMgr extends FlxSpriteGroup{
    * キューにアンロック項目を追加
    **/
   private function _enqueue(idx:Int):Void {
+    // フラグ登録
+    GameData.addUnlock(idx);
+
+    // 保存
+    GameData.save();
+
     _queue.add(idx);
   }
 
@@ -108,9 +123,13 @@ class UnlockMgr extends FlxSpriteGroup{
    * アンロック演出開始
    **/
   private function start(idx:Int):Void {
+
+    // 表示開始
     this.visible = true;
+    // テキスト設定
     _txt.text = "Unlock: " + _getParam(idx, "name");
 
+    // アニメーション設定
     var px = FlxG.width - WIDTH - 4;
     var py = POS_Y;
     this.x = FlxG.width;
@@ -128,11 +147,18 @@ class UnlockMgr extends FlxSpriteGroup{
    * アンロックのチェック
    **/
   public static function check(type:String, arg:Int):Void {
+    trace(GameData.getPlayData().flgUnlock);
     _instance._check(type, arg);
   }
   private function _check(type:String, arg:Int):Void {
     var size = _maxDataSize();
     for(i in 1...size) {
+
+      if(GameData.checkUnlock(i)) {
+        // すでにアンロック済み
+        continue;
+      }
+
       var t = _getParam(i, "type");
       if(t != type) {
         continue;
@@ -142,12 +168,13 @@ class UnlockMgr extends FlxSpriteGroup{
       var bUnlock = false;
       switch(type) {
         case "floor":
-          if(param >= Global.getFloor()) {
+          if(arg >= param) {
             bUnlock = true;
           }
         case "orb":
           // オーブを4つ集めた
         case "floor_all":
+          // 全フロア踏破
         case "money":
           if(param >= Global.getMoney()) {
             bUnlock = true;
@@ -164,7 +191,8 @@ class UnlockMgr extends FlxSpriteGroup{
       }
 
       if(bUnlock) {
-        start(i);
+        trace("unlock", i);
+        _enqueue(i);
       }
     }
   }

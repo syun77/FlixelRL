@@ -450,6 +450,8 @@ class PlayState extends FlxState {
       Save.save(false, false);
       // ゲームデータもセーブしておく
       GameData.save();
+      // フロア踏破アンロックチェック
+      UnlockMgr.check("floor", Global.getFloor());
     }
 
     // 雲エフェクト開始チェック

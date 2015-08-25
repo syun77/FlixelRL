@@ -123,6 +123,20 @@ class GameData {
     }
   }
 
+  // アンロック追加
+  public static function addUnlock(unlockID:Int):Void {
+    var unlockFlg = _playdata.flgUnlock;
+    if(unlockFlg.indexOf(unlockID) == -1) {
+      // 存在しないので追加
+      unlockFlg.push(unlockID);
+    }
+  }
+
+  // アンロック済みかどうかをチェック
+  public static function checkUnlock(unlockID:Int):Bool {
+    return _playdata.flgUnlock.indexOf(unlockID) != -1;
+  }
+
   /**
    * セーブデータが存在するかどうか
    **/
