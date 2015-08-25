@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.util.CauseOfDeathMgr;
 import jp_2dgames.game.unlock.UnlockMgr;
 import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.particle.ParticleKira;
@@ -558,6 +559,10 @@ class PlayState extends FlxState {
             Snd.stopMusic();
             _timer = TIMER_GAMEOVER;
             _state = State.GameoverWait;
+
+            // アンロックチェック
+            var deathID = CauseOfDeathMgr.toIdx();
+            UnlockMgr.check("death", deathID);
 
             // スコア送信
             GameData.sendScore(_player.params.lv);

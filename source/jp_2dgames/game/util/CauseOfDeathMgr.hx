@@ -51,6 +51,35 @@ class CauseOfDeathMgr {
     return StringTools.replace(msg, "<val1>", param);
   }
 
+  /**
+   * 死亡原因に対応するIDを取得する
+   **/
+  public static function toIdx():Int {
+    if(Global.isGameClear()) {
+      return MSG_GAMECLEAR;
+    }
+
+    switch(_type) {
+      case DeathType.EnemyAtk:
+        return MSG_ENEMYATK;
+
+      case DeathType.Hunger:
+        return MSG_HUMGER;
+
+      case DeathType.Spike:
+        return MSG_PIT;
+
+      case DeathType.ReflectAtk:
+        return MSG_REFLECT;
+
+      case DeathType.Poison:
+        return MSG_POISON;
+
+      default:
+        return 0;
+    }
+  }
+
   public static function getMessage():String {
     if(Global.isGameClear()) {
       return _getMessage(MSG_GAMECLEAR);
