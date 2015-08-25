@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.unlock.UnlockMgr;
 import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.save.PlayData;
 import flixel.util.FlxVector;
@@ -158,6 +159,9 @@ class Enemy extends Actor {
       // SEも再生
       Snd.playSe("roar", true);
       GameData.getPlayData().cntNightmareKill++;
+
+      // アンロックチェック
+      UnlockMgr.check("enemy", _id);
     }
     GameData.getPlayData().cntEnemyKill++;
     GameData.save();

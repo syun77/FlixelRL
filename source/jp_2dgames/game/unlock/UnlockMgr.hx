@@ -147,7 +147,6 @@ class UnlockMgr extends FlxSpriteGroup{
    * アンロックのチェック
    **/
   public static function check(type:String, arg:Int):Void {
-    trace(GameData.getPlayData().flgUnlock);
     _instance._check(type, arg);
   }
   private function _check(type:String, arg:Int):Void {
@@ -206,7 +205,6 @@ class UnlockMgr extends FlxSpriteGroup{
       }
 
       if(bUnlock) {
-        trace("unlock", i);
         _enqueue(i);
       }
     }
