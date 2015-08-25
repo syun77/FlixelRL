@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.save.GameData;
 import jp_2dgames.game.util.BgWrap;
 import flixel.tweens.FlxEase;
@@ -9,7 +11,6 @@ import flixel.util.FlxColor;
 import flixel.ui.FlxButton;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import flixel.addons.ui.FlxButtonPlus;
@@ -91,8 +92,7 @@ class ItemLogState extends FlxState {
     this.add(new BgWrap(false));
 
     // CSV読み込み
-    ItemUtil.csvConsumable = new CsvLoader("assets/levels/item_consumable.csv");
-    ItemUtil.csvEquipment  = new CsvLoader("assets/levels/item_equipment.csv");
+    ItemUtil.create();
 
     // 収集率
     _txtCategoryRatio = new FlxText(CATEGORY_RATIO_X, CATEGORY_RATIO_Y, 180, "", 12);
@@ -182,31 +182,11 @@ class ItemLogState extends FlxState {
    * 全体の収集率を計算する
    **/
   private function _calcTotalRatio():Float {
-    var tbl = [
-      IType.Weapon,
-      IType.Armor,
-      IType.Ring,
-      IType.Food,
-      IType.Potion,
-      IType.Wand,
-      IType.Scroll,
-      IType.Orb
-    ];
-    var list = new Array<Int>();
-    for(type in tbl) {
-      var l = _getCategoryList(type);
-      list = list.concat(l);
-    }
 
-    var cnt = 0;
     var logs = GameData.getPlayData().flgItemFind;
-    for(itemID in list) {
-      if(logs.indexOf(itemID) != -1) {
-        cnt++;
-      }
-    }
-
-    var ret = Math.ffloor((cnt / list.length) * 10000);
+    var ratio = ItemUtil.getUnlockRatio(logs);
+    // 小数点第2位まで表示する
+    var ret = Math.ffloor(ratio * 10000);
     return ret / 100;
   }
 
@@ -216,7 +196,7 @@ class ItemLogState extends FlxState {
   private function _calcCategoryRatio(type:IType):Float {
     var cnt = 0;
     var logs = GameData.getPlayData().flgItemFind;
-    var list = _getCategoryList(type);
+    var list = ItemUtil.getCategoryUnlockList(type);
     for(itemID in list) {
       if(logs.indexOf(itemID) != -1) {
         cnt++;
@@ -225,19 +205,6 @@ class ItemLogState extends FlxState {
 
     var ret = Math.ffloor((cnt / list.length) * 10000);
     return ret / 100;
-  }
-
-  private function _getCategoryList(type:IType):Array<Int> {
-    var list = new Array<Int>();
-    var cnt = ItemUtil.count(type);
-    for(i in 0...cnt) {
-      var id = ItemUtil.firstID(type) + i;
-      var bLog = ItemUtil.getParam(id, "log") == 1;
-      if(bLog) {
-        list.push(id);
-      }
-    }
-    return list;
   }
 
   /**
@@ -248,7 +215,7 @@ class ItemLogState extends FlxState {
     for(txt in _txtList) {
       this.remove(txt);
     }
-    _itemList = _getCategoryList(type);
+    _itemList = ItemUtil.getCategoryUnlockList(type);
 
     var idx = 0;
     var px = POS_X;
@@ -256,7 +223,7 @@ class ItemLogState extends FlxState {
     for(id in _itemList) {
       var txt = new FlxText(px, py, POS_DX);
       txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
-      if(_isUnlock(id)) {
+      if(_isDiscoverd(id)) {
         txt.text = ItemUtil.getParamString(id, "name");
       }
       else {
@@ -277,7 +244,10 @@ class ItemLogState extends FlxState {
     }
   }
 
-  private function _isUnlock(itemID:Int):Bool {
+  /**
+   * アイテム発見済みかどうか
+   **/
+  private function _isDiscoverd(itemID:Int):Bool {
     var logs = GameData.getPlayData().flgItemFind;
     if(logs.indexOf(itemID) == -1) {
       // 見つけていない
@@ -292,8 +262,7 @@ class ItemLogState extends FlxState {
    * 破棄
    **/
   override public function destroy():Void {
-    ItemUtil.csvConsumable = null;
-    ItemUtil.csvEquipment  = null;
+    ItemUtil.destroy();
 
     super.destroy();
   }
@@ -317,7 +286,7 @@ class ItemLogState extends FlxState {
     }
 
     var itemID = _itemList[idx];
-    if(_isUnlock(itemID) == false) {
+    if(_isDiscoverd(itemID) == false) {
       // アンロックしていない
       return -2;
     }

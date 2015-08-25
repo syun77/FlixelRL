@@ -40,9 +40,10 @@ class BootState extends FlxState {
   #if flash
     FlxG.switchState(new TitleState());
   #else
-    FlxG.switchState(new PlayInitState());
+//    FlxG.switchState(new PlayInitState());
 //    FlxG.switchState(new TitleState());
 //    FlxG.switchState(new StatsState());
+      FlxG.switchState(new ItemLogState());
   #end
 
     super.update();

@@ -1,4 +1,6 @@
 package jp_2dgames.game.save;
+import jp_2dgames.game.unlock.UnlockMgr;
+import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import jp_2dgames.game.playlog.PlayLog;
 import jp_2dgames.game.playlog.PlayLogData;
@@ -112,6 +114,12 @@ class GameData {
     if(itemFlg.indexOf(itemID) == -1) {
       // ログに存在しないので追加
       itemFlg.push(itemID);
+
+      // 収集率チェック
+      var ratio = ItemUtil.getUnlockRatio(itemFlg);
+      // パーセンテージに変換
+      var per = Math.floor(ratio * 100);
+      UnlockMgr.check("item", per);
     }
   }
 

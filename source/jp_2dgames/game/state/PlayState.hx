@@ -213,8 +213,7 @@ class PlayState extends FlxState {
     // CSV読み込み
     _csv = new Csv();
     Enemy.csv = _csv.enemy;
-    ItemUtil.csvConsumable = _csv.itemConsumable;
-    ItemUtil.csvEquipment = _csv.itemEquipment;
+    ItemUtil.create();
 
     // マップ読み込み
     var tmx = new TmxLoader();
@@ -503,8 +502,7 @@ class PlayState extends FlxState {
     Message.instance = null;
     UIText.instance = null;
     Inventory.instance = null;
-    ItemUtil.csvConsumable = null;
-    ItemUtil.csvEquipment = null;
+    ItemUtil.destroy();
     Field.clear();
     super.destroy();
   }

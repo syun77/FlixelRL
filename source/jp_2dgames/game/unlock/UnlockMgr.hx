@@ -183,14 +183,22 @@ class UnlockMgr extends FlxSpriteGroup{
           bUnlock = true;
 
         case "money":
+          // 所持金チェック
           if(arg >= param) {
             bUnlock = true;
           }
+
         case "item":
+          // アイテム収集率
+          if(arg >= param) {
+            bUnlock = true;
+          }
+
         case "enemy":
           if(param == arg) {
             bUnlock = true;
           }
+
         case "death":
           if(param == arg) {
             bUnlock = true;

@@ -41,8 +41,47 @@ class ItemUtil {
   public static inline var NONE = -1;
   static inline var ID_OFFSET:Int = 1000;
 
+  // アイテムデータを定義しているCSV
   public static var csvConsumable:CsvLoader = null;
   public static var csvEquipment:CsvLoader = null;
+
+  // アンロック対象のアイテムリスト
+  private static var _unlocks:Array<Int> = null;
+
+  /**
+   * 生成
+   **/
+  public static function create():Void {
+    csvConsumable = new CsvLoader("assets/levels/item_consumable.csv");
+    csvEquipment  = new CsvLoader("assets/levels/item_equipment.csv");
+
+    // アンロック対象のアイテムをリストアップ
+    var tbl = [
+      IType.Weapon,
+      IType.Armor,
+      IType.Ring,
+      IType.Food,
+      IType.Potion,
+      IType.Wand,
+      IType.Scroll,
+      IType.Orb
+    ];
+    var list = new Array<Int>();
+    for(type in tbl) {
+      var l = getCategoryUnlockList(type);
+      list = list.concat(l);
+    }
+    _unlocks = list;
+  }
+
+  /**
+   * 破棄
+   **/
+  public static function destroy():Void {
+    csvConsumable = null;
+    csvEquipment  = null;
+    _unlocks       = null;
+  }
 
   public static function getCsv(id:Int):CsvLoader {
     if(isConsumable(id)) {
@@ -263,24 +302,12 @@ class ItemUtil {
   // ランダムでアイテムを取得する
   public static function random(type:IType):Int {
     switch(type) {
-      case IType.Weapon:
-        return FlxRandom.intRanged(ItemConst.WEAPON1, ItemConst.WEAPON8);
-      case IType.Armor:
-        return FlxRandom.intRanged(ItemConst.ARMOR1, ItemConst.ARMOR8);
-      case IType.Ring:
-        return FlxRandom.intRanged(ItemConst.RING1, ItemConst.RING6);
+      case IType.Weapon, IType.Armor, IType.Ring, IType.Food, IType.Potion, IType.Scroll, IType.Wand, IType.Orb:
+        var list = getCategoryUnlockList(type);
+        return list[FlxRandom.intRanged(0, list.length-1)];
+
       case IType.Money:
         return FlxRandom.intRanged(100, 1000);
-      case IType.Food:
-        return FlxRandom.intRanged(ItemConst.FOOD1, ItemConst.FOOD4);
-      case IType.Potion:
-        return FlxRandom.intRanged(ItemConst.POTION1, ItemConst.POTION28);
-      case IType.Scroll:
-        return FlxRandom.intRanged(ItemConst.SCROLL1, ItemConst.SCROLL7);
-      case IType.Wand:
-        return FlxRandom.intRanged(ItemConst.WAND1, ItemConst.WAND9);
-      case IType.Orb:
-        return FlxRandom.intRanged(ItemConst.ORB1, ItemConst.ORB4);
       default:
         trace('Warning: invalid type ${type}');
         return 0;
@@ -297,7 +324,7 @@ class ItemUtil {
       IType.Potion,
 //      IType.Ring,
 //      IType.Money,
-      IType.Food,
+      IType.Food
     ];
     return tbl[FlxRandom.intRanged(0, tbl.length-1)];
   }
@@ -668,5 +695,36 @@ class ItemUtil {
       case IType.Food:   return ItemConst.FOOD1; // 食べ物
       case IType.Orb:    return ItemConst.ORB1;  // 宝珠
     }
+  }
+
+  /**
+   * 指定のカテゴリのアンロック対象のアイテムリストを取得する
+   **/
+  public static function getCategoryUnlockList(type:IType):Array<Int> {
+    var list = new Array<Int>();
+    var cnt = ItemUtil.count(type);
+    for(i in 0...cnt) {
+      var id = ItemUtil.firstID(type) + i;
+      var bLog = ItemUtil.getParam(id, "log") == 1;
+      if(bLog) {
+        list.push(id);
+      }
+    }
+    return list;
+  }
+
+  /**
+   * アンロックの割合を取得する
+   * @return 全アイテム獲得で 1.0
+   **/
+  public static function getUnlockRatio(logs:Array<Int>):Float {
+    var cnt = 0;
+    for(itemID in _unlocks) {
+      if(logs.indexOf(itemID) != -1) {
+        cnt++;
+      }
+    }
+
+    return cnt / _unlocks.length;
   }
 }
