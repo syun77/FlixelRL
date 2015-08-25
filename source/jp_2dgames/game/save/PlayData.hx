@@ -69,7 +69,7 @@ class PlayData {
     }
     var unlockList:Array<Int> = data.flgUnlock;
     for(unlock in unlockList) {
-      flgUnlock.push(unlock);
+//      flgUnlock.push(unlock);
     }
   }
 }

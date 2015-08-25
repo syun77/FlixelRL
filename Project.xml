@@ -105,6 +105,7 @@
         <sound path="roar.mp3" id="roar" />
         <sound path="powerup.mp3" id="powerup" />
         <sound path="chime.mp3" id="chime" />
+        <sound path="unlock.mp3" id="unlock" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="pickup2.ogg" id="pickup" />
@@ -132,6 +133,7 @@
         <sound path="roar.ogg" id="roar" />
         <sound path="powerup.ogg" id="powerup" />
         <sound path="chime.ogg" id="chime" />
+        <sound path="unlock.ogg" id="unlock" />
     </assets>
     <!--------------------------------LIBRARIES------------------------------------->
 
