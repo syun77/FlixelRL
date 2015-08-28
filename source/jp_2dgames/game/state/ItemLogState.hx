@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.save.GameData;
@@ -26,7 +27,7 @@ private class MyButton extends FlxButtonPlus {
     textNormal.size = s;
     textHighlight.size = s;
 
-    enterCallback = OnEnter;
+    enterCallback = function() Snd.playSe("pi", true);
     leaveCallback = OnLeave;
   }
 }

@@ -1,4 +1,9 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
+import jp_2dgames.lib.CsvLoader;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
@@ -26,8 +31,16 @@ private class MyButton extends FlxButtonPlus {
  **/
 class StatsState extends FlxState {
 
+  // ■定数
   private static inline var MENU_Y = 80;
   private static inline var MENU_DY = 64;
+
+  // ■メンバ変数
+  private var _csv:CsvLoader;
+  // ポップアップテキスト
+  private var _txtTip:FlxText = null;
+  // ポップアップの枠
+  private var _sprTip:FlxSprite = null;
 
   /**
    * 生成
@@ -41,6 +54,23 @@ class StatsState extends FlxState {
     // 背景
     this.add(new BgWrap(false));
 
+    // CSV読み込み
+    _csv = new CsvLoader("assets/data/stats.csv");
+
+    // ポップアップテキスト
+    {
+      _txtTip = new FlxText(0, 0, 280, "");
+      _txtTip.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE);
+      _txtTip.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.GREEN);
+      _txtTip.color = FlxColor.WHITE;
+      _txtTip.visible = false;
+
+      _sprTip = new FlxSprite(0, 0);
+      _sprTip.makeGraphic(280, 24, FlxColor.BLACK);
+      _sprTip.alpha = 0.5;
+      _sprTip.visible = false;
+    }
+
     var btnList = new List<MyButton>();
 
     var px = FlxG.width;
@@ -50,6 +80,12 @@ class StatsState extends FlxState {
     btnList.add(new MyButton(px, py, "STATISTICS", function() {
       // プレイデータを見る
       FlxG.switchState(new StatisticsState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(1, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
     }));
 
     py += MENU_DY;
@@ -58,14 +94,26 @@ class StatsState extends FlxState {
     btnList.add(new MyButton(px, py, "ACHIEVEMENT", function() {
       // ACHIEVEMENTを見る
       FlxG.switchState(new AchievementState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(2, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
     }));
 
     py += MENU_DY;
 
     // PLAY LOG
-    btnList.add(new MyButton(px, py, "PLAY LOG", function() {
+    btnList.add(new MyButton(px, py, "HISTORY", function() {
       // PLAY LOGを見る
       FlxG.switchState(new PlayLogState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(3, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
     }));
 
     py += MENU_DY;
@@ -74,6 +122,12 @@ class StatsState extends FlxState {
     btnList.add(new MyButton(px, py, "ENEMY LOG", function() {
       // ENEMY LOGを見る
       FlxG.switchState(new EnemyLogState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(4, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
     }));
 
     py += MENU_DY;
@@ -82,6 +136,12 @@ class StatsState extends FlxState {
     btnList.add(new MyButton(px, py, "ITEM LOG", function() {
       // ITEM LOGを見る
       FlxG.switchState(new ItemLogState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(5, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
     }));
 
     py += Std.int(MENU_DY * 1.3);
@@ -89,9 +149,15 @@ class StatsState extends FlxState {
     btnList.add(new MyButton(px, py, "BACK", function() {
       // タイトル画面に戻る
       FlxG.switchState(new TitleState());
+    }, function() {
+      _txtTip.visible = true;
+      _txtTip.text = _csv.getString(6, "msg");
+      Snd.playSe("pi", true);
+    }, function() {
+      _txtTip.visible = false;
     }));
 
-
+    // メニューが入る演出
     var px2 = FlxG.width/2 - 100;
     var idx:Int = 0;
     for(btn in btnList) {
@@ -99,6 +165,9 @@ class StatsState extends FlxState {
       this.add(btn);
       idx++;
     }
+
+    this.add(_sprTip);
+    this.add(_txtTip);
   }
 
   /**
@@ -113,5 +182,14 @@ class StatsState extends FlxState {
    **/
   override public function update():Void {
     super.update();
+
+    // ヘルプチップ更新
+    if(_txtTip != null) {
+      _txtTip.x = FlxG.mouse.x+16;
+      _txtTip.y = FlxG.mouse.y-24;
+      _sprTip.x = _txtTip.x;
+      _sprTip.y = _txtTip.y;
+      _sprTip.visible = _txtTip.visible;
+    }
   }
 }

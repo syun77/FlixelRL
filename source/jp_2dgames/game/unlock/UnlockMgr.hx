@@ -1,4 +1,5 @@
 package jp_2dgames.game.unlock;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.save.GameData;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
@@ -123,6 +124,8 @@ class UnlockMgr extends FlxSpriteGroup{
    * アンロック演出開始
    **/
   private function start(idx:Int):Void {
+
+    Snd.playSe("unlock");
 
     // 表示開始
     this.visible = true;
