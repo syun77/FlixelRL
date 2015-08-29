@@ -2,6 +2,9 @@
 1画面ローグライク、1Rogueのプロジェクトページ
 
 ## ゲーム情報
+
+[http://2dgames.jp/flash/1rogue/](http://2dgames.jp/flash/1rogue/)
+
 * ゲームタイトル: 1Rogue
 * ジャンル: 1画面ローグライク
 * バージョン: v1.00
