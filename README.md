@@ -1,6 +1,9 @@
 # FlixelRL (1Rogue)
 1画面ローグライク、1Rogueのプロジェクトページ
 
+■YouTubeにアップした紹介動画
+[![](http://img.youtube.com/vi/9YV_Hd1YQ6A/0.jpg)](https://www.youtube.com/watch?v=9YV_Hd1YQ6A)
+
 ## ゲーム情報
 
 [http://2dgames.jp/flash/1rogue/](http://2dgames.jp/flash/1rogue/)
