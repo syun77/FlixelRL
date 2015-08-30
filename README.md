@@ -72,3 +72,7 @@
 |       |ImageMagick|画像変換|
 |サウンド|FL Studio|BGM作成|
 |       |as3sfxr  |効果音作成|
+|       |ffmpeg   |フォーマット変換|
+|サーバー|MySQL|データベース|
+|       |PHP|サーバーサイドのスクリプト言語|
+|       |JavaScript|正確にはサーバーじゃないけど、FlashとPHPの橋渡しとして使用|
