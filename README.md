@@ -68,7 +68,7 @@
 |:---|:---|:---|
 |開発環境|Haxe(v3.2.94)|プログラム言語|
 |       |OpenFL(v3.0.6)|マルチプラットフォーム開発環境|
-|       |HaxeFlixel(v)|ゲームライブラリ|
+|       |HaxeFlixel(v3.3.8)|ゲームライブラリ|
 |テキストエディタ・IDE|Intellij IDEA 13 CE|IDE|
 |                  |Sublime Text 2|テキストエディタ|
 |                  |CotEditor|テキストエディタ|
